@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "Samaj Community Directory | समाज डिरेक्टरी",
   description: "Connect, discover and network with verified community members across cities and professions.",
