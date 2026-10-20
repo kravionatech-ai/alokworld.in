@@ -1,9 +1,12 @@
 export default function MaintenancePage() {
   return (
     <main className="min-h-screen bg-white flex flex-col justify-between items-center px-4 sm:px-6 py-8 sm:py-12">
-      {/* Top subtle decorative badge */}
-      <div className="w-full flex justify-center">
-        <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/70">
+      {/* Top Section: Domain Identity & Status Badge */}
+      <div className="w-full flex flex-col items-center gap-3">
+        <span className="text-sm sm:text-base font-semibold tracking-wide text-gray-800">
+          alokwork<span className="text-orange-600">.in</span>
+        </span>
+        <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/70">
           <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
           Scheduled Maintenance
         </span>

@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Website Under Maintenance",
+  title: "Under Maintenance | alokwork.in",
   description: "We are working to improve your experience. Please visit us again soon.",
 };
 
