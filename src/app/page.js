@@ -69,9 +69,20 @@ export default function Home() {
       </main>
 
       {/* Clean Simple Footer */}
-      <footer className="mt-16 bg-white border-t border-gray-200/80 py-6 text-center text-xs text-gray-500">
-        <div className="max-w-7xl mx-auto px-4">
+      <footer className="mt-16 bg-white border-t border-gray-200/80 py-8 text-center text-xs text-gray-500">
+        <div className="max-w-7xl mx-auto px-4 space-y-2">
           <p>© 2026 Samaj Community Directory. Built for community networking &amp; fellowship.</p>
+          <p className="text-gray-400">
+            Website Developed by{" "}
+            <a
+              href="https://www.kraviona.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-orange-600 hover:text-orange-700 font-medium underline underline-offset-2 transition-colors"
+            >
+              Kraviona
+            </a>
+          </p>
         </div>
       </footer>
     </div>
