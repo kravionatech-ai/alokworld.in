@@ -1,51 +1,164 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-primary-navy: #082F75;
-  --color-brand-dark-navy: #071D49;
-  --color-brand-primary-orange: #F4510B;
-  --color-brand-dark-orange: #C83B08;
-  --color-brand-warm-cream: #FFF9E8;
-  --color-brand-light-cream: #FFFDF6;
-  --color-brand-pale-orange: #FFE6C7;
-  --color-brand-border: #F3D8B0;
-  --color-brand-main-text: #172B4D;
-  --color-brand-secondary-text: #64748B;
-  --color-brand-white: #FFFFFF;
+  --color-primary-navy: #102F6B;
+  --color-deep-navy: #091D42;
+  --color-accent-orange: #F26A21;
+  --color-soft-orange: #FFF0E2;
+  --color-warm-cream: #FFF9ED;
+  --color-white: #FFFFFF;
+  --color-main-text: #263449;
+  --color-secondary-text: #64748B;
+  --color-border: #E9D9C5;
 
-  /* Aliases for ease of use */
-  --color-navy: #082F75;
-  --color-dark-navy: #071D49;
-  --color-orange: #F4510B;
-  --color-dark-orange: #C83B08;
-  --color-warm-cream: #FFF9E8;
-  --color-light-cream: #FFFDF6;
-  --color-pale-orange: #FFE6C7;
-  --color-cream-border: #F3D8B0;
+  /* Aliases for convenience */
+  --color-navy: #102F6B;
+  --color-dark-navy: #091D42;
+  --color-orange: #F26A21;
+  --color-dark-orange: #d95814;
+  --color-warm-cream: #FFF9ED;
+  --color-light-cream: #FFFFFF;
+  --color-pale-orange: #FFF0E2;
+  --color-cream-border: #E9D9C5;
 }
 
 :root {
-  --background: #FFF9E8;
-  --foreground: #172B4D;
+  --background: #FFF9ED;
+  --foreground: #263449;
 }
 
 body {
-  background-color: #FFF9E8;
-  color: #172B4D;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, system-ui, sans-serif;
+  background-color: #FFF9ED;
+  color: #263449;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 13px;
   line-height: 1.5;
 }
 
-a {
-  color: #082F75;
-  transition: color 0.15s ease-in-out;
-}
+@layer base {
+  a {
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+  }
 
-a:hover {
-  color: #F4510B;
+  button {
+    cursor: pointer;
+  }
 }
 
 table {
   border-collapse: collapse;
+}
+
+/* Bulletproof utility classes for CTA and navigation buttons to ensure text is never invisible */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F26A21;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease-in-out;
+}
+.btn-primary:hover {
+  background-color: #d95814;
+  color: #FFFFFF !important;
+}
+
+.btn-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #102F6B;
+  color: #FFFFFF !important;
+  font-weight: 700;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease-in-out;
+}
+.btn-navy:hover {
+  background-color: #091D42;
+  color: #FFFFFF !important;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  color: #102F6B !important;
+  border: 1px solid #E9D9C5;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease-in-out;
+}
+.btn-outline:hover {
+  background-color: #FFF0E2;
+  color: #F26A21 !important;
+  border-color: #F26A21;
+}
+
+/* CMS Rich-Text Prose Styling */
+.cms-prose {
+  color: #263449;
+  line-height: 1.65;
+}
+.cms-prose h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #102F6B;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid #E9D9C5;
+  padding-bottom: 0.25rem;
+}
+.cms-prose h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #102F6B;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+}
+.cms-prose h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #102F6B;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+.cms-prose p {
+  margin-bottom: 0.75rem;
+}
+.cms-prose ul {
+  list-style-type: disc;
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.cms-prose ol {
+  list-style-type: decimal;
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.cms-prose li {
+  margin-bottom: 0.25rem;
+}
+.cms-prose blockquote {
+  border-left: 3px solid #F26A21;
+  background-color: #FFF0E2;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #102F6B;
+}
+.cms-prose a {
+  color: #F26A21;
+  text-decoration: underline;
+}
+.cms-prose a:hover {
+  color: #d95814;
+}
+.cms-prose strong {
+  color: #102F6B;
+  font-weight: 700;
 }

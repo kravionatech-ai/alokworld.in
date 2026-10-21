@@ -2,19 +2,61 @@ import mongoose from "mongoose";
 
 const SiteSettingsSchema = new mongoose.Schema(
   {
-    siteName: { type: String, default: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in" },
+    siteName: { type: String, default: "Akhil Bhartiya Samaj Directory - alokworld.in" },
     tagline: { type: String, default: "Community Directory, Leadership & Networking Portal" },
+    
+    // Top Announcement Strip
     announcement: { type: String, default: "Welcome to the official Samaj Community Directory portal. Connect, unite & empower." },
-    sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं सूचनाएं" },
-    sidebarNoticeContent: { type: String, default: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।" },
+    announcementEnabled: { type: Boolean, default: true },
+
+    // Hero Banner Customization
+    heroBadge: { type: String, default: "Official Community Portal" },
+    heroTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal" },
+    heroSubtitle: { type: String, default: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India." },
+    heroCtaText: { type: String, default: "Explore Member Directory →" },
+    heroCtaLink: { type: String, default: "/directory" },
+
+    // Sidebar Widgets Configuration
+    sidebarNoticeTitle: { type: String, default: "Community Announcements & Notices" },
+    sidebarNoticeContent: { type: String, default: "All community members are requested to keep their family and professional information up to date in the directory." },
+    sidebarNoticeEnabled: { type: Boolean, default: true },
+    keyRegions: {
+      type: [String],
+      default: ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
+    },
+
+    // Community Spotlight / Advertisement
     adTitle: { type: String, default: "Community Business Spotlight" },
-    adBannerText: { type: String, default: "Promote your business across community network." },
+    adBannerText: { type: String, default: "Promote your enterprise across our national community network." },
     adLink: { type: String, default: "/contact" },
+    adImage: { type: String, default: "" },
+    adEnabled: { type: Boolean, default: true },
+
+    // Contact & Secretariat Information
     contactEmail: { type: String, default: "admin@alokworld.in" },
     contactPhone: { type: String, default: "+91 96085 53167" },
-    seoTitle: { type: String, default: "Samaj Community Directory | alokworld.in" },
-    seoDescription: { type: String, default: "Official Samaj Directory - search and connect with community members, elders, doctors, engineers, and professionals." },
-    seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members" },
+    contactAddress: { type: String, default: "National Secretariat, New Delhi, India" },
+    whatsappNumber: { type: String, default: "+91 96085 53167" },
+
+    // Navigation Menu Management
+    navigationLinks: [
+      {
+        label: { type: String, required: true },
+        href: { type: String, required: true },
+        isEnabled: { type: Boolean, default: true },
+        order: { type: Number, default: 0 },
+      },
+    ],
+
+    // Global SEO Directives
+    seoTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal | alokworld.in" },
+    seoDescription: { type: String, default: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India." },
+    seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, lodha mahasabha" },
+    siteUrl: { type: String, default: "https://alokworld.in" },
+    ogImage: { type: String, default: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&auto=format&fit=crop&q=80" },
+    organizationName: { type: String, default: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha" },
+    googleVerificationId: { type: String, default: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg" },
+    twitterHandle: { type: String, default: "@alokworldin" },
     
     // Maintenance Mode Configurations
     maintenanceMode: { type: Boolean, default: true },
@@ -22,7 +64,7 @@ const SiteSettingsSchema = new mongoose.Schema(
     maintenancePopupEnabled: { type: Boolean, default: true },
     maintenanceMessage: {
       type: String,
-      default: "Website Under Maintenance — We are improving your experience. Some features may not work as expected.",
+      default: "Maintenance Notice: Our website is currently under development. We are improving your experience, and some features may not work as expected.",
     },
     maintenancePopupTitle: {
       type: String,
@@ -30,25 +72,25 @@ const SiteSettingsSchema = new mongoose.Schema(
     },
     maintenancePopupMessage: {
       type: String,
-      default: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore.",
+      default: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
     },
 
-    // Multi-page content management
+    // Multi-page content fallbacks
     historyContent: {
       type: String,
-      default: "<h3>समाज का गौरवशाली इतिहास</h3><p>समाज का इतिहास त्याग, तपस्या, शौर्य और राष्ट्रभक्ति से परिपूर्ण रहा है। वैदिक काल से लेकर स्वतंत्रता संग्राम तक समाज के वीर सपूतों और समाजसेवियों ने राष्ट्र निर्माण में ऐतिहासिक योगदान दिया है।</p>",
+      default: "<h3>Glorious Heritage & History</h3><p>The history of our community is rich with sacrifice, dedication, valor, and patriotism. From historical eras to the national independence movement, community visionaries and social leaders have contributed immensely to nation-building.</p>",
     },
     organizationContent: {
       type: String,
-      default: "<h3>संगठन संरचना एवं कार्यसमिति</h3><p>राष्ट्रीय कार्यसमिति, युवा मोर्चा, महिला मोर्चा और राज्य इकाइयों के माध्यम से समाज के कल्याणकारी प्रकल्प संचालित किए जा रहे हैं।</p>",
+      default: "<h3>Organizational Structure & Executive Committee</h3><p>Community welfare initiatives are actively carried out through the National Working Committee, Youth Network, Women Empowerment Wing, and State Chapters.</p>",
     },
     mahasabhaContent: {
       type: String,
-      default: "<h3>अखिल भारतीय महासभा</h3><p>अखिल भारतीय स्तर पर समाज को संगठित करने, सामाजिक कुरीतियों को दूर करने, और शिक्षा के प्रचार-प्रसार के लिए महासभा निरंतर प्रयत्नशील है।</p>",
+      default: "<h3>Akhil Bhartiya Mahasabha</h3><p>The Mahasabha continuously strives to unite the community across the nation, eliminate social challenges, and promote higher education and economic self-reliance.</p>",
     },
     aboutContent: {
       type: String,
-      default: "<h3>हमारे बारे में (About Portal)</h3><p>alokworld.in एक आधुनिक डिजिटल मंच है, जिसका उद्देश्य समाज के सभी वर्गों, पेशेवरों और परिवारों को परस्पर जोड़ना है।</p>",
+      default: "<h3>About alokworld.in</h3><p>alokworld.in is a modern digital platform dedicated to connecting community members, professionals, elders, and families across India.</p>",
     },
   },
   { timestamps: true }

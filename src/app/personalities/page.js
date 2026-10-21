@@ -9,39 +9,39 @@ export default function PersonalitiesPage() {
   const [personalities, setPersonalities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Default historical icons in case database is loading
+  // Default historical icons in clean English
   const defaultList = [
     {
       _id: "p1",
-      name: "वीरांगना रानी अवंतीबाई लोधी",
-      title: "1857 स्वतंत्रता संग्राम की अमर नायिका",
+      name: "Veerangana Rani Avanti Bai Lodhi",
+      title: "Immortal Heroine of the 1857 War of Independence",
       era: "1831 - 1858",
       photo: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=300&auto=format&fit=crop&q=80",
-      summary: "रामगढ़ रियासत की महारानी जिन्होंने 1857 के प्रथम स्वतंत्रता संग्राम में अंग्रेजों के विरुद्ध वीरतापूर्वक संघर्ष किया और मातृभूमि के लिए सर्वोच्च बलिदान दिया।",
+      summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
     },
     {
       _id: "p2",
-      name: "शहीद गुलाब सिंह लोधी",
-      title: "अमर स्वतंत्रता सेनानी एवं ध्वज वाहक",
+      name: "Shaheed Gulab Singh Lodhi",
+      title: "Immortal Freedom Fighter & Flag Bearer",
       era: "1903 - 1935",
       photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80",
-      summary: "लखनऊ के अमीनाबाद पार्क में ब्रिटिश गोलियों के सामने तिरंगा फहराते हुए अमर बलिदान देने वाले युवा क्रांतिकारी सपूत।",
+      summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
     },
     {
       _id: "p3",
-      name: "स्वामी ब्रह्मानंद जी",
-      title: "शिक्षा सुधारक, समाज सुधारक एवं सांसद",
+      name: "Swami Brahmanand Ji",
+      title: "Education Pioneer, Social Reformer & Parliamentarian",
       era: "1894 - 1984",
       photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80",
-      summary: "बुंदेलखंड में शिक्षा क्रांति के जनक, जिन्होंने सैकड़ों गुरुकुल, विद्यालय और महाविद्यालय स्थापित कर वंचित वर्ग के उत्थान का मार्ग प्रशस्त किया।",
+      summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
     },
     {
       _id: "p4",
-      name: "राजा हृदयशाह लोधी",
-      title: "1842 बुंदेला विद्रोह के प्रमुख जननायक",
+      name: "Raja Hridayshah Lodhi",
+      title: "Legendary Leader of the 1842 Bundela Rebellion",
       era: "1806 - 1852",
       photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80",
-      summary: "हीरापुर के राजा जिन्होंने अंग्रेजों की शोषणकारी नीतियों के विरुद्ध 1842 में सशस्त्र क्रांति का नेतृत्व किया था।",
+      summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
     }
   ];
 
@@ -60,18 +60,18 @@ export default function PersonalitiesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9E8] text-[#172B4D]">
+    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
       <Header />
 
-      <main className="flex-1 max-w-[1100px] w-full mx-auto px-2 sm:px-4 py-4 sm:py-6">
+      <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-[#FFFDF6] rounded-lg border border-[#F3D8B0] p-5 sm:p-7 shadow-sm">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#C83B08] bg-[#FFE6C7] px-2.5 py-0.5 rounded border border-[#F3D8B0]">
+            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
                 Icons &amp; Legends
               </span>
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#082F75] mt-2 tracking-tight">
-                समाज के गौरवशाली महापुरुष एवं ऐतिहासिक विभूतियां
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
+                Glorious Historical Figures &amp; Community Icons
               </h1>
               <p className="text-xs sm:text-sm text-[#64748B] mt-1">
                 Honoring the brave freedom fighters, reformers, philosophers, and nation builders from our community heritage.
@@ -82,18 +82,18 @@ export default function PersonalitiesPage() {
               {personalities.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-[#FFFDF6] rounded-lg border border-[#F3D8B0] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#082F75] transition-all flex flex-col justify-between"
+                  className="bg-white rounded-lg border border-[#E9D9C5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-13 h-13 rounded-lg bg-[#082F75] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F4510B]">
-                        {item.name.charAt(0)}
+                      <div className="w-13 h-13 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F26A21]">
+                        {item.name ? item.name.charAt(0) : "P"}
                       </div>
                       <div>
-                        <h2 className="text-sm sm:text-base font-bold text-[#082F75] leading-tight">
+                        <h2 className="text-sm sm:text-base font-bold text-[#102F6B] leading-tight">
                           {item.name}
                         </h2>
-                        <span className="text-[11px] font-semibold text-[#F4510B] block mt-0.5">
+                        <span className="text-[11px] font-semibold text-[#F26A21] block mt-0.5">
                           {item.title}
                         </span>
                         {item.era && (
@@ -104,7 +104,7 @@ export default function PersonalitiesPage() {
                       </div>
                     </div>
 
-                    <p className="text-xs text-[#64748B] leading-relaxed pt-2 border-t border-[#F3D8B0]/60">
+                    <p className="text-xs text-[#64748B] leading-relaxed pt-2.5 border-t border-[#E9D9C5]">
                       {item.summary}
                     </p>
                   </div>

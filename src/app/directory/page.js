@@ -5,17 +5,32 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import MemberList from "@/components/MemberList";
+import MemberTable from "@/components/MemberTable";
 import Sidebar from "@/components/Sidebar";
 
 export default function DirectoryPage() {
   const [members, setMembers] = useState([]);
   const [settings, setSettings] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedCity, setSelectedCity] = useState("All");
+  const [selectedState, setSelectedState] = useState("All");
+  const [selectedProfession, setSelectedProfession] = useState("All");
+  const [selectedOrganization, setSelectedOrganization] = useState("All");
+  const [selectedSort, setSelectedSort] = useState("newest");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [viewMode, setViewMode] = useState("grid"); // "grid" or "table"
+  const [filterOptions, setFilterOptions] = useState({
+    cities: ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
+    states: ["Madhya Pradesh", "Rajasthan", "Karnataka", "Uttar Pradesh", "Delhi", "Maharashtra"],
+    professions: ["Civil Engineer", "Doctor", "Software Architect", "Chartered Accountant", "Advocate", "Educator", "Merchant"],
+    organizations: ["Lodhi Infra Builders", "City Child Healthcare", "TechNova Solutions", "Adarsh Vidyalaya", "Kisan Agro Foods"],
+  });
 
+  // Load site settings
   useEffect(() => {
     fetch("/api/settings")
       .then((res) => res.json())
@@ -25,50 +40,81 @@ export default function DirectoryPage() {
       .catch(console.error);
   }, []);
 
+  // Fetch members with server-side filters, sorting, and pagination
   useEffect(() => {
     setLoading(true);
+    setError("");
+
     const params = new URLSearchParams();
     if (searchQuery) params.set("q", searchQuery);
-    if (selectedLocation && selectedLocation !== "All") params.set("city", selectedLocation);
+    if (selectedCity && selectedCity !== "All") params.set("city", selectedCity);
+    if (selectedState && selectedState !== "All") params.set("state", selectedState);
+    if (selectedProfession && selectedProfession !== "All") params.set("profession", selectedProfession);
+    if (selectedOrganization && selectedOrganization !== "All") params.set("organization", selectedOrganization);
+    if (selectedSort) params.set("sortBy", selectedSort);
     params.set("page", page.toString());
     params.set("limit", "12");
 
     fetch(`/api/members?${params.toString()}`)
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || "Failed to load directory records");
+        }
+        return res.json();
+      })
       .then((data) => {
         if (data?.members) {
           setMembers(data.members);
+          setTotalResults(data.total || 0);
           setTotalPages(data.totalPages || 1);
         }
+        if (data?.filterOptions) {
+          setFilterOptions((prev) => ({
+            cities: data.filterOptions.cities?.length ? data.filterOptions.cities : prev.cities,
+            states: data.filterOptions.states?.length ? data.filterOptions.states : prev.states,
+            professions: data.filterOptions.professions?.length ? data.filterOptions.professions : prev.professions,
+            organizations: data.filterOptions.organizations?.length ? data.filterOptions.organizations : prev.organizations,
+          }));
+        }
       })
-      .catch(console.error)
+      .catch((err) => {
+        console.error("Directory fetch error:", err);
+        setError(err.message || "Failed to connect to the directory service.");
+      })
       .finally(() => setLoading(false));
-  }, [searchQuery, selectedLocation, page]);
+  }, [searchQuery, selectedCity, selectedState, selectedProfession, selectedOrganization, selectedSort, page]);
 
-  const locations = [
-    "Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"
-  ];
+  const handleResetFilters = () => {
+    setSearchQuery("");
+    setSelectedCity("All");
+    setSelectedState("All");
+    setSelectedProfession("All");
+    setSelectedOrganization("All");
+    setSelectedSort("newest");
+    setPage(1);
+  };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9E8] text-[#172B4D]">
+    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
       <Header
         siteName={settings?.siteName}
         tagline={settings?.tagline}
         announcement={settings?.announcement}
       />
 
-      <main className="flex-1 max-w-[1100px] w-full mx-auto px-2 sm:px-4 py-4 sm:py-6">
+      <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Page Banner */}
-        <section className="bg-[#FFFDF6] rounded-lg p-5 sm:p-7 mb-5 border border-[#F3D8B0] shadow-sm">
+        <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#E9D9C5] shadow-xs">
           <div className="max-w-3xl">
-            <span className="inline-block text-[11px] font-bold tracking-wider text-[#C83B08] uppercase bg-[#FFE6C7] px-2 py-0.5 rounded border border-[#F3D8B0] mb-2">
-              अखिल भारतीय समाज डिरेक्टरी
+            <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5] mb-2">
+              Akhil Bhartiya Samaj Directory
             </span>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#082F75] tracking-tight">
-              समाज डायरेक्टरी एवं सदस्यता संपर्क सूची (Member Directory)
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
+              Samaj Community Directory &amp; Member Registry
             </h1>
             <p className="mt-2 text-xs sm:text-sm text-[#64748B] leading-relaxed font-normal">
-              Search and connect with registered community elders, doctors, engineers, advocates, merchants, and youth network across India.
+              Search and discover verified community elders, doctors, engineers, advocates, merchants, and youth network across India.
             </p>
           </div>
         </section>
@@ -76,45 +122,116 @@ export default function DirectoryPage() {
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 order-2 lg:order-1">
+            {/* Filter Bar with city, state, profession, organization, sort, view toggle */}
             <SearchFilterBar
               searchQuery={searchQuery}
               onSearchChange={(q) => {
                 setSearchQuery(q);
                 setPage(1);
               }}
-              selectedLocation={selectedLocation}
-              onLocationChange={(loc) => {
-                setSelectedLocation(loc);
+              selectedCity={selectedCity}
+              onCityChange={(c) => {
+                setSelectedCity(c);
                 setPage(1);
               }}
-              locations={locations}
-              totalResults={members.length}
+              selectedState={selectedState}
+              onStateChange={(s) => {
+                setSelectedState(s);
+                setPage(1);
+              }}
+              selectedProfession={selectedProfession}
+              onProfessionChange={(p) => {
+                setSelectedProfession(p);
+                setPage(1);
+              }}
+              selectedOrganization={selectedOrganization}
+              onOrganizationChange={(o) => {
+                setSelectedOrganization(o);
+                setPage(1);
+              }}
+              selectedSort={selectedSort}
+              onSortChange={(s) => {
+                setSelectedSort(s);
+                setPage(1);
+              }}
+              cities={filterOptions.cities}
+              states={filterOptions.states}
+              professions={filterOptions.professions}
+              organizations={filterOptions.organizations}
+              totalResults={totalResults}
+              onResetFilters={handleResetFilters}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
             />
 
-            {loading ? (
-              <div className="bg-[#FFFDF6] rounded-lg border border-[#F3D8B0] p-12 text-center text-[#64748B] font-medium">
-                Loading members from directory...
+            {/* Error Banner */}
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg mb-5 text-xs flex items-center justify-between">
+                <div>
+                  <strong className="font-bold">Error loading directory: </strong>
+                  <span>{error}</span>
+                </div>
+                <button
+                  onClick={() => setPage(1)}
+                  className="px-3 py-1 bg-red-600 text-white rounded text-xs font-bold hover:bg-red-700 cursor-pointer"
+                >
+                  Retry ↺
+                </button>
               </div>
-            ) : (
-              <MemberList members={members} />
             )}
 
-            {totalPages > 1 && (
-              <div className="mt-6 flex justify-center items-center gap-2">
+            {/* Content Display: Loading / Grid / Table */}
+            {loading ? (
+              <div className="bg-white rounded-lg border border-[#E9D9C5] p-16 text-center text-[#64748B] font-medium shadow-xs">
+                <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                Searching community records...
+              </div>
+            ) : viewMode === "grid" ? (
+              <MemberList members={members} />
+            ) : (
+              <MemberTable members={members} startIndex={(page - 1) * 12} />
+            )}
+
+            {/* Pagination Controls */}
+            {!loading && totalPages > 1 && (
+              <div className="mt-6 flex flex-wrap justify-center items-center gap-2">
                 <button
                   disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="px-3.5 py-1.5 rounded border border-[#F3D8B0] bg-white hover:bg-[#FFE6C7]/50 text-[#082F75] text-xs font-semibold disabled:opacity-40 transition-colors shadow-xs"
+                  onClick={() => {
+                    setPage((p) => Math.max(1, p - 1));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="btn-outline px-3.5 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
                 >
                   ← Previous
                 </button>
-                <span className="text-xs font-semibold px-3 text-[#082F75]">
-                  Page {page} of {totalPages}
-                </span>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      onClick={() => {
+                        setPage(pageNum);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className={`w-7 h-7 rounded text-xs font-bold transition-colors cursor-pointer ${
+                        page === pageNum
+                          ? "bg-[#102F6B] text-white"
+                          : "bg-white border border-[#E9D9C5] text-[#263449] hover:bg-[#FFF0E2]"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                </div>
+
                 <button
                   disabled={page >= totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  className="px-3.5 py-1.5 rounded border border-[#F3D8B0] bg-white hover:bg-[#FFE6C7]/50 text-[#082F75] text-xs font-semibold disabled:opacity-40 transition-colors shadow-xs"
+                  onClick={() => {
+                    setPage((p) => Math.min(totalPages, p + 1));
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="btn-outline px-3.5 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
                 >
                   Next →
                 </button>
@@ -129,10 +246,10 @@ export default function DirectoryPage() {
               adTitle={settings?.adTitle}
               adBannerText={settings?.adBannerText}
               adLink={settings?.adLink}
-              locations={locations}
-              selectedLocation={selectedLocation}
+              locations={filterOptions.cities.slice(0, 8)}
+              selectedLocation={selectedCity}
               onSelectLocation={(loc) => {
-                setSelectedLocation(loc);
+                setSelectedCity(loc);
                 setPage(1);
               }}
             />

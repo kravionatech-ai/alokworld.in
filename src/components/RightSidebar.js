@@ -4,80 +4,80 @@ import Link from "next/link";
 
 export default function RightSidebar() {
   return (
-    <aside className="space-y-3">
-      {/* राष्ट्रीय पदाधिकारी */}
-      <div className="border border-[#F3D8B0] rounded-sm overflow-hidden shadow-xs">
-        <div className="bg-[#082F75] text-white text-xs font-bold px-3 py-1.5 border-b-2 border-[#F4510B]">
-          राष्ट्रीय पदाधिकारी
+    <aside className="space-y-4">
+      {/* National Office Bearers */}
+      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
+          National Office Bearers
         </div>
-        <div className="bg-[#FFFDF6] p-3 text-center">
-          <div className="w-16 h-16 mx-auto bg-[#FFE6C7]/60 rounded-full flex items-center justify-center text-2xl mb-2 border-2 border-[#F3D8B0]">
+        <div className="p-3.5 text-center">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
             👤
           </div>
-          <p className="text-xs font-bold text-[#082F75]">श्री राकेश लोधी</p>
-          <p className="text-[10px] text-[#64748B]">आगरा, उ.प्र.</p>
-          <p className="text-[10px] text-[#F4510B] font-semibold">राष्ट्रीय कोषाध्यक्ष</p>
-          <p className="text-xs font-bold text-[#172B4D] mt-1">9412720183</p>
+          <p className="text-xs font-bold text-[#102F6B]">Shri Rakesh Lodhi</p>
+          <p className="text-[10px] text-[#64748B]">Agra, Uttar Pradesh</p>
+          <p className="text-[11px] text-[#F26A21] font-semibold mt-0.5">National Treasurer</p>
+          <p className="text-xs font-bold text-[#263449] mt-1 font-mono">9412720183</p>
         </div>
       </div>
 
-      {/* प्रदेश-पदाधिकारी */}
-      <div className="border border-[#F3D8B0] rounded-sm overflow-hidden shadow-xs">
-        <div className="bg-[#082F75] text-white text-xs font-bold px-3 py-1.5 border-b-2 border-[#F4510B]">
-          प्रदेश-पदाधिकारी
+      {/* State Office Bearers */}
+      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
+          State Office Bearers
         </div>
-        <div className="bg-[#FFFDF6] p-3 text-center">
-          <div className="w-16 h-16 mx-auto bg-[#FFE6C7]/60 rounded-full flex items-center justify-center text-2xl mb-2 border-2 border-[#F3D8B0]">
+        <div className="p-3.5 text-center">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
             👤
           </div>
-          <p className="text-xs font-bold text-[#082F75]">समाज सेवी महाराज लोधी</p>
-          <p className="text-[10px] text-[#64748B]">उपाध्यक्ष, उत्तर प्रदेश</p>
-          <p className="text-xs font-bold text-[#172B4D] mt-1">9455714545</p>
+          <p className="text-xs font-bold text-[#102F6B]">Maharaj Lodhi (Social Worker)</p>
+          <p className="text-[10px] text-[#64748B]">Vice President, Uttar Pradesh</p>
+          <p className="text-xs font-bold text-[#263449] mt-1 font-mono">9455714545</p>
         </div>
       </div>
 
-      {/* मंत्री एवं विधायक */}
-      <div className="border border-[#F3D8B0] rounded-sm overflow-hidden shadow-xs">
-        <div className="bg-[#082F75] text-white text-xs font-bold px-3 py-1.5 border-b-2 border-[#F4510B]">
-          मंत्री एवं विधायक
+      {/* Ministers & Public Representatives */}
+      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
+          Public Representatives &amp; Leaders
         </div>
-        <div className="bg-[#FFFDF6] p-3 text-center">
-          <div className="w-16 h-16 mx-auto bg-[#FFE6C7]/60 rounded-full flex items-center justify-center text-2xl mb-2 border-2 border-[#F3D8B0]">
+        <div className="p-3.5 text-center">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
             👤
           </div>
-          <p className="text-xs font-bold text-[#082F75]">श्री रामचन्द्र लोधी</p>
-          <p className="text-[10px] text-[#64748B]">पूर्व मंत्री, मध्य प्रदेश</p>
+          <p className="text-xs font-bold text-[#102F6B]">Shri Ramchandra Lodhi</p>
+          <p className="text-[10px] text-[#64748B]">Former Minister, Madhya Pradesh</p>
         </div>
       </div>
 
-      {/* IAS, RAS, CA, Doctor */}
-      <div className="border border-[#F3D8B0] rounded-sm overflow-hidden shadow-xs">
-        <div className="bg-[#082F75] text-white text-xs font-bold px-3 py-1.5 border-b-2 border-[#F4510B]">
-          IAS, RAS, CA, Doctor
+      {/* Civil Servants & Professionals */}
+      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
+          Civil Servants &amp; Professionals
         </div>
-        <div className="bg-[#FFFDF6] p-3 text-center">
-          <div className="w-16 h-16 mx-auto bg-[#FFE6C7]/60 rounded-full flex items-center justify-center text-2xl mb-2 border-2 border-[#F3D8B0]">
+        <div className="p-3.5 text-center">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
             👤
           </div>
-          <p className="text-xs font-bold text-[#082F75]">अमर पाल जी</p>
-          <p className="text-[10px] font-bold text-[#F4510B]">IAS Officer</p>
+          <p className="text-xs font-bold text-[#102F6B]">Amar Pal Ji</p>
+          <p className="text-[11px] font-bold text-[#F26A21] mt-0.5">IAS Officer</p>
         </div>
       </div>
 
-      {/* विज्ञापन (Advertisement) */}
-      <div className="border border-[#F3D8B0] rounded-sm overflow-hidden shadow-xs">
-        <div className="bg-[#082F75] text-white text-xs font-bold px-3 py-1.5 border-b-2 border-[#F4510B]">
-          विज्ञापन
+      {/* Advertisement Box */}
+      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
+          Community Spotlight
         </div>
-        <div className="bg-[#FFFDF6] p-4 text-center text-xs text-[#64748B]">
-          <div className="border border-dashed border-[#F3D8B0] p-4 rounded bg-[#FFF9E8]">
-            <p className="font-semibold text-[#082F75]">Advertisement</p>
-            <p className="text-[10px] mt-1 text-[#64748B]">विज्ञापन के लिए संपर्क करें</p>
+        <div className="p-4 text-center text-xs text-[#64748B]">
+          <div className="border border-dashed border-[#E9D9C5] p-4 rounded-lg bg-[#FFF9ED]">
+            <p className="font-semibold text-[#102F6B]">Enterprise Advertisement</p>
+            <p className="text-[10px] mt-1 text-[#64748B]">Contact the secretariat to feature your business</p>
             <Link
               href="/contact"
-              className="inline-block mt-2 px-2.5 py-1 bg-[#F4510B] hover:bg-[#C83B08] text-white text-[10px] font-bold rounded"
+              className="btn-primary mt-2 px-3 py-1 text-[11px]"
             >
-              Contact Us
+              Contact Us →
             </Link>
           </div>
         </div>

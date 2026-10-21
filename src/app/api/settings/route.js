@@ -2,29 +2,47 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import SiteSettings from "@/models/SiteSettings";
 import { verifyAdminToken } from "@/lib/auth";
+import { recordAudit } from "@/lib/audit";
 
 const defaultSettings = {
-  siteName: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in",
+  siteName: "Akhil Bhartiya Samaj Directory - alokworld.in",
   tagline: "Community Directory, Leadership & Networking Portal",
-  announcement: "Welcome to the official Samaj Community Directory portal. Connect and unite.",
-  sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
-  sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
+  announcement: "Welcome to the official Samaj Community Directory portal. Connect, unite & empower.",
+  announcementEnabled: true,
+  heroBadge: "Official Community Portal",
+  heroTitle: "Akhil Bhartiya Samaj Directory & Central Portal",
+  heroSubtitle: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India.",
+  heroCtaText: "Explore Member Directory →",
+  heroCtaLink: "/directory",
+  sidebarNoticeTitle: "Community Announcements & Notices",
+  sidebarNoticeContent: "All community members are requested to keep their family and professional information up to date in the directory.",
+  sidebarNoticeEnabled: true,
   adTitle: "Community Business Spotlight",
-  adBannerText: "Promote your business across community network.",
-  adLink: "https://alokworld.in",
+  adBannerText: "Promote your enterprise across our national community network.",
+  adLink: "/contact",
+  adEnabled: true,
   contactEmail: "admin@alokworld.in",
   contactPhone: "+91 96085 53167",
-  seoTitle: "Samaj Community Directory | alokworld.in",
-  seoDescription: "Official Samaj Directory - search and connect with community members, elders, doctors, engineers, and professionals.",
-  seoKeywords: "samaj directory, community directory, alokworld, samaj portal, community members",
+  contactAddress: "National Secretariat, New Delhi, India",
+  whatsappNumber: "+91 96085 53167",
+  seoTitle: "Akhil Bhartiya Samaj Directory & Central Portal | alokworld.in",
+  seoDescription: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India.",
+  seoKeywords: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, lodha mahasabha",
+  siteUrl: "https://alokworld.in",
+  ogImage: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&auto=format&fit=crop&q=80",
+  organizationName: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha",
+  googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
+  twitterHandle: "@alokworldin",
 
   // Maintenance Mode defaults
   maintenanceMode: true,
   maintenanceBarEnabled: true,
   maintenancePopupEnabled: true,
-  maintenanceMessage: "Website Under Maintenance — We are improving your experience. Some features may not work as expected.",
+  maintenanceMessage:
+    "Maintenance Notice: Our website is currently under development. We are improving your experience, and some features may not work as expected.",
   maintenancePopupTitle: "Website Under Active Development",
-  maintenancePopupMessage: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore.",
+  maintenancePopupMessage:
+    "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
 };
 
 export async function GET() {
@@ -65,6 +83,15 @@ export async function PUT(req) {
       Object.assign(settings, body);
       await settings.save();
     }
+
+    await recordAudit({
+      req,
+      admin,
+      action: "update_site_settings",
+      targetEntity: "SiteSettings",
+      targetId: settings._id,
+      details: `Updated fields: ${Object.keys(body).join(", ")}`,
+    });
 
     return NextResponse.json({ success: true, settings });
   } catch (error) {

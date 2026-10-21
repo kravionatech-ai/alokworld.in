@@ -1,65 +1,115 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Member from "@/models/Member";
+import PageContent from "@/models/PageContent";
+import SiteSettings from "@/models/SiteSettings";
 import { membersData as fallbackMembers } from "@/data/members";
 
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://alokworld.in";
+  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://alokworld.in";
 
-  let memberUrls = [];
+  const staticRoutes = [
+    { path: "", changefreq: "daily", priority: "1.0" },
+    { path: "/directory", changefreq: "daily", priority: "0.9" },
+    { path: "/about", changefreq: "weekly", priority: "0.8" },
+    { path: "/history", changefreq: "monthly", priority: "0.8" },
+    { path: "/organization", changefreq: "monthly", priority: "0.8" },
+    { path: "/mahasabha", changefreq: "monthly", priority: "0.8" },
+    { path: "/gallery", changefreq: "weekly", priority: "0.8" },
+    { path: "/personalities", changefreq: "monthly", priority: "0.8" },
+    { path: "/matrimonial", changefreq: "weekly", priority: "0.8" },
+    { path: "/contact", changefreq: "monthly", priority: "0.7" },
+    { path: "/privacy", changefreq: "yearly", priority: "0.3" },
+    { path: "/terms", changefreq: "yearly", priority: "0.3" },
+  ];
+
+  let memberEntries = [];
+  let dynamicPageEntries = [];
+
   try {
     const conn = await connectDB();
     if (conn) {
-      const members = await Member.find({ isPublished: true, isApproved: true }, "_id updatedAt").lean();
-      memberUrls = members.map((m) => ({
-        url: `${baseUrl}/member/${m._id}`,
+      // 1. Resolve siteUrl
+      const settings = await SiteSettings.findOne({}, "siteUrl").lean();
+      if (settings?.siteUrl) baseUrl = settings.siteUrl;
+
+      // 2. Query strictly published, approved, non-archived members
+      const members = await Member.find(
+        {
+          isPublished: true,
+          isApproved: true,
+          isArchived: { $ne: true },
+          membershipStatus: { $ne: "archived" },
+        },
+        "_id slug updatedAt"
+      ).lean();
+
+      memberEntries = members.map((m) => ({
+        url: `${baseUrl.replace(/\/+$/, "")}/member/${m.slug || m._id}`,
         lastModified: m.updatedAt ? new Date(m.updatedAt).toISOString() : new Date().toISOString(),
+        changefreq: "weekly",
+        priority: "0.7",
+      }));
+
+      // 3. Query custom published CMS pages
+      const coreSlugs = ["home", "about", "history", "organization", "mahasabha"];
+      const customPages = await PageContent.find(
+        {
+          status: "published",
+          slug: { $nin: coreSlugs },
+        },
+        "slug updatedAt"
+      ).lean();
+
+      dynamicPageEntries = customPages.map((p) => ({
+        url: `${baseUrl.replace(/\/+$/, "")}/${p.slug}`,
+        lastModified: p.updatedAt ? new Date(p.updatedAt).toISOString() : new Date().toISOString(),
+        changefreq: "weekly",
+        priority: "0.7",
       }));
     } else {
-      memberUrls = fallbackMembers.map((m) => ({
-        url: `${baseUrl}/member/${m.id}`,
+      // Fallback in-memory members
+      memberEntries = fallbackMembers.map((m) => ({
+        url: `${baseUrl.replace(/\/+$/, "")}/member/${m.slug || m.id}`,
         lastModified: new Date().toISOString(),
+        changefreq: "weekly",
+        priority: "0.7",
       }));
     }
-  } catch (e) {
-    console.error("Sitemap generation error:", e);
+  } catch (error) {
+    console.error("Sitemap XML generation error:", error.message);
   }
 
-  const staticUrls = [
-    { url: `${baseUrl}`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/directory`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/history`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/personalities`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/organization`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/mahasabha`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/matrimonial`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/gallery`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/about`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/contact`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/privacy`, lastModified: new Date().toISOString() },
-    { url: `${baseUrl}/terms`, lastModified: new Date().toISOString() },
-  ];
+  const cleanBase = baseUrl.replace(/\/+$/, "");
+  const nowIso = new Date().toISOString();
 
-  const allUrls = [...staticUrls, ...memberUrls];
+  const staticEntries = staticRoutes.map((r) => ({
+    url: `${cleanBase}${r.path}`,
+    lastModified: nowIso,
+    changefreq: r.changefreq,
+    priority: r.priority,
+  }));
 
-  const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+  const allEntries = [...staticEntries, ...dynamicPageEntries, ...memberEntries];
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${allUrls
-    .map(
-      (item) => `
-    <url>
-      <loc>${item.url}</loc>
-      <lastmod>${item.lastModified}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>`
-    )
-    .join("")}
+${allEntries
+  .map(
+    (e) => `  <url>
+    <loc>${e.url}</loc>
+    <lastmod>${e.lastModified}</lastmod>
+    <changefreq>${e.changefreq}</changefreq>
+    <priority>${e.priority}</priority>
+  </url>`
+  )
+  .join("\n")}
 </urlset>`;
 
-  return new NextResponse(sitemapXml, {
+  return new NextResponse(xml, {
     headers: {
-      "Content-Type": "application/xml",
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600, stale-while-revalidate=1800",
     },
   });
 }

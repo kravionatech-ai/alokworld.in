@@ -7,112 +7,192 @@ import Footer from "@/components/Footer";
 
 function MemberProfileDetail({ params }) {
   const resolvedParams = use(params);
-  const id = resolvedParams.id;
+  const idOrSlug = resolvedParams.id;
 
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/members/${id}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Member not found or profile is unlisted");
+    setLoading(true);
+    setError("");
+
+    fetch(`/api/members/${encodeURIComponent(idOrSlug)}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "Member profile not found or profile is unlisted");
+        }
         return res.json();
       })
       .then((data) => {
-        if (data?.member) setMember(data.member);
+        if (data?.member) {
+          setMember(data.member);
+        } else {
+          throw new Error("Member record not returned");
+        }
       })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [idOrSlug]);
+
+  const handleCopyLink = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <main className="flex-1 max-w-[900px] w-full mx-auto px-3 sm:px-4 py-6">
-      <Link
-        href="/directory"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#082F75] hover:text-[#F4510B] mb-5 bg-[#FFFDF6] border border-[#F3D8B0] px-3 py-1.5 rounded shadow-xs transition-colors"
-      >
-        ← Back to Directory
-      </Link>
+      <div className="flex items-center justify-between mb-5">
+        <Link
+          href="/directory"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9D9C5] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors"
+        >
+          ← Back to Directory
+        </Link>
+
+        {member && (
+          <button
+            onClick={handleCopyLink}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9D9C5] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer"
+            title="Copy profile link to clipboard"
+          >
+            <span>🔗</span>
+            <span>{copied ? "Link Copied!" : "Share Profile"}</span>
+          </button>
+        )}
+      </div>
 
       {loading ? (
-        <div className="bg-[#FFFDF6] rounded-lg border border-[#F3D8B0] p-16 text-center text-[#64748B] font-medium">
+        <div className="bg-white rounded-lg border border-[#E9D9C5] p-16 text-center text-[#64748B] font-medium shadow-xs">
+          <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
           Loading member profile...
         </div>
       ) : error || !member ? (
-        <div className="bg-[#FFFDF6] p-8 rounded-lg border border-[#F4510B]/50 text-center">
-          <h2 className="text-base font-bold text-[#C83B08] mb-1">Notice</h2>
-          <p className="text-xs text-[#64748B]">{error || "Member profile not available."}</p>
+        <div className="bg-white p-10 rounded-lg border border-[#E9D9C5] text-center shadow-xs space-y-3">
+          <div className="w-14 h-14 mx-auto rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5] flex items-center justify-center text-2xl font-bold">
+            🔒
+          </div>
+          <h2 className="text-lg font-black text-[#102F6B]">Profile Not Available</h2>
+          <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto leading-relaxed">
+            {error || "This member profile could not be located, is currently archived, or requires administrative approval."}
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/directory"
+              className="btn-navy px-4 py-2 text-xs shadow-xs"
+            >
+              Browse Public Directory →
+            </Link>
+          </div>
         </div>
       ) : (
-        <div className="bg-[#FFFDF6] rounded-lg border border-[#F3D8B0] shadow-sm overflow-hidden">
-          {/* Top Profile Header */}
-          <div className="bg-[#FFF9E8] p-5 sm:p-7 border-b border-[#F3D8B0] flex flex-col sm:flex-row items-center sm:items-start gap-5">
+        <div className="bg-white rounded-lg border border-[#E9D9C5] shadow-xs overflow-hidden">
+          {/* Top Profile Header Banner */}
+          <div className="bg-[#FFF9ED] p-5 sm:p-7 border-b border-[#E9D9C5] flex flex-col sm:flex-row items-center sm:items-start gap-5">
             {member.avatar ? (
               <img
                 src={member.avatar}
-                alt={member.name}
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#F3D8B0] shadow-xs"
+                alt={`${member.name} - Verified Samaj Community Profile Photo`}
+                width={112}
+                height={112}
+                decoding="async"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#E9D9C5] shadow-xs shrink-0 bg-white"
               />
             ) : (
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-[#082F75] text-white flex items-center justify-center font-bold text-3xl shadow-xs border-2 border-[#F4510B]">
-                {member.name ? member.name.charAt(0) : "म"}
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-3xl shadow-xs border-2 border-[#F26A21] shrink-0">
+                {member.name ? member.name.charAt(0).toUpperCase() : "M"}
               </div>
             )}
 
-            <div className="text-center sm:text-left flex-1">
+            <div className="text-center sm:text-left flex-1 min-w-0">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
-                <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-[#FFE6C7] text-[#C83B08] border border-[#F3D8B0] uppercase">
+                <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5] uppercase">
                   {member.role || "Samaj Member"}
                 </span>
-                <span className="text-[#F3D8B0]">•</span>
-                <span className="text-xs font-medium text-[#082F75]">Verified Profile</span>
+                <span className="text-[#E9D9C5]">•</span>
+                <span className="text-xs font-medium text-[#102F6B]">Verified Community Record</span>
+                {member.slug && (
+                  <>
+                    <span className="text-[#E9D9C5]">•</span>
+                    <span className="text-[11px] font-mono text-[#64748B]">@{member.slug}</span>
+                  </>
+                )}
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-[#082F75] tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-[#102F6B] tracking-tight break-words">
                 {member.name}
               </h1>
-              <p className="text-sm text-[#172B4D] font-medium mt-1">
-                {member.occupation} {member.company && <span className="text-[#64748B]">• {member.company}</span>}
+              <p className="text-sm text-[#263449] font-medium mt-1">
+                {member.occupation} {member.company && <span className="text-[#64748B] font-normal">• {member.company}</span>}
               </p>
               <p className="text-xs text-[#64748B] mt-1 flex items-center justify-center sm:justify-start gap-1">
-                <span className="text-[#F4510B]">📍</span> {member.city}, {member.state}
+                <span className="text-[#F26A21]">📍</span> {member.city}{member.state ? `, ${member.state}` : ""}
               </p>
             </div>
           </div>
 
           {/* Profile Body & Contact Details */}
           <div className="p-5 sm:p-7 space-y-6">
-            <div className="bg-[#FFF9E8] rounded border border-[#F3D8B0] p-4 sm:p-5 space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#082F75] border-l-3 border-[#F4510B] pl-2">
-                Verified Contact Details
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            {/* Contact Details Card with Privacy Badges */}
+            <div className="bg-[#FFF9ED] rounded-lg border border-[#E9D9C5] p-4 sm:p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-[#E9D9C5] pb-2">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
+                  Verified Contact &amp; Geographic Information
+                </h3>
+                <span className="text-[10px] text-[#64748B]">
+                  🛡️ Protected by consent settings
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-1">
                 <div>
-                  <span className="text-[#64748B] block text-[11px] font-medium">Phone / Mobile:</span>
+                  <span className="text-[#64748B] block text-[11px] font-medium">Telephone / Mobile:</span>
                   {member.phone ? (
-                    <a href={`tel:${member.phone}`} className="font-semibold text-[#F4510B] hover:text-[#C83B08] hover:underline mt-0.5 inline-block">
-                      📞 {member.phone}
+                    <a href={`tel:${member.phone}`} className="font-semibold text-[#F26A21] hover:underline mt-0.5 inline-flex items-center gap-1.5">
+                      <span>📞</span> <span>{member.phone}</span>
                     </a>
                   ) : (
-                    <span className="text-[#64748B] italic">Kept private by member</span>
+                    <span className="text-[#64748B] italic flex items-center gap-1">
+                      <span>🔒</span> <span>Kept private at member request</span>
+                    </span>
                   )}
                 </div>
 
                 <div>
                   <span className="text-[#64748B] block text-[11px] font-medium">Email Address:</span>
                   {member.email ? (
-                    <a href={`mailto:${member.email}`} className="font-semibold text-[#082F75] hover:text-[#F4510B] hover:underline mt-0.5 inline-block">
-                      ✉️ {member.email}
+                    <a href={`mailto:${member.email}`} className="font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline mt-0.5 inline-flex items-center gap-1.5">
+                      <span>✉️</span> <span>{member.email}</span>
                     </a>
                   ) : (
-                    <span className="text-[#64748B] italic">Kept private by member</span>
+                    <span className="text-[#64748B] italic flex items-center gap-1">
+                      <span>🔒</span> <span>Kept private at member request</span>
+                    </span>
                   )}
                 </div>
 
+                <div>
+                  <span className="text-[#64748B] block text-[11px] font-medium">City &amp; State:</span>
+                  <p className="font-medium text-[#263449] mt-0.5">
+                    {member.city}, {member.state} {member.pincode ? `(${member.pincode})` : ""}
+                  </p>
+                </div>
+
+                <div>
+                  <span className="text-[#64748B] block text-[11px] font-medium">Organization / Enterprise:</span>
+                  <p className="font-medium text-[#263449] mt-0.5">
+                    {member.company || "Not specified / Independent"}
+                  </p>
+                </div>
+
                 {member.address && (
-                  <div className="sm:col-span-2">
-                    <span className="text-[#64748B] block text-[11px] font-medium">Address:</span>
-                    <p className="font-medium text-[#172B4D] mt-0.5">
+                  <div className="sm:col-span-2 pt-2 border-t border-[#E9D9C5]/60">
+                    <span className="text-[#64748B] block text-[11px] font-medium">Full Residential / Office Address:</span>
+                    <p className="font-medium text-[#263449] mt-0.5">
                       {member.address} {member.pincode && `- ${member.pincode}`}
                     </p>
                   </div>
@@ -120,30 +200,32 @@ function MemberProfileDetail({ params }) {
               </div>
             </div>
 
+            {/* Biography Section */}
             <div>
-              <h3 className="text-xs font-bold text-[#082F75] uppercase tracking-wider mb-2.5 pb-2 border-b border-[#F3D8B0]">
-                व्यक्तिगत परिचय एवं सामाजिक योगदान (Biography)
+              <h3 className="text-xs font-bold text-[#102F6B] uppercase tracking-wider mb-2.5 pb-2 border-b border-[#E9D9C5]">
+                Biography &amp; Community Contributions
               </h3>
               {member.biography ? (
                 <div
-                  className="prose prose-sm max-w-none text-[#172B4D] text-xs sm:text-sm leading-relaxed"
+                  className="prose prose-sm max-w-none text-[#263449] text-xs sm:text-sm leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: member.biography }}
                 />
               ) : (
                 <p className="text-xs text-[#64748B] italic">
-                  {member.name} has not submitted an extended biography yet.
+                  {member.name} has not submitted an extended community biography yet.
                 </p>
               )}
             </div>
 
+            {/* Specializations & Tags */}
             {member.tags && member.tags.length > 0 && (
-              <div className="pt-2 border-t border-[#F3D8B0]/60">
-                <h4 className="text-xs font-semibold text-[#64748B] mb-2">Specializations &amp; Groups:</h4>
+              <div className="pt-2 border-t border-[#E9D9C5]">
+                <h4 className="text-xs font-semibold text-[#64748B] mb-2">Specializations &amp; Affinity Groups:</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {member.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-medium px-2.5 py-1 bg-[#FFE6C7]/50 text-[#082F75] border border-[#F3D8B0] rounded"
+                      className="text-xs font-medium px-2.5 py-1 bg-[#FFF0E2] text-[#102F6B] border border-[#E9D9C5] rounded"
                     >
                       #{tag}
                     </span>
@@ -154,15 +236,55 @@ function MemberProfileDetail({ params }) {
           </div>
         </div>
       )}
+      {member && member.isPublished && member.isApproved && !member.isArchived && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "BreadcrumbList",
+                  itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
+                    { "@type": "ListItem", position: 2, name: "Directory", item: "https://alokworld.in/directory" },
+                    { "@type": "ListItem", position: 3, name: member.name, item: `https://alokworld.in/member/${member.slug || member._id || member.id}` },
+                  ],
+                },
+                {
+                  "@type": "ProfilePage",
+                  "@id": `https://alokworld.in/member/${member.slug || member._id || member.id}#profilepage`,
+                  url: `https://alokworld.in/member/${member.slug || member._id || member.id}`,
+                  name: `${member.name} - Samaj Directory Profile`,
+                  mainEntity: {
+                    "@type": "Person",
+                    name: member.name,
+                    jobTitle: member.occupation,
+                    worksFor: member.company ? { "@type": "Organization", name: member.company } : undefined,
+                    address: {
+                      "@type": "PostalAddress",
+                      addressLocality: member.city,
+                      addressRegion: member.state,
+                      addressCountry: "IN",
+                    },
+                    image: member.avatar || undefined,
+                    description: member.biography ? member.biography.replace(/<[^>]*>?/gm, "").substring(0, 200) : undefined,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
+      )}
     </main>
   );
 }
 
 export default function MemberProfilePage({ params }) {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9E8] text-[#172B4D]">
+    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
       <Header />
-      <Suspense fallback={<div className="p-16 text-center text-[#64748B] font-medium">Loading...</div>}>
+      <Suspense fallback={<div className="p-16 text-center text-[#64748B] font-medium">Loading member profile...</div>}>
         <MemberProfileDetail params={params} />
       </Suspense>
       <Footer />

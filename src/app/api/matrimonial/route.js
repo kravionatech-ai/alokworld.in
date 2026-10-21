@@ -27,17 +27,50 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json();
+
+    if (!body.name || !body.gender || !body.age || !body.profession || !body.city) {
+      return NextResponse.json(
+        { error: "Name, gender, age, profession, and city are required fields." },
+        { status: 400 }
+      );
+    }
+
+    const token = req.cookies.get("admin_token")?.value;
+    const admin = token ? verifyAdminToken(token) : null;
+
     const conn = await connectDB();
     if (!conn) {
       return NextResponse.json({ error: "Database not connected" }, { status: 503 });
     }
 
-    if (body.bio) {
-      body.bio = sanitizeContent(body.bio);
-    }
+    const profileData = {
+      name: body.name.trim(),
+      gender: body.gender,
+      age: Number(body.age) || 25,
+      height: body.height ? body.height.trim() : "",
+      education: body.education ? body.education.trim() : "",
+      profession: body.profession.trim(),
+      city: body.city.trim(),
+      state: body.state ? body.state.trim() : "",
+      bio: sanitizeContent(body.bio || ""),
+      contactPerson: body.contactPerson ? body.contactPerson.trim() : "",
+      contactPhone: body.contactPhone ? body.contactPhone.trim() : "",
+      // Public submissions default to pending approval; admins can publish immediately
+      isApproved: admin ? Boolean(body.isApproved ?? true) : false,
+      isPublished: admin ? Boolean(body.isPublished ?? true) : false,
+    };
 
-    const created = await Matrimonial.create(body);
-    return NextResponse.json({ success: true, profile: created }, { status: 201 });
+    const created = await Matrimonial.create(profileData);
+    return NextResponse.json(
+      {
+        success: true,
+        message: admin
+          ? "Matrimonial profile saved."
+          : "Matrimonial registration submitted successfully. It will appear once verified by the community administrator.",
+        profile: created,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

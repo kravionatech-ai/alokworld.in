@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Admin from "@/models/Admin";
 import { signAdminToken, verifyAdminToken } from "@/lib/auth";
+import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
+import { recordAudit } from "@/lib/audit";
 import bcrypt from "bcryptjs";
 
 // Helper to seed initial admin if database has none
@@ -14,7 +16,7 @@ async function ensureAdminExists() {
     await Admin.create({
       email,
       password: hashedPassword,
-      name: "Super Admin",
+      name: "Directory Super Admin",
       role: "superadmin",
     });
   }
@@ -22,6 +24,11 @@ async function ensureAdminExists() {
 
 export async function POST(req) {
   try {
+    const ip =
+      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      req.headers.get("x-real-ip") ||
+      "127.0.0.1";
+
     const { email, password } = await req.json();
 
     if (!email || !password) {
@@ -31,13 +38,22 @@ export async function POST(req) {
       );
     }
 
+    // Rate Limiting check: max 10 attempts per 15 minutes per IP
+    const rateLimit = checkRateLimit(`login_${ip}`, 10, 15 * 60 * 1000);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        { error: `Too many login attempts. Please wait ${rateLimit.retryAfter} seconds before trying again.` },
+        { status: 429, headers: { "Retry-After": String(rateLimit.retryAfter) } }
+      );
+    }
+
     const conn = await connectDB();
     if (conn) {
       await ensureAdminExists();
       const admin = await Admin.findOne({ email: email.toLowerCase().trim() });
       if (!admin) {
         return NextResponse.json(
-          { error: "Invalid email or password" },
+          { error: "Invalid administrative credentials" },
           { status: 401 }
         );
       }
@@ -45,12 +61,26 @@ export async function POST(req) {
       const isMatch = await bcrypt.compare(password, admin.password);
       if (!isMatch) {
         return NextResponse.json(
-          { error: "Invalid email or password" },
+          { error: "Invalid administrative credentials" },
           { status: 401 }
         );
       }
 
+      // Reset rate limit on successful authentication
+      resetRateLimit(`login_${ip}`);
+
       const token = signAdminToken(admin);
+
+      // Record audit log
+      await recordAudit({
+        req,
+        admin,
+        action: "ADMIN_LOGIN",
+        targetEntity: "AdminSession",
+        targetId: admin._id,
+        details: `Administrator ${admin.email} (${admin.role}) logged in successfully.`,
+      });
+
       const res = NextResponse.json({
         success: true,
         admin: { email: admin.email, name: admin.name, role: admin.role },
@@ -123,8 +153,21 @@ export async function GET(req) {
   }
 }
 
-export async function DELETE() {
-  const res = NextResponse.json({ success: true, message: "Logged out" });
+export async function DELETE(req) {
+  const token = req.cookies.get("admin_token")?.value;
+  const admin = token ? verifyAdminToken(token) : null;
+  if (admin) {
+    await recordAudit({
+      req,
+      admin,
+      action: "ADMIN_LOGOUT",
+      targetEntity: "AdminSession",
+      targetId: admin.id || "",
+      details: `Administrator ${admin.email} logged out.`,
+    });
+  }
+
+  const res = NextResponse.json({ success: true, message: "Logged out successfully" });
   res.cookies.set("admin_token", "", {
     httpOnly: true,
     maxAge: 0,

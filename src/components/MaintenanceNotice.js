@@ -7,10 +7,10 @@ const defaultMaintenanceSettings = {
   maintenanceBarEnabled: true,
   maintenancePopupEnabled: true,
   maintenanceMessage:
-    "Website Under Maintenance — We are improving your experience. Some features may not work as expected.",
+    "Maintenance Notice: Our website is currently under development. We are improving your experience, and some features may not work as expected.",
   maintenancePopupTitle: "Website Under Active Development",
   maintenancePopupMessage:
-    "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore.",
+    "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
 };
 
 export default function MaintenanceNotice() {
@@ -74,44 +74,47 @@ export default function MaintenanceNotice() {
     return null;
   }
 
-  const message = settings.maintenanceMessage || defaultMaintenanceSettings.maintenanceMessage;
+  // Use the required English message by default or from settings
+  const message =
+    settings.maintenanceMessage && !/[\u0900-\u097F]/.test(settings.maintenanceMessage)
+      ? settings.maintenanceMessage
+      : defaultMaintenanceSettings.maintenanceMessage;
   const popupTitle = settings.maintenancePopupTitle || defaultMaintenanceSettings.maintenancePopupTitle;
   const popupMessage = settings.maintenancePopupMessage || defaultMaintenanceSettings.maintenancePopupMessage;
 
   return (
     <>
-      {/* 1. Maintenance Announcement Bar */}
+      {/* 1. Maintenance Announcement Bar: rendered in normal document flow above Header (never overlaps) */}
       {!barDismissed && settings.maintenanceBarEnabled && (
-        <div
+        <aside
           role="alert"
-          className="relative z-50 bg-[#071D49] text-white border-b-2 border-[#F4510B] px-3 py-2 text-xs transition-all duration-200"
+          aria-label="Maintenance Announcement"
+          className="relative z-40 bg-[#091D42] text-white border-b-2 border-[#F26A21] px-3 py-2.5 text-xs transition-all duration-200"
         >
           <div className="max-w-[1100px] mx-auto flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2 flex-1 min-w-0">
-              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#F4510B] text-white text-[11px] shrink-0 font-bold">
+            <div className="flex items-center gap-2.5 flex-1 min-w-0">
+              <span className="flex items-center justify-center w-5 h-5 rounded-full bg-[#F26A21] text-white text-[11px] shrink-0 font-bold">
                 🛠️
               </span>
-              <span className="font-bold text-[#FFE6C7] shrink-0 hidden sm:inline">
-                [Maintenance Notice]:
-              </span>
-              <p className="truncate sm:whitespace-normal text-white/95 text-[11px] sm:text-xs">
-                {message}
+              <p className="text-white text-[11px] sm:text-xs font-medium leading-tight">
+                <strong className="text-[#FFF0E2] font-bold mr-1">Maintenance Notice:</strong>
+                Our website is currently under development. We are improving your experience, and some features may not work as expected.
               </p>
             </div>
 
             <button
               onClick={dismissBar}
               aria-label="Dismiss maintenance announcement"
-              className="shrink-0 text-white/80 hover:text-[#F4510B] hover:bg-white/10 rounded px-1.5 py-0.5 text-xs font-bold transition-colors cursor-pointer"
-              title="Close notification"
+              className="shrink-0 text-white/90 hover:text-white hover:bg-white/10 rounded px-2 py-0.5 text-xs font-bold transition-colors cursor-pointer border border-white/20"
+              title="Dismiss announcement"
             >
-              ✕
+              ✕ Close
             </button>
           </div>
-        </div>
+        </aside>
       )}
 
-      {/* 2. Optional Maintenance Popup Modal */}
+      {/* 2. Maintenance Popup Modal (controlled via settings) */}
       {mounted && showPopup && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
@@ -120,28 +123,28 @@ export default function MaintenanceNotice() {
           aria-modal="true"
         >
           <div
-            className="relative w-full max-w-md bg-[#FFFDF6] border-2 border-[#F3D8B0] rounded-xl shadow-2xl p-6 text-center text-[#172B4D] animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-md bg-white border-2 border-[#E9D9C5] rounded-xl shadow-2xl p-6 text-center text-[#263449] animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Close Button */}
             <button
               onClick={closePopup}
               aria-label="Close maintenance notice"
-              className="absolute right-3.5 top-3.5 text-[#64748B] hover:text-[#F4510B] text-sm font-bold w-6 h-6 rounded-full flex items-center justify-center hover:bg-[#FFE6C7]/50 transition-colors cursor-pointer"
+              className="absolute right-3.5 top-3.5 text-[#64748B] hover:text-[#F26A21] text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#FFF0E2] transition-colors cursor-pointer"
             >
               ✕
             </button>
 
             {/* Icon Header */}
-            <div className="w-14 h-14 mx-auto rounded-full bg-[#082F75] text-[#FFE6C7] border-2 border-[#F4510B] flex items-center justify-center text-2xl shadow-sm mb-3.5">
+            <div className="w-14 h-14 mx-auto rounded-full bg-[#102F6B] text-[#FFF0E2] border-2 border-[#F26A21] flex items-center justify-center text-2xl shadow-sm mb-3.5">
               🛠️
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 mb-2 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFE6C7] text-[#C83B08] border border-[#F3D8B0]">
-              Development In Progress
+            <div className="inline-block px-2.5 py-0.5 mb-2 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+              Active Development
             </div>
 
-            <h3 className="text-base sm:text-lg font-black text-[#082F75] tracking-tight">
+            <h3 className="text-base sm:text-lg font-black text-[#102F6B] tracking-tight">
               {popupTitle}
             </h3>
 
@@ -149,10 +152,10 @@ export default function MaintenanceNotice() {
               {popupMessage}
             </p>
 
-            <div className="mt-5 pt-4 border-t border-[#F3D8B0]/60 flex items-center justify-center gap-3">
+            <div className="mt-5 pt-4 border-t border-[#E9D9C5] flex items-center justify-center gap-3">
               <button
                 onClick={closePopup}
-                className="w-full py-2.5 px-4 bg-[#F4510B] hover:bg-[#C83B08] text-white text-xs sm:text-sm font-bold rounded transition-colors shadow-sm cursor-pointer"
+                className="btn-primary w-full py-2.5 px-4 text-xs sm:text-sm shadow-sm cursor-pointer"
               >
                 Continue Browsing alokworld.in →
               </button>
