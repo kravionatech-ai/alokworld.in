@@ -15,6 +15,7 @@ const SiteSettingsSchema = new mongoose.Schema(
     heroSubtitle: { type: String, default: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India." },
     heroCtaText: { type: String, default: "Explore Member Directory →" },
     heroCtaLink: { type: String, default: "/directory" },
+    heroImage: { type: String, default: "" },
 
     // Sidebar Widgets Configuration
     sidebarNoticeTitle: { type: String, default: "Community Announcements & Notices" },

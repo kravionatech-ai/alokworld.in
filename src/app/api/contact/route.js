@@ -4,6 +4,7 @@ import Contact from "@/models/Contact";
 import { sendEmail } from "@/lib/email";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { recordAudit } from "@/lib/audit";
 
 export async function POST(req) {
   try {
@@ -119,5 +120,42 @@ export async function GET(req) {
   } catch (error) {
     console.error("GET /api/contact error:", error);
     return NextResponse.json({ error: "Failed to fetch contact inquiries" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    const token = req.cookies.get("admin_token")?.value;
+    const admin = token ? verifyAdminToken(token) : null;
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ error: "Missing message ID" }, { status: 400 });
+    }
+
+    const conn = await connectDB();
+    if (conn) {
+      const deleted = await Contact.findByIdAndDelete(id);
+      if (deleted) {
+        await recordAudit({
+          req,
+          admin,
+          action: "delete_contact_inquiry",
+          targetEntity: "Contact",
+          targetId: id,
+          details: `Deleted contact inquiry from ${deleted.name} (${deleted.email})`,
+        });
+        return NextResponse.json({ success: true, message: "Inquiry deleted successfully" });
+      }
+    }
+
+    return NextResponse.json({ error: "Message not found" }, { status: 404 });
+  } catch (error) {
+    console.error("DELETE /api/contact error:", error);
+    return NextResponse.json({ error: "Failed to delete contact inquiry" }, { status: 500 });
   }
 }

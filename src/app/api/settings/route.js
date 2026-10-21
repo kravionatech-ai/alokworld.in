@@ -14,6 +14,7 @@ const defaultSettings = {
   heroSubtitle: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India.",
   heroCtaText: "Explore Member Directory →",
   heroCtaLink: "/directory",
+  heroImage: "",
   sidebarNoticeTitle: "Community Announcements & Notices",
   sidebarNoticeContent: "All community members are requested to keep their family and professional information up to date in the directory.",
   sidebarNoticeEnabled: true,

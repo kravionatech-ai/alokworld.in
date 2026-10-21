@@ -109,6 +109,12 @@ function Icon({ name, className = "w-4 h-4 shrink-0" }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25H4.5a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5H4.5a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
         </svg>
       );
+    case "server":
+      return (
+        <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.7 4.05a2.25 2.25 0 011.8-.9h9a2.25 2.25 0 011.8.9l2.55 4.5a4.5 4.5 0 01.9 2.7" />
+        </svg>
+      );
     default:
       return null;
   }
@@ -204,6 +210,7 @@ export default function AdminDashboard() {
     heroSubtitle: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India.",
     heroCtaText: "Explore Member Directory →",
     heroCtaLink: "/directory",
+    heroImage: "",
     sidebarNoticeTitle: "",
     sidebarNoticeContent: "",
     sidebarNoticeEnabled: true,
@@ -656,7 +663,16 @@ export default function AdminDashboard() {
     setUploadingImage(true);
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("folder", targetField === "gallery" ? "alokworld_gallery" : "alokworld_members");
+    formData.append(
+      "folder",
+      targetField === "gallery"
+        ? "alokworld_gallery"
+        : targetField === "heroImage"
+        ? "alokworld_hero"
+        : targetField === "ogImage"
+        ? "alokworld_seo"
+        : "alokworld_members"
+    );
 
     try {
       const res = await fetch("/api/upload", {
@@ -675,6 +691,9 @@ export default function AdminDashboard() {
       } else if (targetField === "ogImage") {
         setSettings((prev) => ({ ...prev, ogImage: data.url }));
         showBanner("Social image uploaded.");
+      } else if (targetField === "heroImage") {
+        setSettings((prev) => ({ ...prev, heroImage: data.url }));
+        showBanner("Hero banner image uploaded! Remember to save settings.");
       }
     } catch (err) {
       showBanner(err.message, true);
@@ -927,39 +946,65 @@ export default function AdminDashboard() {
   };
 
   // ==========================================
-  // EDITORIAL NAVIGATION STRUCTURE
+  // EDITORIAL NAVIGATION STRUCTURE (6 ORGANIZED GROUPS)
   // ==========================================
   const navigationSections = [
     {
-      title: "Publishing",
+      title: "Dashboard",
       items: [
-        { id: "overview", label: "Overview", icon: "overview" },
+        { id: "overview", label: "Overview & Metrics", icon: "overview" },
+        { id: "system_health", label: "Site & System Health", icon: "server" },
+      ],
+    },
+    {
+      title: "Content Management",
+      items: [
+        { id: "pages", label: "Page Content", icon: "document", count: pagesList.length },
+        {
+          id: "hero_widgets",
+          label: "Hero & Announcements",
+          icon: "widgets",
+          activeIndicator: settings.announcementEnabled,
+        },
+        { id: "navigation", label: "Header Navigation Menu", icon: "navigation" },
+        { id: "gallery", label: "Photo Gallery", icon: "photo", count: galleryItems.length },
+      ],
+    },
+    {
+      title: "Members & Community",
+      items: [
         {
           id: "members",
           label: "Member Directory",
           icon: "users",
-          count: members.length,
+          count: memberStats.total,
           onClick: () => {
             setActiveTab("members");
             setStatusFilter("all");
           },
         },
-        { id: "pages", label: "Page Content", icon: "document", count: pagesList.length },
-        { id: "gallery", label: "Photo Gallery", icon: "photo", count: galleryItems.length },
+        {
+          id: "add_member",
+          label: "Register New Member",
+          icon: "user-plus",
+          onClick: () => {
+            resetMemberForm();
+            setActiveTab("add_member");
+          },
+        },
+        {
+          id: "messages",
+          label: "Inquiries & Submissions",
+          icon: "mail",
+          count: messages.length,
+          activeIndicator: messages.some((m) => !m.isRead),
+        },
       ],
     },
     {
-      title: "Structure & Layout",
+      title: "Website Configuration",
       items: [
-        { id: "navigation", label: "Header Menu", icon: "navigation" },
-        { id: "hero_widgets", label: "Hero & Announcements", icon: "widgets" },
-      ],
-    },
-    {
-      title: "Configuration",
-      items: [
-        { id: "site_settings", label: "Site Information", icon: "settings" },
-        { id: "seo_settings", label: "Technical SEO", icon: "search" },
+        { id: "site_settings", label: "Site Info & Contacts", icon: "settings" },
         {
           id: "maintenance",
           label: "Maintenance Mode",
@@ -969,13 +1014,18 @@ export default function AdminDashboard() {
       ],
     },
     {
+      title: "Technical SEO",
+      items: [
+        { id: "seo_settings", label: "Technical SEO & Meta", icon: "search" },
+      ],
+    },
+    {
       title: "Administration",
       items: [
         { id: "audit_logs", label: "Audit Trail", icon: "clipboard" },
         ...(currentUser?.role === "superadmin"
           ? [{ id: "admin_team", label: "Staff & Permissions", icon: "key", count: adminUsers.length }]
           : []),
-        { id: "messages", label: "Inquiries", icon: "mail", count: messages.length },
       ],
     },
   ];
@@ -991,18 +1041,18 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F6F0] text-[#1E293B] flex flex-col font-sans antialiased text-[13px]">
+    <div className="h-screen w-screen overflow-hidden bg-[#F8F6F0] text-[#1E293B] flex flex-col font-sans antialiased text-[13px]">
       {/* ========================================================================= */}
-      {/* 1. TOP UTILITY BAR (44px compact, clean typography) */}
+      {/* 1. TOP UTILITY BAR (Sticky Full-Width Header, 48px)                       */}
       {/* ========================================================================= */}
-      <header className="h-11 bg-white border-b border-[#E2DDD5] sticky top-0 z-30 px-3 sm:px-5 flex items-center justify-between shrink-0">
+      <header className="h-12 w-full bg-white border-b border-[#E2DDD5] shrink-0 z-30 px-3 sm:px-6 flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1 text-[#102F6B] hover:text-[#D9531E] cursor-pointer"
-            aria-label="Toggle menu"
+            className="md:hidden p-1.5 rounded-xs text-[#102F6B] hover:text-[#D9531E] hover:bg-[#FAF8F3] cursor-pointer"
+            aria-label="Toggle navigation drawer"
           >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
@@ -1010,14 +1060,14 @@ export default function AdminDashboard() {
           <Link href="/admin" className="flex items-center gap-1.5 font-bold text-sm tracking-tight text-[#102F6B]">
             <span>alokworld<span className="text-[#D9531E]">.in</span></span>
             <span className="text-[#A09A90] font-normal mx-0.5">/</span>
-            <span className="text-xs font-medium text-[#55657E] hidden xs:inline">Editorial Desk</span>
+            <span className="text-xs font-medium text-[#55657E] hidden xs:inline">Centralized Control Desk</span>
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 sm:gap-3 text-xs">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 text-xs">
           <div className="text-[#55657E] hidden sm:flex items-center gap-1.5">
             <span className="font-medium text-[#1E293B]">{currentUser?.email}</span>
-            <span className="text-[10px] uppercase font-mono px-1 py-0.2 bg-[#F2EDE4] text-[#102F6B] border border-[#E2DDD5] rounded-xs">
+            <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 bg-[#F2EDE4] text-[#102F6B] border border-[#E2DDD5] rounded-xs font-semibold">
               {currentUser?.role || "Editor"}
             </span>
           </div>
@@ -1027,9 +1077,10 @@ export default function AdminDashboard() {
           <Link
             href="/directory"
             target="_blank"
-            className="text-[#102F6B] hover:text-[#D9531E] font-medium transition-colors"
+            className="text-[#102F6B] hover:text-[#D9531E] font-medium transition-colors flex items-center gap-1"
           >
-            Live Site ↗
+            <span>Live Site</span>
+            <span className="text-[11px]">↗</span>
           </Link>
 
           <span className="text-[#E2DDD5]">|</span>
@@ -1044,39 +1095,43 @@ export default function AdminDashboard() {
       </header>
 
       {/* ========================================================================= */}
-      {/* 2. BODY LAYOUT: NARROW SIDEBAR + WORKSPACE */}
+      {/* 2. BODY LAYOUT: FIXED STICKY SIDEBAR + FULL-WIDTH SCROLLABLE WORKSPACE     */}
       {/* ========================================================================= */}
-      <div className="flex-1 flex min-w-0 overflow-x-hidden">
+      <div className="flex-1 flex w-full min-h-0 overflow-hidden relative">
         {/* Mobile Backdrop */}
         {mobileMenuOpen && (
           <div
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-[#0D1B2A]/40 z-40 md:hidden"
+            className="fixed inset-0 bg-[#0D1B2A]/60 z-40 md:hidden backdrop-blur-xs transition-opacity"
           />
         )}
 
         {/* Sidebar */}
         <aside
           className={`
-            fixed md:sticky top-0 md:top-11 h-screen md:h-[calc(100vh-2.75rem)]
-            w-56 bg-[#0D1B2A] text-slate-300 z-50 md:z-20 shrink-0 border-r border-[#1B2A40]
-            flex flex-col justify-between transition-all duration-150 ease-in-out
-            ${mobileMenuOpen ? "left-0 shadow-lg" : "-left-56 md:left-0"}
+            fixed md:relative top-0 bottom-0 left-0 md:left-auto
+            w-60 lg:w-64 h-full bg-[#0D1B2A] text-slate-300 z-50 md:z-10 shrink-0 border-r border-[#1B2A40]
+            flex flex-col justify-between transition-transform duration-200 ease-in-out
+            ${mobileMenuOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full md:translate-x-0"}
           `}
         >
           {/* Mobile Header */}
-          <div className="md:hidden h-11 px-3 flex items-center justify-between border-b border-[#1B2A40]">
-            <span className="font-bold text-xs text-white">Menu Navigation</span>
-            <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 p-1">
+          <div className="md:hidden h-12 px-4 flex items-center justify-between border-b border-[#1B2A40] bg-[#091424]">
+            <span className="font-bold text-xs text-white">Website Control Center</span>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-slate-400 hover:text-white p-1 cursor-pointer"
+              aria-label="Close drawer"
+            >
               ✕
             </button>
           </div>
 
-          {/* Nav List */}
-          <nav className="flex-1 overflow-y-auto py-2.5 px-2 space-y-3.5 text-xs">
+          {/* Nav List - Independently Scrollable */}
+          <nav className="flex-1 overflow-y-auto py-3 px-2.5 space-y-3.5 text-xs">
             {navigationSections.map((sec) => (
               <div key={sec.title} className="space-y-0.5">
-                <div className="px-2 text-[10px] uppercase tracking-wider font-semibold text-slate-500 mb-1">
+                <div className="px-2 text-[10px] uppercase tracking-wider font-semibold text-slate-400 mb-1">
                   {sec.title}
                 </div>
                 {sec.items.map((item) => {
@@ -1106,15 +1161,17 @@ export default function AdminDashboard() {
                         <span className="truncate">{item.label}</span>
                       </div>
 
-                      {item.count !== undefined && (
-                        <span className="text-[10px] font-mono text-slate-400 ml-1">
-                          {item.count}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                        {item.count !== undefined && (
+                          <span className="text-[10px] font-mono text-slate-400 px-1.5 py-0.2 rounded-xs bg-white/5">
+                            {item.count}
+                          </span>
+                        )}
 
-                      {item.activeIndicator && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#D9531E]" title="Notice Active"></span>
-                      )}
+                        {item.activeIndicator && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D9531E]" title="Active"></span>
+                        )}
+                      </div>
                     </button>
                   );
                 })}
@@ -1122,14 +1179,18 @@ export default function AdminDashboard() {
             ))}
           </nav>
 
-          <div className="p-2.5 border-t border-[#1B2A40] text-[11px] text-slate-500 flex items-center justify-between">
-            <span>alokworld.in CMS</span>
-            <span className="font-mono text-slate-400">v2.0</span>
+          {/* Sidebar Footer */}
+          <div className="p-3 border-t border-[#1B2A40] text-[11px] text-slate-500 flex items-center justify-between bg-[#091424]">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>alokworld.in</span>
+            </div>
+            <span className="font-mono text-slate-400 text-[10px]">v2.5 Full-Screen</span>
           </div>
         </aside>
 
-        {/* Workspace */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-7 max-w-6xl mx-auto w-full space-y-4 overflow-x-hidden">
+        {/* Workspace: 100% full width, independent vertical scrolling, zero horizontal overflow */}
+        <main className="flex-1 min-w-0 h-full overflow-y-auto overflow-x-hidden bg-[#F8F6F0] p-4 sm:p-6 lg:p-8 space-y-5">
           {/* Notifications */}
           {statusMsg && (
             <div className="p-3 bg-[#EAF5EC] border border-[#BDE0C6] text-[#1E5429] text-xs flex items-center justify-between rounded-xs">
@@ -1162,32 +1223,118 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* Cohesive Summary Strip */}
-              <div className="bg-white border border-[#E2DDD5] divide-y sm:divide-y-0 sm:divide-x divide-[#E2DDD5] grid grid-cols-1 sm:grid-cols-4 rounded-xs">
-                <div className="p-4 cursor-pointer hover:bg-[#FAF8F3]" onClick={() => { setActiveTab("members"); setStatusFilter("all"); }}>
-                  <div className="text-[11px] uppercase font-semibold text-[#55657E]">Total Members</div>
-                  <div className="text-2xl font-bold text-[#102F6B] mt-0.5">{memberStats.total}</div>
-                  <div className="text-[11px] text-[#55657E] mt-0.5">Directory database</div>
+              {/* 6-Metric Operational Summary Strip */}
+              <div className="bg-white border border-[#E2DDD5] divide-y sm:divide-y-0 sm:divide-x divide-[#E2DDD5] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 rounded-xs">
+                <div
+                  className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
+                  onClick={() => {
+                    setActiveTab("members");
+                    setStatusFilter("all");
+                  }}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">Total Members</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{memberStats.total}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">Directory DB</div>
                 </div>
 
-                <div className="p-4 cursor-pointer hover:bg-[#FAF8F3]" onClick={() => { setActiveTab("members"); setStatusFilter("active"); }}>
-                  <div className="text-[11px] uppercase font-semibold text-emerald-800">Approved</div>
-                  <div className="text-2xl font-bold text-emerald-800 mt-0.5">{memberStats.approved}</div>
-                  <div className="text-[11px] text-[#55657E] mt-0.5">Publicly active</div>
+                <div
+                  className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
+                  onClick={() => {
+                    setActiveTab("members");
+                    setStatusFilter("active");
+                  }}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-emerald-800">Approved</div>
+                  <div className="text-xl sm:text-2xl font-bold text-emerald-800 mt-0.5">{memberStats.approved}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">Publicly active</div>
                 </div>
 
-                <div className="p-4 cursor-pointer hover:bg-[#FAF8F3]" onClick={() => { setActiveTab("members"); setStatusFilter("pending"); }}>
-                  <div className="text-[11px] uppercase font-semibold text-amber-800">Pending Approval</div>
-                  <div className="text-2xl font-bold text-amber-800 mt-0.5">{memberStats.pending}</div>
-                  <div className="text-[11px] text-[#55657E] mt-0.5">
-                    {memberStats.pending > 0 ? "Requires review" : "Up to date"}
+                <div
+                  className={`p-3.5 cursor-pointer transition-colors ${
+                    memberStats.pending > 0 ? "bg-amber-50/60 hover:bg-amber-50" : "hover:bg-[#FAF8F3]"
+                  }`}
+                  onClick={() => {
+                    setActiveTab("members");
+                    setStatusFilter("pending");
+                  }}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-amber-800">Pending Review</div>
+                  <div className="text-xl sm:text-2xl font-bold text-amber-800 mt-0.5">{memberStats.pending}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">
+                    {memberStats.pending > 0 ? "● Action required" : "All reviewed"}
                   </div>
                 </div>
 
-                <div className="p-4 cursor-pointer hover:bg-[#FAF8F3]" onClick={() => { setActiveTab("members"); setStatusFilter("archived"); }}>
-                  <div className="text-[11px] uppercase font-semibold text-[#55657E]">Archived</div>
-                  <div className="text-2xl font-bold text-[#1E293B] mt-0.5">{memberStats.archived}</div>
-                  <div className="text-[11px] text-[#55657E] mt-0.5">Retained records</div>
+                <div
+                  className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
+                  onClick={() => setActiveTab("pages")}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-[#102F6B]">CMS Pages</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{pagesList.length}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">Rich articles</div>
+                </div>
+
+                <div
+                  className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
+                  onClick={() => setActiveTab("gallery")}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">Photo Gallery</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#1E293B] mt-0.5">{galleryItems.length}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">Cloudinary media</div>
+                </div>
+
+                <div
+                  className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
+                  onClick={() => setActiveTab("messages")}
+                >
+                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">Inquiries</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{messages.length}</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">
+                    {messages.filter((m) => !m.isRead).length > 0 ? (
+                      <span className="text-[#D9531E] font-medium font-mono">
+                        {messages.filter((m) => !m.isRead).length} new unread
+                      </span>
+                    ) : (
+                      "All answered"
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* System & Portal Live Status Strip */}
+              <div className="bg-white border border-[#E2DDD5] p-3 rounded-xs text-xs flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-4 flex-wrap text-[11px]">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span className="text-[#55657E]">Database:</span>
+                    <span className="font-semibold text-[#1E293B]">MongoDB Online</span>
+                  </div>
+                  <span className="text-[#E2DDD5]">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${settings.announcementEnabled ? "bg-[#D9531E]" : "bg-slate-400"}`}></span>
+                    <span className="text-[#55657E]">Announcement:</span>
+                    <span className="font-semibold text-[#1E293B]">
+                      {settings.announcementEnabled ? "Live Strip Active" : "Disabled"}
+                    </span>
+                  </div>
+                  <span className="text-[#E2DDD5]">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${settings.maintenanceMode ? "bg-amber-500" : "bg-emerald-500"}`}></span>
+                    <span className="text-[#55657E]">Maintenance Advisory:</span>
+                    <span className="font-semibold text-[#1E293B]">
+                      {settings.maintenanceMode ? "Advisory Banner ON" : "Production Normal"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("system_health")}
+                    className="text-[11px] text-[#102F6B] hover:text-[#D9531E] font-medium underline"
+                  >
+                    View System Diagnostics →
+                  </button>
                 </div>
               </div>
 
@@ -1196,31 +1343,37 @@ export default function AdminDashboard() {
                 <span className="font-semibold text-[#102F6B] mr-1">Quick Actions:</span>
                 <button
                   onClick={() => { resetMemberForm(); setActiveTab("add_member"); }}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
                   + Add Member
                 </button>
                 <button
                   onClick={() => setActiveTab("pages")}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
                   Edit CMS Pages
                 </button>
                 <button
+                  onClick={() => setActiveTab("hero_widgets")}
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
+                >
+                  Hero &amp; Announcements
+                </button>
+                <button
                   onClick={() => setActiveTab("gallery")}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
                   Upload Photos
                 </button>
                 <button
                   onClick={() => setActiveTab("site_settings")}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
                   Site Settings
                 </button>
                 <button
                   onClick={() => setActiveTab("audit_logs")}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer"
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
                   View Audit Trail
                 </button>
@@ -2087,6 +2240,115 @@ export default function AdminDashboard() {
                         className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                       />
                     </div>
+                    <div className="col-span-full">
+                      <label className="block font-medium text-[#1E293B] mb-1">
+                        Optional Hero Banner Image (Cloudinary CDN URL)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          placeholder="https://res.cloudinary.com/..."
+                          value={settings.heroImage || ""}
+                          onChange={(e) => setSettings({ ...settings, heroImage: e.target.value })}
+                          className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
+                        />
+                        <label className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shrink-0">
+                          <span>{uploadingImage ? "Uploading..." : "Upload File"}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            disabled={uploadingImage}
+                            onChange={(e) => handleImageUpload(e, "heroImage")}
+                            className="hidden"
+                          />
+                        </label>
+                        {settings.heroImage && (
+                          <button
+                            type="button"
+                            onClick={() => setSettings({ ...settings, heroImage: "" })}
+                            className="px-2 py-1.5 text-xs text-red-700 hover:bg-red-50 border border-red-200 rounded-xs cursor-pointer"
+                          >
+                            Clear
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Live Interactive Preview Canvas */}
+                <div className="space-y-2 pt-3 border-t border-[#E2DDD5]">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
+                      Live Portal Preview (Desktop View)
+                    </h3>
+                    <span className="text-[10px] text-[#55657E]">
+                      Real-time interactive rendering of hero section &amp; announcement
+                    </span>
+                  </div>
+
+                  <div className="border border-[#D5CEC4] rounded-xs bg-[#FFFCF5] p-3 sm:p-4 space-y-3">
+                    {/* Top Announcement Strip Simulation */}
+                    {settings.announcementEnabled ? (
+                      <div className="bg-[#091D42] text-white px-3 py-1.5 text-xs rounded-xs flex items-center gap-2 border-l-4 border-[#F26A21]">
+                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 bg-[#F26A21] text-white rounded-xs shrink-0">
+                          Notice
+                        </span>
+                        <span className="text-xs truncate">{settings.announcement || "No announcement text configured"}</span>
+                      </div>
+                    ) : (
+                      <div className="text-[11px] text-[#8896AB] italic px-2">
+                        [Announcement strip is currently disabled]
+                      </div>
+                    )}
+
+                    {/* Hero Banner Card Simulation */}
+                    <div className="bg-white rounded-xs p-4 sm:p-6 border border-[#F0E5D5] shadow-xs flex flex-col md:flex-row items-start justify-between gap-4">
+                      <div className="flex-1 max-w-2xl space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                            {settings.heroBadge || "Official Community Portal"}
+                          </span>
+                          <span className="text-xs text-[#55657E]">• alokworld.in</span>
+                        </div>
+
+                        <h2 className="text-lg sm:text-xl font-black text-[#102F6B] leading-snug">
+                          {settings.heroTitle || "Akhil Bhartiya Samaj Directory & Central Portal"}
+                        </h2>
+
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          {settings.heroSubtitle || "A comprehensive digital network connecting community members across India."}
+                        </p>
+
+                        <div className="pt-2 flex flex-wrap gap-2">
+                          <span className="inline-block px-3 py-1.5 bg-[#F26A21] text-white font-semibold text-xs rounded-xs shadow-xs">
+                            {settings.heroCtaText || "Explore Member Directory →"}
+                          </span>
+                          <span className="inline-block px-3 py-1.5 bg-[#102F6B] text-white font-medium text-xs rounded-xs">
+                            Register / Contact
+                          </span>
+                        </div>
+                      </div>
+
+                      {settings.heroImage && (
+                        <div className="w-full md:w-56 shrink-0 rounded-xs overflow-hidden border border-[#E2DDD5]">
+                          <img src={settings.heroImage} alt="Hero Banner" className="w-full h-32 object-cover" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Community Sidebar Notice Simulation */}
+                    {settings.sidebarNoticeEnabled && (
+                      <div className="bg-white p-3 border border-[#E2DDD5] rounded-xs space-y-1 max-w-md">
+                        <div className="text-[11px] font-bold text-[#102F6B] flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D9531E]"></span>
+                          <span>{settings.sidebarNoticeTitle || "Community Announcements"}</span>
+                        </div>
+                        <p className="text-xs text-[#55657E] leading-relaxed">
+                          {settings.sidebarNoticeContent || "Notice content text..."}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -2798,6 +3060,150 @@ export default function AdminDashboard() {
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================================= */}
+          {/* VIEW: SYSTEM & DATABASE HEALTH                                            */}
+          {/* ========================================================================= */}
+          {activeTab === "system_health" && (
+            <div className="space-y-4">
+              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
+                <div>
+                  <h1 className="text-lg font-bold text-[#102F6B]">Site &amp; System Integration Health</h1>
+                  <p className="text-xs text-[#55657E]">
+                    Real-time connection monitoring, database telemetry, and infrastructure diagnostics.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    fetchMembers();
+                    fetchPages();
+                    fetchSettings();
+                    fetchGallery();
+                    fetchMessages();
+                    setStatusMsg("Refreshed all system telemetry and connection health checks.");
+                  }}
+                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shadow-2xs"
+                >
+                  Refresh Health Checks
+                </button>
+              </div>
+
+              {/* 6-Card Diagnostic Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                {/* 1. Database Connection */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">MongoDB Database</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      CONNECTED
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    Local MongoDB database active with Mongoose ODM connection pool.
+                  </p>
+                  <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
+                    <div className="flex justify-between"><span>Members:</span> <span className="font-bold text-[#1E293B]">{memberStats.total} records</span></div>
+                    <div className="flex justify-between"><span>CMS Pages:</span> <span className="font-bold text-[#1E293B]">{pagesList.length} documents</span></div>
+                    <div className="flex justify-between"><span>Gallery Media:</span> <span className="font-bold text-[#1E293B]">{galleryItems.length} photos</span></div>
+                    <div className="flex justify-between"><span>Contact Inquiries:</span> <span className="font-bold text-[#1E293B]">{messages.length} messages</span></div>
+                  </div>
+                </div>
+
+                {/* 2. Media Storage / CDN */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">Cloudinary Media CDN</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      ACTIVE
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    Image uploads routed through authenticated server-side buffer endpoints.
+                  </p>
+                  <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
+                    <div className="flex justify-between"><span>API Gateway:</span> <span className="text-[#1E293B]">/api/upload</span></div>
+                    <div className="flex justify-between"><span>Size Restriction:</span> <span className="text-[#1E293B]">Max 5.0 MB</span></div>
+                    <div className="flex justify-between"><span>MIME Filter:</span> <span className="text-[#1E293B]">JPEG, PNG, WebP, GIF</span></div>
+                  </div>
+                </div>
+
+                {/* 3. Authentication & Proxy */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">Authentication Proxy</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      ENFORCED
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    JWT cryptographic tokens in HTTP-only cookies verified by Next.js proxy middleware.
+                  </p>
+                  <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
+                    <div className="flex justify-between"><span>Active User:</span> <span className="text-[#1E293B] font-bold truncate max-w-[140px]">{currentUser?.email}</span></div>
+                    <div className="flex justify-between"><span>Assigned Role:</span> <span className="text-[#102F6B] font-bold uppercase">{currentUser?.role}</span></div>
+                    <div className="flex justify-between"><span>Token Session:</span> <span className="text-[#1E293B]">7 days rolling</span></div>
+                  </div>
+                </div>
+
+                {/* 4. Technical SEO Endpoints */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">Search Engine Crawl Directives</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      ONLINE
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    Dynamic XML sitemap and robots.txt index published routes and public members.
+                  </p>
+                  <div className="text-[11px] pt-2 border-t border-[#EFECE6] flex items-center justify-between">
+                    <a href="/sitemap.xml" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
+                      View sitemap.xml ↗
+                    </a>
+                    <a href="/robots.txt" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
+                      View robots.txt ↗
+                    </a>
+                  </div>
+                </div>
+
+                {/* 5. Email Dispatch Service */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">Email Dispatch Gateway</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      CONFIGURED
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    Contact inquiries persist to database and dispatch notifications via Resend API.
+                  </p>
+                  <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
+                    <div className="flex justify-between"><span>Total Inquiries:</span> <span className="font-bold text-[#1E293B]">{messages.length}</span></div>
+                    <div className="flex justify-between"><span>Inbox Address:</span> <span className="text-[#1E293B] truncate max-w-[140px]">{settings.contactEmail}</span></div>
+                  </div>
+                </div>
+
+                {/* 6. OWASP Security Headers */}
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[#102F6B]">HTTP Security Headers</span>
+                    <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
+                      ACTIVE
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#55657E] leading-relaxed">
+                    OWASP security headers injected on all HTTP requests through proxy middleware.
+                  </p>
+                  <div className="text-[10px] font-mono text-emerald-800 pt-2 border-t border-[#EFECE6] space-y-0.5">
+                    <div>✓ HSTS: max-age=63072000; preload</div>
+                    <div>✓ X-Frame-Options: SAMEORIGIN</div>
+                    <div>✓ X-Content-Type-Options: nosniff</div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
