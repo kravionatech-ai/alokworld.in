@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { useState, useEffect } from "react";
 
 // Standard editorial animation easing curve (restrained, fluid, non-bouncy)
 const standardEase = [0.22, 1, 0.36, 1];
@@ -15,18 +14,13 @@ export function FadeIn({
   direction = "up",
   delay = 0,
   duration = 0.5,
-  distance = 18,
-  threshold = 0.1,
+  distance = 16,
+  threshold = 0,
   once = true,
   as = "div",
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const getOffset = () => {
     if (shouldReduceMotion) return { x: 0, y: 0 };
@@ -47,15 +41,6 @@ export function FadeIn({
 
   const initialOffset = getOffset();
   const Component = motion[as] || motion.div;
-
-  if (!mounted) {
-    const Tag = as;
-    return (
-      <Tag className={className} {...props}>
-        {children}
-      </Tag>
-    );
-  }
 
   return (
     <Component
@@ -81,48 +66,29 @@ export function FadeIn({
 export function StaggerContainer({
   children,
   className = "",
-  staggerDelay = 0.08,
-  initialDelay = 0.05,
-  once = true,
-  threshold = 0.08,
+  staggerDelay = 0.05,
+  initialDelay = 0.02,
   as = "div",
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: shouldReduceMotion ? 1 : 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: shouldReduceMotion ? 0 : staggerDelay,
-        delayChildren: shouldReduceMotion ? 0 : initialDelay,
-      },
-    },
-  };
-
   const Component = motion[as] || motion.div;
-
-  if (!mounted) {
-    const Tag = as;
-    return (
-      <Tag className={className} {...props}>
-        {children}
-      </Tag>
-    );
-  }
 
   return (
     <Component
-      variants={containerVariants}
-      initial="hidden"
+      initial={shouldReduceMotion ? false : "hidden"}
       whileInView="show"
-      viewport={{ once, amount: threshold }}
+      viewport={{ once: true, amount: 0 }}
+      variants={{
+        hidden: { opacity: shouldReduceMotion ? 1 : 0 },
+        show: {
+          opacity: 1,
+          transition: {
+            staggerChildren: shouldReduceMotion ? 0 : staggerDelay,
+            delayChildren: shouldReduceMotion ? 0 : initialDelay,
+          },
+        },
+      }}
       className={className}
       {...props}
     >
@@ -137,46 +103,33 @@ export function StaggerContainer({
 export function StaggerItem({
   children,
   className = "",
-  distance = 16,
+  distance = 14,
   duration = 0.45,
   as = "div",
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: shouldReduceMotion ? 0 : distance,
-    },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: shouldReduceMotion ? 0.01 : duration,
-        ease: standardEase,
-      },
-    },
-  };
-
   const Component = motion[as] || motion.div;
 
-  if (!mounted) {
-    const Tag = as;
-    return (
-      <Tag className={className} {...props}>
-        {children}
-      </Tag>
-    );
-  }
-
   return (
-    <Component variants={itemVariants} className={className} {...props}>
+    <Component
+      variants={{
+        hidden: {
+          opacity: shouldReduceMotion ? 1 : 0,
+          y: shouldReduceMotion ? 0 : distance,
+        },
+        show: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: shouldReduceMotion ? 0.01 : duration,
+            ease: standardEase,
+          },
+        },
+      }}
+      className={className}
+      {...props}
+    >
       {children}
     </Component>
   );
@@ -193,25 +146,12 @@ export function SectionHeadingReveal({
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className={className} {...props}>
-        {children}
-      </div>
-    );
-  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
+      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 12 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, amount: 0.2 }}
+      viewport={{ once, amount: 0 }}
       transition={{
         duration: shouldReduceMotion ? 0.01 : 0.45,
         delay: shouldReduceMotion ? 0 : delay,
@@ -236,22 +176,7 @@ export function SubtleHoverCard({
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const Component = motion[as] || motion.div;
-
-  if (!mounted) {
-    const Tag = as;
-    return (
-      <Tag className={className} {...props}>
-        {children}
-      </Tag>
-    );
-  }
 
   return (
     <Component
@@ -276,22 +201,7 @@ export function InteractiveTap({
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   const Component = motion[as] || motion.div;
-
-  if (!mounted) {
-    const Tag = as;
-    return (
-      <Tag className={className} {...props}>
-        {children}
-      </Tag>
-    );
-  }
 
   return (
     <Component

@@ -73,19 +73,22 @@ export default function FeaturedMembersCarousel({
       </div>
 
       {/* Swiper Slider with SSR Fallback */}
-      <div className="relative">
+      <div className="relative w-full">
         {!mounted ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {members.slice(0, 3).map((member) => (
-              <div key={member._id || member.id || member.slug} className="h-full">
+              <div key={member._id || member.id || member.slug} className="h-full min-h-[290px]">
                 <MemberCard member={member} />
               </div>
             ))}
           </div>
         ) : (
-          <>
+          <div className="w-full">
             <Swiper
               modules={[Autoplay, Pagination, Navigation, A11y]}
+              observer={true}
+              observeParents={true}
+              resizeObserver={true}
               spaceBetween={16}
               slidesPerView={1}
               breakpoints={{
@@ -119,11 +122,11 @@ export default function FeaturedMembersCarousel({
                 prevSlideMessage: "Previous member slide",
                 nextSlideMessage: "Next member slide",
               }}
-              className="w-full pb-2"
+              className="w-full"
             >
               {members.map((member) => (
-                <SwiperSlide key={member._id || member.id || member.slug} className="h-auto">
-                  <div className="h-full">
+                <SwiperSlide key={member._id || member.id || member.slug} className="!h-auto pb-2">
+                  <div className="h-full min-h-[290px]">
                     <MemberCard member={member} />
                   </div>
                 </SwiperSlide>
@@ -132,7 +135,7 @@ export default function FeaturedMembersCarousel({
 
             {/* Custom Pagination Bullets */}
             <div className="featured-members-pagination flex items-center justify-center gap-1.5 mt-4" />
-          </>
+          </div>
         )}
       </div>
     </section>

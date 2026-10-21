@@ -143,13 +143,11 @@ export default function HomePage() {
 
         {/* Featured Community Members Carousel (Multi-card Swiper) */}
         {featuredMembers && featuredMembers.length > 0 && (
-          <FadeIn direction="up" distance={16} duration={0.5}>
-            <FeaturedMembersCarousel
-              members={featuredMembers}
-              title="Distinguished Community Members Spotlight"
-              subtitle="Swipe through verified community elders, doctors, engineers, and professionals."
-            />
-          </FadeIn>
+          <FeaturedMembersCarousel
+            members={featuredMembers}
+            title="Distinguished Community Members Spotlight"
+            subtitle="Swipe through verified community elders, doctors, engineers, and professionals."
+          />
         )}
 
         {/* 2-Column Responsive Layout: Directory Spotlight + Sidebar */}
