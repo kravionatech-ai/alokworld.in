@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchFilterBar from "@/components/SearchFilterBar";
-import MemberList from "@/components/MemberList";
+import MemberTable from "@/components/MemberTable";
 import Sidebar from "@/components/Sidebar";
 import HeroCarousel from "@/components/HeroCarousel";
 import AnnouncementSlider from "@/components/AnnouncementSlider";
@@ -191,7 +191,7 @@ export default function HomePage() {
                 Loading members from directory...
               </div>
             ) : (
-              <MemberList members={featuredMembers.slice(0, 6)} />
+              <MemberTable members={featuredMembers.slice(0, 6)} startIndex={0} />
             )}
 
             <div className="text-center pt-3">

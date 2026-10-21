@@ -24,8 +24,6 @@ export default function SearchFilterBar({
   organizations = [],
   totalResults = 0,
   onResetFilters,
-  viewMode = "grid",
-  onViewModeChange,
 }) {
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -197,36 +195,6 @@ export default function SearchFilterBar({
         </div>
 
         <div className="flex items-center gap-3">
-          {/* View Toggle */}
-          {onViewModeChange && (
-            <div className="inline-flex rounded border border-[#F0E5D5] overflow-hidden">
-              <button
-                type="button"
-                onClick={() => onViewModeChange("grid")}
-                className={`px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-                  viewMode === "grid"
-                    ? "bg-[#102F6B] text-white"
-                    : "bg-white text-[#263449] hover:bg-[#FFF0E2]"
-                }`}
-                title="Grid view"
-              >
-                ▦ Grid
-              </button>
-              <button
-                type="button"
-                onClick={() => onViewModeChange("table")}
-                className={`px-2.5 py-1 text-xs font-semibold cursor-pointer ${
-                  viewMode === "table"
-                    ? "bg-[#102F6B] text-white"
-                    : "bg-white text-[#263449] hover:bg-[#FFF0E2]"
-                }`}
-                title="Table view"
-              >
-                ☰ Table
-              </button>
-            </div>
-          )}
-
           {hasActiveFilters && (
             <button
               onClick={handleReset}

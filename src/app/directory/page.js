@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchFilterBar from "@/components/SearchFilterBar";
-import MemberList from "@/components/MemberList";
 import MemberTable from "@/components/MemberTable";
 import Sidebar from "@/components/Sidebar";
 import { FadeIn } from "@/components/MotionWrappers";
@@ -23,7 +22,6 @@ export default function DirectoryPage() {
   const [totalResults, setTotalResults] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [viewMode, setViewMode] = useState("grid"); // "grid" or "table"
   const [filterOptions, setFilterOptions] = useState({
     cities: ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
     states: ["Madhya Pradesh", "Rajasthan", "Karnataka", "Uttar Pradesh", "Delhi", "Maharashtra"],
@@ -164,8 +162,6 @@ export default function DirectoryPage() {
                 organizations={filterOptions.organizations}
                 totalResults={totalResults}
                 onResetFilters={handleResetFilters}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
               />
             </FadeIn>
 
@@ -185,14 +181,12 @@ export default function DirectoryPage() {
               </div>
             )}
 
-            {/* Content Display: Loading / Grid / Table */}
+            {/* Content Display: Loading / Traditional Table */}
             {loading ? (
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-16 text-center text-[#64748B] font-medium shadow-xs">
                 <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
                 Searching community records...
               </div>
-            ) : viewMode === "grid" ? (
-              <MemberList members={members} />
             ) : (
               <MemberTable members={members} startIndex={(page - 1) * 12} />
             )}
