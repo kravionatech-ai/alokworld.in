@@ -207,7 +207,7 @@ function MemberProfileDetail({ params }) {
               </h3>
               {member.biography ? (
                 <div
-                  className="prose prose-sm max-w-none text-[#263449] text-xs sm:text-sm leading-relaxed"
+                  className="cms-prose text-[#263449] text-xs sm:text-sm leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: member.biography }}
                 />
               ) : (

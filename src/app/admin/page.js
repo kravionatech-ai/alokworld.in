@@ -3,6 +3,16 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 border border-[#D5CEC4] bg-[#FAF8F3] flex items-center justify-center text-xs text-[#55657E] animate-pulse rounded-xs">
+      Loading visual rich-text editor...
+    </div>
+  ),
+});
 
 // =========================================================================
 // MINIMALIST EDITORIAL ICONS (Monochrome SVGs, No Emojis)
@@ -1764,12 +1774,19 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div className="col-span-full">
-                      <label className="block font-medium text-[#1E293B] mb-1">Biography</label>
-                      <textarea
-                        rows={3}
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block font-medium text-[#1E293B]">
+                          Biography &amp; Career Highlights (WYSIWYG Rich Text)
+                        </label>
+                        <span className="text-[10px] text-[#55657E]">
+                          Supports bold, italics, lists, headings, links, and Hindi/English
+                        </span>
+                      </div>
+                      <RichTextEditor
                         value={memberForm.biography}
-                        onChange={(e) => setMemberForm({ ...memberForm, biography: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        onChange={(html) => setMemberForm((prev) => ({ ...prev, biography: html }))}
+                        minHeight="180px"
+                        placeholder="Write biographical details, community contributions, and professional honors..."
                       />
                     </div>
                   </div>
@@ -1922,38 +1939,20 @@ export default function AdminDashboard() {
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="font-medium text-[#1E293B]">Page Content (HTML)</label>
-                    <div className="space-x-1">
-                      <button
-                        type="button"
-                        onClick={() => setPageEditorMode("edit")}
-                        className={`px-2 py-0.5 rounded-xs text-[11px] font-mono ${pageEditorMode === "edit" ? "bg-[#102F6B] text-white" : "bg-[#F2EDE4]"}`}
-                      >
-                        Code
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPageEditorMode("preview")}
-                        className={`px-2 py-0.5 rounded-xs text-[11px] font-mono ${pageEditorMode === "preview" ? "bg-[#102F6B] text-white" : "bg-[#F2EDE4]"}`}
-                      >
-                        Preview
-                      </button>
-                    </div>
+                    <label className="font-medium text-[#1E293B]">
+                      Visual Page Content (WYSIWYG Document Editor)
+                    </label>
+                    <span className="text-[11px] text-[#55657E]">
+                      Format headings, tables, Hindi/English text, links, and Cloudinary media visually.
+                    </span>
                   </div>
 
-                  {pageEditorMode === "edit" ? (
-                    <textarea
-                      rows={12}
-                      value={pageForm.content}
-                      onChange={(e) => setPageForm({ ...pageForm, content: e.target.value })}
-                      className="w-full px-2.5 py-2 border border-[#D5CEC4] bg-[#FAF8F3] font-mono text-xs rounded-xs focus:border-[#102F6B] outline-hidden"
-                    />
-                  ) : (
-                    <div
-                      className="p-4 border border-[#D5CEC4] bg-[#FAF8F3] cms-prose min-h-[220px] rounded-xs"
-                      dangerouslySetInnerHTML={{ __html: pageForm.content }}
-                    />
-                  )}
+                  <RichTextEditor
+                    value={pageForm.content}
+                    onChange={(html) => setPageForm((prev) => ({ ...prev, content: html }))}
+                    minHeight="340px"
+                    placeholder="Compose structured page content with headings, lists, tables, and images..."
+                  />
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-[#E2DDD5]">

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import sanitizeHtml from "sanitize-html";
+import { sanitizeRichText } from "./richText.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "default_alokworld_secure_secret_2026";
 
@@ -25,17 +25,6 @@ export function verifyAdminToken(token) {
 }
 
 export function sanitizeContent(html) {
-  if (!html) return "";
-  return sanitizeHtml(html, {
-    allowedTags: [
-      "b", "i", "em", "strong", "a", "p", "ul", "ol", "li", "br",
-      "h2", "h3", "h4", "h5", "h6", "blockquote", "span"
-    ],
-    allowedAttributes: {
-      a: ["href", "name", "target", "rel"],
-      span: ["class", "style"],
-      p: ["class"],
-    },
-    allowedSchemes: ["http", "https", "mailto", "tel"],
-  });
+  return sanitizeRichText(html);
 }
+
