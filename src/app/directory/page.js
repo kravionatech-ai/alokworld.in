@@ -7,6 +7,7 @@ import SearchFilterBar from "@/components/SearchFilterBar";
 import MemberList from "@/components/MemberList";
 import MemberTable from "@/components/MemberTable";
 import Sidebar from "@/components/Sidebar";
+import { FadeIn } from "@/components/MotionWrappers";
 
 export default function DirectoryPage() {
   const [members, setMembers] = useState([]);
@@ -105,64 +106,68 @@ export default function DirectoryPage() {
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Page Banner */}
-        <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#F0E5D5] shadow-xs">
-          <div className="max-w-3xl">
-            <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5] mb-2">
-              Akhil Bhartiya Samaj Directory
-            </span>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
-              Samaj Community Directory &amp; Member Registry
-            </h1>
-            <p className="mt-2 text-xs sm:text-sm text-[#64748B] leading-relaxed font-normal">
-              Search and discover verified community elders, doctors, engineers, advocates, merchants, and youth network across India.
-            </p>
-          </div>
-        </section>
+        <FadeIn direction="up" distance={14} duration={0.5}>
+          <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#F0E5D5] shadow-xs">
+            <div className="max-w-3xl">
+              <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5] mb-2">
+                Akhil Bhartiya Samaj Directory
+              </span>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
+                Samaj Community Directory &amp; Member Registry
+              </h1>
+              <p className="mt-2 text-xs sm:text-sm text-[#64748B] leading-relaxed font-normal">
+                Search and discover verified community elders, doctors, engineers, advocates, merchants, and youth network across India.
+              </p>
+            </div>
+          </section>
+        </FadeIn>
 
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 order-2 lg:order-1">
             {/* Filter Bar with city, state, profession, organization, sort, view toggle */}
-            <SearchFilterBar
-              searchQuery={searchQuery}
-              onSearchChange={(q) => {
-                setSearchQuery(q);
-                setPage(1);
-              }}
-              selectedCity={selectedCity}
-              onCityChange={(c) => {
-                setSelectedCity(c);
-                setPage(1);
-              }}
-              selectedState={selectedState}
-              onStateChange={(s) => {
-                setSelectedState(s);
-                setPage(1);
-              }}
-              selectedProfession={selectedProfession}
-              onProfessionChange={(p) => {
-                setSelectedProfession(p);
-                setPage(1);
-              }}
-              selectedOrganization={selectedOrganization}
-              onOrganizationChange={(o) => {
-                setSelectedOrganization(o);
-                setPage(1);
-              }}
-              selectedSort={selectedSort}
-              onSortChange={(s) => {
-                setSelectedSort(s);
-                setPage(1);
-              }}
-              cities={filterOptions.cities}
-              states={filterOptions.states}
-              professions={filterOptions.professions}
-              organizations={filterOptions.organizations}
-              totalResults={totalResults}
-              onResetFilters={handleResetFilters}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-            />
+            <FadeIn direction="up" distance={10} duration={0.4}>
+              <SearchFilterBar
+                searchQuery={searchQuery}
+                onSearchChange={(q) => {
+                  setSearchQuery(q);
+                  setPage(1);
+                }}
+                selectedCity={selectedCity}
+                onCityChange={(c) => {
+                  setSelectedCity(c);
+                  setPage(1);
+                }}
+                selectedState={selectedState}
+                onStateChange={(s) => {
+                  setSelectedState(s);
+                  setPage(1);
+                }}
+                selectedProfession={selectedProfession}
+                onProfessionChange={(p) => {
+                  setSelectedProfession(p);
+                  setPage(1);
+                }}
+                selectedOrganization={selectedOrganization}
+                onOrganizationChange={(o) => {
+                  setSelectedOrganization(o);
+                  setPage(1);
+                }}
+                selectedSort={selectedSort}
+                onSortChange={(s) => {
+                  setSelectedSort(s);
+                  setPage(1);
+                }}
+                cities={filterOptions.cities}
+                states={filterOptions.states}
+                professions={filterOptions.professions}
+                organizations={filterOptions.organizations}
+                totalResults={totalResults}
+                onResetFilters={handleResetFilters}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+              />
+            </FadeIn>
 
             {/* Error Banner */}
             {error && (

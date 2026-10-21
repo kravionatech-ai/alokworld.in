@@ -1,4 +1,7 @@
+"use client";
+
 import MemberCard from "./MemberCard";
+import { StaggerContainer, StaggerItem } from "./MotionWrappers";
 
 export default function MemberList({ members = [] }) {
   if (members.length === 0) {
@@ -18,10 +21,15 @@ export default function MemberList({ members = [] }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <StaggerContainer
+      className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"
+      staggerDelay={0.06}
+    >
       {members.map((member) => (
-        <MemberCard key={member._id || member.id} member={member} />
+        <StaggerItem key={member._id || member.id} className="h-full">
+          <MemberCard member={member} />
+        </StaggerItem>
       ))}
-    </div>
+    </StaggerContainer>
   );
 }

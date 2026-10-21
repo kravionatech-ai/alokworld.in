@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -86,14 +87,22 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
   return (
     <>
       <NavLinksDesktop currentPath={pathname || ""} />
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-[#091D42] border-t border-[#162744] px-3 pb-2">
-          <NavLinksMobile
-            currentPath={pathname || ""}
-            onSelect={() => setMobileMenuOpen(false)}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.22, ease: "easeInOut" }}
+            className="md:hidden bg-[#091D42] border-t border-[#162744] px-3 pb-2 overflow-hidden"
+          >
+            <NavLinksMobile
+              currentPath={pathname || ""}
+              onSelect={() => setMobileMenuOpen(false)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

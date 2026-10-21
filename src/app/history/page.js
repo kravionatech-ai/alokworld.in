@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
+import { FadeIn } from "@/components/MotionWrappers";
 
 export default function HistoryPage() {
   const [cmsPage, setCmsPage] = useState(null);
@@ -23,7 +24,7 @@ export default function HistoryPage() {
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          <article className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-8 shadow-xs space-y-5">
+          <FadeIn as="article" direction="up" distance={14} duration={0.5} className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-8 shadow-xs space-y-5">
             <div className="border-b border-[#F0E5D5] pb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Heritage &amp; History
@@ -93,11 +94,11 @@ export default function HistoryPage() {
                 </div>
               </div>
             )}
-          </article>
+          </FadeIn>
 
-          <div className="lg:col-span-4">
+          <FadeIn as="div" direction="up" distance={14} duration={0.5} delay={0.1} className="lg:col-span-4">
             <Sidebar />
-          </div>
+          </FadeIn>
         </div>
       </main>
 

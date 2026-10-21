@@ -4,6 +4,7 @@ import { useEffect, useState, use, Suspense } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { FadeIn } from "@/components/MotionWrappers";
 
 function MemberProfileDetail({ params }) {
   const resolvedParams = use(params);
@@ -91,7 +92,8 @@ function MemberProfileDetail({ params }) {
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-[#F0E5D5] shadow-xs overflow-hidden">
+        <FadeIn direction="up" distance={14} duration={0.5}>
+          <div className="bg-white rounded-lg border border-[#F0E5D5] shadow-xs overflow-hidden">
           {/* Top Profile Header Banner */}
           <div className="bg-[#FFFCF5] p-5 sm:p-7 border-b border-[#F0E5D5] flex flex-col sm:flex-row items-center sm:items-start gap-5">
             {member.avatar ? (
@@ -235,6 +237,7 @@ function MemberProfileDetail({ params }) {
             )}
           </div>
         </div>
+        </FadeIn>
       )}
       {member && member.isPublished && member.isApproved && !member.isArchived && (
         <script

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
+import { FadeIn, StaggerContainer, StaggerItem, SubtleHoverCard } from "@/components/MotionWrappers";
 
 export default function AboutPage() {
   const [cmsPage, setCmsPage] = useState(null);
@@ -23,7 +24,7 @@ export default function AboutPage() {
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          <div className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-5">
+          <FadeIn as="div" direction="up" distance={14} duration={0.5} className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-5">
             <div className="border-b border-[#F0E5D5] pb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Community Portal
@@ -50,32 +51,48 @@ export default function AboutPage() {
                 <h2 className="text-base font-bold text-[#102F6B] pt-2 border-b border-[#F0E5D5] pb-1">
                   Core Objectives &amp; Vision
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5]">
-                    <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">1. Verified Community Directory</h3>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      Enabling community members residing across every city and state to easily connect, build professional associations, and assist one another in times of need.
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5]">
-                    <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">2. Youth &amp; Career Mentorship</h3>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      Connecting young aspirants with experienced mentors in civil services (IAS, IPS, State PSC), medicine, engineering, technology, law, and business.
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5]">
-                    <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">3. Dignified Matrimonial Coordination</h3>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      Providing a respectable, verified, and family-centered matchmaking directory for educated community youth and their families.
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5]">
-                    <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">4. Preserving Cultural Heritage</h3>
-                    <p className="text-xs text-[#64748B] leading-relaxed">
-                      Honoring community history, celebrating the sacrifices of immortal patriots, and passing down noble ideals to coming generations.
-                    </p>
-                  </div>
-                </div>
+                <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" staggerDelay={0.06}>
+                  <StaggerItem>
+                    <SubtleHoverCard>
+                      <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">1. Verified Community Directory</h3>
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          Enabling community members residing across every city and state to easily connect, build professional associations, and assist one another in times of need.
+                        </p>
+                      </div>
+                    </SubtleHoverCard>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <SubtleHoverCard>
+                      <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">2. Youth &amp; Career Mentorship</h3>
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          Connecting young aspirants with experienced mentors in civil services (IAS, IPS, State PSC), medicine, engineering, technology, law, and business.
+                        </p>
+                      </div>
+                    </SubtleHoverCard>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <SubtleHoverCard>
+                      <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">3. Dignified Matrimonial Coordination</h3>
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          Providing a respectable, verified, and family-centered matchmaking directory for educated community youth and their families.
+                        </p>
+                      </div>
+                    </SubtleHoverCard>
+                  </StaggerItem>
+                  <StaggerItem>
+                    <SubtleHoverCard>
+                      <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">4. Preserving Cultural Heritage</h3>
+                        <p className="text-xs text-[#64748B] leading-relaxed">
+                          Honoring community history, celebrating the sacrifices of immortal patriots, and passing down noble ideals to coming generations.
+                        </p>
+                      </div>
+                    </SubtleHoverCard>
+                  </StaggerItem>
+                </StaggerContainer>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-3 border-b border-[#F0E5D5] pb-1">
                   Commitment to Privacy and Dignity
@@ -85,11 +102,11 @@ export default function AboutPage() {
                 </p>
               </div>
             )}
-          </div>
+          </FadeIn>
 
-          <div className="lg:col-span-4">
+          <FadeIn as="div" direction="up" distance={14} duration={0.5} delay={0.1} className="lg:col-span-4">
             <Sidebar />
-          </div>
+          </FadeIn>
         </div>
       </main>
 

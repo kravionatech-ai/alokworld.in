@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation, EffectFade, A11y } from "swiper/modules";
+import { FadeIn, InteractiveTap } from "@/components/MotionWrappers";
 
 // Swiper base and module styles
 import "swiper/css";
@@ -144,7 +145,11 @@ export default function HeroCarousel({ settings }) {
   }
 
   return (
-    <section
+    <FadeIn
+      as="section"
+      direction="up"
+      distance={16}
+      duration={0.55}
       aria-label="Community Highlights & Announcements Carousel"
       className="relative bg-white rounded-lg border border-[#F0E5D5] shadow-xs overflow-hidden"
     >
@@ -202,19 +207,23 @@ export default function HeroCarousel({ settings }) {
                   </p>
 
                   <div className="mt-5 flex flex-wrap items-center gap-2.5">
-                    <Link
-                      href={slide.ctaLink}
-                      className="btn-primary px-4 py-2 text-xs shadow-xs focus:ring-2 focus:ring-[#F26A21] focus:outline-hidden"
-                    >
-                      {slide.ctaText}
-                    </Link>
-                    {slide.secondaryCtaText && slide.secondaryCtaLink && (
+                    <InteractiveTap>
                       <Link
-                        href={slide.secondaryCtaLink}
-                        className="btn-navy px-4 py-2 text-xs shadow-xs focus:ring-2 focus:ring-[#102F6B] focus:outline-hidden"
+                        href={slide.ctaLink}
+                        className="btn-primary px-4 py-2 text-xs shadow-xs focus:ring-2 focus:ring-[#F26A21] focus:outline-hidden"
                       >
-                        {slide.secondaryCtaText}
+                        {slide.ctaText}
                       </Link>
+                    </InteractiveTap>
+                    {slide.secondaryCtaText && slide.secondaryCtaLink && (
+                      <InteractiveTap>
+                        <Link
+                          href={slide.secondaryCtaLink}
+                          className="btn-navy px-4 py-2 text-xs shadow-xs focus:ring-2 focus:ring-[#102F6B] focus:outline-hidden"
+                        >
+                          {slide.secondaryCtaText}
+                        </Link>
+                      </InteractiveTap>
                     )}
                   </div>
                 </div>
@@ -244,22 +253,26 @@ export default function HeroCarousel({ settings }) {
 
         {/* Previous / Next Arrows */}
         <div className="flex items-center gap-1.5">
-          <button
-            type="button"
-            className="hero-btn-prev w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-            aria-label="Previous slide"
-          >
-            ←
-          </button>
-          <button
-            type="button"
-            className="hero-btn-next w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-            aria-label="Next slide"
-          >
-            →
-          </button>
+          <InteractiveTap>
+            <button
+              type="button"
+              className="hero-btn-prev w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
+              aria-label="Previous slide"
+            >
+              ←
+            </button>
+          </InteractiveTap>
+          <InteractiveTap>
+            <button
+              type="button"
+              className="hero-btn-next w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
+              aria-label="Next slide"
+            >
+              →
+            </button>
+          </InteractiveTap>
         </div>
       </div>
-    </section>
+    </FadeIn>
   );
 }

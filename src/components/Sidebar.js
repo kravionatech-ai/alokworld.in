@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation, A11y } from "swiper/modules";
+import { FadeIn, InteractiveTap } from "@/components/MotionWrappers";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -61,172 +62,180 @@ export default function Sidebar({
   return (
     <aside className="space-y-4">
       {/* Box 1: Samaj Notice & Message with Swiper Slider */}
-      <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs overflow-hidden">
-        <div className="flex items-center justify-between gap-2 mb-2.5 pb-2.5 border-b border-[#F0E5D5]">
-          <div className="flex items-center gap-1.5 text-[#102F6B] font-bold text-sm">
-            <span className="text-[#F26A21]">📢</span>
-            <h3 className="border-l-3 border-[#F26A21] pl-2">
-              {noticeTitle && !/[\u0900-\u097F]/.test(noticeTitle)
-                ? noticeTitle
-                : "Community Notices"}
-            </h3>
-          </div>
-
-          {/* Micro Navigation Arrows */}
-          <div className="flex items-center gap-1">
-            <button
-              type="button"
-              className="sidebar-notice-prev w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-              aria-label="Previous notice"
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="sidebar-notice-next w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-              aria-label="Next notice"
-            >
-              ›
-            </button>
-          </div>
-        </div>
-
-        <div className="p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5]">
-          {!mounted ? (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-                  {notices[0].badge}
-                </span>
-                <Link
-                  href={notices[0].actionLink}
-                  className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
-                >
-                  {notices[0].actionText}
-                </Link>
-              </div>
-              <p className="text-xs text-[#263449] leading-relaxed">
-                {notices[0].text}
-              </p>
+      <FadeIn direction="up" distance={12} duration={0.45}>
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs overflow-hidden">
+          <div className="flex items-center justify-between gap-2 mb-2.5 pb-2.5 border-b border-[#F0E5D5]">
+            <div className="flex items-center gap-1.5 text-[#102F6B] font-bold text-sm">
+              <span className="text-[#F26A21]">📢</span>
+              <h3 className="border-l-3 border-[#F26A21] pl-2">
+                {noticeTitle && !/[\u0900-\u097F]/.test(noticeTitle)
+                  ? noticeTitle
+                  : "Community Notices"}
+              </h3>
             </div>
-          ) : (
-            <Swiper
-              modules={[Autoplay, Navigation, A11y]}
-              speed={500}
-              loop={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-                pauseOnMouseEnter: true,
-              }}
-              navigation={{
-                prevEl: ".sidebar-notice-prev",
-                nextEl: ".sidebar-notice-next",
-              }}
-              a11y={{
-                prevSlideMessage: "Previous notice",
-                nextSlideMessage: "Next notice",
-              }}
-              className="w-full"
-            >
-              {notices.map((n) => (
-                <SwiperSlide key={n.id}>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-                        {n.badge}
-                      </span>
-                      <Link
-                        href={n.actionLink}
-                        className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
-                      >
-                        {n.actionText}
-                      </Link>
+
+            {/* Micro Navigation Arrows */}
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                className="sidebar-notice-prev w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
+                aria-label="Previous notice"
+              >
+                ‹
+              </button>
+              <button
+                type="button"
+                className="sidebar-notice-next w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
+                aria-label="Next notice"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+
+          <div className="p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5]">
+            {!mounted ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                    {notices[0].badge}
+                  </span>
+                  <Link
+                    href={notices[0].actionLink}
+                    className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
+                  >
+                    {notices[0].actionText}
+                  </Link>
+                </div>
+                <p className="text-xs text-[#263449] leading-relaxed">
+                  {notices[0].text}
+                </p>
+              </div>
+            ) : (
+              <Swiper
+                modules={[Autoplay, Navigation, A11y]}
+                speed={500}
+                loop={true}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                  pauseOnMouseEnter: true,
+                }}
+                navigation={{
+                  prevEl: ".sidebar-notice-prev",
+                  nextEl: ".sidebar-notice-next",
+                }}
+                a11y={{
+                  prevSlideMessage: "Previous notice",
+                  nextSlideMessage: "Next notice",
+                }}
+                className="w-full"
+              >
+                {notices.map((n) => (
+                  <SwiperSlide key={n.id}>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                          {n.badge}
+                        </span>
+                        <Link
+                          href={n.actionLink}
+                          className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
+                        >
+                          {n.actionText}
+                        </Link>
+                      </div>
+                      <p className="text-xs text-[#263449] leading-relaxed">
+                        {n.text}
+                      </p>
                     </div>
-                    <p className="text-xs text-[#263449] leading-relaxed">
-                      {n.text}
-                    </p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
+          </div>
         </div>
-      </div>
+      </FadeIn>
 
       {/* Box 2: Quick Filter By Region / State */}
-      <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] mb-3 pb-2 border-b border-[#F0E5D5] flex items-center justify-between">
-          <span>Key Regions</span>
-          <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
-        </h3>
-        <div className="flex flex-col gap-1 text-xs">
-          {onSelectLocation ? (
-            <>
-              <button
-                onClick={() => onSelectLocation("All")}
-                className={`text-left px-3 py-2 rounded font-medium transition-colors cursor-pointer ${
-                  selectedLocation === "All"
-                    ? "bg-[#102F6B] text-white font-bold border-l-4 border-[#F26A21]"
-                    : "text-[#263449] hover:bg-[#FFF0E2]"
-                }`}
-              >
-                All Regions
-              </button>
-              {locations.map((loc) => (
+      <FadeIn direction="up" distance={12} duration={0.45} delay={0.06}>
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] mb-3 pb-2 border-b border-[#F0E5D5] flex items-center justify-between">
+            <span>Key Regions</span>
+            <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
+          </h3>
+          <div className="flex flex-col gap-1 text-xs">
+            {onSelectLocation ? (
+              <>
                 <button
-                  key={loc}
-                  onClick={() => onSelectLocation(loc)}
+                  onClick={() => onSelectLocation("All")}
                   className={`text-left px-3 py-2 rounded font-medium transition-colors cursor-pointer ${
-                    selectedLocation === loc
+                    selectedLocation === "All"
                       ? "bg-[#102F6B] text-white font-bold border-l-4 border-[#F26A21]"
                       : "text-[#263449] hover:bg-[#FFF0E2]"
                   }`}
                 >
-                  {loc}
+                  All Regions
                 </button>
-              ))}
-            </>
-          ) : (
-            <>
-              <Link
-                href="/directory"
-                className="text-left px-3 py-2 rounded font-medium text-[#263449] hover:bg-[#FFF0E2]"
-              >
-                All Regions
-              </Link>
-              {locations.map((loc) => (
+                {locations.map((loc) => (
+                  <button
+                    key={loc}
+                    onClick={() => onSelectLocation(loc)}
+                    className={`text-left px-3 py-2 rounded font-medium transition-colors cursor-pointer ${
+                      selectedLocation === loc
+                        ? "bg-[#102F6B] text-white font-bold border-l-4 border-[#F26A21]"
+                        : "text-[#263449] hover:bg-[#FFF0E2]"
+                    }`}
+                  >
+                    {loc}
+                  </button>
+                ))}
+              </>
+            ) : (
+              <>
                 <Link
-                  key={loc}
-                  href={`/directory?city=${encodeURIComponent(loc)}`}
+                  href="/directory"
                   className="text-left px-3 py-2 rounded font-medium text-[#263449] hover:bg-[#FFF0E2]"
                 >
-                  {loc}
+                  All Regions
                 </Link>
-              ))}
-            </>
-          )}
+                {locations.map((loc) => (
+                  <Link
+                    key={loc}
+                    href={`/directory?city=${encodeURIComponent(loc)}`}
+                    className="text-left px-3 py-2 rounded font-medium text-[#263449] hover:bg-[#FFF0E2]"
+                  >
+                    {loc}
+                  </Link>
+                ))}
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      </FadeIn>
 
       {/* Box 3: Community Business Spotlight / Advertisement */}
-      <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs text-center space-y-3">
-        <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-          COMMUNITY SPOTLIGHT
-        </span>
-        <h4 className="font-bold text-sm text-[#102F6B]">
-          {adTitle && !/[\u0900-\u097F]/.test(adTitle) ? adTitle : "Community Business Directory"}
-        </h4>
-        <p className="text-xs text-[#64748B] leading-relaxed">
-          {adBannerText || "Promote your enterprise across our national community network."}
-        </p>
-        <Link
-          href={adLink || "/contact"}
-          className="inline-block w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors"
-        >
-          Publish Listing / Contact →
-        </Link>
-      </div>
+      <FadeIn direction="up" distance={12} duration={0.45} delay={0.12}>
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs text-center space-y-3">
+          <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
+            COMMUNITY SPOTLIGHT
+          </span>
+          <h4 className="font-bold text-sm text-[#102F6B]">
+            {adTitle && !/[\u0900-\u097F]/.test(adTitle) ? adTitle : "Community Business Directory"}
+          </h4>
+          <p className="text-xs text-[#64748B] leading-relaxed">
+            {adBannerText || "Promote your enterprise across our national community network."}
+          </p>
+          <InteractiveTap>
+            <Link
+              href={adLink || "/contact"}
+              className="inline-block w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors"
+            >
+              Publish Listing / Contact →
+            </Link>
+          </InteractiveTap>
+        </div>
+      </FadeIn>
     </aside>
   );
 }
