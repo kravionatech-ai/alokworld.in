@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/Sidebar";
+import PersonalitiesCarousel from "@/components/PersonalitiesCarousel";
 
 export default function PersonalitiesPage() {
   const [personalities, setPersonalities] = useState([]);
@@ -78,38 +79,50 @@ export default function PersonalitiesPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {personalities.map((item) => (
-                <div
-                  key={item._id}
-                  className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-13 h-13 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F26A21]">
-                        {item.name ? item.name.charAt(0) : "P"}
-                      </div>
-                      <div>
-                        <h2 className="text-sm sm:text-base font-bold text-[#102F6B] leading-tight">
-                          {item.name}
-                        </h2>
-                        <span className="text-[11px] font-semibold text-[#F26A21] block mt-0.5">
-                          {item.title}
-                        </span>
-                        {item.era && (
-                          <span className="text-[10px] text-[#64748B] block font-mono">
-                            {item.era}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+            {/* Featured Swiper Carousel */}
+            {personalities.length > 0 && (
+              <PersonalitiesCarousel personalities={personalities} />
+            )}
 
-                    <p className="text-xs text-[#64748B] leading-relaxed pt-2.5 border-t border-[#F0E5D5]">
-                      {item.summary}
-                    </p>
+            {/* Complete Grid */}
+            <div className="space-y-3">
+              <h2 className="text-sm font-bold text-[#102F6B] pb-1 border-b border-[#F0E5D5]">
+                All Historical Personalities ({personalities.length})
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {personalities.map((item) => (
+                  <div
+                    key={item._id}
+                    className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-13 h-13 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F26A21]">
+                          {item.name ? item.name.charAt(0) : "P"}
+                        </div>
+                        <div>
+                          <h3 className="text-sm sm:text-base font-bold text-[#102F6B] leading-tight">
+                            {item.name}
+                          </h3>
+                          <span className="text-[11px] font-semibold text-[#F26A21] block mt-0.5">
+                            {item.title}
+                          </span>
+                          {item.era && (
+                            <span className="text-[10px] text-[#64748B] block font-mono">
+                              {item.era}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-[#64748B] leading-relaxed pt-2.5 border-t border-[#F0E5D5]">
+                        {item.summary}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
 

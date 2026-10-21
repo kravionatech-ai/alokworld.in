@@ -1,6 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Navigation, A11y } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
 
 export default function Sidebar({
   noticeTitle,
@@ -12,22 +18,139 @@ export default function Sidebar({
   selectedLocation = "All",
   onSelectLocation,
 }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const notices = [
+    {
+      id: "n1",
+      badge: "Directory",
+      text:
+        noticeContent && !/[\u0900-\u097F]/.test(noticeContent)
+          ? noticeContent
+          : "All community members are requested to keep their family and professional information up to date in the directory.",
+      actionText: "Verify Record →",
+      actionLink: "/directory",
+    },
+    {
+      id: "n2",
+      badge: "Matrimonial",
+      text: "Submit confidential family matrimonial profiles for verified community matching across India.",
+      actionText: "Matrimonial Portal →",
+      actionLink: "/matrimonial",
+    },
+    {
+      id: "n3",
+      badge: "Mahasabha",
+      text: "State committees & youth wing conventions scheduled. Connect with your district conveners.",
+      actionText: "Organization Wings →",
+      actionLink: "/organization",
+    },
+    {
+      id: "n4",
+      badge: "Secretariat",
+      text: "For directory inquiries, corrections, or registration support, contact our central helpline.",
+      actionText: "Contact Us →",
+      actionLink: "/contact",
+    },
+  ];
+
   return (
     <aside className="space-y-4">
-      {/* Box 1: Samaj Notice & Message */}
-      <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs">
-        <div className="flex items-center gap-2 mb-2.5 pb-2.5 border-b border-[#F0E5D5] text-[#102F6B] font-bold text-sm">
-          <span className="text-[#F26A21]">📢</span>
-          <h3 className="border-l-3 border-[#F26A21] pl-2">
-            {noticeTitle && !/[\u0900-\u097F]/.test(noticeTitle)
-              ? noticeTitle
-              : "Community Announcements & Notices"}
-          </h3>
+      {/* Box 1: Samaj Notice & Message with Swiper Slider */}
+      <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs overflow-hidden">
+        <div className="flex items-center justify-between gap-2 mb-2.5 pb-2.5 border-b border-[#F0E5D5]">
+          <div className="flex items-center gap-1.5 text-[#102F6B] font-bold text-sm">
+            <span className="text-[#F26A21]">📢</span>
+            <h3 className="border-l-3 border-[#F26A21] pl-2">
+              {noticeTitle && !/[\u0900-\u097F]/.test(noticeTitle)
+                ? noticeTitle
+                : "Community Notices"}
+            </h3>
+          </div>
+
+          {/* Micro Navigation Arrows */}
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="sidebar-notice-prev w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
+              aria-label="Previous notice"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              className="sidebar-notice-next w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
+              aria-label="Next notice"
+            >
+              ›
+            </button>
+          </div>
         </div>
-        <div className="p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5] text-xs text-[#263449] leading-relaxed">
-          {noticeContent && !/[\u0900-\u097F]/.test(noticeContent)
-            ? noticeContent
-            : "All community members are requested to keep their family and professional information up to date in the directory."}
+
+        <div className="p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5]">
+          {!mounted ? (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                  {notices[0].badge}
+                </span>
+                <Link
+                  href={notices[0].actionLink}
+                  className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
+                >
+                  {notices[0].actionText}
+                </Link>
+              </div>
+              <p className="text-xs text-[#263449] leading-relaxed">
+                {notices[0].text}
+              </p>
+            </div>
+          ) : (
+            <Swiper
+              modules={[Autoplay, Navigation, A11y]}
+              speed={500}
+              loop={true}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
+              navigation={{
+                prevEl: ".sidebar-notice-prev",
+                nextEl: ".sidebar-notice-next",
+              }}
+              a11y={{
+                prevSlideMessage: "Previous notice",
+                nextSlideMessage: "Next notice",
+              }}
+              className="w-full"
+            >
+              {notices.map((n) => (
+                <SwiperSlide key={n.id}>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                        {n.badge}
+                      </span>
+                      <Link
+                        href={n.actionLink}
+                        className="text-[10px] font-bold text-[#102F6B] hover:text-[#F26A21] underline transition-colors"
+                      >
+                        {n.actionText}
+                      </Link>
+                    </div>
+                    <p className="text-xs text-[#263449] leading-relaxed">
+                      {n.text}
+                    </p>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
       </div>
 
@@ -99,9 +222,9 @@ export default function Sidebar({
         </p>
         <Link
           href={adLink || "/contact"}
-          className="btn-primary w-full py-2 text-xs shadow-xs"
+          className="inline-block w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors"
         >
-          Connect &amp; Promote →
+          Publish Listing / Contact →
         </Link>
       </div>
     </aside>

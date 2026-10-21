@@ -29,7 +29,8 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "resend": "^6.34.1",
-    "sanitize-html": "^2.18.1"
+    "sanitize-html": "^2.18.1",
+    "swiper": "^14.3.0"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
