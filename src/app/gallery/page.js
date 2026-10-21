@@ -58,12 +58,12 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
-        <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs mb-6">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs mb-6">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
             Moments &amp; Memories
           </span>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -78,9 +78,9 @@ export default function GalleryPage() {
           {items.map((img) => (
             <div
               key={img._id}
-              className="bg-white rounded-lg border border-[#E9D9C5] overflow-hidden shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all group"
+              className="bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all group"
             >
-              <div className="h-48 overflow-hidden bg-[#FFF9ED]">
+              <div className="h-48 overflow-hidden bg-[#FFFCF5]">
                 <img
                   src={img.imageUrl}
                   alt={img.title ? `${img.title} - Samaj Community Photo Gallery` : "Samaj Community Event Photo"}

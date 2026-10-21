@@ -36,7 +36,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9ED] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 text-[#263449]">
+    <div className="min-h-screen bg-[#FFFCF5] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 text-[#263449]">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <div className="w-13 h-13 mx-auto rounded-full bg-[#102F6B] text-white border-2 border-[#F26A21] flex items-center justify-center font-bold text-2xl shadow-xs mb-3">
           🏛️
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-6 shadow-xs rounded-lg border border-[#E9D9C5]">
+        <div className="bg-white py-8 px-6 shadow-xs rounded-lg border border-[#F0E5D5]">
           {error && (
             <div className="mb-4 p-3 bg-red-50 text-red-700 text-xs rounded border border-red-200 font-medium">
               {error}
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@alokworld.in"
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
               />
             </div>
 
@@ -82,7 +82,7 @@ export default function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
               />
             </div>
 
@@ -95,7 +95,7 @@ export default function AdminLoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-[#E9D9C5] flex items-center justify-between text-[11px] text-[#64748B]">
+          <div className="mt-6 pt-4 border-t border-[#F0E5D5] flex items-center justify-between text-[11px] text-[#64748B]">
             <Link href="/" className="hover:text-[#F26A21] text-[#102F6B] underline font-medium">
               ← Return to Directory
             </Link>

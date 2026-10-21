@@ -12,13 +12,13 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[900px] w-full mx-auto px-3 sm:px-4 py-8">
-        <div className="bg-white rounded-lg border border-[#E9D9C5] p-6 sm:p-8 shadow-xs space-y-5">
-          <div className="border-b border-[#E9D9C5] pb-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="border-b border-[#F0E5D5] pb-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
               Legal &amp; Privacy
             </span>
             <h1 className="text-xl sm:text-2xl font-black text-[#102F6B] mt-2 tracking-tight">

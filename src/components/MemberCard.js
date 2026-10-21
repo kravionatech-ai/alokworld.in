@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function MemberCard({ member }) {
+export default function MemberCard({ member = {} }) {
   const {
     _id,
     id,
@@ -13,114 +13,218 @@ export default function MemberCard({ member }) {
     state,
     phone,
     email,
-    tags,
     avatar,
   } = member;
 
   const profileIdentifier = slug || _id || id;
 
-  return (
-    <div className="bg-white rounded-lg border border-[#E9D9C5] shadow-xs hover:shadow-md transition-all duration-200 p-5 flex flex-col justify-between group hover:border-[#102F6B] h-full">
-      <div>
-        {/* Header: Photo / Initials + Identity */}
-        <div className="flex items-start gap-3.5">
-          {avatar ? (
-            <img
-              src={avatar}
-              alt={name ? `${name} - Samaj Community Member` : "Samaj Community Member"}
-              width={56}
-              height={56}
-              loading="lazy"
-              decoding="async"
-              className="w-14 h-14 rounded-lg object-cover border border-[#E9D9C5] shrink-0"
-            />
-          ) : (
-            <div className="w-14 h-14 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F26A21]">
-              {name ? name.charAt(0).toUpperCase() : "M"}
-            </div>
-          )}
+  // Determine privacy & availability of contact details
+  const hasPhone = Boolean(phone && String(phone).trim() !== "" && member.showPhone !== false);
+  const isPrivatePhone = member.showPhone === false;
 
+  const hasEmail = Boolean(email && String(email).trim() !== "" && member.showEmail !== false);
+  const isPrivateEmail = member.showEmail === false;
+
+  // Clean phone number for tel: protocol (e.g., "+91 98260 12345" -> "+919826012345")
+  const telHref = hasPhone ? `tel:${String(phone).replace(/[^\d+]/g, "")}` : "#";
+  const mailtoHref = hasEmail ? `mailto:${String(email).trim()}` : "#";
+
+  return (
+    <div className="bg-white rounded-lg border border-[#F0E5D5] shadow-xs hover:shadow-md transition-all duration-200 p-4 sm:p-5 flex flex-col justify-between group hover:border-[#F26A21] h-full">
+      <div className="flex-1 flex flex-col">
+        {/* Top Header: Avatar + Identity */}
+        <div className="flex items-start gap-3.5">
+          {/* Avatar or Monogram */}
+          <Link
+            href={`/member/${profileIdentifier}`}
+            className="shrink-0 group/avatar block"
+            title={`View ${name || "Member"}'s profile`}
+          >
+            {avatar ? (
+              <img
+                src={avatar}
+                alt={name ? `${name} - Samaj Community Member` : "Samaj Community Member"}
+                width={56}
+                height={56}
+                loading="lazy"
+                decoding="async"
+                className="w-14 h-14 rounded-full object-cover border-2 border-[#F0E5D5] group-hover/avatar:border-[#F26A21] transition-colors shadow-xs"
+              />
+            ) : (
+              <div
+                className="w-14 h-14 rounded-full bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border-2 border-[#F26A21] shadow-xs group-hover/avatar:bg-[#091D42] transition-colors"
+                aria-hidden="true"
+              >
+                {name ? name.charAt(0).toUpperCase() : "M"}
+              </div>
+            )}
+          </Link>
+
+          {/* Member Name & Role */}
           <div className="flex-1 min-w-0">
-            <Link href={`/member/${profileIdentifier}`}>
-              <h3 className="text-base font-bold text-[#102F6B] break-words group-hover:text-[#F26A21] transition-colors leading-snug">
-                {name}
+            <Link href={`/member/${profileIdentifier}`} className="block">
+              <h3 className="text-base font-bold text-[#102F6B] leading-snug group-hover:text-[#F26A21] transition-colors break-words">
+                {name || "Community Member"}
               </h3>
             </Link>
-            {role && (
-              <span className="inline-block mt-1 text-[11px] font-bold px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
-                {role}
+
+            <div className="mt-1 flex flex-wrap items-center gap-1.5">
+              <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
+                {role || "Member"}
               </span>
-            )}
+            </div>
           </div>
         </div>
 
-        {/* Occupation & Organization */}
-        <div className="mt-4 pt-3 border-t border-[#E9D9C5] space-y-1.5 text-xs text-[#263449]">
+        {/* Professional & Location Information */}
+        <div className="mt-3.5 space-y-1.5 text-xs text-[#263449]">
+          {/* Profession */}
           <div className="flex items-start gap-2 font-medium text-[#263449]">
-            <span className="text-[#102F6B] shrink-0 mt-0.5">💼</span>
-            <span className="leading-snug break-words">{occupation || "Community Member"}</span>
+            <span className="text-[#102F6B] shrink-0 mt-0.5 text-xs" aria-hidden="true">
+              💼
+            </span>
+            <span className="leading-snug break-words">
+              {occupation || "Community Member"}
+            </span>
           </div>
 
+          {/* Company / Organization (only if available) */}
           {company && (
-            <div className="text-[11px] text-[#64748B] pl-5 break-words font-normal">
-              {company}
+            <div className="flex items-start gap-2 text-[11px] text-[#64748B] font-normal">
+              <span className="text-[#F26A21] shrink-0 mt-0.5 text-xs" aria-hidden="true">
+                🏢
+              </span>
+              <span className="leading-snug break-words">{company}</span>
             </div>
           )}
 
+          {/* Location: City and State */}
           <div className="flex items-center gap-2 text-[#64748B] text-[11px] pt-0.5">
-            <span className="text-[#102F6B] shrink-0">📍</span>
-            <span>
-              {city}{state ? `, ${state}` : ""}
+            <span className="text-[#F26A21] shrink-0 text-xs" aria-hidden="true">
+              📍
+            </span>
+            <span className="truncate">
+              {city || "India"}
+              {state ? `, ${state}` : ""}
             </span>
           </div>
         </div>
 
-        {/* Tags */}
-        {tags && tags.length > 0 && (
-          <div className="mt-3.5 flex flex-wrap gap-1.5">
-            {tags.slice(0, 3).map((tag) => (
-              <span
-                key={tag}
-                className="text-[10px] font-medium px-2 py-0.5 bg-[#FFF0E2] text-[#102F6B] border border-[#E9D9C5] rounded"
-              >
-                #{tag}
-              </span>
-            ))}
+        {/* Clear Visual Separation: Direct Contact Details Section */}
+        <div className="mt-3.5 pt-3 border-t border-[#F0E5D5] bg-[#FFFCF5]/80 rounded-md p-2.5 space-y-2 border border-[#F0E5D5]/60 mt-auto">
+          {/* Mobile Number Row */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div
+              className="w-6 h-6 rounded-full bg-[#FFF0E2] text-[#F26A21] flex items-center justify-center text-xs shrink-0 border border-[#F0E5D5]"
+              aria-hidden="true"
+            >
+              📞
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider leading-none mb-0.5">
+                Mobile
+              </div>
+              {hasPhone ? (
+                <a
+                  href={telHref}
+                  className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
+                  title={`Call ${phone}`}
+                >
+                  {phone}
+                </a>
+              ) : (
+                <span className="text-[11px] text-[#64748B] italic block">
+                  {isPrivatePhone ? "Kept private by member" : "Not provided"}
+                </span>
+              )}
+            </div>
           </div>
-        )}
+
+          {/* Email Address Row */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div
+              className="w-6 h-6 rounded-full bg-[#FFF0E2] text-[#F26A21] flex items-center justify-center text-xs shrink-0 border border-[#F0E5D5]"
+              aria-hidden="true"
+            >
+              ✉️
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider leading-none mb-0.5">
+                Email
+              </div>
+              {hasEmail ? (
+                <a
+                  href={mailtoHref}
+                  className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
+                  title={`Email ${email}`}
+                >
+                  {email}
+                </a>
+              ) : (
+                <span className="text-[11px] text-[#64748B] italic block">
+                  {isPrivateEmail ? "Kept private by member" : "Not provided"}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Card Footer: Quick Actions */}
-      <div className="mt-4 pt-3 border-t border-[#E9D9C5] flex items-center justify-between text-xs gap-2">
-        <div className="flex items-center gap-3">
-          {phone ? (
+      {/* Card Actions: Call, Email, and View Profile */}
+      <div className="mt-4 pt-3 border-t border-[#F0E5D5] space-y-2">
+        <div className="grid grid-cols-2 gap-2">
+          {/* Call Action Button */}
+          {hasPhone ? (
             <a
-              href={`tel:${phone}`}
-              className="text-[#102F6B] hover:text-[#F26A21] font-semibold inline-flex items-center gap-1 transition-colors"
-              title="Call Member"
+              href={telHref}
+              className="btn-outline h-8 px-2 text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 hover:border-[#F26A21] hover:text-[#F26A21] hover:bg-[#FFF0E2] transition-all"
+              title={`Call ${name}: ${phone}`}
             >
-              <span>📞</span> <span className="underline">Call</span>
+              <span className="text-[#F26A21]">📞</span>
+              <span>Call</span>
             </a>
           ) : (
-            <span className="text-[#64748B] text-[11px]" title="Contact details kept private by member">Private</span>
+            <button
+              type="button"
+              disabled
+              className="btn-outline h-8 px-2 text-xs font-semibold opacity-40 cursor-not-allowed bg-[#F8FAFC] text-[#64748B] border-[#F0E5D5] flex items-center justify-center gap-1.5"
+              title={isPrivatePhone ? "Phone kept private by member" : "Phone not provided"}
+            >
+              <span className="grayscale opacity-60">📞</span>
+              <span>Call</span>
+            </button>
           )}
 
-          {email ? (
+          {/* Email Action Button */}
+          {hasEmail ? (
             <a
-              href={`mailto:${email}`}
-              className="text-[#102F6B] hover:text-[#F26A21] font-semibold inline-flex items-center gap-1 transition-colors"
-              title="Email Member"
+              href={mailtoHref}
+              className="btn-outline h-8 px-2 text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 hover:border-[#F26A21] hover:text-[#F26A21] hover:bg-[#FFF0E2] transition-all"
+              title={`Email ${name}: ${email}`}
             >
-              <span>✉️</span> <span className="underline">Email</span>
+              <span className="text-[#F26A21]">✉️</span>
+              <span>Email</span>
             </a>
-          ) : null}
+          ) : (
+            <button
+              type="button"
+              disabled
+              className="btn-outline h-8 px-2 text-xs font-semibold opacity-40 cursor-not-allowed bg-[#F8FAFC] text-[#64748B] border-[#F0E5D5] flex items-center justify-center gap-1.5"
+              title={isPrivateEmail ? "Email kept private by member" : "Email not provided"}
+            >
+              <span className="grayscale opacity-60">✉️</span>
+              <span>Email</span>
+            </button>
+          )}
         </div>
 
+        {/* View Profile Action Button */}
         <Link
           href={`/member/${profileIdentifier}`}
-          className="btn-navy px-3 py-1.5 text-xs shadow-xs"
+          className="btn-navy w-full h-8 px-3 text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 hover:bg-[#F26A21] transition-all text-center"
         >
-          View Profile →
+          <span>View Profile</span>
+          <span aria-hidden="true">→</span>
         </Link>
       </div>
     </div>

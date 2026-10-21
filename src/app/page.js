@@ -56,18 +56,18 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header siteName={settings?.siteName} />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-6">
         {/* Portal Hero Banner */}
-        <section className="bg-white rounded-lg p-5 sm:p-7 border border-[#E9D9C5] shadow-xs">
+        <section className="bg-white rounded-lg p-5 sm:p-7 border border-[#F0E5D5] shadow-xs">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-2">
-              <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+              <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 {settings?.heroBadge || "Official Community Portal"}
               </span>
-              <span className="text-[#E9D9C5]">•</span>
+              <span className="text-[#F0E5D5]">•</span>
               <span className="text-xs font-semibold text-[#102F6B]">alokworld.in</span>
             </div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
@@ -107,7 +107,7 @@ export default function HomePage() {
             <Link
               key={idx}
               href={p.href}
-              className="bg-white p-3 sm:p-4 rounded-lg border border-[#E9D9C5] shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between group"
+              className="bg-white p-3 sm:p-4 rounded-lg border border-[#F0E5D5] shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between group"
             >
               <div>
                 <span className="text-xl mb-1.5 block">{p.icon}</span>
@@ -129,7 +129,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           {/* Main Central Directory Spotlight */}
           <div className="lg:col-span-8 order-2 lg:order-1 space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-[#E9D9C5]">
+            <div className="flex items-center justify-between pb-2 border-b border-[#F0E5D5]">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
                   Community Member Directory Spotlight
@@ -156,7 +156,7 @@ export default function HomePage() {
             />
 
             {loading ? (
-              <div className="bg-white rounded-lg border border-[#E9D9C5] p-12 text-center text-[#64748B] font-medium">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-12 text-center text-[#64748B] font-medium">
                 Loading members from directory...
               </div>
             ) : (

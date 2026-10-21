@@ -934,7 +934,7 @@ export default function AdminDashboard() {
 
   if (!authChecked) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFF9ED] text-[#102F6B]">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFCF5] text-[#102F6B]">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 border-3 border-[#102F6B] border-t-[#F26A21] rounded-full animate-spin"></div>
           <p className="text-xs font-semibold uppercase tracking-wider text-[#64748B]">Verifying CMS Administrative Session...</p>
@@ -944,7 +944,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       {/* Top Administrative Header */}
       <header className="bg-[#091D42] text-white border-b-2 border-[#F26A21] sticky top-0 z-30 shadow-md">
         <div className="max-w-[1240px] mx-auto px-4 py-2.5 flex items-center justify-between">
@@ -952,7 +952,7 @@ export default function AdminDashboard() {
             <Link href="/" className="font-black text-lg text-white tracking-tight flex items-center gap-1.5 hover:opacity-90">
               <span className="w-3 h-3 rounded-full bg-[#F26A21] inline-block"></span>
               alokworld<span className="text-[#F26A21]">.in</span>
-              <span className="text-[11px] font-bold text-[#FFF0E2] bg-[#102F6B] px-2 py-0.5 rounded border border-[#E9D9C5]/30 ml-1">
+              <span className="text-[11px] font-bold text-[#FFF0E2] bg-[#102F6B] px-2 py-0.5 rounded border border-[#F0E5D5]/30 ml-1">
                 CMS CONTROL CENTER
               </span>
             </Link>
@@ -966,7 +966,7 @@ export default function AdminDashboard() {
                 className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
                   currentUser?.role === "superadmin"
                     ? "bg-[#F26A21] text-white"
-                    : "bg-[#102F6B] text-[#FFF0E2] border border-[#E9D9C5]/40"
+                    : "bg-[#102F6B] text-[#FFF0E2] border border-[#F0E5D5]/40"
                 }`}
               >
                 {currentUser?.role || "Editor"}
@@ -976,7 +976,7 @@ export default function AdminDashboard() {
             <Link
               href="/directory"
               target="_blank"
-              className="text-xs font-semibold px-2.5 py-1 rounded bg-[#102F6B] hover:bg-[#102F6B]/80 text-[#FFF0E2] transition-colors border border-[#E9D9C5]/20"
+              className="text-xs font-semibold px-2.5 py-1 rounded bg-[#102F6B] hover:bg-[#102F6B]/80 text-[#FFF0E2] transition-colors border border-[#F0E5D5]/20"
             >
               View Public Site ↗
             </Link>
@@ -1135,7 +1135,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "members" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-3">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Samaj Member Directory Management</h1>
                 <p className="text-xs text-[#64748B]">
@@ -1157,7 +1157,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Filter Toolbar */}
-            <div className="bg-white p-3 rounded-lg border border-[#E9D9C5] shadow-xs flex flex-wrap items-center justify-between gap-2.5 text-xs">
+            <div className="bg-white p-3 rounded-lg border border-[#F0E5D5] shadow-xs flex flex-wrap items-center justify-between gap-2.5 text-xs">
               <div className="flex items-center gap-1.5 flex-wrap">
                 <span className="font-semibold text-[#102F6B] mr-1">Status:</span>
                 {[
@@ -1173,7 +1173,7 @@ export default function AdminDashboard() {
                     className={`px-2.5 py-1 rounded cursor-pointer font-medium transition-colors ${
                       statusFilter === s.id
                         ? "bg-[#102F6B] text-white font-bold"
-                        : "bg-[#FFF9ED] text-[#263449] hover:bg-[#FFF0E2] border border-[#E9D9C5]"
+                        : "bg-[#FFFCF5] text-[#263449] hover:bg-[#FFF0E2] border border-[#F0E5D5]"
                     }`}
                   >
                     {s.label}
@@ -1187,13 +1187,13 @@ export default function AdminDashboard() {
                   placeholder="Search by name, city, profession..."
                   value={adminSearch}
                   onChange={(e) => setAdminSearch(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                  className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                 />
               </div>
             </div>
 
             {/* Members Table */}
-            <div className="bg-white rounded-lg border border-[#E9D9C5] overflow-hidden shadow-xs">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#102F6B] text-white text-[11px] uppercase tracking-wider font-semibold">
@@ -1206,7 +1206,7 @@ export default function AdminDashboard() {
                       <th className="py-2.5 px-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E9D9C5]">
+                  <tbody className="divide-y divide-[#F0E5D5]">
                     {filteredMembers.length === 0 ? (
                       <tr>
                         <td colSpan={6} className="py-10 text-center text-[#64748B]">
@@ -1217,10 +1217,10 @@ export default function AdminDashboard() {
                       filteredMembers.map((m) => {
                         const isArchived = m.isArchived || m.membershipStatus === "archived";
                         return (
-                          <tr key={m._id || m.id} className="hover:bg-[#FFF9ED]/60 transition-colors">
+                          <tr key={m._id || m.id} className="hover:bg-[#FFFCF5]/60 transition-colors">
                             <td className="py-2.5 px-3">
                               <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 rounded-full overflow-hidden bg-[#FFF0E2] border border-[#E9D9C5] shrink-0">
+                                <div className="w-8 h-8 rounded-full overflow-hidden bg-[#FFF0E2] border border-[#F0E5D5] shrink-0">
                                   {m.avatar ? (
                                     <img
                                       src={m.avatar}
@@ -1298,7 +1298,7 @@ export default function AdminDashboard() {
                               <div className="flex items-center justify-end gap-1.5">
                                 <button
                                   onClick={() => startEditMember(m)}
-                                  className="px-2 py-1 rounded bg-[#FFF0E2] text-[#F26A21] hover:bg-[#F26A21] hover:text-white font-semibold transition-colors cursor-pointer border border-[#E9D9C5]"
+                                  className="px-2 py-1 rounded bg-[#FFF0E2] text-[#F26A21] hover:bg-[#F26A21] hover:text-white font-semibold transition-colors cursor-pointer border border-[#F0E5D5]"
                                   title="Edit full profile details"
                                 >
                                   Edit
@@ -1306,7 +1306,7 @@ export default function AdminDashboard() {
 
                                 <button
                                   onClick={() => toggleMemberArchive(m)}
-                                  className={`px-2 py-1 rounded font-semibold transition-colors cursor-pointer border border-[#E9D9C5] ${
+                                  className={`px-2 py-1 rounded font-semibold transition-colors cursor-pointer border border-[#F0E5D5] ${
                                     isArchived
                                       ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white"
                                       : "bg-slate-100 text-slate-700 hover:bg-slate-700 hover:text-white"
@@ -1335,7 +1335,7 @@ export default function AdminDashboard() {
                 </table>
               </div>
 
-              <div className="bg-[#FFF9ED] p-3 border-t border-[#E9D9C5] text-xs text-[#64748B] flex items-center justify-between">
+              <div className="bg-[#FFFCF5] p-3 border-t border-[#F0E5D5] text-xs text-[#64748B] flex items-center justify-between">
                 <span>Showing {filteredMembers.length} of {members.length} total members</span>
                 <span className="italic">Slugs enable direct links (e.g. /member/dr-rajesh-lodhi)</span>
               </div>
@@ -1347,8 +1347,8 @@ export default function AdminDashboard() {
         {/* TAB 2: ADD / EDIT MEMBER FORM */}
         {/* ========================================================================= */}
         {activeTab === "add_member" && (
-          <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 shadow-xs space-y-5">
-            <div className="border-b border-[#E9D9C5] pb-3 flex items-center justify-between">
+          <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs space-y-5">
+            <div className="border-b border-[#F0E5D5] pb-3 flex items-center justify-between">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">
                   {editingMemberId ? "Edit Member Profile" : "Register New Community Member"}
@@ -1362,7 +1362,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={resetMemberForm}
-                  className="text-xs font-semibold px-3 py-1 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5] cursor-pointer"
+                  className="text-xs font-semibold px-3 py-1 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5] cursor-pointer"
                 >
                   Cancel Edit (Switch to New)
                 </button>
@@ -1381,7 +1381,7 @@ export default function AdminDashboard() {
                     value={memberForm.name}
                     onChange={(e) => setMemberForm({ ...memberForm, name: e.target.value })}
                     placeholder="e.g. Dr. Rajesh Kumar Lodhi"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1395,7 +1395,7 @@ export default function AdminDashboard() {
                     value={memberForm.occupation}
                     onChange={(e) => setMemberForm({ ...memberForm, occupation: e.target.value })}
                     placeholder="e.g. Senior Medical Officer / Cardiologist"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1406,7 +1406,7 @@ export default function AdminDashboard() {
                     value={memberForm.company}
                     onChange={(e) => setMemberForm({ ...memberForm, company: e.target.value })}
                     placeholder="e.g. AIIMS Bhopal / Self-Employed"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1420,7 +1420,7 @@ export default function AdminDashboard() {
                     value={memberForm.city}
                     onChange={(e) => setMemberForm({ ...memberForm, city: e.target.value })}
                     placeholder="e.g. Bhopal"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1434,7 +1434,7 @@ export default function AdminDashboard() {
                     value={memberForm.state}
                     onChange={(e) => setMemberForm({ ...memberForm, state: e.target.value })}
                     placeholder="e.g. Madhya Pradesh"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1445,7 +1445,7 @@ export default function AdminDashboard() {
                     value={memberForm.pincode}
                     onChange={(e) => setMemberForm({ ...memberForm, pincode: e.target.value })}
                     placeholder="e.g. 462001"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1456,7 +1456,7 @@ export default function AdminDashboard() {
                     value={memberForm.phone}
                     onChange={(e) => setMemberForm({ ...memberForm, phone: e.target.value })}
                     placeholder="e.g. +91 98765 43210"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1467,7 +1467,7 @@ export default function AdminDashboard() {
                     value={memberForm.email}
                     onChange={(e) => setMemberForm({ ...memberForm, email: e.target.value })}
                     placeholder="e.g. doctor.rajesh@example.com"
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   />
                 </div>
 
@@ -1476,7 +1476,7 @@ export default function AdminDashboard() {
                   <select
                     value={memberForm.role}
                     onChange={(e) => setMemberForm({ ...memberForm, role: e.target.value })}
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                   >
                     <option value="Member">Regular Member</option>
                     <option value="Patron">Community Patron / Elder</option>
@@ -1488,7 +1488,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Photo Upload with Cloudinary */}
-              <div className="p-3.5 bg-[#FFF9ED] rounded-lg border border-[#E9D9C5] space-y-2">
+              <div className="p-3.5 bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] space-y-2">
                 <label className="block font-semibold text-[#102F6B] text-xs">Profile Photo (Cloudinary Upload or Direct URL)</label>
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <input
@@ -1507,7 +1507,7 @@ export default function AdminDashboard() {
                     placeholder="Or paste direct image URL here"
                     value={memberForm.avatar}
                     onChange={(e) => setMemberForm({ ...memberForm, avatar: e.target.value })}
-                    className="flex-1 px-3 py-1.5 rounded border border-[#E9D9C5] bg-white text-xs text-[#263449]"
+                    className="flex-1 px-3 py-1.5 rounded border border-[#F0E5D5] bg-white text-xs text-[#263449]"
                   />
                 </div>
               </div>
@@ -1522,12 +1522,12 @@ export default function AdminDashboard() {
                   value={memberForm.biography}
                   onChange={(e) => setMemberForm({ ...memberForm, biography: e.target.value })}
                   placeholder="Detailed professional experience, community contributions, awards, and educational background..."
-                  className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
+                  className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] focus:outline-none focus:border-[#F26A21]"
                 />
               </div>
 
               {/* Privacy Consent & Visibility Controls */}
-              <div className="p-3 bg-[#FFF0E2]/60 rounded-lg border border-[#E9D9C5] space-y-2 text-xs">
+              <div className="p-3 bg-[#FFF0E2]/60 rounded-lg border border-[#F0E5D5] space-y-2 text-xs">
                 <span className="font-bold text-[#102F6B] uppercase tracking-wider text-[11px]">
                   Member Privacy &amp; Consent Directives (Server-Masked)
                 </span>
@@ -1588,7 +1588,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "pages" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Page Content Management System</h1>
                 <p className="text-xs text-[#64748B]">
@@ -1605,7 +1605,7 @@ export default function AdminDashboard() {
                     className={`px-3 py-1.5 rounded text-xs font-bold uppercase transition-colors cursor-pointer ${
                       selectedPageSlug === slug
                         ? "bg-[#102F6B] text-white"
-                        : "bg-[#FFF9ED] text-[#263449] hover:bg-[#FFF0E2] border border-[#E9D9C5]"
+                        : "bg-[#FFFCF5] text-[#263449] hover:bg-[#FFF0E2] border border-[#F0E5D5]"
                     }`}
                   >
                     {slug}
@@ -1615,10 +1615,10 @@ export default function AdminDashboard() {
             </div>
 
             {/* Page Editor Grid */}
-            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 shadow-xs space-y-4">
-              <div className="flex items-center justify-between border-b border-[#E9D9C5] pb-3">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+                  <span className="text-xs font-bold uppercase px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
                     Slug: /{pageForm.slug}
                   </span>
                   <span
@@ -1657,7 +1657,7 @@ export default function AdminDashboard() {
                         type="text"
                         value={pageForm.title}
                         onChange={(e) => setPageForm({ ...pageForm, title: e.target.value })}
-                        className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449] font-bold"
+                        className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449] font-bold"
                       />
                     </div>
                     <div>
@@ -1666,68 +1666,68 @@ export default function AdminDashboard() {
                         type="text"
                         value={pageForm.subtitle}
                         onChange={(e) => setPageForm({ ...pageForm, subtitle: e.target.value })}
-                        className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] focus:bg-white text-xs text-[#263449]"
+                        className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] focus:bg-white text-xs text-[#263449]"
                       />
                     </div>
                   </div>
 
                   {/* Rich Text Toolbar */}
-                  <div className="border border-[#E9D9C5] rounded-lg overflow-hidden bg-white">
-                    <div className="bg-[#FFF9ED] p-2 border-b border-[#E9D9C5] flex flex-wrap items-center gap-1.5 text-xs font-semibold text-[#102F6B]">
+                  <div className="border border-[#F0E5D5] rounded-lg overflow-hidden bg-white">
+                    <div className="bg-[#FFFCF5] p-2 border-b border-[#F0E5D5] flex flex-wrap items-center gap-1.5 text-xs font-semibold text-[#102F6B]">
                       <span className="text-[11px] uppercase tracking-wider text-[#64748B] mr-2">Formatting:</span>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<strong>", "</strong>")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Bold
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<em>", "</em>")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer italic"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer italic"
                       >
                         Italic
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<h3>", "</h3>\n")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Heading 3
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<h4>", "</h4>\n")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Heading 4
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<p>", "</p>\n")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Paragraph
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<ul>\n  <li>", "</li>\n  <li>Item</li>\n</ul>\n")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         • Bullet List
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag("<blockquote>", "</blockquote>\n")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Quote Box
                       </button>
                       <button
                         type="button"
                         onClick={() => insertHtmlTag('<a href="/contact">', "</a>")}
-                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#E9D9C5] cursor-pointer"
+                        className="px-2 py-0.5 rounded bg-white hover:bg-[#FFF0E2] border border-[#F0E5D5] cursor-pointer"
                       >
                         Link
                       </button>
@@ -1744,14 +1744,14 @@ export default function AdminDashboard() {
                   </div>
 
                   {/* SEO Directives */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 bg-[#FFF9ED] rounded-lg border border-[#E9D9C5]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 bg-[#FFFCF5] rounded-lg border border-[#F0E5D5]">
                     <div>
                       <label className="block font-semibold text-[#102F6B] mb-1">Meta Title (SEO)</label>
                       <input
                         type="text"
                         value={pageForm.metaTitle}
                         onChange={(e) => setPageForm({ ...pageForm, metaTitle: e.target.value })}
-                        className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-white text-xs"
+                        className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-white text-xs"
                       />
                     </div>
                     <div>
@@ -1760,7 +1760,7 @@ export default function AdminDashboard() {
                         type="text"
                         value={pageForm.metaDescription}
                         onChange={(e) => setPageForm({ ...pageForm, metaDescription: e.target.value })}
-                        className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-white text-xs"
+                        className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-white text-xs"
                       />
                     </div>
                   </div>
@@ -1794,9 +1794,9 @@ export default function AdminDashboard() {
                 </div>
               ) : (
                 /* LIVE PREVIEW PANEL */
-                <div className="p-6 bg-[#FFF9ED] rounded-lg border border-[#E9D9C5] space-y-4">
-                  <div className="border-b border-[#E9D9C5] pb-3 bg-white p-4 rounded-lg">
-                    <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+                <div className="p-6 bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] space-y-4">
+                  <div className="border-b border-[#F0E5D5] pb-3 bg-white p-4 rounded-lg">
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                       Live Preview ({pageForm.status.toUpperCase()})
                     </span>
                     <h1 className="text-2xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -1805,7 +1805,7 @@ export default function AdminDashboard() {
                     <p className="text-xs text-[#64748B] mt-1">{pageForm.subtitle}</p>
                   </div>
 
-                  <div className="bg-white p-6 rounded-lg border border-[#E9D9C5]">
+                  <div className="bg-white p-6 rounded-lg border border-[#F0E5D5]">
                     <div
                       className="cms-prose text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4"
                       dangerouslySetInnerHTML={{ __html: pageForm.content }}
@@ -1822,7 +1822,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "gallery" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Community Photo Gallery CMS</h1>
                 <p className="text-xs text-[#64748B]">
@@ -1842,7 +1842,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Category Filter */}
-            <div className="bg-white p-3 rounded-lg border border-[#E9D9C5] flex items-center gap-1.5 flex-wrap text-xs">
+            <div className="bg-white p-3 rounded-lg border border-[#F0E5D5] flex items-center gap-1.5 flex-wrap text-xs">
               <span className="font-semibold text-[#102F6B] mr-1">Category:</span>
               {["All", "National Convention", "Education & Youth", "Heritage Festival", "Social Welfare"].map((cat) => (
                 <button
@@ -1851,7 +1851,7 @@ export default function AdminDashboard() {
                   className={`px-2.5 py-1 rounded cursor-pointer font-medium transition-colors ${
                     galleryCategoryFilter === cat
                       ? "bg-[#102F6B] text-white font-bold"
-                      : "bg-[#FFF9ED] text-[#263449] hover:bg-[#FFF0E2] border border-[#E9D9C5]"
+                      : "bg-[#FFFCF5] text-[#263449] hover:bg-[#FFF0E2] border border-[#F0E5D5]"
                   }`}
                 >
                   {cat}
@@ -1862,16 +1862,16 @@ export default function AdminDashboard() {
             {/* Gallery Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {filteredGallery.length === 0 ? (
-                <div className="col-span-full bg-white p-10 text-center text-[#64748B] rounded-lg border border-[#E9D9C5]">
+                <div className="col-span-full bg-white p-10 text-center text-[#64748B] rounded-lg border border-[#F0E5D5]">
                   No photo gallery items found in this category.
                 </div>
               ) : (
                 filteredGallery.map((img) => (
                   <div
                     key={img._id}
-                    className="bg-white rounded-lg border border-[#E9D9C5] overflow-hidden shadow-xs flex flex-col"
+                    className="bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs flex flex-col"
                   >
-                    <div className="h-40 bg-[#FFF9ED] overflow-hidden relative">
+                    <div className="h-40 bg-[#FFFCF5] overflow-hidden relative">
                       <img
                         src={img.imageUrl}
                         alt={img.title || "Gallery photo thumbnail"}
@@ -1898,7 +1898,7 @@ export default function AdminDashboard() {
                         <p className="text-[11px] text-[#64748B] line-clamp-2 mt-0.5">{img.description}</p>
                       </div>
 
-                      <div className="pt-2 border-t border-[#E9D9C5] flex items-center justify-between text-xs">
+                      <div className="pt-2 border-t border-[#F0E5D5] flex items-center justify-between text-xs">
                         <button
                           onClick={() => toggleGalleryPublish(img)}
                           className="text-[11px] font-semibold text-[#102F6B] hover:text-[#F26A21] cursor-pointer"
@@ -1908,7 +1908,7 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-1.5">
                           <button
                             onClick={() => openEditGalleryModal(img)}
-                            className="px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] font-semibold text-[11px] cursor-pointer border border-[#E9D9C5]"
+                            className="px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] font-semibold text-[11px] cursor-pointer border border-[#F0E5D5]"
                           >
                             Edit
                           </button>
@@ -1929,8 +1929,8 @@ export default function AdminDashboard() {
             {/* Modal for Add / Edit Photo */}
             {galleryModalOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-                <div className="bg-white rounded-lg border border-[#E9D9C5] max-w-md w-full p-5 space-y-4 shadow-xl">
-                  <div className="border-b border-[#E9D9C5] pb-2 flex items-center justify-between">
+                <div className="bg-white rounded-lg border border-[#F0E5D5] max-w-md w-full p-5 space-y-4 shadow-xl">
+                  <div className="border-b border-[#F0E5D5] pb-2 flex items-center justify-between">
                     <h3 className="font-bold text-[#102F6B] text-sm">
                       {editingGalleryId ? "Edit Gallery Photo" : "Add New Gallery Photo"}
                     </h3>
@@ -1951,7 +1951,7 @@ export default function AdminDashboard() {
                         value={galleryForm.title}
                         onChange={(e) => setGalleryForm({ ...galleryForm, title: e.target.value })}
                         placeholder="e.g. National Convention Bhopal Assembly"
-                        className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                        className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                       />
                     </div>
 
@@ -1961,7 +1961,7 @@ export default function AdminDashboard() {
                         <select
                           value={galleryForm.category}
                           onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
-                          className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                          className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                         >
                           <option value="National Convention">National Convention</option>
                           <option value="Education & Youth">Education &amp; Youth</option>
@@ -1977,13 +1977,13 @@ export default function AdminDashboard() {
                           value={galleryForm.eventDate}
                           onChange={(e) => setGalleryForm({ ...galleryForm, eventDate: e.target.value })}
                           placeholder="e.g. 2025"
-                          className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                          className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                         />
                       </div>
                     </div>
 
                     {/* Image Upload for Gallery */}
-                    <div className="p-3 bg-[#FFF9ED] rounded border border-[#E9D9C5] space-y-1.5">
+                    <div className="p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5] space-y-1.5">
                       <label className="block font-semibold text-[#102F6B]">Photo Upload (Max 5MB)</label>
                       <input
                         type="file"
@@ -2000,7 +2000,7 @@ export default function AdminDashboard() {
                         placeholder="Or direct image URL"
                         value={galleryForm.imageUrl}
                         onChange={(e) => setGalleryForm({ ...galleryForm, imageUrl: e.target.value })}
-                        className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-white text-xs"
+                        className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-white text-xs"
                       />
                     </div>
 
@@ -2011,7 +2011,7 @@ export default function AdminDashboard() {
                         value={galleryForm.description}
                         onChange={(e) => setGalleryForm({ ...galleryForm, description: e.target.value })}
                         placeholder="Brief description of the event, venue, or attendees..."
-                        className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                        className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                       />
                     </div>
 
@@ -2025,7 +2025,7 @@ export default function AdminDashboard() {
                       Publish immediately to live gallery
                     </label>
 
-                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E9D9C5]">
+                    <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#F0E5D5]">
                       <button
                         type="button"
                         onClick={() => setGalleryModalOpen(false)}
@@ -2053,7 +2053,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "navigation_widgets" && (
           <form onSubmit={handleSaveSettings} className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex items-center justify-between">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex items-center justify-between">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Navigation, Hero Banners &amp; Sidebar Widgets</h1>
                 <p className="text-xs text-[#64748B]">
@@ -2070,8 +2070,8 @@ export default function AdminDashboard() {
             </div>
 
             {/* Announcement Strip */}
-            <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-[#E9D9C5] pb-2">
+            <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
                 <h2 className="font-bold text-sm text-[#102F6B]">1. Top Announcement Strip</h2>
                 <label className="flex items-center gap-2 text-xs font-semibold text-[#102F6B] cursor-pointer">
                   <input
@@ -2091,14 +2091,14 @@ export default function AdminDashboard() {
                   value={settings.announcement}
                   onChange={(e) => setSettings({ ...settings, announcement: e.target.value })}
                   placeholder="e.g. Welcome to the official Samaj Community Directory portal. Connect, unite & empower."
-                  className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                  className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                 />
               </div>
             </div>
 
             {/* Hero Banner Section */}
-            <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#E9D9C5] pb-2">
+            <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
                 2. Homepage Hero Banner Customization
               </h2>
 
@@ -2109,7 +2109,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.heroBadge}
                     onChange={(e) => setSettings({ ...settings, heroBadge: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2118,7 +2118,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.heroTitle}
                     onChange={(e) => setSettings({ ...settings, heroTitle: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs font-bold"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs font-bold"
                   />
                 </div>
 
@@ -2128,7 +2128,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={settings.heroSubtitle}
                     onChange={(e) => setSettings({ ...settings, heroSubtitle: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
 
@@ -2138,7 +2138,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.heroCtaText}
                     onChange={(e) => setSettings({ ...settings, heroCtaText: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2147,7 +2147,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.heroCtaLink}
                     onChange={(e) => setSettings({ ...settings, heroCtaLink: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
               </div>
@@ -2155,8 +2155,8 @@ export default function AdminDashboard() {
 
             {/* Sidebar Notices & Ad Widget */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-                <div className="flex items-center justify-between border-b border-[#E9D9C5] pb-2">
+              <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+                <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
                   <h2 className="font-bold text-sm text-[#102F6B]">3. Sidebar Notice Box</h2>
                   <input
                     type="checkbox"
@@ -2173,7 +2173,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={settings.sidebarNoticeTitle}
                       onChange={(e) => setSettings({ ...settings, sidebarNoticeTitle: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                   <div>
@@ -2182,7 +2182,7 @@ export default function AdminDashboard() {
                       rows={3}
                       value={settings.sidebarNoticeContent}
                       onChange={(e) => setSettings({ ...settings, sidebarNoticeContent: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                   <div>
@@ -2191,14 +2191,14 @@ export default function AdminDashboard() {
                       type="text"
                       value={settings.keyRegions}
                       onChange={(e) => setSettings({ ...settings, keyRegions: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-                <div className="flex items-center justify-between border-b border-[#E9D9C5] pb-2">
+              <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+                <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
                   <h2 className="font-bold text-sm text-[#102F6B]">4. Community Business Ad</h2>
                   <input
                     type="checkbox"
@@ -2215,7 +2215,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={settings.adTitle}
                       onChange={(e) => setSettings({ ...settings, adTitle: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                   <div>
@@ -2224,7 +2224,7 @@ export default function AdminDashboard() {
                       rows={2}
                       value={settings.adBannerText}
                       onChange={(e) => setSettings({ ...settings, adBannerText: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                   <div>
@@ -2233,7 +2233,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={settings.adLink}
                       onChange={(e) => setSettings({ ...settings, adLink: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
                 </div>
@@ -2257,7 +2257,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "settings" && (
           <form onSubmit={handleSaveSettings} className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex items-center justify-between">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex items-center justify-between">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Global Website Settings &amp; Maintenance Mode</h1>
                 <p className="text-xs text-[#64748B]">
@@ -2274,14 +2274,14 @@ export default function AdminDashboard() {
             </div>
 
             {/* Maintenance Mode Controls */}
-            <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#E9D9C5] pb-2 flex items-center justify-between">
+            <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2 flex items-center justify-between">
                 <span>1. Maintenance Mode &amp; Notice Controls</span>
                 <span className="text-xs font-semibold text-[#F26A21]">Active on Portal</span>
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                <label className="flex items-center gap-2 cursor-pointer font-medium p-3 bg-[#FFF9ED] rounded border border-[#E9D9C5]">
+                <label className="flex items-center gap-2 cursor-pointer font-medium p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5]">
                   <input
                     type="checkbox"
                     checked={settings.maintenanceBarEnabled}
@@ -2291,7 +2291,7 @@ export default function AdminDashboard() {
                   <span>Show Top Yellow Maintenance Banner</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer font-medium p-3 bg-[#FFF9ED] rounded border border-[#E9D9C5]">
+                <label className="flex items-center gap-2 cursor-pointer font-medium p-3 bg-[#FFFCF5] rounded border border-[#F0E5D5]">
                   <input
                     type="checkbox"
                     checked={settings.maintenancePopupEnabled}
@@ -2309,15 +2309,15 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.maintenanceMessage}
                     onChange={(e) => setSettings({ ...settings, maintenanceMessage: e.target.value })}
-                    className="w-full px-3 py-2 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-2 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
               </div>
             </div>
 
             {/* Portal Identity & Secretariat Contact */}
-            <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#E9D9C5] pb-2">
+            <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
                 2. Secretariat &amp; Identity Details
               </h2>
 
@@ -2328,7 +2328,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.siteName}
                     onChange={(e) => setSettings({ ...settings, siteName: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs font-bold"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs font-bold"
                   />
                 </div>
                 <div>
@@ -2337,7 +2337,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.tagline}
                     onChange={(e) => setSettings({ ...settings, tagline: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2346,7 +2346,7 @@ export default function AdminDashboard() {
                     type="email"
                     value={settings.contactEmail}
                     onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2355,7 +2355,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.contactPhone}
                     onChange={(e) => setSettings({ ...settings, contactPhone: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2364,7 +2364,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.whatsappNumber}
                     onChange={(e) => setSettings({ ...settings, whatsappNumber: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2373,15 +2373,15 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.contactAddress}
                     onChange={(e) => setSettings({ ...settings, contactAddress: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
               </div>
             </div>
 
             {/* SEO Settings */}
-            <div className="bg-white p-5 rounded-lg border border-[#E9D9C5] shadow-xs space-y-3">
-              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#E9D9C5] pb-2">
+            <div className="bg-white p-5 rounded-lg border border-[#F0E5D5] shadow-xs space-y-3">
+              <h2 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
                 3. Global SEO &amp; Social Meta Directives
               </h2>
 
@@ -2392,7 +2392,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.seoTitle}
                     onChange={(e) => setSettings({ ...settings, seoTitle: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs font-semibold"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs font-semibold"
                   />
                 </div>
                 <div>
@@ -2402,7 +2402,7 @@ export default function AdminDashboard() {
                     value={settings.siteUrl}
                     onChange={(e) => setSettings({ ...settings, siteUrl: e.target.value })}
                     placeholder="https://alokworld.in"
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs font-mono"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs font-mono"
                   />
                 </div>
 
@@ -2412,7 +2412,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.seoKeywords}
                     onChange={(e) => setSettings({ ...settings, seoKeywords: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2422,7 +2422,7 @@ export default function AdminDashboard() {
                     value={settings.ogImage}
                     onChange={(e) => setSettings({ ...settings, ogImage: e.target.value })}
                     placeholder="https://alokworld.in/og-image.png"
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
 
@@ -2432,7 +2432,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.organizationName}
                     onChange={(e) => setSettings({ ...settings, organizationName: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
                 <div>
@@ -2441,7 +2441,7 @@ export default function AdminDashboard() {
                     type="text"
                     value={settings.googleVerificationId}
                     onChange={(e) => setSettings({ ...settings, googleVerificationId: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs font-mono"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs font-mono"
                   />
                 </div>
 
@@ -2451,7 +2451,7 @@ export default function AdminDashboard() {
                     rows={2}
                     value={settings.seoDescription}
                     onChange={(e) => setSettings({ ...settings, seoDescription: e.target.value })}
-                    className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                    className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                   />
                 </div>
               </div>
@@ -2474,7 +2474,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "audit_logs" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Administrative Activity Audit Log</h1>
                 <p className="text-xs text-[#64748B]">
@@ -2488,13 +2488,13 @@ export default function AdminDashboard() {
                   placeholder="Filter by admin or details..."
                   value={auditSearch}
                   onChange={(e) => setAuditSearch(e.target.value)}
-                  className="px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs w-56"
+                  className="px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs w-56"
                 />
               </div>
             </div>
 
             {/* Audit Log Table */}
-            <div className="bg-white rounded-lg border border-[#E9D9C5] overflow-hidden shadow-xs">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-[#102F6B] text-white text-[11px] uppercase tracking-wider font-semibold">
@@ -2507,7 +2507,7 @@ export default function AdminDashboard() {
                       <th className="py-2.5 px-3">IP</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E9D9C5]">
+                  <tbody className="divide-y divide-[#F0E5D5]">
                     {auditLogs.length === 0 ? (
                       <tr>
                         <td colSpan={6} className="py-10 text-center text-[#64748B]">
@@ -2516,7 +2516,7 @@ export default function AdminDashboard() {
                       </tr>
                     ) : (
                       auditLogs.map((log) => (
-                        <tr key={log._id} className="hover:bg-[#FFF9ED]/60 transition-colors">
+                        <tr key={log._id} className="hover:bg-[#FFFCF5]/60 transition-colors">
                           <td className="py-2 px-3 text-[11px] text-[#64748B] whitespace-nowrap">
                             {new Date(log.createdAt).toLocaleString("en-IN", {
                               day: "2-digit",
@@ -2531,7 +2531,7 @@ export default function AdminDashboard() {
                             <span className="text-[10px] text-[#64748B] uppercase font-bold">{log.adminRole}</span>
                           </td>
                           <td className="py-2 px-3">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
                               {log.action}
                             </span>
                           </td>
@@ -2552,7 +2552,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Pagination Bar */}
-              <div className="bg-[#FFF9ED] p-3 border-t border-[#E9D9C5] flex items-center justify-between text-xs">
+              <div className="bg-[#FFFCF5] p-3 border-t border-[#F0E5D5] flex items-center justify-between text-xs">
                 <span>
                   Showing page {auditPage} of {auditTotalPages} ({auditTotal} total records)
                 </span>
@@ -2560,14 +2560,14 @@ export default function AdminDashboard() {
                   <button
                     disabled={auditPage <= 1}
                     onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
-                    className="px-2.5 py-1 rounded bg-white border border-[#E9D9C5] disabled:opacity-40 cursor-pointer font-semibold text-[#102F6B]"
+                    className="px-2.5 py-1 rounded bg-white border border-[#F0E5D5] disabled:opacity-40 cursor-pointer font-semibold text-[#102F6B]"
                   >
                     Previous
                   </button>
                   <button
                     disabled={auditPage >= auditTotalPages}
                     onClick={() => setAuditPage((p) => p + 1)}
-                    className="px-2.5 py-1 rounded bg-white border border-[#E9D9C5] disabled:opacity-40 cursor-pointer font-semibold text-[#102F6B]"
+                    className="px-2.5 py-1 rounded bg-white border border-[#F0E5D5] disabled:opacity-40 cursor-pointer font-semibold text-[#102F6B]"
                   >
                     Next
                   </button>
@@ -2582,7 +2582,7 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "admin_team" && currentUser?.role === "superadmin" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs flex items-center justify-between">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs flex items-center justify-between">
               <div>
                 <h1 className="text-lg font-bold text-[#102F6B]">Administrative Team &amp; Access Control</h1>
                 <p className="text-xs text-[#64748B]">
@@ -2593,8 +2593,8 @@ export default function AdminDashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
               {/* Existing Team Members Table */}
-              <div className="lg:col-span-7 bg-white rounded-lg border border-[#E9D9C5] overflow-hidden shadow-xs">
-                <div className="p-3.5 bg-[#FFF9ED] border-b border-[#E9D9C5] font-bold text-[#102F6B] text-xs">
+              <div className="lg:col-span-7 bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs">
+                <div className="p-3.5 bg-[#FFFCF5] border-b border-[#F0E5D5] font-bold text-[#102F6B] text-xs">
                   Active Administrators ({adminUsers.length})
                 </div>
 
@@ -2608,11 +2608,11 @@ export default function AdminDashboard() {
                         <th className="py-2.5 px-3 text-right">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-[#E9D9C5]">
+                    <tbody className="divide-y divide-[#F0E5D5]">
                       {adminUsers.map((u) => {
                         const isSelf = u.email === currentUser?.email;
                         return (
-                          <tr key={u._id} className="hover:bg-[#FFF9ED]/60 transition-colors">
+                          <tr key={u._id} className="hover:bg-[#FFFCF5]/60 transition-colors">
                             <td className="py-2.5 px-3">
                               <div className="font-bold text-[#102F6B]">
                                 {u.name} {isSelf && <span className="text-[#F26A21] text-[10px]">(You)</span>}
@@ -2652,8 +2652,8 @@ export default function AdminDashboard() {
               </div>
 
               {/* Add New Administrator Card */}
-              <div className="lg:col-span-5 bg-white rounded-lg border border-[#E9D9C5] p-5 shadow-xs space-y-4">
-                <div className="border-b border-[#E9D9C5] pb-2">
+              <div className="lg:col-span-5 bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs space-y-4">
+                <div className="border-b border-[#F0E5D5] pb-2">
                   <h2 className="font-bold text-sm text-[#102F6B]">Add New Team Administrator</h2>
                   <p className="text-xs text-[#64748B]">Provide credentials for editors or secondary superadmins.</p>
                 </div>
@@ -2667,7 +2667,7 @@ export default function AdminDashboard() {
                       value={newAdminForm.name}
                       onChange={(e) => setNewAdminForm({ ...newAdminForm, name: e.target.value })}
                       placeholder="e.g. Ramesh Chandra Verma"
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
 
@@ -2679,7 +2679,7 @@ export default function AdminDashboard() {
                       value={newAdminForm.email}
                       onChange={(e) => setNewAdminForm({ ...newAdminForm, email: e.target.value })}
                       placeholder="e.g. editor.ramesh@alokworld.in"
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
 
@@ -2688,7 +2688,7 @@ export default function AdminDashboard() {
                     <select
                       value={newAdminForm.role}
                       onChange={(e) => setNewAdminForm({ ...newAdminForm, role: e.target.value })}
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     >
                       <option value="editor">Editor (Can create/edit members, CMS &amp; gallery)</option>
                       <option value="superadmin">Superadmin (Unrestricted access &amp; deletions)</option>
@@ -2704,7 +2704,7 @@ export default function AdminDashboard() {
                       value={newAdminForm.password}
                       onChange={(e) => setNewAdminForm({ ...newAdminForm, password: e.target.value })}
                       placeholder="••••••••"
-                      className="w-full px-3 py-1.5 rounded border border-[#E9D9C5] bg-[#FFF9ED] text-xs"
+                      className="w-full px-3 py-1.5 rounded border border-[#F0E5D5] bg-[#FFFCF5] text-xs"
                     />
                   </div>
 
@@ -2726,23 +2726,23 @@ export default function AdminDashboard() {
         {/* ========================================================================= */}
         {activeTab === "messages" && (
           <div className="space-y-4">
-            <div className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs">
+            <div className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs">
               <h1 className="text-lg font-bold text-[#102F6B]">Public Secretariat Contact Inquiries</h1>
               <p className="text-xs text-[#64748B]">Messages and questions submitted through the portal contact form.</p>
             </div>
 
             <div className="space-y-3">
               {messages.length === 0 ? (
-                <div className="bg-white p-10 text-center text-[#64748B] rounded-lg border border-[#E9D9C5]">
+                <div className="bg-white p-10 text-center text-[#64748B] rounded-lg border border-[#F0E5D5]">
                   No incoming messages found.
                 </div>
               ) : (
                 messages.map((msg) => (
                   <div
                     key={msg._id}
-                    className="bg-white p-4 rounded-lg border border-[#E9D9C5] shadow-xs space-y-2 text-xs"
+                    className="bg-white p-4 rounded-lg border border-[#F0E5D5] shadow-xs space-y-2 text-xs"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[#E9D9C5] pb-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-[#F0E5D5] pb-2">
                       <div className="font-bold text-[#102F6B] text-sm">
                         {msg.name}{" "}
                         <span className="text-xs font-normal text-[#64748B]">({msg.email})</span>
@@ -2758,7 +2758,7 @@ export default function AdminDashboard() {
                       <span>Subject: {msg.subject || "General Inquiry"}</span>
                     </div>
 
-                    <p className="text-[#263449] bg-[#FFF9ED] p-3 rounded border border-[#E9D9C5] leading-relaxed">
+                    <p className="text-[#263449] bg-[#FFFCF5] p-3 rounded border border-[#F0E5D5] leading-relaxed">
                       {msg.message}
                     </p>
 
@@ -2784,7 +2784,7 @@ export default function AdminDashboard() {
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
           <div
-            className="bg-white rounded-xl border border-[#E9D9C5] max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150"
+            className="bg-white rounded-xl border border-[#F0E5D5] max-w-md w-full p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95 duration-150"
             role="dialog"
             aria-modal="true"
             aria-labelledby="confirmDialogTitle"
@@ -2804,12 +2804,12 @@ export default function AdminDashboard() {
             </div>
 
             {confirmModal.targetName && (
-              <div className="p-3 bg-[#FFF9ED] rounded-lg border border-[#E9D9C5] text-xs font-semibold text-[#102F6B]">
+              <div className="p-3 bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] text-xs font-semibold text-[#102F6B]">
                 Target: {confirmModal.targetName}
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#E9D9C5]">
+            <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#F0E5D5]">
               <button
                 type="button"
                 onClick={closeConfirmation}

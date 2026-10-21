@@ -36,14 +36,14 @@ export default function MahasabhaPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Central Leadership &amp; Body
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -55,14 +55,14 @@ export default function MahasabhaPage() {
             </div>
 
             {cmsPage?.content ? (
-              <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <div
                   className="cms-prose text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4"
                   dangerouslySetInnerHTML={{ __html: cmsPage.content }}
                 />
               </div>
             ) : (
-              <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs space-y-4 text-xs sm:text-sm text-[#263449] leading-relaxed">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-4 text-xs sm:text-sm text-[#263449] leading-relaxed">
                 <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
                   Vision &amp; Strategic Mission
                 </h2>
@@ -77,10 +77,10 @@ export default function MahasabhaPage() {
                   {fallbackResolutions.map((r, i) => (
                     <div
                       key={i}
-                      className="p-3.5 sm:p-4 rounded-lg bg-[#FFF9ED] border border-[#E9D9C5] space-y-1.5"
+                      className="p-3.5 sm:p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] space-y-1.5"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#E9D9C5]">
+                        <span className="text-[11px] font-bold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
                           {r.year}
                         </span>
                       </div>
@@ -94,7 +94,7 @@ export default function MahasabhaPage() {
                   ))}
                 </div>
 
-                <div className="p-4 bg-[#FFF0E2] rounded-lg border border-[#E9D9C5] mt-4">
+                <div className="p-4 bg-[#FFF0E2] rounded-lg border border-[#F0E5D5] mt-4">
                   <h3 className="font-bold text-[#102F6B] text-xs uppercase tracking-wider mb-1">
                     Secretariat Inquiries &amp; State Chapter Affiliations
                   </h3>

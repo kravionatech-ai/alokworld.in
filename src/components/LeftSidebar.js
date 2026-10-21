@@ -21,7 +21,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
   return (
     <aside className="space-y-4">
       {/* Navigation Links Section */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Quick Navigation
         </div>
@@ -31,7 +31,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
               key={link.href}
               href={link.href}
               className={`block px-3.5 py-2 text-xs text-[#263449] font-semibold hover:bg-[#FFF0E2] hover:text-[#F26A21] transition-colors ${
-                i < inspirationLinks.length - 1 ? "border-b border-[#E9D9C5]" : ""
+                i < inspirationLinks.length - 1 ? "border-b border-[#F0E5D5]" : ""
               }`}
             >
               {link.label}
@@ -41,7 +41,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       </div>
 
       {/* Business Section */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Featured Business
         </div>
@@ -56,12 +56,12 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       </div>
 
       {/* Community Stars Section */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Community Achievers
         </div>
         <div className="p-3.5 text-center text-xs text-[#263449]">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-2xl mb-2 border border-[#E9D9C5]">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-2xl mb-2 border border-[#F0E5D5]">
             ⭐
           </div>
           <p className="font-bold text-[#102F6B]">Meritorious Students &amp; Achievers</p>
@@ -72,7 +72,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       </div>
 
       {/* Organization Posts */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Executive Leadership Registry
         </div>
@@ -88,7 +88,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
 
       {/* Community Spotlight / Ad */}
       {adTitle && (
-        <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
           <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
             {adTitle}
           </div>

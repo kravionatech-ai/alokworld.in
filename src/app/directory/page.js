@@ -96,7 +96,7 @@ export default function DirectoryPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header
         siteName={settings?.siteName}
         tagline={settings?.tagline}
@@ -105,9 +105,9 @@ export default function DirectoryPage() {
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Page Banner */}
-        <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#E9D9C5] shadow-xs">
+        <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#F0E5D5] shadow-xs">
           <div className="max-w-3xl">
-            <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5] mb-2">
+            <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5] mb-2">
               Akhil Bhartiya Samaj Directory
             </span>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
@@ -182,7 +182,7 @@ export default function DirectoryPage() {
 
             {/* Content Display: Loading / Grid / Table */}
             {loading ? (
-              <div className="bg-white rounded-lg border border-[#E9D9C5] p-16 text-center text-[#64748B] font-medium shadow-xs">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-16 text-center text-[#64748B] font-medium shadow-xs">
                 <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
                 Searching community records...
               </div>
@@ -217,7 +217,7 @@ export default function DirectoryPage() {
                       className={`w-7 h-7 rounded text-xs font-bold transition-colors cursor-pointer ${
                         page === pageNum
                           ? "bg-[#102F6B] text-white"
-                          : "bg-white border border-[#E9D9C5] text-[#263449] hover:bg-[#FFF0E2]"
+                          : "bg-white border border-[#F0E5D5] text-[#263449] hover:bg-[#FFF0E2]"
                       }`}
                     >
                       {pageNum}

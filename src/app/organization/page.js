@@ -46,14 +46,14 @@ export default function OrganizationPage() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Structure &amp; Governance
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -65,7 +65,7 @@ export default function OrganizationPage() {
             </div>
 
             {cmsPage?.content ? (
-              <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <div
                   className="cms-prose text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4"
                   dangerouslySetInnerHTML={{ __html: cmsPage.content }}
@@ -76,20 +76,20 @@ export default function OrganizationPage() {
                 {fallbackCommittees.map((c, i) => (
                   <div
                     key={i}
-                    className="p-4 sm:p-5 rounded-lg bg-white border border-[#E9D9C5] shadow-xs space-y-2"
+                    className="p-4 sm:p-5 rounded-lg bg-white border border-[#F0E5D5] shadow-xs space-y-2"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <h2 className="font-bold text-sm sm:text-base text-[#102F6B]">
                         {c.title}
                       </h2>
-                      <span className="text-[11px] font-semibold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#E9D9C5] shrink-0">
+                      <span className="text-[11px] font-semibold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5] shrink-0">
                         Active Body
                       </span>
                     </div>
                     <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
                       {c.desc}
                     </p>
-                    <div className="pt-2 border-t border-[#E9D9C5] text-xs font-semibold text-[#102F6B]">
+                    <div className="pt-2 border-t border-[#F0E5D5] text-xs font-semibold text-[#102F6B]">
                       {c.lead}
                     </div>
                   </div>

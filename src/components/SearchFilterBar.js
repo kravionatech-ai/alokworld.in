@@ -55,7 +55,7 @@ export default function SearchFilterBar({
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-5 border border-[#E9D9C5] shadow-xs mb-5 space-y-3.5">
+    <div className="bg-white rounded-lg p-4 sm:p-5 border border-[#F0E5D5] shadow-xs mb-5 space-y-3.5">
       {/* Primary Row: Search Input + City Filter + Sort + Toggle */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
         {/* Search input */}
@@ -65,7 +65,7 @@ export default function SearchFilterBar({
             value={searchQuery}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
             placeholder="Search by name, profession, city, organization..."
-            className="w-full pl-3 pr-14 py-2.5 bg-white text-[#263449] placeholder-[#64748B] text-xs sm:text-sm rounded border border-[#E9D9C5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden font-medium"
+            className="w-full pl-3 pr-14 py-2.5 bg-white text-[#263449] placeholder-[#64748B] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden font-medium"
           />
           {searchQuery && (
             <button
@@ -83,7 +83,7 @@ export default function SearchFilterBar({
           <select
             value={activeCity}
             onChange={(e) => handleCityChange && handleCityChange(e.target.value)}
-            className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#E9D9C5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
+            className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
           >
             <option value="All">All Cities &amp; Regions</option>
             {cityList.map((c) => (
@@ -99,7 +99,7 @@ export default function SearchFilterBar({
           <select
             value={selectedSort}
             onChange={(e) => onSortChange && onSortChange(e.target.value)}
-            className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#E9D9C5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
+            className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
           >
             <option value="newest">Sort: Newest First</option>
             <option value="name_asc">Sort: Name (A to Z)</option>
@@ -117,7 +117,7 @@ export default function SearchFilterBar({
             className={`w-full py-2.5 px-3 text-xs font-bold rounded border transition-colors cursor-pointer flex items-center justify-center gap-1.5 ${
               showAdvanced || selectedState !== "All" || selectedProfession !== "All" || selectedOrganization !== "All"
                 ? "bg-[#102F6B] text-white border-[#102F6B]"
-                : "bg-[#FFF9ED] text-[#102F6B] border-[#E9D9C5] hover:bg-[#FFF0E2]"
+                : "bg-[#FFFCF5] text-[#102F6B] border-[#F0E5D5] hover:bg-[#FFF0E2]"
             }`}
           >
             <span>Filters</span>
@@ -128,14 +128,14 @@ export default function SearchFilterBar({
 
       {/* Advanced Filter Drawer: State, Profession, Organization */}
       {showAdvanced && (
-        <div className="pt-3 border-t border-[#E9D9C5] grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in duration-150">
+        <div className="pt-3 border-t border-[#F0E5D5] grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in duration-150">
           {/* State Filter */}
           <div>
             <label className="block text-[11px] font-bold text-[#64748B] mb-1">State / Province</label>
             <select
               value={selectedState}
               onChange={(e) => onStateChange && onStateChange(e.target.value)}
-              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#E9D9C5] focus:border-[#102F6B] outline-hidden cursor-pointer"
+              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
               <option value="All">All States</option>
               {states.map((s) => (
@@ -152,7 +152,7 @@ export default function SearchFilterBar({
             <select
               value={selectedProfession}
               onChange={(e) => onProfessionChange && onProfessionChange(e.target.value)}
-              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#E9D9C5] focus:border-[#102F6B] outline-hidden cursor-pointer"
+              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
               <option value="All">All Professions</option>
               {professions.map((p) => (
@@ -169,7 +169,7 @@ export default function SearchFilterBar({
             <select
               value={selectedOrganization}
               onChange={(e) => onOrganizationChange && onOrganizationChange(e.target.value)}
-              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#E9D9C5] focus:border-[#102F6B] outline-hidden cursor-pointer"
+              className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
               <option value="All">All Organizations</option>
               {organizations.map((o) => (
@@ -183,14 +183,14 @@ export default function SearchFilterBar({
       )}
 
       {/* Footer Strip: Results Counter + View Toggle + Reset */}
-      <div className="pt-2 border-t border-[#E9D9C5] flex flex-wrap items-center justify-between text-xs text-[#64748B] gap-2">
+      <div className="pt-2 border-t border-[#F0E5D5] flex flex-wrap items-center justify-between text-xs text-[#64748B] gap-2">
         <div className="flex items-center gap-2">
           <span>
             Showing <strong className="text-[#102F6B] font-bold">{totalResults}</strong> verified member{totalResults === 1 ? "" : "s"}
           </span>
 
           {hasActiveFilters && (
-            <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
               Filters Active
             </span>
           )}
@@ -199,7 +199,7 @@ export default function SearchFilterBar({
         <div className="flex items-center gap-3">
           {/* View Toggle */}
           {onViewModeChange && (
-            <div className="inline-flex rounded border border-[#E9D9C5] overflow-hidden">
+            <div className="inline-flex rounded border border-[#F0E5D5] overflow-hidden">
               <button
                 type="button"
                 onClick={() => onViewModeChange("grid")}

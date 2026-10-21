@@ -11,11 +11,11 @@ export default function ErrorBoundary({ error, reset }) {
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[800px] w-full mx-auto px-4 py-16 flex items-center justify-center">
-        <div className="bg-white rounded-xl border border-[#E9D9C5] p-8 sm:p-12 shadow-sm text-center space-y-6 w-full">
+        <div className="bg-white rounded-xl border border-[#F0E5D5] p-8 sm:p-12 shadow-sm text-center space-y-6 w-full">
           <div className="w-16 h-16 mx-auto rounded-full bg-red-100 text-red-600 border border-red-200 flex items-center justify-center text-3xl font-black">
             ⚠
           </div>

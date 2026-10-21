@@ -5,14 +5,14 @@ import Link from "next/link";
 export default function MemberTable({ members = [], startIndex = 0 }) {
   if (members.length === 0) {
     return (
-      <div className="border border-[#E9D9C5] bg-white p-6 text-center text-xs text-[#64748B] rounded-lg">
+      <div className="border border-[#F0E5D5] bg-white p-6 text-center text-xs text-[#64748B] rounded-lg">
         No community members found matching your search.
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto border border-[#E9D9C5] rounded-lg shadow-xs bg-white">
+    <div className="overflow-x-auto border border-[#F0E5D5] rounded-lg shadow-xs bg-white">
       <table className="w-full text-xs bg-white">
         <thead>
           <tr className="bg-[#102F6B] text-white">
@@ -24,13 +24,13 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
             <th className="border-b border-[#091D42] px-3 py-2.5 text-center font-bold w-[90px]">Action</th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#E9D9C5]">
+        <tbody className="divide-y divide-[#F0E5D5]">
           {members.map((member, index) => {
             const profileIdentifier = member.slug || member._id || member.id;
             return (
               <tr
                 key={member._id || member.id || index}
-                className={index % 2 === 0 ? "bg-[#FFF9ED]/30 hover:bg-[#FFF0E2]/50" : "bg-white hover:bg-[#FFF0E2]/50"}
+                className={index % 2 === 0 ? "bg-[#FFFCF5]/30 hover:bg-[#FFF0E2]/50" : "bg-white hover:bg-[#FFF0E2]/50"}
               >
                 <td className="px-3 py-2 text-center text-[#263449] font-medium">
                   {startIndex + index + 1}

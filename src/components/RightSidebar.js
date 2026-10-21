@@ -6,12 +6,12 @@ export default function RightSidebar() {
   return (
     <aside className="space-y-4">
       {/* National Office Bearers */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           National Office Bearers
         </div>
         <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
             👤
           </div>
           <p className="text-xs font-bold text-[#102F6B]">Shri Rakesh Lodhi</p>
@@ -22,12 +22,12 @@ export default function RightSidebar() {
       </div>
 
       {/* State Office Bearers */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           State Office Bearers
         </div>
         <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
             👤
           </div>
           <p className="text-xs font-bold text-[#102F6B]">Maharaj Lodhi (Social Worker)</p>
@@ -37,12 +37,12 @@ export default function RightSidebar() {
       </div>
 
       {/* Ministers & Public Representatives */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Public Representatives &amp; Leaders
         </div>
         <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
             👤
           </div>
           <p className="text-xs font-bold text-[#102F6B]">Shri Ramchandra Lodhi</p>
@@ -51,12 +51,12 @@ export default function RightSidebar() {
       </div>
 
       {/* Civil Servants & Professionals */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Civil Servants &amp; Professionals
         </div>
         <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#E9D9C5]">
+          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
             👤
           </div>
           <p className="text-xs font-bold text-[#102F6B]">Amar Pal Ji</p>
@@ -65,12 +65,12 @@ export default function RightSidebar() {
       </div>
 
       {/* Advertisement Box */}
-      <div className="border border-[#E9D9C5] rounded-lg overflow-hidden shadow-xs bg-white">
+      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
           Community Spotlight
         </div>
         <div className="p-4 text-center text-xs text-[#64748B]">
-          <div className="border border-dashed border-[#E9D9C5] p-4 rounded-lg bg-[#FFF9ED]">
+          <div className="border border-dashed border-[#F0E5D5] p-4 rounded-lg bg-[#FFFCF5]">
             <p className="font-semibold text-[#102F6B]">Enterprise Advertisement</p>
             <p className="text-[10px] mt-1 text-[#64748B]">Contact the secretariat to feature your business</p>
             <Link

@@ -118,7 +118,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebsite) }}
         />
       </head>
-      <body className="min-h-screen bg-[#FFF9ED] text-[#263449]">
+      <body className="min-h-screen bg-[#FFFCF5] text-[#263449]">
         {/* Google tag (gtag.js) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-7LLNEM51KC"

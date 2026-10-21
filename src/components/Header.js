@@ -26,7 +26,7 @@ export default function Header({ siteName }) {
         <div className="max-w-[1100px] mx-auto px-4">
           <div className="flex items-center justify-between sm:justify-center py-3.5 gap-4">
             {/* Left Crest */}
-            <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FFF9ED] text-[#102F6B] font-black text-lg sm:text-xl border-2 border-[#F26A21] shrink-0 shadow-sm">
+            <div className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FFFCF5] text-[#102F6B] font-black text-lg sm:text-xl border-2 border-[#F26A21] shrink-0 shadow-xs">
               🏛️
             </div>
 
@@ -46,7 +46,7 @@ export default function Header({ siteName }) {
             </div>
 
             {/* Right Emblem on desktop */}
-            <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-full bg-[#FFF9ED] text-[#102F6B] font-black text-xl border-2 border-[#F26A21] shrink-0 shadow-sm">
+            <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-full bg-[#FFFCF5] text-[#102F6B] font-black text-xl border-2 border-[#F26A21] shrink-0 shadow-xs">
               ⭐
             </div>
 
@@ -76,12 +76,6 @@ export default function Header({ siteName }) {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/admin/login"
-              className="px-3 py-2.5 text-xs font-bold text-[#FFF0E2] hover:bg-[#F26A21] hover:text-white transition-colors whitespace-nowrap ml-1 bg-[#091D42]/60 rounded-xs"
-            >
-              Admin Portal
-            </Link>
           </div>
 
           {/* Mobile Tablet Header info strip */}
@@ -104,13 +98,6 @@ export default function Header({ siteName }) {
                 {item.label}
               </Link>
             ))}
-            <Link
-              href="/admin/login"
-              onClick={() => setMenuOpen(false)}
-              className="block px-3 py-2 text-xs font-bold text-[#F26A21] hover:bg-[#F26A21] hover:text-white rounded bg-[#102F6B]/50"
-            >
-              Admin Portal →
-            </Link>
           </div>
         )}
       </nav>

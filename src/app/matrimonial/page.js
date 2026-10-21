@@ -79,14 +79,14 @@ export default function MatrimonialPage() {
   }, [genderFilter, cityFilter]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Community Matchmaking
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -97,7 +97,7 @@ export default function MatrimonialPage() {
               </p>
 
               {/* Filters */}
-              <div className="mt-4 pt-4 border-t border-[#E9D9C5] flex flex-wrap items-center gap-2.5">
+              <div className="mt-4 pt-4 border-t border-[#F0E5D5] flex flex-wrap items-center gap-2.5">
                 <span className="text-xs font-bold text-[#263449]">Filter by Category:</span>
                 <div className="flex gap-1.5">
                   {[
@@ -111,7 +111,7 @@ export default function MatrimonialPage() {
                       className={`px-3 py-1 rounded text-xs font-semibold transition-colors cursor-pointer border ${
                         genderFilter === g.key
                           ? "bg-[#102F6B] text-white border-[#102F6B]"
-                          : "bg-white text-[#263449] border-[#E9D9C5] hover:bg-[#FFF0E2]"
+                          : "bg-white text-[#263449] border-[#F0E5D5] hover:bg-[#FFF0E2]"
                       }`}
                     >
                       {g.label}
@@ -124,20 +124,20 @@ export default function MatrimonialPage() {
             {/* Profiles Grid */}
             <div className="space-y-3.5">
               {profiles.length === 0 ? (
-                <div className="bg-white rounded-lg border border-[#E9D9C5] p-10 text-center shadow-xs text-xs text-[#64748B]">
+                <div className="bg-white rounded-lg border border-[#F0E5D5] p-10 text-center shadow-xs text-xs text-[#64748B]">
                   No matrimonial profiles found in this category.
                 </div>
               ) : (
                 profiles.map((p) => (
                 <div
                   key={p._id}
-                  className="bg-white rounded-lg border border-[#E9D9C5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all"
+                  className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all"
                 >
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#E9D9C5]">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-[#F0E5D5]">
                     <div>
                       <div className="flex items-center gap-2">
                         <h2 className="text-base font-bold text-[#102F6B]">{p.fullName}</h2>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
                           {p.gender === "Male" ? "Groom" : "Bride"}
                         </span>
                       </div>

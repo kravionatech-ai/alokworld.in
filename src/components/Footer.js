@@ -2,9 +2,9 @@ import Link from "next/link";
 
 export default function Footer({ contactEmail, contactPhone }) {
   return (
-    <footer className="bg-[#FFF9ED] border-t-2 border-[#E9D9C5] mt-12 pt-8 pb-6 text-[#263449]">
+    <footer className="bg-[#FFFCF5] border-t-2 border-[#F0E5D5] mt-12 pt-8 pb-6 text-[#263449]">
       <div className="max-w-[1100px] mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 pb-6 border-b border-[#E9D9C5]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6 pb-6 border-b border-[#F0E5D5]">
           {/* Col 1: Identity */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
@@ -62,14 +62,6 @@ export default function Footer({ contactEmail, contactPhone }) {
               <p>Email: <a href={`mailto:${contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] hover:underline font-medium">{contactEmail || "admin@alokworld.in"}</a></p>
               <p>Phone: <a href={`tel:${contactPhone || "+919608553167"}`} className="text-[#F26A21] hover:underline font-medium">{contactPhone || "+91 96085 53167"}</a></p>
               <p className="text-[11px] text-[#64748B]">Working Hours: Mon - Sat (10:00 AM - 6:00 PM)</p>
-            </div>
-            <div className="pt-2">
-              <Link
-                href="/admin/login"
-                className="btn-navy px-3.5 py-1.5 text-xs shadow-xs"
-              >
-                Admin Login →
-              </Link>
             </div>
           </div>
         </div>

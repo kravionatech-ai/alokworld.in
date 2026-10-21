@@ -3,8 +3,8 @@ import MemberCard from "./MemberCard";
 export default function MemberList({ members = [] }) {
   if (members.length === 0) {
     return (
-      <div className="bg-white rounded-lg border border-[#E9D9C5] p-10 text-center shadow-xs">
-        <div className="w-12 h-12 mx-auto mb-3 bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl text-[#102F6B] border border-[#E9D9C5]">
+      <div className="bg-white rounded-lg border border-[#F0E5D5] p-10 text-center shadow-xs">
+        <div className="w-12 h-12 mx-auto mb-3 bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl text-[#102F6B] border border-[#F0E5D5]">
           🔍
         </div>
         <h3 className="text-base font-bold text-[#102F6B] mb-1">

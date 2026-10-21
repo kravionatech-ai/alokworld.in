@@ -123,7 +123,7 @@ export default function MaintenanceNotice() {
           aria-modal="true"
         >
           <div
-            className="relative w-full max-w-md bg-white border-2 border-[#E9D9C5] rounded-xl shadow-2xl p-6 text-center text-[#263449] animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-md bg-white border-2 border-[#F0E5D5] rounded-xl shadow-2xl p-6 text-center text-[#263449] animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Close Button */}
@@ -140,7 +140,7 @@ export default function MaintenanceNotice() {
               🛠️
             </div>
 
-            <div className="inline-block px-2.5 py-0.5 mb-2 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#E9D9C5]">
+            <div className="inline-block px-2.5 py-0.5 mb-2 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
               Active Development
             </div>
 
@@ -152,7 +152,7 @@ export default function MaintenanceNotice() {
               {popupMessage}
             </p>
 
-            <div className="mt-5 pt-4 border-t border-[#E9D9C5] flex items-center justify-center gap-3">
+            <div className="mt-5 pt-4 border-t border-[#F0E5D5] flex items-center justify-center gap-3">
               <button
                 onClick={closePopup}
                 className="btn-primary w-full py-2.5 px-4 text-xs sm:text-sm shadow-sm cursor-pointer"

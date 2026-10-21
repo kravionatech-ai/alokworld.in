@@ -81,9 +81,9 @@ export async function POST(req) {
             <p><strong>Email:</strong> ${cleanEmail}</p>
             <p><strong>Phone:</strong> ${phone ? phone.trim() : "Not provided"}</p>
             <p><strong>Subject:</strong> ${subject.trim()}</p>
-            <hr style="border: 1px solid #E9D9C5; margin: 20px 0;" />
+            <hr style="border: 1px solid #F0E5D5; margin: 20px 0;" />
             <p><strong>Message:</strong></p>
-            <div style="background: #FFF9ED; padding: 15px; border-radius: 8px; border: 1px solid #E9D9C5;">${sanitizedMessage}</div>
+            <div style="background: #FFFCF5; padding: 15px; border-radius: 8px; border: 1px solid #F0E5D5;">${sanitizedMessage}</div>
           </div>
         `,
       });

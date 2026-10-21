@@ -60,14 +60,14 @@ export default function PersonalitiesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-white rounded-lg border border-[#E9D9C5] p-5 sm:p-7 shadow-xs">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+            <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
                 Icons &amp; Legends
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -82,7 +82,7 @@ export default function PersonalitiesPage() {
               {personalities.map((item) => (
                 <div
                   key={item._id}
-                  className="bg-white rounded-lg border border-[#E9D9C5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between"
+                  className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-3 mb-3">
@@ -104,7 +104,7 @@ export default function PersonalitiesPage() {
                       </div>
                     </div>
 
-                    <p className="text-xs text-[#64748B] leading-relaxed pt-2.5 border-t border-[#E9D9C5]">
+                    <p className="text-xs text-[#64748B] leading-relaxed pt-2.5 border-t border-[#F0E5D5]">
                       {item.summary}
                     </p>
                   </div>

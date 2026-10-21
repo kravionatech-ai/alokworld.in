@@ -40,13 +40,13 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFF9ED] text-[#263449]">
+    <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
 
       <main className="flex-1 max-w-[700px] w-full mx-auto px-3 sm:px-4 py-8">
-        <div className="bg-white rounded-lg border border-[#E9D9C5] p-6 sm:p-8 shadow-xs">
+        <div className="bg-white rounded-lg border border-[#F0E5D5] p-6 sm:p-8 shadow-xs">
           <div className="text-center mb-6">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9D9C5]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
               Get In Touch
             </span>
             <h1 className="text-xl sm:text-2xl font-black text-[#102F6B] mt-2 tracking-tight">
@@ -62,7 +62,7 @@ export default function ContactPage() {
               className={`p-3.5 rounded-lg mb-5 text-xs sm:text-sm font-semibold ${
                 status.error
                   ? "bg-red-50 text-red-700 border border-red-200"
-                  : "bg-[#FFF0E2] text-[#102F6B] border border-[#E9D9C5]"
+                  : "bg-[#FFF0E2] text-[#102F6B] border border-[#F0E5D5]"
               }`}
             >
               {status.msg}
@@ -81,7 +81,7 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Ramesh Kumar Lodhi"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
                 />
               </div>
 
@@ -95,7 +95,7 @@ export default function ContactPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="your.email@example.com"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
                 />
               </div>
             </div>
@@ -110,7 +110,7 @@ export default function ContactPage() {
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   placeholder="+91 98765 43210"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
                 />
               </div>
 
@@ -124,7 +124,7 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                   placeholder="e.g. Member Registration / Profile Update"
-                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                  className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
                 />
               </div>
             </div>
@@ -139,7 +139,7 @@ export default function ContactPage() {
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 placeholder="Write your message or community inquiry here..."
-                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#E9D9C5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
+                className="w-full px-3 py-2 text-xs sm:text-sm rounded border border-[#F0E5D5] bg-white focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 outline-hidden font-medium text-[#263449]"
               />
             </div>
 
