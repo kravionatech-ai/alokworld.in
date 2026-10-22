@@ -54,7 +54,7 @@ const SiteSettingsSchema = new mongoose.Schema(
     seoDescription: { type: String, default: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India." },
     seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, lodha mahasabha" },
     siteUrl: { type: String, default: "https://alokworld.in" },
-    ogImage: { type: String, default: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&auto=format&fit=crop&q=80" },
+    ogImage: { type: String, default: "/asset/topofwebsite/web_sit_front.png" },
     organizationName: { type: String, default: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha" },
     googleVerificationId: { type: String, default: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg" },
     twitterHandle: { type: String, default: "@alokworldin" },

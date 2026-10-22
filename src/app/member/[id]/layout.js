@@ -61,7 +61,7 @@ export async function generateMetadata({ params }) {
   const canonicalUrl = `${baseUrl.replace(/\/+$/, "")}${canonicalPath}`;
   const ogImage =
     member.avatar ||
-    "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&auto=format&fit=crop&q=80";
+    "/asset/topofwebsite/web_sit_front.png";
 
   return {
     title: `${cleanName} - ${occupation}${location ? ` (${location})` : ""}`,

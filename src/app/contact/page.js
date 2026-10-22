@@ -95,7 +95,7 @@ export default function ContactPage() {
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. ramesh@example.com"
+                    placeholder="e.g. ramesh@alokworld.in"
                     className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                   />
                 </div>

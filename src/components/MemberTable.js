@@ -90,17 +90,45 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
 
                   {/* Full Name & Designation */}
                   <td className="px-3.5 py-2.5 align-middle">
-                    <Link
-                      href={`/member/${profileIdentifier}`}
-                      className="font-bold text-[#102F6B] hover:text-[#F26A21] transition-colors text-xs sm:text-[13px] block leading-snug"
-                    >
-                      {member.name || "Community Member"}
-                    </Link>
-                    {member.role && (
-                      <span className="text-[#F26A21] font-semibold text-[10.5px] block mt-0.5 tracking-tight">
-                        [{member.role}]
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2.5">
+                      <Link
+                        href={`/member/${profileIdentifier}`}
+                        className="shrink-0 block"
+                        title={`View ${member.name || "Member"}'s profile`}
+                      >
+                        {member.avatar ? (
+                          <img
+                            src={member.avatar}
+                            alt={member.name || "Member"}
+                            width={34}
+                            height={34}
+                            loading="lazy"
+                            decoding="async"
+                            className="w-8.5 h-8.5 rounded-full object-cover border border-[#E9E2D8] shadow-2xs hover:scale-105 transition-transform"
+                          />
+                        ) : (
+                          <div
+                            className="w-8.5 h-8.5 rounded-full bg-[#102F6B] text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#F26A21] shadow-2xs"
+                            aria-hidden="true"
+                          >
+                            {member.name ? member.name.replace(/^श्री\s+|^डॉ\.\s*|^इं०?\s*|^श्रीमती\s*/, "").charAt(0).toUpperCase() : "M"}
+                          </div>
+                        )}
+                      </Link>
+                      <div className="min-w-0">
+                        <Link
+                          href={`/member/${profileIdentifier}`}
+                          className="font-bold text-[#102F6B] hover:text-[#F26A21] transition-colors text-xs sm:text-[13px] block leading-snug"
+                        >
+                          {member.name || "Community Member"}
+                        </Link>
+                        {member.role && (
+                          <span className="text-[#F26A21] font-semibold text-[10.5px] block mt-0.5 tracking-tight truncate max-w-[220px]">
+                            [{member.role}]
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </td>
 
                   {/* Location / Address */}

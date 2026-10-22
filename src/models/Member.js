@@ -75,6 +75,11 @@ const MemberSchema = new mongoose.Schema(
         trim: true,
       },
     ],
+    order: {
+      type: Number,
+      default: 999,
+      index: true,
+    },
     // Membership Status & Administrative Controls
     membershipStatus: {
       type: String,

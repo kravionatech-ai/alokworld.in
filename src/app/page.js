@@ -212,7 +212,7 @@ export default function HomePage() {
                   href="/directory"
                   className="btn-navy px-5 py-2.5 text-xs shadow-sm inline-block"
                 >
-                  Browse All 99 Verified Members &amp; Pagination →
+                  Browse All Verified Directory Records &amp; Pagination →
                 </Link>
               </InteractiveTap>
             </div>

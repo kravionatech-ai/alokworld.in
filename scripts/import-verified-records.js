@@ -21,6 +21,7 @@ const MemberSchema = new mongoose.Schema(
     avatar: { type: String, default: "" },
     biography: { type: String, default: "" },
     tags: [{ type: String, trim: true }],
+    order: { type: Number, default: 999, index: true },
     membershipStatus: { type: String, enum: ["active", "pending", "archived"], default: "active" },
     isApproved: { type: Boolean, default: true },
     isPublished: { type: Boolean, default: true },
@@ -88,6 +89,7 @@ async function importVerifiedRecords() {
 
     const memberData = {
       name: cleanName,
+      slug: record.slug || '',
       role: record.role || 'आलोक पदाधिकारी',
       occupation: record.occupation || record.role || 'वरिष्ठ अधिकारी',
       company: record.company || 'अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक)',
@@ -99,6 +101,7 @@ async function importVerifiedRecords() {
       email: '',                 // NO fabricated emails
       avatar: record.avatar || '', // ONLY verified photo or empty string
       biography: record.biography || '',
+      order: record.order || 999,
       tags: [],                  // NO hashtags
       membershipStatus: 'active',
       isApproved: true,

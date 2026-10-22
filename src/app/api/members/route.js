@@ -104,9 +104,10 @@ export async function GET(req) {
         ];
       }
 
-      // Sorting
-      let sortObj = { createdAt: -1 };
-      if (sortBy === "oldest") sortObj = { createdAt: 1 };
+      // Sorting: prioritize order (official hierarchy)
+      let sortObj = { order: 1, createdAt: 1 };
+      if (sortBy === "newest" || !sortBy) sortObj = { order: 1, createdAt: 1 };
+      else if (sortBy === "oldest") sortObj = { order: -1, createdAt: -1 };
       else if (sortBy === "name_asc") sortObj = { name: 1 };
       else if (sortBy === "name_desc") sortObj = { name: -1 };
       else if (sortBy === "city_asc") sortObj = { city: 1, name: 1 };
