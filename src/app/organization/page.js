@@ -108,6 +108,80 @@ export default function OrganizationPage() {
               </StaggerContainer>
             )}
 
+            {/* Official PDF Constitution & Objectives Section */}
+            <FadeIn direction="up" distance={14} duration={0.5} className="mt-6">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-5">
+                <div className="border-b border-[#F0E5D5] pb-3">
+                  <span className="text-[11px] font-bold text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
+                    आधिकारिक विधान एवं नियमावली (स्त्रोत: अधिकारी परिचय प्रपत्र)
+                  </span>
+                  <h2 className="text-base sm:text-lg font-bold text-[#102F6B] mt-2">
+                    संघ की वैधानिक संरचना, उद्देश्य एवं सदस्यता नियम
+                  </h2>
+                  <p className="text-xs text-[#64748B] mt-1">
+                    अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) के आधिकारिक परिचय प्रपत्र अनुसार अधिकृत संगठनात्मक प्रावधान।
+                  </p>
+                </div>
+
+                {/* Key Pillars Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Scope & HQ */}
+                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] space-y-2">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#102F6B] flex items-center gap-1.5">
+                      <span>🏛️</span>
+                      <span>कार्यक्षेत्र एवं मुख्यालय</span>
+                    </h3>
+                    <ul className="text-xs text-[#64748B] space-y-1 leading-relaxed list-disc pl-4">
+                      <li><strong>कार्यक्षेत्र:</strong> संघ का कार्यक्षेत्र संपूर्ण भारत होगा।</li>
+                      <li><strong>राष्ट्रीय मुख्यालय:</strong> राष्ट्रीय मुख्यालय नई दिल्ली में स्थित होगा।</li>
+                      <li><strong>प्रांतीय व जिला मुख्यालय:</strong> संबंधित राज्य की राजधानी एवं जिला मुख्यालय में स्थापित होगा।</li>
+                    </ul>
+                  </div>
+
+                  {/* Membership & Fees */}
+                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] space-y-2">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#102F6B] flex items-center gap-1.5">
+                      <span>💳</span>
+                      <span>सदस्यता श्रेणियां एवं शुल्क</span>
+                    </h3>
+                    <ul className="text-xs text-[#64748B] space-y-1 leading-relaxed list-disc pl-4">
+                      <li><strong className="text-[#102F6B]">संस्थापक सदस्य:</strong> ₹31,000/- (परामर्शदात्री समिति सदस्य)</li>
+                      <li><strong className="text-[#102F6B]">आजीवन सदस्य:</strong> ₹1,100/- (आजीवन सक्रिय सदस्यता)</li>
+                      <li><strong className="text-[#102F6B]">वार्षिक सदस्य:</strong> ₹100/- (वार्षिक नवीनीकरण)</li>
+                      <li className="text-[11px] text-[#F26A21]">पात्रता: केंद्र/राज्य सरकार, उपक्रमों एवं अर्ध-सरकारी संस्थानों के सेवारत व सेवानिवृत्त बंधु।</li>
+                    </ul>
+                  </div>
+
+                  {/* Broad Objectives */}
+                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] space-y-2">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#102F6B] flex items-center gap-1.5">
+                      <span>🎯</span>
+                      <span>प्रमुख ध्येय एवं संकल्प</span>
+                    </h3>
+                    <ul className="text-xs text-[#64748B] space-y-1 leading-relaxed list-disc pl-4">
+                      <li>अधिकारियों एवं कर्मचारियों के संवैधानिक व मौलिक अधिकारों की रक्षा करना।</li>
+                      <li>दिल्ली एवं राज्यों की राजधानियों में उच्च शिक्षा व प्रतियोगी परीक्षा हेतु छात्रावास (हॉस्टल) स्थापित करना।</li>
+                      <li>समाज की प्रतिभाओं को खोजना, मार्गदर्शन देना और राष्ट्रीय पुरस्कारों से सम्मानित करना।</li>
+                      <li>रूढ़ियों, अंधविश्वास, दहेज, मृत्युभोज का उन्मूलन कर बालिका/महिला शिक्षा को शत-प्रतिशत बढ़ावा देना।</li>
+                    </ul>
+                  </div>
+
+                  {/* Tenures & Elections */}
+                  <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] space-y-2">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#102F6B] flex items-center gap-1.5">
+                      <span>⚖️</span>
+                      <span>कार्यकाल एवं निर्वाचन प्रणाली</span>
+                    </h3>
+                    <ul className="text-xs text-[#64748B] space-y-1 leading-relaxed list-disc pl-4">
+                      <li><strong>कार्यकारिणी कार्यकाल:</strong> 02 (दो) वर्ष। निर्वाचन से दो वर्ष पूर्ण होने पर कार्यकाल स्वतः समाप्त।</li>
+                      <li><strong>मार्गदर्शक व संयोजक कार्यकाल:</strong> परामर्शदात्री समिति द्वारा 03 (तीन) वर्ष हेतु मनोनयन।</li>
+                      <li><strong>निर्वाचन:</strong> वार्षिक अधिवेशन में उपस्थित सदस्यों द्वारा लोकतांत्रिक पद्धति से निर्वाचन।</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </FadeIn>
+
             {/* Official State Executive Document Showcase */}
             <FadeIn direction="up" distance={14} duration={0.5} className="mt-6">
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-6 shadow-xs space-y-3">

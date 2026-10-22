@@ -8,7 +8,7 @@ import { FadeIn } from "@/components/MotionWrappers";
 
 function MemberProfileDetail({ params }) {
   const resolvedParams = use(params);
-  const idOrSlug = resolvedParams.id;
+  const idOrSlug = resolvedParams.id || resolvedParams.slug;
 
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);

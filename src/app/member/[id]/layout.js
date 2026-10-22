@@ -28,9 +28,10 @@ async function getMemberData(id) {
 }
 
 export async function generateMetadata({ params }) {
-  const { id } = await params;
+  const resolved = await params;
+  const lookupId = resolved.id || resolved.slug;
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://alokworld.in";
-  const member = await getMemberData(id);
+  const member = await getMemberData(lookupId);
 
   if (
     !member ||
