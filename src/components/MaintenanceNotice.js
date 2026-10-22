@@ -7,10 +7,10 @@ const defaultMaintenanceSettings = {
   maintenanceBarEnabled: true,
   maintenancePopupEnabled: true,
   maintenanceMessage:
-    "Maintenance Notice: Our website is currently under development. We are improving your experience, and some features may not work as expected.",
-  maintenancePopupTitle: "Website Under Active Development",
+    "आवश्यक सूचना: हमारी वेबसाइट वर्तमान में विकास और अद्यतन प्रक्रिया में है। हम आपकी सुविधा हेतु निरंतर सुधार कर रहे हैं।",
+  maintenancePopupTitle: "वेबसाइट सक्रिय विकास और अद्यतन में है",
   maintenancePopupMessage:
-    "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
+    "alokworld.in पर आपका स्वागत है! हम सुविधाओं, सत्यापित डायरेक्टरी रिकॉर्ड और समाज सेवाओं को निरंतर अद्यतन कर रहे हैं। कृपया पोर्टल का अवलोकन करें।",
 };
 
 export default function MaintenanceNotice() {
@@ -74,11 +74,7 @@ export default function MaintenanceNotice() {
     return null;
   }
 
-  // Use the required English message by default or from settings
-  const message =
-    settings.maintenanceMessage && !/[\u0900-\u097F]/.test(settings.maintenanceMessage)
-      ? settings.maintenanceMessage
-      : defaultMaintenanceSettings.maintenanceMessage;
+  const message = settings.maintenanceMessage || defaultMaintenanceSettings.maintenanceMessage;
   const popupTitle = settings.maintenancePopupTitle || defaultMaintenanceSettings.maintenancePopupTitle;
   const popupMessage = settings.maintenancePopupMessage || defaultMaintenanceSettings.maintenancePopupMessage;
 
@@ -97,18 +93,18 @@ export default function MaintenanceNotice() {
                 🛠️
               </span>
               <p className="text-white text-[11px] sm:text-xs font-medium leading-tight">
-                <strong className="text-[#FFF0E2] font-bold mr-1">Maintenance Notice:</strong>
-                Our website is currently under development. We are improving your experience, and some features may not work as expected.
+                <strong className="text-[#FFF0E2] font-bold mr-1">आवश्यक सूचना:</strong>
+                {message}
               </p>
             </div>
 
             <button
               onClick={dismissBar}
-              aria-label="Dismiss maintenance announcement"
+              aria-label="सूचना बंद करें"
               className="shrink-0 text-white/90 hover:text-white hover:bg-white/10 rounded px-2 py-0.5 text-xs font-bold transition-colors cursor-pointer border border-white/20"
-              title="Dismiss announcement"
+              title="सूचना बंद करें"
             >
-              ✕ Close
+              ✕ बंद करें
             </button>
           </div>
         </aside>
@@ -129,7 +125,7 @@ export default function MaintenanceNotice() {
             {/* Top Close Button */}
             <button
               onClick={closePopup}
-              aria-label="Close maintenance notice"
+              aria-label="सूचना बंद करें"
               className="absolute right-3.5 top-3.5 text-[#64748B] hover:text-[#F26A21] text-sm font-bold w-7 h-7 rounded-full flex items-center justify-center hover:bg-[#FFF0E2] transition-colors cursor-pointer"
             >
               ✕
@@ -141,7 +137,7 @@ export default function MaintenanceNotice() {
             </div>
 
             <div className="inline-block px-2.5 py-0.5 mb-2 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
-              Active Development
+              सक्रिय विकास एवं अद्यतन
             </div>
 
             <h3 className="text-base sm:text-lg font-black text-[#102F6B] tracking-tight">
@@ -157,7 +153,7 @@ export default function MaintenanceNotice() {
                 onClick={closePopup}
                 className="btn-primary w-full py-2.5 px-4 text-xs sm:text-sm shadow-sm cursor-pointer"
               >
-                Continue Browsing alokworld.in →
+                पोर्टल पर आगे बढ़ें →
               </button>
             </div>
           </div>

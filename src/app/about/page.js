@@ -27,13 +27,13 @@ export default function AboutPage() {
           <FadeIn as="div" direction="up" distance={14} duration={0.5} className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-5">
             <div className="border-b border-[#F0E5D5] pb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                Community Portal
+                समुदाय पोर्टल
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                {cmsPage?.title || "About alokworld.in"}
+                {cmsPage?.title || "alokworld.in के बारे में"}
               </h1>
               <p className="text-xs text-[#64748B] mt-1">
-                {cmsPage?.subtitle || "Empowering the Samaj through digital connectivity, mutual support, and purposeful leadership."}
+                {cmsPage?.subtitle || "डिजिटल संपर्क, परस्पर सहयोग एवं समर्पित नेतृत्व के माध्यम से समाज सशक्तिकरण।"}
               </p>
             </div>
 
@@ -45,19 +45,19 @@ export default function AboutPage() {
             ) : (
               <div className="text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4">
                 <p className="font-medium text-[#102F6B] text-sm sm:text-base leading-relaxed bg-[#FFFCF5] p-4 rounded-lg border border-[#F0E5D5]">
-                  alokworld.in is a secure, modern, and verified digital community directory portal, established with the vision of uniting community members, families, elders, professionals, and youth across India under a trusted digital foundation.
+                  alokworld.in एक सुरक्षित, आधुनिक और सत्यापित समाज डायरेक्टरी पोर्टल है, जिसकी स्थापना देश भर के समाज बंधुओं, परिवारों, वरिष्ठ मार्गदर्शकों, प्रबुद्ध अधिकारियों एवं युवाओं को एक विश्वसनीय डिजिटल मंच पर संगठित करने के ध्येय से की गई है।
                 </p>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-2 border-b border-[#F0E5D5] pb-1">
-                  Core Objectives &amp; Vision
+                  प्रमुख उद्देश्य एवं संकल्पना
                 </h2>
                 <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" staggerDelay={0.06}>
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">1. Verified Community Directory</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">१. सत्यापित समाज डायरेक्टरी</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
-                          Enabling community members residing across every city and state to easily connect, build professional associations, and assist one another in times of need.
+                          प्रत्येक नगर और राज्य में निवासरत स्वजातीय बंधुओं को आपस में जोड़ना, व्यावसायिक संबंध सुदृढ़ करना और आवश्यकता के समय एक-दूसरे का संबल बनना।
                         </p>
                       </div>
                     </SubtleHoverCard>
@@ -65,9 +65,9 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">2. Youth &amp; Career Mentorship</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">२. युवा एवं कैरियर मार्गदर्शन</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
-                          Connecting young aspirants with experienced mentors in civil services (IAS, IPS, State PSC), medicine, engineering, technology, law, and business.
+                          प्रतियोगी परीक्षाओं (UPSC, State PSC), चिकित्सा, इंजीनियरिंग, तकनीकी, विधि और उद्योग जगत के अनुभवी मार्गदर्शकों से युवाओं को जोड़ना।
                         </p>
                       </div>
                     </SubtleHoverCard>
@@ -75,9 +75,9 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">3. Dignified Matrimonial Coordination</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">३. गरिमामय वैवाहिक समन्वय</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
-                          Providing a respectable, verified, and family-centered matchmaking directory for educated community youth and their families.
+                          उच्च शिक्षित समाज के युवक-युवतियों एवं संभ्रांत परिवारों के लिए एक विश्वसनीय, पारदर्शी एवं पारिवारिक समन्वय मंच उपलब्ध कराना।
                         </p>
                       </div>
                     </SubtleHoverCard>
@@ -85,9 +85,9 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">4. Preserving Cultural Heritage</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">४. सांस्कृतिक विरासत का संरक्षण</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
-                          Honoring community history, celebrating the sacrifices of immortal patriots, and passing down noble ideals to coming generations.
+                          समाज के गौरवशाली इतिहास, अमर वीर बलिदानियों के आदर्शों का स्मरण और नई पीढ़ी में स्वाभिमान व संस्कारों का संचार करना।
                         </p>
                       </div>
                     </SubtleHoverCard>
@@ -95,10 +95,10 @@ export default function AboutPage() {
                 </StaggerContainer>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-3 border-b border-[#F0E5D5] pb-1">
-                  Commitment to Privacy and Dignity
+                  गोपनीयता और सामाजिक गरिमा के प्रति प्रतिबद्धता
                 </h2>
                 <p>
-                  The publication of contact details (such as phone numbers and addresses) on this portal is strictly based on the voluntary consent of the member. All profile submissions undergo administrative verification to prevent unauthorized misuse and maintain community integrity.
+                  इस पोर्टल पर संपर्क विवरण (जैसे फोन नंबर और पता) केवल सदस्य की ऐच्छिक सहमति के आधार पर ही प्रदर्शित किया जाता है। अनधिकृत दुरुपयोग को रोकने और सामाजिक विश्वास को बनाए रखने के लिए प्रत्येक प्रविष्टि का प्रशासनिक सत्यापन किया जाता है।
                 </p>
               </div>
             )}

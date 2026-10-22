@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "Community Photo Gallery - National Conventions & Moments",
+  title: "छायाचित्र दीर्घा - राष्ट्रीय अधिवेशन, सांस्कृतिक उत्सव एवं ऐतिहासिक क्षण",
   description:
-    "Glimpses of national Samaj conventions, youth felicitation ceremonies, heritage celebrations, and medical assistance camps.",
+    "अखिल भारतीय समाज के राष्ट्रीय अधिवेशनों, युवा प्रतिभा सम्मान समारोहों, ऐतिहासिक आयोजनों और समाज सेवा अभियानों के पावन छायाचित्र।",
   alternates: {
     canonical: "/gallery",
   },
   openGraph: {
-    title: "Community Photo Gallery | alokworld.in",
+    title: "छायाचित्र दीर्घा | alokworld.in",
     description:
-      "Glimpses of community conventions, cultural celebrations, youth symposiums, and felicitation events.",
+      "राष्ट्रीय अधिवेशनों, सांस्कृतिक समारोहों और सम्मान कार्यक्रमों के अनुपम क्षण।",
     url: "https://alokworld.in/gallery",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "website",
   },
 };
@@ -20,8 +20,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-    { "@type": "ListItem", position: 2, name: "Photo Gallery", item: "https://alokworld.in/gallery" },
+    { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+    { "@type": "ListItem", position: 2, name: "छायाचित्र दीर्घा", item: "https://alokworld.in/gallery" },
   ],
 };
 

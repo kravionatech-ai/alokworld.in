@@ -10,10 +10,10 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
           🔍
         </div>
         <h3 className="text-sm font-bold text-[#102F6B] mb-1">
-          No Community Members Found
+          कोई सदस्य रिकॉर्ड नहीं मिला
         </h3>
         <p className="text-xs text-[#64748B] max-w-sm mx-auto">
-          Please adjust your search keyword, select &quot;All Cities&quot;, or clear active filters.
+          कृपया खोज शब्द बदलें, &quot;सभी शहर व क्षेत्र&quot; का चयन करें, अथवा सक्रिय फ़िल्टर हटाएं।
         </p>
       </div>
     );
@@ -23,7 +23,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
     <div className="w-full">
       {/* Mobile scroll hint */}
       <div className="block sm:hidden text-[11px] text-[#64748B] mb-1.5 px-1 font-medium">
-        ⇄ Scroll horizontally to view all table columns
+        ⇄ सभी कॉलम देखने हेतु तालिका को क्षैतिज (दाएं-बाएं) स्क्रॉल करें
       </div>
 
       <div className="overflow-x-auto border border-[#E9E2D8] rounded-lg shadow-xs bg-white">
@@ -34,37 +34,37 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-center text-white border-b-2 border-[#091D42] w-[60px]"
               >
-                S.No.
+                क्र.सं.
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[170px]"
               >
-                Full Name
+                पूरा नाम एवं दायित्व
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[160px]"
               >
-                Location / Address
+                स्थान / पता
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[130px]"
               >
-                Contact No.
+                संपर्क सूत्र
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[180px]"
               >
-                Role &amp; Profession
+                पद / व्यवसाय एवं विभाग
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-center text-white border-b-2 border-[#091D42] w-[90px]"
               >
-                Action
+                विवरण
               </th>
             </tr>
           </thead>
@@ -159,7 +159,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                       </a>
                     ) : (
                       <span className="text-[#64748B] italic text-[11px] whitespace-nowrap">
-                        Private
+                        गोपनीय
                       </span>
                     )}
                   </td>
@@ -167,7 +167,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                   {/* Role & Profession + Organization */}
                   <td className="px-3.5 py-2.5 align-middle text-xs">
                     <div className="font-semibold text-[#102F6B] leading-tight">
-                      {member.occupation || "Community Member"}
+                      {member.occupation || "समाज सदस्य"}
                     </div>
                     {member.company ? (
                       <div className="text-[11px] text-[#64748B] mt-0.5 leading-tight">
@@ -181,9 +181,9 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                     <Link
                       href={`/member/${profileIdentifier}`}
                       className="text-[#F26A21] font-bold text-xs hover:text-[#091D42] hover:underline transition-colors inline-flex items-center gap-0.5"
-                      title={`View complete profile of ${member.name}`}
+                      title={`${member.name} का संपूर्ण विवरण देखें`}
                     >
-                      <span>Details</span>
+                      <span>विवरण</span>
                       <span aria-hidden="true">→</span>
                     </Link>
                   </td>

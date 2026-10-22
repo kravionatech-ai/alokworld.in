@@ -12,8 +12,8 @@ import "swiper/css/navigation";
 
 export default function FeaturedMembersCarousel({
   members = [],
-  title = "Featured Community Members",
-  subtitle = "Honoring distinguished elders, doctors, engineers, advocates, and youth leaders.",
+  title = "विशिष्ट समाज बंधु एवं पदाधिकारी",
+  subtitle = "समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं युवा प्रतिनिधियों का विवरण।",
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -27,7 +27,7 @@ export default function FeaturedMembersCarousel({
 
   return (
     <section
-      aria-label="Featured Community Members Carousel"
+      aria-label="विशेष समाज सदस्य कैरोसेल"
       className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-6 shadow-xs"
     >
       {/* Header bar with title, description, and carousel controls */}
@@ -35,7 +35,7 @@ export default function FeaturedMembersCarousel({
         <div>
           <div className="flex items-center gap-2">
             <span className="inline-block text-[10px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-              Spotlight
+              प्रमुख विभूतियां
             </span>
             <h2 className="text-base sm:text-lg font-bold text-[#102F6B]">
               {title}
@@ -51,20 +51,20 @@ export default function FeaturedMembersCarousel({
             href="/directory"
             className="text-xs font-bold text-[#F26A21] hover:text-[#102F6B] underline transition-colors mr-2 hidden sm:inline-block"
           >
-            All Members ({members.length}) →
+            सभी सदस्य देखें ({members.length}) →
           </Link>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
               className="featured-members-prev w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Previous member"
+              aria-label="पिछले सदस्य"
             >
               ←
             </button>
             <button
               type="button"
               className="featured-members-next w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Next member"
+              aria-label="अगले सदस्य"
             >
               →
             </button>
@@ -119,8 +119,8 @@ export default function FeaturedMembersCarousel({
                 nextEl: ".featured-members-next",
               }}
               a11y={{
-                prevSlideMessage: "Previous member slide",
-                nextSlideMessage: "Next member slide",
+                prevSlideMessage: "पिछली स्लाइड",
+                nextSlideMessage: "अगली स्लाइड",
               }}
               className="w-full"
             >

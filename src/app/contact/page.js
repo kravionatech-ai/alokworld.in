@@ -27,11 +27,11 @@ export default function ContactPage() {
       });
       const data = await res.json();
 
-      if (!res.ok) throw new Error(data.error || "Failed to submit message");
+      if (!res.ok) throw new Error(data.error || "संदेश प्रेषित करने में त्रुटि आई");
 
       setStatus({
         loading: false,
-        msg: "Thank you! Your message has been received by the Samaj secretariat.",
+        msg: "धन्यवाद! आपका संदेश समाज केंद्रीय सचिवालय को सफलतापूर्वक प्राप्त हो गया है।",
         error: false,
       });
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
@@ -49,13 +49,13 @@ export default function ContactPage() {
           <div className="bg-white rounded-lg border border-[#E9E2D8] p-6 sm:p-8 shadow-xs">
             <div className="text-center mb-6">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9E2D8]">
-                Get In Touch
+                संपर्क सूत्र
               </span>
               <h1 className="text-xl sm:text-2xl font-black text-[#102F6B] mt-2 tracking-tight">
-                Secretariat Contact &amp; Inquiry Form
+                केंद्रीय सचिवालय संपर्क एवं सूचना प्रपत्र
               </h1>
               <p className="text-xs sm:text-sm text-[#64748B] mt-1.5 max-w-md mx-auto">
-                For directory updates, new member registrations, matrimonial inquiries, or general community assistance.
+                डायरेक्टरी नवीनीकरण, नए सदस्य पंजीकरण, वैवाहिक समन्वय अथवा सामान्य सामाजिक सहयोग हेतु संपर्क करें।
               </p>
             </div>
 
@@ -75,27 +75,27 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                    Your Full Name <span className="text-[#F26A21]">*</span>
+                    आपका पूरा नाम <span className="text-[#F26A21]">*</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="e.g. Ramesh Chandra Lodhi"
+                    placeholder="उदा. रमेश चंद्र लोधी"
                     className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                    Email Address
+                    ईमेल पता
                   </label>
                   <input
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. ramesh@alokworld.in"
+                    placeholder="उदा. ramesh@alokworld.in"
                     className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                   />
                 </div>
@@ -104,28 +104,28 @@ export default function ContactPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                    Contact Phone Number <span className="text-[#F26A21]">*</span>
+                    संपर्क मोबाइल नंबर <span className="text-[#F26A21]">*</span>
                   </label>
                   <input
                     type="tel"
                     required
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="e.g. +91 98260 12345"
+                    placeholder="उदा. +91 98260 12345"
                     className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                    Subject / Purpose <span className="text-[#F26A21]">*</span>
+                    विषय / प्रयोजन <span className="text-[#F26A21]">*</span>
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    placeholder="e.g. Member Registration / Profile Update"
+                    placeholder="उदा. सदस्य पंजीकरण / विवरण नवीनीकरण"
                     className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                   />
                 </div>
@@ -133,14 +133,14 @@ export default function ContactPage() {
 
               <div>
                 <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                  Message / Details <span className="text-[#F26A21]">*</span>
+                  संदेश / विस्तृत विवरण <span className="text-[#F26A21]">*</span>
                 </label>
                 <textarea
                   required
                   rows={4}
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder="Please describe your query or directory update details..."
+                  placeholder="कृपया अपना प्रश्न अथवा डायरेक्टरी विवरण विस्तार से यहाँ लिखें..."
                   className="w-full text-xs px-3 py-2 border border-[#F0E5D5] rounded bg-[#FFFCF5] focus:outline-hidden focus:ring-1 focus:ring-[#102F6B] focus:border-[#102F6B]"
                 />
               </div>
@@ -151,7 +151,7 @@ export default function ContactPage() {
                   disabled={status.loading}
                   className="btn-primary w-full py-2.5 text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
                 >
-                  {status.loading ? "Submitting Message..." : "Submit Inquiry to Secretariat →"}
+                  {status.loading ? "संदेश भेजा जा रहा है..." : "सचिवालय को संदेश भेजें →"}
                 </button>
               </InteractiveTap>
             </form>

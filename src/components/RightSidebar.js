@@ -46,7 +46,7 @@ export default function RightSidebar() {
       {/* 1. Verified National Office Bearers Spotlight */}
       <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21] flex items-center justify-between">
-          <span>National Office Bearers</span>
+          <span>राष्ट्रीय पदाधिकारी</span>
           <span className="text-[10px] bg-[#FFF0E2] text-[#F26A21] px-1.5 py-0.5 rounded font-mono">आलोक</span>
         </div>
         <div className="divide-y divide-[#E9E2D8]">
@@ -86,7 +86,7 @@ export default function RightSidebar() {
             href="/organization"
             className="text-[11px] font-bold text-[#F26A21] hover:underline"
           >
-            View Complete Executive Council →
+            संपूर्ण कार्यकारिणी विवरण देखें →
           </Link>
         </div>
       </div>
@@ -94,21 +94,21 @@ export default function RightSidebar() {
       {/* 2. Official Secretariat Contact Notice */}
       <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
-          Secretariat Directory Helpdesk
+          केंद्रीय सचिवालय सहायता केंद्र
         </div>
         <div className="p-4 text-xs text-[#263449] space-y-2">
           <p className="leading-relaxed">
-            All community members and office bearers are invited to verify and update their professional records.
+            समस्त समाज बंधुओं एवं पदाधिकारियों से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।
           </p>
           <div className="pt-2 border-t border-[#E9E2D8] text-[11px] text-[#64748B] space-y-1">
-            <p>Email: <a href="mailto:admin@alokworld.in" className="text-[#F26A21] font-medium">admin@alokworld.in</a></p>
-            <p>Phone: <a href="tel:+919608553167" className="text-[#F26A21] font-medium">+91 96085 53167</a></p>
+            <p>ईमेल: <a href="mailto:admin@alokworld.in" className="text-[#F26A21] font-medium">admin@alokworld.in</a></p>
+            <p>दूरभाष: <a href="tel:+919608553167" className="text-[#F26A21] font-medium">+91 96085 53167</a></p>
           </div>
           <Link
             href="/contact"
             className="block text-center w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors mt-2"
           >
-            Submit Listing / Inquiry →
+            विवरण संशोधन / संपर्क करें →
           </Link>
         </div>
       </div>

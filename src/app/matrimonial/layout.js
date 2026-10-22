@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "Samaj Matrimonial - Verified Family Matchmaking Portal",
+  title: "समाज वैवाहिक मंच - सुयोग्य एवं शिक्षित स्वजातीय संबंध",
   description:
-    "A dignified, family-centered matrimonial matchmaking platform for educated community brides, grooms, and respected families.",
+    "समाज के उच्च शिक्षित युवक-युवतियों एवं संभ्रांत परिवारों के लिए एक मर्यादित, विश्वसनीय और पारिवारिक वैवाहिक समन्वय पोर्टल।",
   alternates: {
     canonical: "/matrimonial",
   },
   openGraph: {
-    title: "Samaj Matrimonial | alokworld.in",
+    title: "समाज वैवाहिक मंच | alokworld.in",
     description:
-      "A dignified, family-centered matrimonial matchmaking platform for educated community youth.",
+      "समाज के शिक्षित युवक-युवतियों एवं आदरणीय परिवारों के लिए एक गरिमामय वैवाहिक परिचय मंच।",
     url: "https://alokworld.in/matrimonial",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "website",
   },
 };
@@ -20,8 +20,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-    { "@type": "ListItem", position: 2, name: "Matrimonial Directory", item: "https://alokworld.in/matrimonial" },
+    { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+    { "@type": "ListItem", position: 2, name: "वैवाहिक मंच", item: "https://alokworld.in/matrimonial" },
   ],
 };
 

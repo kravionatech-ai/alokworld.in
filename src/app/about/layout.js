@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "About alokworld.in - Community Mission & Principles",
+  title: "alokworld.in परिचय - समाज संकल्प एवं उद्देश्य",
   description:
-    "Learn about the mission, values, digital network, and leadership behind the alokworld.in Samaj Community Directory portal.",
+    "alokworld.in समाज डायरेक्टरी पोर्टल के मिशन, मानवीय मूल्यों, डिजिटल नेटवर्क और नेतृत्व के बारे में जानें।",
   alternates: {
     canonical: "/about",
   },
   openGraph: {
-    title: "About Us | alokworld.in Samaj Directory",
+    title: "परिचय | alokworld.in समाज डायरेक्टरी",
     description:
-      "Learn about the mission, vision, values, and digital objectives of the Samaj Directory portal.",
+      "alokworld.in समाज डायरेक्टरी पोर्टल के मिशन, संकल्पना एवं डिजिटल उद्देश्यों के बारे में जानें।",
     url: "https://alokworld.in/about",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "website",
   },
 };
@@ -22,16 +22,17 @@ const jsonLd = {
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-        { "@type": "ListItem", position: 2, name: "About Us", item: "https://alokworld.in/about" },
+        { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+        { "@type": "ListItem", position: 2, name: "परिचय", item: "https://alokworld.in/about" },
       ],
     },
     {
       "@type": "AboutPage",
       "@id": "https://alokworld.in/about#webpage",
       url: "https://alokworld.in/about",
-      name: "About alokworld.in Samaj Community Directory",
-      description: "Empowering the Samaj through digital connectivity, mutual support, and purposeful leadership.",
+      name: "alokworld.in अखिल भारतीय समाज डायरेक्टरी परिचय",
+      description: "डिजिटल संपर्क, परस्पर सहयोग एवं समर्पित नेतृत्व के माध्यम से समाज सशक्तिकरण।",
+      inLanguage: "hi",
       isPartOf: { "@id": "https://alokworld.in/#website" },
     },
   ],

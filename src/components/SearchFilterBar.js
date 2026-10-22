@@ -62,16 +62,16 @@ export default function SearchFilterBar({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-            placeholder="Search by name, profession, city, organization..."
+            placeholder="नाम, पद, शहर, विभाग, संगठन द्वारा खोजें..."
             className="w-full pl-3 pr-14 py-2.5 bg-white text-[#263449] placeholder-[#64748B] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden font-medium"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange && onSearchChange("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#64748B] hover:text-[#F26A21] cursor-pointer"
-              title="Clear search input"
+              title="खोज शब्द हटाएं"
             >
-              Clear ✕
+              हटाएं ✕
             </button>
           )}
         </div>
@@ -83,7 +83,7 @@ export default function SearchFilterBar({
             onChange={(e) => handleCityChange && handleCityChange(e.target.value)}
             className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
           >
-            <option value="All">All Cities &amp; Regions</option>
+            <option value="All">सभी शहर व क्षेत्र</option>
             {cityList.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -99,11 +99,11 @@ export default function SearchFilterBar({
             onChange={(e) => onSortChange && onSortChange(e.target.value)}
             className="w-full px-3 py-2.5 bg-white text-[#263449] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden cursor-pointer font-medium"
           >
-            <option value="newest">Sort: Newest First</option>
-            <option value="name_asc">Sort: Name (A to Z)</option>
-            <option value="name_desc">Sort: Name (Z to A)</option>
-            <option value="city_asc">Sort: By City</option>
-            <option value="oldest">Sort: Oldest First</option>
+            <option value="newest">क्रम: नवीनतम पहले</option>
+            <option value="name_asc">क्रम: नाम (अ से ज्ञ / A-Z)</option>
+            <option value="name_desc">क्रम: नाम (विपरीत Z-A)</option>
+            <option value="city_asc">क्रम: शहर अनुसार</option>
+            <option value="oldest">क्रम: प्राचीनतम पहले</option>
           </select>
         </div>
 
@@ -118,7 +118,7 @@ export default function SearchFilterBar({
                 : "bg-[#FFFCF5] text-[#102F6B] border-[#F0E5D5] hover:bg-[#FFF0E2]"
             }`}
           >
-            <span>Filters</span>
+            <span>फ़िल्टर</span>
             <span>{showAdvanced ? "▲" : "▾"}</span>
           </button>
         </div>
@@ -129,13 +129,13 @@ export default function SearchFilterBar({
         <div className="pt-3 border-t border-[#F0E5D5] grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in duration-150">
           {/* State Filter */}
           <div>
-            <label className="block text-[11px] font-bold text-[#64748B] mb-1">State / Province</label>
+            <label className="block text-[11px] font-bold text-[#64748B] mb-1">राज्य / प्रांत</label>
             <select
               value={selectedState}
               onChange={(e) => onStateChange && onStateChange(e.target.value)}
               className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
-              <option value="All">All States</option>
+              <option value="All">सभी राज्य</option>
               {states.map((s) => (
                 <option key={s} value={s}>
                   {s}
@@ -146,13 +146,13 @@ export default function SearchFilterBar({
 
           {/* Profession Filter */}
           <div>
-            <label className="block text-[11px] font-bold text-[#64748B] mb-1">Profession / Occupation</label>
+            <label className="block text-[11px] font-bold text-[#64748B] mb-1">व्यवसाय / पद</label>
             <select
               value={selectedProfession}
               onChange={(e) => onProfessionChange && onProfessionChange(e.target.value)}
               className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
-              <option value="All">All Professions</option>
+              <option value="All">सभी पद व व्यवसाय</option>
               {professions.map((p) => (
                 <option key={p} value={p}>
                   {p}
@@ -163,13 +163,13 @@ export default function SearchFilterBar({
 
           {/* Organization / Company Filter */}
           <div>
-            <label className="block text-[11px] font-bold text-[#64748B] mb-1">Company / Organization</label>
+            <label className="block text-[11px] font-bold text-[#64748B] mb-1">विभाग / संगठन</label>
             <select
               value={selectedOrganization}
               onChange={(e) => onOrganizationChange && onOrganizationChange(e.target.value)}
               className="w-full px-3 py-2 bg-white text-[#263449] text-xs rounded border border-[#F0E5D5] focus:border-[#102F6B] outline-hidden cursor-pointer"
             >
-              <option value="All">All Organizations</option>
+              <option value="All">सभी संगठन</option>
               {organizations.map((o) => (
                 <option key={o} value={o}>
                   {o}
@@ -184,12 +184,12 @@ export default function SearchFilterBar({
       <div className="pt-2 border-t border-[#F0E5D5] flex flex-wrap items-center justify-between text-xs text-[#64748B] gap-2">
         <div className="flex items-center gap-2">
           <span>
-            Showing <strong className="text-[#102F6B] font-bold">{totalResults}</strong> verified member{totalResults === 1 ? "" : "s"}
+            कुल <strong className="text-[#102F6B] font-bold">{totalResults}</strong> सत्यापित सदस्य प्रदर्शित
           </span>
 
           {hasActiveFilters && (
             <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
-              Filters Active
+              फ़िल्टर सक्रिय
             </span>
           )}
         </div>
@@ -200,7 +200,7 @@ export default function SearchFilterBar({
               onClick={handleReset}
               className="text-[#F26A21] hover:underline font-bold cursor-pointer transition-colors"
             >
-              Reset Filters ↺
+              फ़िल्टर रीसेट करें ↺
             </button>
           )}
         </div>

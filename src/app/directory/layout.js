@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "Community Member Directory - Verified Professionals & Elders",
+  title: "समाज सदस्य डायरेक्टरी - सत्यापित प्रबुद्धजन एवं वरिष्ठ मार्गदर्शक",
   description:
-    "Search and discover verified Samaj community members, doctors, engineers, advocates, civil servants, entrepreneurs, and elders across India.",
+    "अखिल भारतीय समाज के सत्यापित सदस्यों, चिकित्सकों, अभियंताओं, अधिवक्ताओं, प्रशासनिक अधिकारियों, व्यवसायियों एवं वरिष्ठ बंधुओं की खोज करें।",
   alternates: {
     canonical: "/directory",
   },
   openGraph: {
-    title: "Community Member Directory | alokworld.in",
+    title: "समाज सदस्य डायरेक्टरी | alokworld.in",
     description:
-      "Search and connect with verified Samaj community members, doctors, engineers, advocates, and elders across India.",
+      "देश भर के सत्यापित समाज बंधुओं, अधिकारियों, व्यवसायियों एवं मार्गदर्शकों से जुड़ें।",
     url: "https://alokworld.in/directory",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "website",
   },
 };
@@ -23,13 +23,13 @@ const jsonLdBreadcrumb = {
     {
       "@type": "ListItem",
       position: 1,
-      name: "Home",
+      name: "मुख्य पृष्ठ",
       item: "https://alokworld.in",
     },
     {
       "@type": "ListItem",
       position: 2,
-      name: "Community Directory",
+      name: "समाज डायरेक्टरी",
       item: "https://alokworld.in/directory",
     },
   ],

@@ -3,25 +3,25 @@
 import Link from "next/link";
 
 const navigationLinks = [
-  { label: "Home Portal", href: "/" },
-  { label: "Samaj Directory", href: "/directory" },
-  { label: "National Executive & Wings", href: "/organization" },
-  { label: "Mahasabha Resolutions", href: "/mahasabha" },
-  { label: "Heritage & History", href: "/history" },
-  { label: "Historical Personalities", href: "/personalities" },
-  { label: "Convention Gallery", href: "/gallery" },
-  { label: "Samaj Matrimonial", href: "/matrimonial" },
-  { label: "Contact Secretariat", href: "/contact" },
-  { label: "About alokworld.in", href: "/about" },
+  { label: "मुख्य पृष्ठ (होम)", href: "/" },
+  { label: "समाज डायरेक्टरी", href: "/directory" },
+  { label: "राष्ट्रीय कार्यकारिणी एवं प्रकोष्ठ", href: "/organization" },
+  { label: "महासभा संकल्प", href: "/mahasabha" },
+  { label: "इतिहास एवं गौरवशाली विरासत", href: "/history" },
+  { label: "ऐतिहासिक विभूतियां", href: "/personalities" },
+  { label: "अधिवेशन छायाचित्र दीर्घा", href: "/gallery" },
+  { label: "समाज वैवाहिक मंच", href: "/matrimonial" },
+  { label: "केंद्रीय सचिवालय संपर्क", href: "/contact" },
+  { label: "alokworld.in परिचय", href: "/about" },
 ];
 
 const stateChapters = [
-  { name: "Uttar Pradesh", code: "UP", members: "State Chapter" },
-  { name: "Madhya Pradesh", code: "MP", members: "State Chapter" },
-  { name: "Rajasthan", code: "RJ", members: "State Chapter" },
-  { name: "Delhi NCR", code: "DL", members: "State Chapter" },
-  { name: "Telangana & South", code: "TS", members: "State Chapter" },
-  { name: "Haryana & Punjab", code: "HR", members: "State Chapter" },
+  { name: "उत्तर प्रदेश", code: "UP", members: "प्रांतीय इकाई" },
+  { name: "मध्य प्रदेश", code: "MP", members: "प्रांतीय इकाई" },
+  { name: "राजस्थान", code: "RJ", members: "प्रांतीय इकाई" },
+  { name: "दिल्ली एनसीआर", code: "DL", members: "प्रांतीय इकाई" },
+  { name: "तेलंगाना एवं दक्षिण", code: "TS", members: "प्रांतीय इकाई" },
+  { name: "हरियाणा एवं पंजाब", code: "HR", members: "प्रांतीय इकाई" },
 ];
 
 export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
@@ -30,7 +30,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       {/* 1. Quick Navigation Links */}
       <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
-          Quick Directory Navigation
+          त्वरित डायरेक्टरी नेविगेशन
         </div>
         <div className="p-0">
           {navigationLinks.map((link, i) => (
@@ -50,7 +50,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       {/* 2. Key State Units & Chapters */}
       <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21] flex items-center justify-between">
-          <span>State Chapters &amp; Units</span>
+          <span>प्रांतीय इकाइयां एवं प्रकोष्ठ</span>
           <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
         </div>
         <div className="p-2 space-y-1">
@@ -72,7 +72,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
       {/* 3. National Convention 2026 Notice Box */}
       <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
         <div className="bg-[#091D42] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
-          National Convention 2026
+          राष्ट्रीय अधिवेशन 2026
         </div>
         <div className="p-3.5 text-center text-xs space-y-2">
           <p className="font-bold text-[#102F6B] text-xs leading-snug">
@@ -85,7 +85,7 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
             href="/gallery"
             className="inline-block text-[11px] font-bold text-[#F26A21] hover:underline pt-1"
           >
-            View Official Posters →
+            आधिकारिक पोस्टर देखें →
           </Link>
         </div>
       </div>

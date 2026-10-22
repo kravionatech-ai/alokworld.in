@@ -18,56 +18,56 @@ export default function Footer({ contactEmail, contactPhone }) {
                 🏛️
               </div>
               <span className="font-bold text-sm text-[#102F6B] tracking-tight">
-                Akhil Bhartiya Samaj
+                अखिल भारतीय समाज
               </span>
             </div>
             <p className="text-xs text-[#64748B] leading-relaxed">
-              Official Samaj Community Directory connecting verified members, professionals, and community leadership nationwide.
+              अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक) एवं समाज डायरेक्टरी — देशभर के सभी सत्यापित सदस्यों, वरिष्ठजनों एवं प्रबुद्धजनों का आधिकारिक मंच।
             </p>
             <p className="text-[11px] text-[#64748B]">
-              Portal Domain: <span className="font-semibold text-[#102F6B]">alokworld.in</span>
+              पोर्टल डोमेन: <span className="font-semibold text-[#102F6B]">alokworld.in</span>
             </p>
           </StaggerItem>
 
           {/* Col 2: Directory & Samaj Navigation */}
           <StaggerItem className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-b border-[#F26A21]/30 pb-1">
-              Community Navigation
+              सामुदायिक नेविगेशन
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li><Link href="/" className="text-[#263449] hover:text-[#F26A21] transition-colors">Home Portal</Link></li>
-              <li><Link href="/directory" className="text-[#263449] hover:text-[#F26A21] transition-colors">Samaj Directory</Link></li>
-              <li><Link href="/history" className="text-[#263449] hover:text-[#F26A21] transition-colors">Samaj History</Link></li>
-              <li><Link href="/personalities" className="text-[#263449] hover:text-[#F26A21] transition-colors">Historical Personalities</Link></li>
-              <li><Link href="/organization" className="text-[#263449] hover:text-[#F26A21] transition-colors">Samaj Organization</Link></li>
-              <li><Link href="/mahasabha" className="text-[#263449] hover:text-[#F26A21] transition-colors">Mahasabha Information</Link></li>
+              <li><Link href="/" className="text-[#263449] hover:text-[#F26A21] transition-colors">मुख्य पृष्ठ (होम)</Link></li>
+              <li><Link href="/directory" className="text-[#263449] hover:text-[#F26A21] transition-colors">समाज डायरेक्टरी</Link></li>
+              <li><Link href="/history" className="text-[#263449] hover:text-[#F26A21] transition-colors">समाज इतिहास</Link></li>
+              <li><Link href="/personalities" className="text-[#263449] hover:text-[#F26A21] transition-colors">ऐतिहासिक विभूतियां</Link></li>
+              <li><Link href="/organization" className="text-[#263449] hover:text-[#F26A21] transition-colors">संगठन एवं कार्यकारिणी</Link></li>
+              <li><Link href="/mahasabha" className="text-[#263449] hover:text-[#F26A21] transition-colors">महासभा विवरण</Link></li>
             </ul>
           </StaggerItem>
 
           {/* Col 3: Matrimonial & Gallery & Legal */}
           <StaggerItem className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-b border-[#F26A21]/30 pb-1">
-              Services &amp; Legal
+              सेवाएं एवं नियम
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li><Link href="/matrimonial" className="text-[#263449] hover:text-[#F26A21] transition-colors">Samaj Matrimonial</Link></li>
-              <li><Link href="/gallery" className="text-[#263449] hover:text-[#F26A21] transition-colors">Photo Gallery</Link></li>
-              <li><Link href="/about" className="text-[#263449] hover:text-[#F26A21] transition-colors">About Us</Link></li>
-              <li><Link href="/contact" className="text-[#263449] hover:text-[#F26A21] transition-colors">Contact Secretariat</Link></li>
-              <li><Link href="/privacy" className="text-[#263449] hover:text-[#F26A21] transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-[#263449] hover:text-[#F26A21] transition-colors">Terms and Conditions</Link></li>
+              <li><Link href="/matrimonial" className="text-[#263449] hover:text-[#F26A21] transition-colors">समाज वैवाहिक</Link></li>
+              <li><Link href="/gallery" className="text-[#263449] hover:text-[#F26A21] transition-colors">छायाचित्र दीर्घा</Link></li>
+              <li><Link href="/about" className="text-[#263449] hover:text-[#F26A21] transition-colors">हमारे बारे में</Link></li>
+              <li><Link href="/contact" className="text-[#263449] hover:text-[#F26A21] transition-colors">सचिवालय संपर्क</Link></li>
+              <li><Link href="/privacy" className="text-[#263449] hover:text-[#F26A21] transition-colors">गोपनीयता नीति</Link></li>
+              <li><Link href="/terms" className="text-[#263449] hover:text-[#F26A21] transition-colors">नियम एवं शर्तें</Link></li>
             </ul>
           </StaggerItem>
 
           {/* Col 4: Secretariat Contact */}
           <StaggerItem className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-b border-[#F26A21]/30 pb-1">
-              Secretariat Helpdesk
+              केंद्रीय सचिवालय सहायता केंद्र
             </h4>
             <div className="space-y-1.5 text-xs text-[#64748B]">
-              <p>Email: <a href={`mailto:${contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] hover:underline font-medium">{contactEmail || "admin@alokworld.in"}</a></p>
-              <p>Phone: <a href={`tel:${contactPhone || "+919608553167"}`} className="text-[#F26A21] hover:underline font-medium">{contactPhone || "+91 96085 53167"}</a></p>
-              <p className="text-[11px] text-[#64748B]">Working Hours: Mon - Sat (10:00 AM - 6:00 PM)</p>
+              <p>ईमेल: <a href={`mailto:${contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] hover:underline font-medium">{contactEmail || "admin@alokworld.in"}</a></p>
+              <p>दूरभाष: <a href={`tel:${contactPhone || "+919608553167"}`} className="text-[#F26A21] hover:underline font-medium">{contactPhone || "+91 96085 53167"}</a></p>
+              <p className="text-[11px] text-[#64748B]">कार्यालय समय: सोमवार - शनिवार (प्रातः 10:00 से सायं 6:00 बजे)</p>
             </div>
           </StaggerItem>
         </StaggerContainer>
@@ -75,9 +75,9 @@ export default function Footer({ contactEmail, contactPhone }) {
         {/* Bottom Attribution Bar with subtle reveal */}
         <FadeIn direction="up" distance={8} duration={0.4}>
           <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-[#64748B] gap-2 pt-2">
-            <p>© 2026 Samaj Community Directory (alokworld.in). All rights reserved.</p>
+            <p>© 2026 अखिल भारतीय समाज डायरेक्टरी (alokworld.in). सर्वाधिकार सुरक्षित।</p>
             <p className="text-center sm:text-right">
-              Maintained by{" "}
+              तकनीकी प्रबंधन{" "}
               <a
                 href="https://www.kraviona.com/"
                 target="_blank"

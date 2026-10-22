@@ -3,7 +3,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "404 - Page Not Found | alokworld.in",
+  title: "404 - पृष्ठ प्राप्त नहीं हुआ | alokworld.in",
   robots: {
     index: false,
     follow: false,
@@ -23,10 +23,10 @@ export default function NotFound() {
 
           <div className="space-y-2">
             <h1 className="text-2xl sm:text-3xl font-black text-[#102F6B] tracking-tight">
-              Page or Record Not Found
+              पृष्ठ अथवा अभिलेख उपलब्ध नहीं है
             </h1>
             <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto leading-relaxed">
-              The community page, directory slug, or record you requested does not exist, may have been relocated, or is currently private.
+              आपके द्वारा अनुरोधित पृष्ठ, डायरेक्टरी लिंक अथवा सदस्य अभिलेख मौजूद नहीं है, स्थानांतरित कर दिया गया है अथवा गोपनीय रखा गया है।
             </p>
           </div>
 
@@ -35,19 +35,19 @@ export default function NotFound() {
               href="/"
               className="btn-primary text-xs px-5 py-2.5 font-bold shadow-xs"
             >
-              ← Return to Homepage
+              ← मुख्य पृष्ठ पर वापस जाएं
             </Link>
             <Link
               href="/directory"
               className="btn-navy text-xs px-5 py-2.5 font-bold shadow-xs"
             >
-              Explore Member Directory →
+              सदस्य डायरेक्टरी देखें →
             </Link>
             <Link
               href="/contact"
               className="btn-outline text-xs px-4 py-2.5 font-semibold shadow-xs"
             >
-              Contact Support
+              सचिवालय से संपर्क करें
             </Link>
           </div>
         </div>

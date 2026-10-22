@@ -24,10 +24,10 @@ export default function PersonalitiesCarousel({ personalities = [] }) {
       <div className="flex items-center justify-between pb-3 border-b border-[#F0E5D5] mb-4">
         <div className="flex items-center gap-2">
           <span className="inline-block text-[10px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-            Featured Icons
+            अमर महापुरुष
           </span>
           <h2 className="text-sm sm:text-base font-bold text-[#102F6B]">
-            Historical Icons Spotlight
+            ऐतिहासिक विभूतियां एवं प्रेरक व्यक्तित्व
           </h2>
         </div>
 
@@ -36,14 +36,14 @@ export default function PersonalitiesCarousel({ personalities = [] }) {
           <button
             type="button"
             className="pers-prev-btn w-6 h-6 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-            aria-label="Previous personality"
+            aria-label="पिछली विभूति"
           >
             ←
           </button>
           <button
             type="button"
             className="pers-next-btn w-6 h-6 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-            aria-label="Next personality"
+            aria-label="अगली विभूति"
           >
             →
           </button>
@@ -118,8 +118,8 @@ export default function PersonalitiesCarousel({ personalities = [] }) {
                 nextEl: ".pers-next-btn",
               }}
               a11y={{
-                prevSlideMessage: "Previous personality",
-                nextSlideMessage: "Next personality",
+                prevSlideMessage: "पिछली विभूति",
+                nextSlideMessage: "अगली विभूति",
               }}
               className="w-full pb-2"
             >

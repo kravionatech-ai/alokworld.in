@@ -36,10 +36,10 @@ export default function GalleryCarousel({ items = [] }) {
         <div className="flex items-center justify-between pb-3 border-b border-[#F0E5D5] mb-4">
           <div className="flex items-center gap-2">
             <span className="inline-block text-[10px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-              Featured Moments
+              प्रमुख छायाचित्र
             </span>
             <h2 className="text-sm sm:text-base font-bold text-[#102F6B]">
-              Convention &amp; Event Carousel
+              अधिवेशन एवं कार्यक्रम छायाचित्र दीर्घा
             </h2>
           </div>
 
@@ -48,14 +48,14 @@ export default function GalleryCarousel({ items = [] }) {
             <button
               type="button"
               className="gallery-prev-btn w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Previous gallery photo"
+              aria-label="पिछला छायाचित्र"
             >
               ←
             </button>
             <button
               type="button"
               className="gallery-next-btn w-7 h-7 rounded-full bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Next gallery photo"
+              aria-label="अगला छायाचित्र"
             >
               →
             </button>
@@ -74,7 +74,7 @@ export default function GalleryCarousel({ items = [] }) {
                   <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                     <img
                       src={img.imageUrl}
-                      alt={img.title || "Samaj Community Event Photo"}
+                      alt={img.title || "समाज कार्यक्रम छायाचित्र"}
                       className="max-w-full max-h-full object-contain drop-shadow-xs"
                     />
                   </div>
@@ -120,8 +120,8 @@ export default function GalleryCarousel({ items = [] }) {
                   nextEl: ".gallery-next-btn",
                 }}
                 a11y={{
-                  prevSlideMessage: "Previous photo",
-                  nextSlideMessage: "Next photo",
+                  prevSlideMessage: "पिछला छायाचित्र",
+                  nextSlideMessage: "अगला छायाचित्र",
                 }}
                 className="w-full pb-2"
               >
@@ -157,7 +157,7 @@ export default function GalleryCarousel({ items = [] }) {
                           </p>
                         </div>
                         <span className="text-[10px] font-bold text-[#F26A21] mt-2 block group-hover:translate-x-0.5 transition-transform">
-                          Click to expand 🔍
+                          विस्तृत देखें 🔍
                         </span>
                       </div>
                     </div>
@@ -186,13 +186,13 @@ export default function GalleryCarousel({ items = [] }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-xs sm:text-sm font-bold text-[#FFF0E2]">
-              Photo {lightboxIndex + 1} of {items.length}
+              छायाचित्र {lightboxIndex + 1} / {items.length}
             </div>
             <button
               type="button"
               onClick={() => setLightboxIndex(null)}
               className="text-white hover:text-[#F26A21] bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition-colors text-base font-bold cursor-pointer"
-              aria-label="Close photo preview"
+              aria-label="बंद करें"
             >
               ✕
             </button>
@@ -220,14 +220,14 @@ export default function GalleryCarousel({ items = [] }) {
                     <div className="w-full max-h-[65vh] flex items-center justify-center bg-black/50 p-2 sm:p-4">
                       <img
                         src={img.imageUrl}
-                        alt={img.title || "Samaj Photo Preview"}
+                        alt={img.title || "समाज कार्यक्रम छायाचित्र"}
                         className="max-h-[60vh] max-w-full object-contain rounded"
                       />
                     </div>
                     <div className="w-full p-4 bg-[#091D42] border-t border-white/10 text-white">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2]/10 px-2 py-0.5 rounded border border-[#F26A21]/30">
-                          {img.category || "Community"}
+                          {img.category || "समाज आयोजन"}
                         </span>
                         {img.eventDate && (
                           <span className="text-xs text-[#CBD5E1]">
@@ -253,14 +253,14 @@ export default function GalleryCarousel({ items = [] }) {
             <button
               type="button"
               className="lightbox-prev absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-[#F26A21] transition-colors flex items-center justify-center text-sm font-bold cursor-pointer"
-              aria-label="Previous image"
+              aria-label="पिछला छायाचित्र"
             >
               ‹
             </button>
             <button
               type="button"
               className="lightbox-next absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/60 text-white hover:bg-[#F26A21] transition-colors flex items-center justify-center text-sm font-bold cursor-pointer"
-              aria-label="Next image"
+              aria-label="अगला छायाचित्र"
             >
               ›
             </button>

@@ -43,22 +43,22 @@ export default function MatrimonialPage() {
             <FadeIn direction="up" distance={14} duration={0.5}>
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                  Dignified Matchmaking
+                  गरिमामय वैवाहिक संबंध
                 </span>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                  Samaj Matrimonial &amp; Family Network
+                  समाज वैवाहिक एवं परिवार नेटवर्क
                 </h1>
                 <p className="text-xs sm:text-sm text-[#64748B] mt-1 leading-relaxed">
-                  Connecting verified community families across India with trust, tradition, and dignified matrimonial matches.
+                  संस्कार, विश्वास और मर्यादा के साथ देशभर के समाज परिवारों को जोड़ने वाला विश्वसनीय मंच।
                 </p>
 
                 {/* Filter Controls */}
                 <div className="mt-4 pt-4 border-t border-[#F0E5D5] flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-bold text-[#102F6B] mr-2">Looking for:</span>
+                  <span className="text-xs font-bold text-[#102F6B] mr-2">चयन करें:</span>
                   {[
-                    { key: "All", label: "All Profiles" },
-                    { key: "Female", label: "Brides (Kanya)" },
-                    { key: "Male", label: "Grooms (Var)" },
+                    { key: "All", label: "सभी प्रोफ़ाइल" },
+                    { key: "Female", label: "कन्या (वधू)" },
+                    { key: "Male", label: "वर" },
                   ].map((g) => (
                     <button
                       key={g.key}
@@ -80,7 +80,7 @@ export default function MatrimonialPage() {
             <div className="space-y-3.5">
               {filtered.length === 0 ? (
                 <div className="bg-white rounded-lg border border-[#F0E5D5] p-10 text-center shadow-xs text-xs text-[#64748B]">
-                  No matrimonial profiles found in this category.
+                  इस श्रेणी में कोई वैवाहिक प्रोफ़ाइल उपलब्ध नहीं है।
                 </div>
               ) : (
                 <StaggerContainer className="space-y-3.5" staggerDelay={0.06}>
@@ -93,11 +93,11 @@ export default function MatrimonialPage() {
                               <div className="flex items-center gap-2">
                                 <h2 className="text-base font-bold text-[#102F6B]">{p.fullName}</h2>
                                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
-                                  {p.gender === "Male" ? "Groom" : "Bride"}
+                                  {p.gender === "Male" ? "वर" : "वधू"}
                                 </span>
                               </div>
                               <p className="text-xs text-[#64748B] mt-0.5">
-                                {p.dob} • Height: {p.height} • Gotra: {p.gotra}
+                                जन्म तिथि: {p.dob} • कद: {p.height} • गोत्र: {p.gotra}
                               </p>
                             </div>
 
@@ -106,26 +106,26 @@ export default function MatrimonialPage() {
                                 href="/contact"
                                 className="btn-primary px-3.5 py-1.5 text-xs shadow-xs inline-block"
                               >
-                                Express Interest →
+                                संपर्क / रुचि व्यक्त करें →
                               </a>
                             </InteractiveTap>
                           </div>
 
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 text-xs text-[#263449]">
                             <div>
-                              <span className="text-[#64748B] block text-[11px]">Education:</span>
+                              <span className="text-[#64748B] block text-[11px]">शिक्षा:</span>
                               <strong className="text-[#102F6B]">{p.education}</strong>
                             </div>
                             <div>
-                              <span className="text-[#64748B] block text-[11px]">Occupation &amp; Annual Income:</span>
+                              <span className="text-[#64748B] block text-[11px]">व्यवसाय एवं वार्षिक आय:</span>
                               <strong className="text-[#102F6B]">{p.occupation} {p.annualIncome && `(${p.annualIncome})`}</strong>
                             </div>
                             <div>
-                              <span className="text-[#64748B] block text-[11px]">Current Location:</span>
+                              <span className="text-[#64748B] block text-[11px]">वर्तमान निवास:</span>
                               <span className="font-medium">{p.city}, {p.state}</span>
                             </div>
                             <div>
-                              <span className="text-[#64748B] block text-[11px]">Family Background:</span>
+                              <span className="text-[#64748B] block text-[11px]">पारिवारिक पृष्ठभूमि:</span>
                               <span className="font-medium">{p.fatherName} • {p.familyCity}</span>
                             </div>
                           </div>

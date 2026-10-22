@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 
 export default function AnnouncementSlider({
   announcements = [],
-  title = "Samaj Notice",
+  title = "समाज संदेश एवं सूचनाएं",
   className = "",
 }) {
   const [mounted, setMounted] = useState(false);
@@ -22,31 +22,31 @@ export default function AnnouncementSlider({
   const defaultItems = [
     {
       id: "a1",
-      tag: "Directory",
-      text: "All community members are requested to keep their family and professional information up to date in the directory.",
+      tag: "डायरेक्टरी",
+      text: "सभी समाज बंधुओं से अनुरोध है कि वे डायरेक्टरी में अपने परिवार एवं कार्यक्षेत्र की जानकारी अद्यतन रखें।",
       link: "/directory",
-      linkText: "Update Profile →",
+      linkText: "विवरण अद्यतन करें →",
     },
     {
       id: "a2",
-      tag: "Matrimonial",
-      text: "New verified community matrimonial profiles added for 2026. Register your family matrimonial inquiries.",
+      tag: "वैवाहिक",
+      text: "वर्ष 2026 हेतु नवीन सत्यापित वैवाहिक प्रविष्टियां सम्मिलित की गई हैं। योग्य रिश्ते हेतु प्रोफाइल देखें।",
       link: "/matrimonial",
-      linkText: "View Profiles →",
+      linkText: "प्रोफाइल देखें →",
     },
     {
       id: "a3",
-      tag: "Mahasabha",
-      text: "Upcoming Akhil Bhartiya Samaj state conventions and educational felicitation conferences announced.",
-      link: "/organization",
-      linkText: "View Schedule →",
+      tag: "अधिवेशन",
+      text: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह 2026 (कांस्टीट्यूशन क्लब नई दिल्ली) की घोषणा। आवेदन आमंत्रित।",
+      link: "/mahasabha",
+      linkText: "अधिवेशन विवरण →",
     },
     {
       id: "a4",
-      tag: "Assistance",
-      text: "Need directory assistance or help connecting with local state chapters? Reach out to our central secretariat.",
+      tag: "सहायता",
+      text: "डायरेक्टरी प्रविष्टि अथवा प्रांतीय इकाइयों से संपर्क हेतु केंद्रीय सचिवालय हेल्पलाइन पर संपर्क करें।",
       link: "/contact",
-      linkText: "Contact Us →",
+      linkText: "संपर्क करें →",
     },
   ];
 
@@ -54,7 +54,7 @@ export default function AnnouncementSlider({
 
   return (
     <div
-      aria-label="Community Announcements"
+      aria-label="समाज संदेश एवं महत्वपूर्ण सूचनाएं"
       className={`bg-white rounded-lg border border-[#F0E5D5] shadow-xs overflow-hidden ${className}`}
     >
       <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#FAF7F0] border-b border-[#F0E5D5]">
@@ -70,14 +70,14 @@ export default function AnnouncementSlider({
           <button
             type="button"
             className="announcement-prev-btn w-5 h-5 rounded bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-            aria-label="Previous announcement"
+            aria-label="पिछली सूचना"
           >
             ‹
           </button>
           <button
             type="button"
             className="announcement-next-btn w-5 h-5 rounded bg-white border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-            aria-label="Next announcement"
+            aria-label="अगली सूचना"
           >
             ›
           </button>
@@ -102,7 +102,7 @@ export default function AnnouncementSlider({
                 href={items[0].link}
                 className="shrink-0 text-[11px] font-bold text-[#F26A21] hover:text-[#102F6B] underline transition-colors whitespace-nowrap self-end sm:self-auto"
               >
-                {items[0].linkText || "Read More →"}
+                {items[0].linkText || "विवरण देखें →"}
               </Link>
             )}
           </div>
@@ -122,8 +122,8 @@ export default function AnnouncementSlider({
               nextEl: ".announcement-next-btn",
             }}
             a11y={{
-              prevSlideMessage: "Previous announcement",
-              nextSlideMessage: "Next announcement",
+              prevSlideMessage: "पिछली सूचना",
+              nextSlideMessage: "अगली सूचना",
             }}
             className="w-full"
           >
@@ -145,7 +145,7 @@ export default function AnnouncementSlider({
                       href={item.link}
                       className="shrink-0 text-[11px] font-bold text-[#F26A21] hover:text-[#102F6B] underline transition-colors whitespace-nowrap self-end sm:self-auto"
                     >
-                      {item.linkText || "Read More →"}
+                      {item.linkText || "विवरण देखें →"}
                     </Link>
                   )}
                 </div>

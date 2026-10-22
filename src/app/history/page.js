@@ -27,13 +27,13 @@ export default function HistoryPage() {
           <FadeIn as="article" direction="up" distance={14} duration={0.5} className="lg:col-span-8 bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-8 shadow-xs space-y-5">
             <div className="border-b border-[#F0E5D5] pb-3">
               <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                Heritage &amp; History
+                विरासत एवं इतिहास
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                {cmsPage?.title || "Glorious Heritage & History of the Samaj"}
+                {cmsPage?.title || "समाज का गौरवशाली इतिहास एवं अमर विरासत"}
               </h1>
               <p className="text-xs text-[#64748B] mt-1">
-                {cmsPage?.subtitle || "A chronicle of selfless service, courage, cultural legacy, and nation-building."}
+                {cmsPage?.subtitle || "त्याग, राष्ट्रभक्ति, शौर्य और समाज सेवा की प्रेरणादायी अमर गाथा।"}
               </p>
             </div>
 
@@ -54,50 +54,50 @@ export default function HistoryPage() {
             ) : (
               <div className="text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4">
                 <p className="font-medium text-[#102F6B] text-sm sm:text-base leading-relaxed bg-[#FFFCF5] p-4 rounded-lg border border-[#F0E5D5]">
-                  The historical journey of our community is marked by sacrifice, dedication, valor, and enduring patriotism. Our ancestors played seminal roles in protecting cultural heritage, expanding agrarian prosperity, and contributing decisively to India&apos;s freedom movement.
+                  हमारे समाज की ऐतिहासिक यात्रा त्याग, समर्पण, शौर्य और अटूट राष्ट्रभक्ति से परिपूर्ण है। हमारे पूर्वजों ने सांस्कृतिक विरासत के संरक्षण, कृषि समृद्धि के विस्तार तथा भारत के स्वतंत्रता संग्राम में निर्णायक व अतुलनीय योगदान दिया है।
                 </p>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-2 border-b border-[#F0E5D5] pb-1">
-                  1. Historical Roots &amp; Ancient Background
+                  १. ऐतिहासिक पृष्ठभूमि एवं प्राचीन गौरव
                 </h2>
                 <p>
-                  Historical annals document that our community has been fundamentally rooted in agrarian advancement, land stewardship, and courageous defense of truth and justice. Through generations, community elders and leaders served as steadfast protectors of cultural traditions and civic harmony.
+                  ऐतिहासिक स्रोतों और धार्मिक ग्रंथों में लोधी, लोधा समाज का उल्लेख अत्यंत स्वाभिमानी, पुरुषार्थी और धर्मनिष्ठ समुदाय के रूप में मिलता है। भगवान लोधेश्वर महादेव के पावन सानिध्य से लेकर मध्यकालीन कालखंड तक समाज के नायकों ने सदा सत्य, धर्म और प्रजा के अधिकारों की रक्षा हेतु अपने प्राणों की बाजी लगाई।
                 </p>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-2 border-b border-[#F0E5D5] pb-1">
-                  2. Invaluable Contributions to India&apos;s Freedom Struggle
+                  २. भारत के स्वतंत्रता संग्राम में अमर योगदान
                 </h2>
                 <p>
-                  From the First War of Independence in 1857 to the nationwide independence struggle culminating in 1947, brave men and women from our community laid down their lives for the motherland. Legendary icons like Veerangana Rani Avanti Bai Lodhi, Shaheed Gulab Singh Lodhi, Raja Bakhtiyar Singh, and countless unsung freedom fighters exhibited supreme courage against colonial oppression.
+                  सन् 1842 के ऐतिहासिक बुंदेला महाविद्रोह में <strong>राजा हिरदेशाह लोधी (हीरापुर)</strong> ने ईस्ट इंडिया कंपनी की सेनाओं के छक्के छुड़ा दिए थे। सन् 1857 के प्रथम स्वतंत्रता संग्राम में <strong>वीरांगना महारानी अवंतीबाई लोधी (रामगढ़)</strong> ने रणचंडी का रूप धरकर अंग्रेजों की विशाल सेना को पराजित किया और आत्मबलिदान देकर इतिहास में अमर हो गईं। स्वतंत्रता आंदोलन में <strong>अमर शहीद गुलाब सिंह लोधी</strong> ने 23 अगस्त 1935 को लखनऊ के अमीनाबाद पार्क में ब्रिटिश गोलियों के सामने सीना तानकर तिरंगा फहराया और शहादत प्राप्त की।
                 </p>
 
                 <h2 className="text-base font-bold text-[#102F6B] pt-2 border-b border-[#F0E5D5] pb-1">
-                  3. Modern Era of Social &amp; Educational Renaissance
+                  ३. आधुनिक सामाजिक एवं शैक्षणिक पुनर्जागरण
                 </h2>
                 <p>
-                  In the post-independence era, community reformers recognized education as the paramount vehicle for socio-economic empowerment. Reformers like Swami Brahmanand Ji established schools, colleges, and hostels across regional heartlands. Today, the youth of our community are actively contributing as civil servants (IAS, IPS, State PSC), doctors, engineers, legal luminaries, entrepreneurs, and global scholars.
+                  स्वतंत्रता के पश्चात समाज के महान संत, स्वतंत्रता सेनानी एवं पूर्व सांसद <strong>स्वामी ब्रह्मानंद जी महाराज</strong> ने संपूर्ण बुंदेलखंड और उत्तर भारत में शिक्षा की क्रांति का सूत्रपात किया। उन्होंने दर्जनों विद्यालय, महाविद्यालय एवं छात्रावास स्थापित कर निर्धन व ग्रामीण समाज को शिक्षा का प्रकाश दिया। आज समाज के प्रतिभावान युवक-युवतियां सिविल सेवा (आईएएस, आईपीएस, पीसीएस), चिकित्सा, इंजीनियरिंग, न्यायपालिका, व्यापार एवं राजनीति में राष्ट्र निर्माण में अग्रणी भूमिका निभा रहे हैं।
                 </p>
 
                 <div className="p-4 bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] mt-5">
                   <h3 className="font-bold text-[#102F6B] text-xs uppercase tracking-wider mb-2 border-l-3 border-[#F26A21] pl-2">
-                    Core Community Ideals &amp; Commitments
+                    समाज के मूलभूत आदर्श एवं संकल्प
                   </h3>
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-[#263449]">
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#F26A21]"></span>
-                      Truth, Integrity, and Social Morality
+                      सत्य, निष्ठा एवं सामाजिक समरसता
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#F26A21]"></span>
-                      Prioritizing Higher Education &amp; Modern Science
+                      उच्च शिक्षा एवं आधुनिक विज्ञान को प्राथमिकता
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#F26A21]"></span>
-                      Universal Brotherhood &amp; National Service
+                      बंधुत्व, परस्पर सहयोग एवं राष्ट्र सेवा
                     </li>
                     <li className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#F26A21]"></span>
-                      Women Empowerment &amp; Social Upliftment
+                      महिला सशक्तीकरण एवं सामाजिक कुरीतियों का उन्मूलन
                     </li>
                   </ul>
                 </div>

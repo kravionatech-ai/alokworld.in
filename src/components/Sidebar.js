@@ -28,33 +28,32 @@ export default function Sidebar({
   const notices = [
     {
       id: "n1",
-      badge: "Directory",
+      badge: "डायरेक्टरी",
       text:
-        noticeContent && !/[\u0900-\u097F]/.test(noticeContent)
-          ? noticeContent
-          : "All community members are requested to keep their family and professional information up to date in the directory.",
-      actionText: "Verify Record →",
+        noticeContent ||
+        "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी डायरेक्टरी में अद्यतन रखें।",
+      actionText: "रिकॉर्ड जांचें →",
       actionLink: "/directory",
     },
     {
       id: "n2",
-      badge: "Matrimonial",
-      text: "Submit confidential family matrimonial profiles for verified community matching across India.",
-      actionText: "Matrimonial Portal →",
+      badge: "वैवाहिक",
+      text: "सत्यापित पारिवारिक वैवाहिक रिश्ते हेतु अपनी पारिवारिक प्रविष्टियां दर्ज कराएं।",
+      actionText: "वैवाहिक मंच →",
       actionLink: "/matrimonial",
     },
     {
       id: "n3",
-      badge: "Mahasabha",
-      text: "State committees & youth wing conventions scheduled. Connect with your district conveners.",
-      actionText: "Organization Wings →",
+      badge: "महासभा",
+      text: "प्रांतीय कमेटियों एवं युवा प्रकोष्ठ सम्मेलनों के संबंध में जिला प्रभारियों से संपर्क करें।",
+      actionText: "संगठन प्रकोष्ठ →",
       actionLink: "/organization",
     },
     {
       id: "n4",
-      badge: "Secretariat",
-      text: "For directory inquiries, corrections, or registration support, contact our central helpline.",
-      actionText: "Contact Us →",
+      badge: "सचिवालय",
+      text: "डायरेक्टरी संशोधन, प्रविष्टि सहायता अथवा जानकारी हेतु केंद्रीय हेल्पलाइन से संपर्क करें।",
+      actionText: "संपर्क करें →",
       actionLink: "/contact",
     },
   ];
@@ -68,9 +67,7 @@ export default function Sidebar({
             <div className="flex items-center gap-1.5 text-[#102F6B] font-bold text-sm">
               <span className="text-[#F26A21]">📢</span>
               <h3 className="border-l-3 border-[#F26A21] pl-2">
-                {noticeTitle && !/[\u0900-\u097F]/.test(noticeTitle)
-                  ? noticeTitle
-                  : "Community Notices"}
+                {noticeTitle || "समाज संदेश एवं सूचनाएं"}
               </h3>
             </div>
 
@@ -161,7 +158,7 @@ export default function Sidebar({
       <FadeIn direction="up" distance={12} duration={0.45} delay={0.06}>
         <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs">
           <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] mb-3 pb-2 border-b border-[#F0E5D5] flex items-center justify-between">
-            <span>Key Regions</span>
+            <span>प्रमुख क्षेत्र व शहर</span>
             <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
           </h3>
           <div className="flex flex-col gap-1 text-xs">
@@ -175,7 +172,7 @@ export default function Sidebar({
                       : "text-[#263449] hover:bg-[#FFF0E2]"
                   }`}
                 >
-                  All Regions
+                  सभी क्षेत्र
                 </button>
                 {locations.map((loc) => (
                   <button
@@ -197,7 +194,7 @@ export default function Sidebar({
                   href="/directory"
                   className="text-left px-3 py-2 rounded font-medium text-[#263449] hover:bg-[#FFF0E2]"
                 >
-                  All Regions
+                  सभी क्षेत्र
                 </Link>
                 {locations.map((loc) => (
                   <Link
@@ -218,20 +215,20 @@ export default function Sidebar({
       <FadeIn direction="up" distance={12} duration={0.45} delay={0.12}>
         <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 shadow-xs text-center space-y-3">
           <span className="inline-block text-[10px] font-bold uppercase tracking-widest text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-            COMMUNITY SPOTLIGHT
+            सामुदायिक व्यवसाय मंच
           </span>
           <h4 className="font-bold text-sm text-[#102F6B]">
-            {adTitle && !/[\u0900-\u097F]/.test(adTitle) ? adTitle : "Community Business Directory"}
+            {adTitle || "व्यावसायिक डायरेक्टरी एवं प्रतिष्ठान"}
           </h4>
           <p className="text-xs text-[#64748B] leading-relaxed">
-            {adBannerText || "Promote your enterprise across our national community network."}
+            {adBannerText || "अपने व्यावसायिक प्रतिष्ठान को देशभर के समाज नेटवर्क पर प्रचारित करें।"}
           </p>
           <InteractiveTap>
             <Link
               href={adLink || "/contact"}
               className="inline-block w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors"
             >
-              Publish Listing / Contact →
+              प्रतिष्ठान सूचीबद्ध करें / संपर्क करें →
             </Link>
           </InteractiveTap>
         </div>

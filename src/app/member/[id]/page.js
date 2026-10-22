@@ -23,7 +23,7 @@ function MemberProfileDetail({ params }) {
       .then(async (res) => {
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
-          throw new Error(data.error || "Member profile not found or profile is unlisted");
+          throw new Error(data.error || "सदस्य प्रोफ़ाइल उपलब्ध नहीं है अथवा अप्रकाशित है");
         }
         return res.json();
       })
@@ -31,7 +31,7 @@ function MemberProfileDetail({ params }) {
         if (data?.member) {
           setMember(data.member);
         } else {
-          throw new Error("Member record not returned");
+          throw new Error("सदस्य विवरण प्राप्त नहीं हुआ");
         }
       })
       .catch((err) => setError(err.message))
@@ -53,17 +53,17 @@ function MemberProfileDetail({ params }) {
           href="/directory"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9E2D8] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors"
         >
-          ← Back to Directory
+          ← डायरेक्टरी सूची पर वापस जाएं
         </Link>
 
         {member && (
           <button
             onClick={handleCopyLink}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9E2D8] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer"
-            title="Copy profile link to clipboard"
+            title="प्रोफ़ाइल लिंक कॉपी करें"
           >
             <span>🔗</span>
-            <span>{copied ? "Link Copied!" : "Share Profile"}</span>
+            <span>{copied ? "लिंक कॉपी हो गया!" : "प्रोफ़ाइल साझा करें"}</span>
           </button>
         )}
       </div>
@@ -71,23 +71,23 @@ function MemberProfileDetail({ params }) {
       {loading ? (
         <div className="bg-white rounded-lg border border-[#E9E2D8] p-16 text-center text-[#64748B] font-medium shadow-xs">
           <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-          Loading member profile...
+          सदस्य प्रोफ़ाइल लोड हो रही है...
         </div>
       ) : error || !member ? (
         <div className="bg-white p-10 rounded-lg border border-[#E9E2D8] text-center shadow-xs space-y-3">
           <div className="w-14 h-14 mx-auto rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#E9E2D8] flex items-center justify-center text-2xl font-bold">
             🔒
           </div>
-          <h2 className="text-lg font-black text-[#102F6B]">Profile Not Available</h2>
+          <h2 className="text-lg font-black text-[#102F6B]">प्रोफ़ाइल उपलब्ध नहीं है</h2>
           <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto leading-relaxed">
-            {error || "This member profile could not be located, is currently archived, or requires administrative approval."}
+            {error || "यह सदस्य प्रोफ़ाइल उपलब्ध नहीं है, अभिलेख में सुरक्षित है अथवा प्रशासनिक सत्यापन प्रतीक्षित है।"}
           </p>
           <div className="pt-2">
             <Link
               href="/directory"
               className="btn-navy px-4 py-2 text-xs shadow-xs"
             >
-              Browse Public Directory →
+              सार्वजनिक डायरेक्टरी देखें →
             </Link>
           </div>
         </div>
@@ -99,7 +99,7 @@ function MemberProfileDetail({ params }) {
             {member.avatar ? (
               <img
                 src={member.avatar}
-                alt={`${member.name} - Verified Samaj Community Profile Photo`}
+                alt={`${member.name} - सत्यापित समाज सदस्य छायाचित्र`}
                 width={112}
                 height={112}
                 decoding="async"
@@ -114,10 +114,10 @@ function MemberProfileDetail({ params }) {
             <div className="text-center sm:text-left flex-1 min-w-0">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
                 <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#E9E2D8] uppercase">
-                  {member.role || "Samaj Member"}
+                  {member.role || "समाज सदस्य"}
                 </span>
                 <span className="text-[#E9E2D8]">•</span>
-                <span className="text-xs font-medium text-[#102F6B]">Verified Community Record</span>
+                <span className="text-xs font-medium text-[#102F6B]">सत्यापित समाज अभिलेख</span>
                 {member.slug && (
                   <>
                     <span className="text-[#E9E2D8]">•</span>
@@ -143,57 +143,57 @@ function MemberProfileDetail({ params }) {
             <div className="bg-[#FFFCF5] rounded-lg border border-[#E9E2D8] p-4 sm:p-5 space-y-3">
               <div className="flex items-center justify-between border-b border-[#E9E2D8] pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-                  Verified Contact &amp; Geographic Information
+                  सत्यापित संपर्क एवं भौगोलिक विवरण
                 </h3>
                 <span className="text-[10px] text-[#64748B]">
-                  🛡️ Protected by consent settings
+                  🛡️ सदस्य सहमति द्वारा संरक्षित
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-1">
                 <div>
-                  <span className="text-[#64748B] block text-[11px] font-medium">Telephone / Mobile:</span>
+                  <span className="text-[#64748B] block text-[11px] font-medium">संपर्क मोबाइल / फोन:</span>
                   {member.phone ? (
                     <a href={`tel:${member.phone}`} className="font-semibold text-[#F26A21] hover:underline mt-0.5 inline-flex items-center gap-1.5">
                       <span>📞</span> <span>{member.phone}</span>
                     </a>
                   ) : (
                     <span className="text-[#64748B] italic flex items-center gap-1">
-                      <span>🔒</span> <span>Kept private at member request</span>
+                      <span>🔒</span> <span>सदस्य के अनुरोध पर गोपनीय</span>
                     </span>
                   )}
                 </div>
 
                 <div>
-                  <span className="text-[#64748B] block text-[11px] font-medium">Email Address:</span>
+                  <span className="text-[#64748B] block text-[11px] font-medium">ईमेल पता:</span>
                   {member.email ? (
                     <a href={`mailto:${member.email}`} className="font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline mt-0.5 inline-flex items-center gap-1.5">
                       <span>✉️</span> <span>{member.email}</span>
                     </a>
                   ) : (
                     <span className="text-[#64748B] italic flex items-center gap-1">
-                      <span>🔒</span> <span>Kept private at member request</span>
+                      <span>🔒</span> <span>सदस्य के अनुरोध पर गोपनीय</span>
                     </span>
                   )}
                 </div>
 
                 <div>
-                  <span className="text-[#64748B] block text-[11px] font-medium">City &amp; State:</span>
+                  <span className="text-[#64748B] block text-[11px] font-medium">नगर व राज्य:</span>
                   <p className="font-medium text-[#263449] mt-0.5">
                     {member.city}, {member.state} {member.pincode ? `(${member.pincode})` : ""}
                   </p>
                 </div>
 
                 <div>
-                  <span className="text-[#64748B] block text-[11px] font-medium">Organization / Enterprise:</span>
+                  <span className="text-[#64748B] block text-[11px] font-medium">प्रतिष्ठान / विभाग / संगठन:</span>
                   <p className="font-medium text-[#263449] mt-0.5">
-                    {member.company || "Not specified / Independent"}
+                    {member.company || "स्वतंत्र / अनिर्दिष्ट"}
                   </p>
                 </div>
 
                 {member.address && (
                   <div className="sm:col-span-2 pt-2 border-t border-[#E9E2D8]/60">
-                    <span className="text-[#64748B] block text-[11px] font-medium">Full Residential / Office Address:</span>
+                    <span className="text-[#64748B] block text-[11px] font-medium">स्थाई / कार्यालय का पूरा पता:</span>
                     <p className="font-medium text-[#263449] mt-0.5">
                       {member.address} {member.pincode && `- ${member.pincode}`}
                     </p>
@@ -205,7 +205,7 @@ function MemberProfileDetail({ params }) {
             {/* Biography Section */}
             <div>
               <h3 className="text-xs font-bold text-[#102F6B] uppercase tracking-wider mb-2.5 pb-2 border-b border-[#E9E2D8]">
-                Biography &amp; Community Contributions
+                परिचय, उपलब्धियां एवं सामाजिक योगदान
               </h3>
               {member.biography ? (
                 <div
@@ -214,7 +214,7 @@ function MemberProfileDetail({ params }) {
                 />
               ) : (
                 <p className="text-xs text-[#64748B] italic">
-                  {member.name} has not submitted an extended community biography yet.
+                  {member.name} ने अभी विस्तृत जीवन-परिचय प्रेषित नहीं किया है।
                 </p>
               )}
             </div>
@@ -222,7 +222,7 @@ function MemberProfileDetail({ params }) {
             {/* Specializations & Categories */}
             {member.tags && member.tags.length > 0 && (
               <div className="pt-2 border-t border-[#E9E2D8]">
-                <h4 className="text-xs font-semibold text-[#64748B] mb-2">Designation &amp; Committee Affiliations:</h4>
+                <h4 className="text-xs font-semibold text-[#64748B] mb-2">दायित्व एवं समिति संबद्धता:</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {member.tags.map((tag) => (
                     <span
@@ -249,8 +249,8 @@ function MemberProfileDetail({ params }) {
                 {
                   "@type": "BreadcrumbList",
                   itemListElement: [
-                    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-                    { "@type": "ListItem", position: 2, name: "Directory", item: "https://alokworld.in/directory" },
+                    { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+                    { "@type": "ListItem", position: 2, name: "डायरेक्टरी", item: "https://alokworld.in/directory" },
                     { "@type": "ListItem", position: 3, name: member.name, item: `https://alokworld.in/member/${member.slug || member._id || member.id}` },
                   ],
                 },
@@ -258,7 +258,8 @@ function MemberProfileDetail({ params }) {
                   "@type": "ProfilePage",
                   "@id": `https://alokworld.in/member/${member.slug || member._id || member.id}#profilepage`,
                   url: `https://alokworld.in/member/${member.slug || member._id || member.id}`,
-                  name: `${member.name} - Samaj Directory Profile`,
+                  name: `${member.name} - समाज डायरेक्टरी प्रोफ़ाइल`,
+                  inLanguage: "hi",
                   mainEntity: {
                     "@type": "Person",
                     name: member.name,
@@ -287,7 +288,7 @@ export default function MemberProfilePage({ params }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
       <Header />
-      <Suspense fallback={<div className="p-16 text-center text-[#64748B] font-medium">Loading member profile...</div>}>
+      <Suspense fallback={<div className="p-16 text-center text-[#64748B] font-medium">सदस्य प्रोफ़ाइल लोड हो रही है...</div>}>
         <MemberProfileDetail params={params} />
       </Suspense>
       <Footer />

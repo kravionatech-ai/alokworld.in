@@ -51,13 +51,13 @@ export default function MahasabhaPage() {
             <FadeIn direction="up" distance={14} duration={0.5}>
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                  Central Leadership &amp; Body
+                  केंद्रीय नेतृत्व एवं राष्ट्रीय महासभा
                 </span>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                  {cmsPage?.title || "Akhil Bhartiya Mahasabha (National Assembly)"}
+                  {cmsPage?.title || "अखिल भारतीय महासभा एवं राष्ट्रीय संकल्प"}
                 </h1>
                 <p className="text-xs sm:text-sm text-[#64748B] mt-1">
-                  {cmsPage?.subtitle || "The apex representative organization uniting all regional chapters, trusts, and community councils across India."}
+                  {cmsPage?.subtitle || "देशभर के सभी प्रांतीय प्रकोष्ठों, सामाजिक ट्रस्टों एवं समाज परिषदों को संगठित करने वाली सर्वोच्च संस्था।"}
                 </p>
               </div>
             </FadeIn>
@@ -75,14 +75,14 @@ export default function MahasabhaPage() {
               <FadeIn direction="up" distance={14} duration={0.5}>
                 <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs space-y-4 text-xs sm:text-sm text-[#263449] leading-relaxed">
                   <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-                    Vision &amp; Strategic Mission
+                    विजन एवं रणनीतिक उद्देश्य
                   </h2>
                   <p className="pl-2">
-                    The Akhil Bhartiya Mahasabha serves as the premier apex organization uniting state chapters, community trusts, and councils across the country. Its primary mandate is to foster holistic social development, educational excellence, cultural preservation, and economic self-reliance for all community members.
+                    अखिल भारतीय महासभा देशभर की राज्य इकाइयों, सामाजिक ट्रस्टों और परिषदों को संगठित करने वाली सर्वोच्च शीर्ष संस्था है। इसका प्राथमिक उद्देश्य समाज के प्रत्येक वर्ग का सर्वांगीण उत्थान, शैक्षणिक प्रगति, सांस्कृतिक संरक्षण और आर्थिक स्वावलंबन सुनिश्चित करना है।
                   </p>
 
                   <h2 className="text-base font-bold text-[#102F6B] pt-3 border-l-3 border-[#F26A21] pl-2">
-                    Key National Resolutions &amp; Action Plans
+                    प्रमुख राष्ट्रीय संकल्प एवं कार्ययोजना
                   </h2>
                   <StaggerContainer className="space-y-3 pt-1" staggerDelay={0.06}>
                     {fallbackResolutions.map((r, i) => (
@@ -108,10 +108,10 @@ export default function MahasabhaPage() {
 
                   <div className="p-4 bg-[#FFF0E2] rounded-lg border border-[#F0E5D5] mt-4">
                     <h3 className="font-bold text-[#102F6B] text-xs uppercase tracking-wider mb-1">
-                      Secretariat Inquiries &amp; State Chapter Affiliations
+                      सचिवालय पूछताछ एवं प्रांतीय इकाई संबद्धता
                     </h3>
                     <p className="text-xs text-[#64748B]">
-                      For convening regional conventions, submitting agenda resolutions, or affiliating local trust bodies, please reach out to the National General Secretary at the Central Secretariat.
+                      प्रांतीय अधिवेशनों के आयोजन, संकल्प प्रस्ताव भेजने अथवा स्थानीय ट्रस्ट व कमेटियों के संबद्धीकरण हेतु केंद्रीय सचिवालय से संपर्क करें।
                     </p>
                   </div>
                 </div>

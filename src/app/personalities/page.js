@@ -21,35 +21,35 @@ export default function PersonalitiesPage() {
   const defaultList = [
     {
       _id: "p1",
-      name: "Veerangana Rani Avanti Bai Lodhi",
-      title: "Immortal Heroine of the 1857 War of Independence",
-      era: "1831 - 1858",
+      name: "वीरांगना रानी अवंतीबाई लोधी",
+      title: "प्रथम स्वतंत्रता संग्राम १८५७ की अमर वीरांगना",
+      era: "१८३१ - १८५८",
       photo: "/asset/personalities/rani_avanti_bai.png",
-      summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
+      summary: "रामगढ़ की महारानी जिन्होंने 1857 के प्रथम स्वतंत्रता संग्राम में ब्रिटिश हुकूमत के विरुद्ध अद्वितीय शौर्य और पराक्रम का परिचय देते हुए मातृभूमि की रक्षा हेतु अपने प्राणों की आहुति दी।",
     },
     {
       _id: "p2",
-      name: "Shaheed Gulab Singh Lodhi",
-      title: "Immortal Freedom Fighter & Flag Bearer",
-      era: "1903 - 1935",
+      name: "अमर शहीद गुलाब सिंह लोधी",
+      title: "अमर स्वतंत्रता सेनानी एवं तिरंगा ध्वजवाहक",
+      era: "१९०३ - १९३५",
       photo: "/asset/personalities/shaheed_gulab_singh.png",
-      summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
+      summary: "अमीनाबाद पार्क (लखनऊ) में 23 अगस्त 1935 को ब्रिटिश पुलिस की गोलियों की परवाह न करते हुए विशाल जनसभा के मध्य राष्ट्रीय तिरंगा फहराने वाले अदम्य साहसी अमर बलिदानी।",
     },
     {
       _id: "p3",
-      name: "Swami Brahmanand Ji",
-      title: "Education Pioneer, Social Reformer & Parliamentarian",
-      era: "1894 - 1984",
+      name: "स्वामी ब्रह्मानंद जी महाराज",
+      title: "शिक्षा प्रवर्तक, महान समाज सुधारक एवं पूर्व सांसद",
+      era: "१८९४ - १९८४",
       photo: "/asset/personalities/swami_brahmanand.png",
-      summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
+      summary: "बुंदेलखंड की धरती पर शिक्षा की अलख जगाने वाले महान संत व हमीरपुर से लोकसभा सांसद, जिन्होंने निर्धन व उपेक्षित समाज के उत्थान हेतु दर्जनों गुरुकुल, स्कूल व महाविद्यालय स्थापित किए।",
     },
     {
       _id: "p4",
-      name: "Raja Hridayshah Lodhi",
-      title: "Legendary Leader of the 1842 Bundela Rebellion",
-      era: "1806 - 1852",
+      name: "राजा हिरदेशाह लोधी",
+      title: "१८४२ के ऐतिहासिक बुंदेला विद्रोह के महानायक",
+      era: "१८०६ - १८५२",
       photo: "/asset/personalities/raja_hridayshah.png",
-      summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
+      summary: "हीरापुर के वीर शासक जिन्होंने ईस्ट इंडिया कंपनी की दमनकारी नीतियों के विरुद्ध 1842 में महाविद्रोह का नेतृत्व कर नरसिंहपुर, दमोह व सागर क्षेत्र को ब्रिटिश दासता से मुक्त कराया था।",
     }
   ];
 
@@ -77,13 +77,13 @@ export default function PersonalitiesPage() {
             <FadeIn direction="up" distance={14} duration={0.5}>
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                  Icons &amp; Legends
+                  गौरवशाली महापुरुष एवं विभूतियां
                 </span>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                  Glorious Historical Figures &amp; Community Icons
+                  समाज के अमर ऐतिहासिक महापुरुष एवं राष्ट्र निर्माता
                 </h1>
                 <p className="text-xs sm:text-sm text-[#64748B] mt-1">
-                  Honoring the brave freedom fighters, reformers, philosophers, and nation builders from our community heritage.
+                  स्वतंत्रता संग्राम के अमर सेनानियों, समाज सुधारकों, दार्शनिकों एवं राष्ट्र निर्माताओं को सादर नमन।
                 </p>
               </div>
             </FadeIn>
@@ -99,7 +99,7 @@ export default function PersonalitiesPage() {
             <div className="space-y-3">
               <SectionHeadingReveal>
                 <h2 className="text-sm font-bold text-[#102F6B] pb-1 border-b border-[#F0E5D5]">
-                  All Historical Personalities ({personalities.length})
+                  समस्त ऐतिहासिक विभूतियां ({personalities.length})
                 </h2>
               </SectionHeadingReveal>
 

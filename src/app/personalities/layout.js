@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "Eminent Personalities - Historical Icons, Pioneers & Achievers",
+  title: "ऐतिहासिक विभूतियां एवं प्रेरक व्यक्तित्व - अमर बलिदानी, समाज सुधारक एवं पथप्रदर्शक",
   description:
-    "Honoring celebrated freedom fighters, martyrs, reformers, civil servants, and social visionaries of the Samaj community.",
+    "समाज के अमर स्वतंत्रता सेनानियों, वीरांगनाओं, समाज सुधारकों, प्रशासनिक अधिकारियों एवं प्रेरक मार्गदर्शकों का पावन स्मरण।",
   alternates: {
     canonical: "/personalities",
   },
   openGraph: {
-    title: "Eminent Personalities | alokworld.in",
+    title: "ऐतिहासिक विभूतियां एवं प्रेरक व्यक्तित्व | alokworld.in",
     description:
-      "Honoring celebrated freedom fighters, martyrs, reformers, civil servants, and social visionaries of the Samaj community.",
+      "समाज के अमर स्वतंत्रता सेनानियों, वीरांगनाओं, समाज सुधारकों और प्रबुद्ध विभूतियों का प्रेरक जीवन दर्शन।",
     url: "https://alokworld.in/personalities",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "article",
   },
 };
@@ -20,8 +20,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-    { "@type": "ListItem", position: 2, name: "Eminent Personalities", item: "https://alokworld.in/personalities" },
+    { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+    { "@type": "ListItem", position: 2, name: "विभूतियां", item: "https://alokworld.in/personalities" },
   ],
 };
 

@@ -2,33 +2,33 @@ import mongoose from "mongoose";
 
 const SiteSettingsSchema = new mongoose.Schema(
   {
-    siteName: { type: String, default: "Akhil Bhartiya Samaj Directory - alokworld.in" },
-    tagline: { type: String, default: "Community Directory, Leadership & Networking Portal" },
+    siteName: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी - alokworld.in" },
+    tagline: { type: String, default: "समाज डायरेक्टरी, राष्ट्रीय नेतृत्व एवं संगठनात्मक समन्वय मंच" },
     
     // Top Announcement Strip
-    announcement: { type: String, default: "Welcome to the official Samaj Community Directory portal. Connect, unite & empower." },
+    announcement: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी पोर्टल पर आपका हार्दिक स्वागत है। संगठित समाज, सशक्त राष्ट्र।" },
     announcementEnabled: { type: Boolean, default: true },
 
     // Hero Banner Customization
-    heroBadge: { type: String, default: "Official Community Portal" },
-    heroTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal" },
-    heroSubtitle: { type: String, default: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India." },
-    heroCtaText: { type: String, default: "Explore Member Directory →" },
+    heroBadge: { type: String, default: "आधिकारिक समुदाय पोर्टल" },
+    heroTitle: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल" },
+    heroSubtitle: { type: String, default: "देश भर के समाज बंधुओं, वरिष्ठ मार्गदर्शकों, चिकित्सकों, अभियंताओं, प्रशासनिक अधिकारियों, अधिवक्ताओं एवं युवाओं को जोड़ने वाला डिजिटल मंच।" },
+    heroCtaText: { type: String, default: "सदस्य डायरेक्टरी देखें →" },
     heroCtaLink: { type: String, default: "/directory" },
     heroImage: { type: String, default: "" },
 
     // Sidebar Widgets Configuration
-    sidebarNoticeTitle: { type: String, default: "Community Announcements & Notices" },
-    sidebarNoticeContent: { type: String, default: "All community members are requested to keep their family and professional information up to date in the directory." },
+    sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं महत्वपूर्ण सूचनाएं" },
+    sidebarNoticeContent: { type: String, default: "समस्त समाज बंधुओं से अनुरोध है कि डायरेक्टरी में अपना एवं अपने परिवार का प्रामाणिक विवरण अद्यतन रखें।" },
     sidebarNoticeEnabled: { type: Boolean, default: true },
     keyRegions: {
       type: [String],
-      default: ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
+      default: ["भोपाल", "जयपुर", "बेंगलुरु", "लखनऊ", "इंदौर", "दिल्ली एनसीआर", "मुंबई", "जबलपुर"],
     },
 
     // Community Spotlight / Advertisement
-    adTitle: { type: String, default: "Community Business Spotlight" },
-    adBannerText: { type: String, default: "Promote your enterprise across our national community network." },
+    adTitle: { type: String, default: "समाज व्यापार एवं उद्योग संवर्धन" },
+    adBannerText: { type: String, default: "राष्ट्रव्यापी समाज डायरेक्टरी नेटवर्क के माध्यम से अपने व्यवसाय एवं प्रतिष्ठान का प्रचार करें।" },
     adLink: { type: String, default: "/contact" },
     adImage: { type: String, default: "" },
     adEnabled: { type: Boolean, default: true },
@@ -36,7 +36,7 @@ const SiteSettingsSchema = new mongoose.Schema(
     // Contact & Secretariat Information
     contactEmail: { type: String, default: "admin@alokworld.in" },
     contactPhone: { type: String, default: "+91 96085 53167" },
-    contactAddress: { type: String, default: "National Secretariat, New Delhi, India" },
+    contactAddress: { type: String, default: "केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली, भारत" },
     whatsappNumber: { type: String, default: "+91 96085 53167" },
 
     // Navigation Menu Management
@@ -50,12 +50,12 @@ const SiteSettingsSchema = new mongoose.Schema(
     ],
 
     // Global SEO Directives
-    seoTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal | alokworld.in" },
-    seoDescription: { type: String, default: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India." },
-    seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, lodha mahasabha" },
+    seoTitle: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल | alokworld.in" },
+    seoDescription: { type: String, default: "अखिल भारतीय लोधी, लोधा, लोध समाज की आधिकारिक डिजिटल डायरेक्टरी - देश भर के सत्यापित समाज बंधुओं, वरिष्ठ मार्गदर्शकों एवं प्रबुद्ध अधिकारियों से जुड़ें।" },
+    seoKeywords: { type: String, default: "समाज डायरेक्टरी, लोधी समाज, लोधा महासभा, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी, लोध समाज डायरेक्टरी" },
     siteUrl: { type: String, default: "https://alokworld.in" },
     ogImage: { type: String, default: "/asset/topofwebsite/web_sit_front.png" },
-    organizationName: { type: String, default: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha" },
+    organizationName: { type: String, default: "अखिल भारतीय लोधी, लोधा, लोध समाज महासभा" },
     googleVerificationId: { type: String, default: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg" },
     twitterHandle: { type: String, default: "@alokworldin" },
     
@@ -65,33 +65,33 @@ const SiteSettingsSchema = new mongoose.Schema(
     maintenancePopupEnabled: { type: Boolean, default: true },
     maintenanceMessage: {
       type: String,
-      default: "Maintenance Notice: Our website is currently under development. We are improving your experience, and some features may not work as expected.",
+      default: "सूचना: पोर्टल पर तकनीकी सुधार एवं डेटा सत्यापन कार्य प्रगति पर है। कुछ सेवाएं अस्थायी रूप से प्रभावित हो सकती हैं।",
     },
     maintenancePopupTitle: {
       type: String,
-      default: "Website Under Active Development",
+      default: "वेबसाइट विकास एवं डेटा सत्यापन प्रगति पर",
     },
     maintenancePopupMessage: {
       type: String,
-      default: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
+      default: "alokworld.in पर आपका स्वागत है! हम नवीन सुविधाओं एवं सत्यापित डायरेक्टरी अभिलेखों को निरंतर अद्यतन कर रहे हैं।",
     },
 
     // Multi-page content fallbacks
     historyContent: {
       type: String,
-      default: "<h3>Glorious Heritage & History</h3><p>The history of our community is rich with sacrifice, dedication, valor, and patriotism. From historical eras to the national independence movement, community visionaries and social leaders have contributed immensely to nation-building.</p>",
+      default: "<h3>गौरवशाली इतिहास एवं सांस्कृतिक विरासत</h3><p>हमारे समाज का इतिहास त्याग, तपस्या, वीरता और देशभक्ति से परिपूर्ण है। ऐतिहासिक युगों से लेकर राष्ट्रीय स्वतंत्रता आंदोलन तक, समाज के मार्गदर्शकों और जननायकों ने राष्ट्र निर्माण में अप्रतिम योगदान दिया है।</p>",
     },
     organizationContent: {
       type: String,
-      default: "<h3>Organizational Structure & Executive Committee</h3><p>Community welfare initiatives are actively carried out through the National Working Committee, Youth Network, Women Empowerment Wing, and State Chapters.</p>",
+      default: "<h3>संगठनात्मक संरचना एवं कार्यसमिति</h3><p>समाज कल्याण की समस्त गतिविधियां राष्ट्रीय कार्यसमिति, युवा प्रकोष्ठ, महिला सशक्तिकरण विंग और राज्य शाखाओं के माध्यम से सक्रिय रूप से संचालित की जाती हैं।</p>",
     },
     mahasabhaContent: {
       type: String,
-      default: "<h3>Akhil Bhartiya Mahasabha</h3><p>The Mahasabha continuously strives to unite the community across the nation, eliminate social challenges, and promote higher education and economic self-reliance.</p>",
+      default: "<h3>अखिल भारतीय महासभा</h3><p>महासभा देश भर में समाज को संगठित करने, सामाजिक विसंगतियों को दूर करने तथा उच्च शिक्षा एवं आर्थिक स्वावलंबन को बढ़ावा देने के लिए सतत प्रयासरत है।</p>",
     },
     aboutContent: {
       type: String,
-      default: "<h3>About alokworld.in</h3><p>alokworld.in is a modern digital platform dedicated to connecting community members, professionals, elders, and families across India.</p>",
+      default: "<h3>alokworld.in के बारे में</h3><p>alokworld.in देश भर के समाज बंधुओं, प्रबुद्ध अधिकारियों, वरिष्ठ मार्गदर्शकों और परिवारों को जोड़ने के लिए समर्पित एक आधुनिक डिजिटल मंच है।</p>",
     },
   },
   { timestamps: true }

@@ -1,17 +1,17 @@
 export const metadata = {
-  title: "Samaj History & Glorious Heritage - Origins, Freedom Struggle & Legacy",
+  title: "समाज का गौरवशाली इतिहास - उत्पत्ति, स्वतंत्रता संग्राम एवं त्याग की अमर गाथा",
   description:
-    "A comprehensive chronicle of the sacrifices, freedom struggle leadership, historical origins, and patriotic legacy of our Samaj.",
+    "हमारे समाज के त्याग, स्वतंत्रता संग्राम में अग्रणी भूमिका, ऐतिहासिक उत्पत्ति और राष्ट्र निर्माण में अभूतपूर्व योगदान का प्रामाणिक इतिहास।",
   alternates: {
     canonical: "/history",
   },
   openGraph: {
-    title: "Samaj History & Heritage | alokworld.in",
+    title: "समाज का गौरवशाली इतिहास | alokworld.in",
     description:
-      "A chronicle of selfless service, courage, cultural legacy, and nation-building.",
+      "निस्वार्थ सेवा, अदम्य साहस, सांस्कृतिक विरासत एवं राष्ट्र निर्माण की ऐतिहासिक गाथा।",
     url: "https://alokworld.in/history",
     siteName: "alokworld.in",
-    locale: "en_IN",
+    locale: "hi_IN",
     type: "article",
   },
 };
@@ -20,8 +20,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "Home", item: "https://alokworld.in" },
-    { "@type": "ListItem", position: 2, name: "Samaj History", item: "https://alokworld.in/history" },
+    { "@type": "ListItem", position: 1, name: "मुख्य पृष्ठ", item: "https://alokworld.in" },
+    { "@type": "ListItem", position: 2, name: "समाज इतिहास", item: "https://alokworld.in/history" },
   ],
 };
 

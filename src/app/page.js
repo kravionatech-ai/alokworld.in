@@ -56,16 +56,16 @@ export default function HomePage() {
   }, [searchQuery, selectedLocation]);
 
   const quickPillars = [
-    { title: "Samaj Directory", desc: "Verified member profiles, elders, doctors & engineers.", href: "/directory", icon: "👥" },
-    { title: "Samaj History", desc: "Glorious heritage, freedom struggle & historical roots.", href: "/history", icon: "📜" },
-    { title: "Personalities", desc: "Honoring brave historical icons, patriots & reformers.", href: "/personalities", icon: "🎖️" },
-    { title: "Samaj Matrimonial", desc: "Dignified match-making for community families.", href: "/matrimonial", icon: "💍" },
-    { title: "Organization", desc: "Core committees, youth wing & regional chapters.", href: "/organization", icon: "🏛️" },
-    { title: "Photo Gallery", desc: "Moments from national conventions & youth meets.", href: "/gallery", icon: "📸" },
+    { title: "समाज डायरेक्टरी", desc: "सत्यापित सदस्य विवरण, वरिष्ठजन, डॉक्टर, इंजीनियर व अधिवक्ता।", href: "/directory", icon: "👥" },
+    { title: "समाज इतिहास", desc: "गौरवशाली विरासत, स्वतंत्रता संग्राम व ऐतिहासिक जड़ें।", href: "/history", icon: "📜" },
+    { title: "विभूतियां", desc: "वीर स्वतंत्रता सेनानी, समाज सुधारक एवं महापुरुष।", href: "/personalities", icon: "🎖️" },
+    { title: "समाज वैवाहिक", desc: "समाज के परिवारों हेतु गरिमामय वैवाहिक संबंध।", href: "/matrimonial", icon: "💍" },
+    { title: "संगठन एवं इकाइयां", desc: "राष्ट्रीय कार्यकारिणी, युवा प्रकोष्ठ व प्रांतीय शाखाएं।", href: "/organization", icon: "🏛️" },
+    { title: "छायाचित्र दीर्घा", desc: "राष्ट्रीय अधिवेशन व प्रतिभा सम्मान समारोह के क्षण।", href: "/gallery", icon: "📸" },
   ];
 
   const locations = [
-    "Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"
+    "भोपाल", "जयपुर", "बेंगलुरु", "लखनऊ", "इंदौर", "दिल्ली एनसीआर", "मुंबई", "जबलपुर", "ग्वालियर", "धौलपुर"
   ];
 
   // Dynamic announcement list for AnnouncementSlider
@@ -73,24 +73,24 @@ export default function HomePage() {
     ? [
         {
           id: "ann-settings",
-          tag: "Notice",
+          tag: "सूचना",
           text: settings.announcement,
           link: "/directory",
-          linkText: "Explore Directory →",
+          linkText: "डायरेक्टरी देखें →",
         },
         {
           id: "ann-matrimonial",
-          tag: "Matrimonial",
-          text: "Verified matrimonial applications open for community brides and grooms across India.",
+          tag: "वैवाहिक",
+          text: "देशभर के समाज परिवारों हेतु सत्यापित वैवाहिक प्रविष्टियां आमंत्रित हैं।",
           link: "/matrimonial",
-          linkText: "View Profiles →",
+          linkText: "प्रोफाइल देखें →",
         },
         {
           id: "ann-history",
-          tag: "Heritage",
-          text: "Honor the valor of Veerangana Rani Avanti Bai and Shaheed Gulab Singh in our heritage portal.",
+          tag: "विरासत",
+          text: "वीरांगना रानी अवंतीबाई एवं अमर शहीद गुलाब सिंह के शौर्य और बलिदान को सादर नमन।",
           link: "/history",
-          linkText: "Read History →",
+          linkText: "इतिहास पढ़ें →",
         },
       ]
     : undefined;
@@ -135,7 +135,7 @@ export default function HomePage() {
                     </p>
                   </div>
                   <span className="text-[10px] font-bold text-[#F26A21] mt-2.5 block group-hover:translate-x-0.5 transition-transform">
-                    Open Section →
+                    अनुभाग देखें →
                   </span>
                 </Link>
               </SubtleHoverCard>
@@ -147,8 +147,8 @@ export default function HomePage() {
         {featuredMembers && featuredMembers.length > 0 && (
           <FeaturedMembersCarousel
             members={featuredMembers}
-            title="Distinguished Community Members Spotlight"
-            subtitle="Swipe through verified community elders, doctors, engineers, and professionals."
+            title="विशिष्ट समाज बंधु एवं पदाधिकारी"
+            subtitle="समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।"
           />
         )}
 
@@ -170,10 +170,10 @@ export default function HomePage() {
             <SectionHeadingReveal className="flex items-center justify-between pb-2 border-b border-[#E9E2D8]">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-                  Community Member Directory Spotlight
+                  सामुदायिक सदस्य डायरेक्टरी
                 </h2>
                 <p className="text-xs text-[#64748B] mt-0.5 pl-2">
-                  Verified published records from MongoDB ({featuredMembers.length} active).
+                  सत्यापित प्रकाशित समाज सदस्य सूची ({featuredMembers.length} सक्रिय)।
                 </p>
               </div>
               <InteractiveTap>
@@ -181,7 +181,7 @@ export default function HomePage() {
                   href="/directory"
                   className="text-xs font-bold text-[#F26A21] hover:text-[#091D42] underline"
                 >
-                  Full Directory →
+                  संपूर्ण डायरेक्टरी देखें →
                 </Link>
               </InteractiveTap>
             </SectionHeadingReveal>

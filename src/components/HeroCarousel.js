@@ -23,14 +23,14 @@ export default function HeroCarousel({ settings }) {
   const slides = [
     {
       id: "hero-main",
-      badge: settings?.heroBadge || "Official Community Portal",
+      badge: settings?.heroBadge || "आधिकारिक समुदाय पोर्टल",
       title: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
       subtitle:
         settings?.heroSubtitle ||
         "अखिल भारतीय समाज डायरेक्टरी — देशभर के सेवारत व सेवानिवृत्त अधिकारियों, कर्मचारियों, प्रबुद्धजनों एवं युवाओं का सशक्त व पारदर्शी डिजिटल मंच।",
-      ctaText: settings?.heroCtaText || "Explore Member Directory →",
+      ctaText: settings?.heroCtaText || "सदस्य डायरेक्टरी देखें →",
       ctaLink: settings?.heroCtaLink || "/directory",
-      secondaryCtaText: "Executive Structure",
+      secondaryCtaText: "कार्यकारिणी संरचना",
       secondaryCtaLink: "/organization",
       image: "/asset/topofwebsite/web_sit_front1.png",
       imageAlt: "अखिल भारतीय लोधी अधिकारी कर्मचारी संघ — स्वामी ब्रह्मानंद जी महाराज, आलोक प्रतीक एवं वीरांगना रानी अवंती बाई लोधी",
@@ -38,13 +38,13 @@ export default function HeroCarousel({ settings }) {
     },
     {
       id: "hero-adhiveshan-2026",
-      badge: "National Convention 2026",
+      badge: "राष्ट्रीय अधिवेशन 2026",
       title: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह-2026",
       subtitle:
         "15 नवम्बर 2026 (रविवार), समय: प्रातः 10:00 से सायं 4:00 बजे | स्थान: कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली। समाज के समग्र विकास, शिक्षा एवं संगठनात्मक सशक्तीकरण हेतु चारों राष्ट्रीय पुरस्कारों के आवेदन आमंत्रित।",
-      ctaText: "View Convention Details →",
+      ctaText: "अधिवेशन विवरण देखें →",
       ctaLink: "/mahasabha",
-      secondaryCtaText: "Official Convention Posters",
+      secondaryCtaText: "आधिकारिक पोस्टर देखें",
       secondaryCtaLink: "/gallery",
       image: "/asset/alokadhivationposter2026/poster1.jpeg",
       imageAlt: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह 2026 — कांस्टीट्यूशन क्लब नई दिल्ली मुख्य आमंत्रण पोस्टर",
@@ -52,13 +52,13 @@ export default function HeroCarousel({ settings }) {
     },
     {
       id: "hero-education-merit",
-      badge: "Education & Youth Merit",
+      badge: "शिक्षा एवं छात्र प्रतिभा",
       title: "स्वामी ब्रह्मानंद सम्मान पुरस्कार — प्रतिभावान छात्र-छात्रा सम्मान",
       subtitle:
         "आईआईटी (IIT), एमबीबीएस (MBBS), आईआईएम (IIM), आईआईएफटी (IIFT) एवं संघ लोक सेवा आयोग (UPSC) सहित उच्च संस्थानों में चयनित समाज के होनहार विद्यार्थियों का राष्ट्रीय स्तर पर सम्मान।",
-      ctaText: "Explore Youth Initiatives →",
+      ctaText: "युवा प्रकोष्ठ विवरण →",
       ctaLink: "/organization",
-      secondaryCtaText: "Submit Student Query",
+      secondaryCtaText: "छात्र मार्गदर्शन संपर्क",
       secondaryCtaLink: "/contact",
       image: "/asset/alokadhivationposter2026/poster4.jpeg",
       imageAlt: "स्वामी ब्रह्मानंद पुरस्कार — आईआईटी, एमबीबीएस, आईआईएम, आईआईएफटी प्रतिभावान छात्र-छात्रा सम्मान पोस्टर",
@@ -66,13 +66,13 @@ export default function HeroCarousel({ settings }) {
     },
     {
       id: "hero-public-service",
-      badge: "Public Service & Heritage",
+      badge: "लोक सेवा एवं गौरवशाली विरासत",
       title: "अमर शहीद महारानी अवंतीबाई लोधी पुरस्कार — अधिकारी-कर्मचारी सेवा",
       subtitle:
         "केंद्रीय व राज्य सरकार के उपक्रमों, अर्ध-सरकारी संस्थानों एवं लोक सेवाओं में नव-नियुक्त तथा निष्ठापूर्वक सेवानिवृत्त समाज के सम्मानित अधिकारियों एवं कर्मचारियों का राष्ट्रीय अभिनंदन।",
-      ctaText: "Read Heritage & Valor →",
+      ctaText: "समाज इतिहास पढ़ें →",
       ctaLink: "/history",
-      secondaryCtaText: "View Personalities",
+      secondaryCtaText: "विभूतियां देखें",
       secondaryCtaLink: "/personalities",
       image: "/asset/alokadhivationposter2026/poster3.jpeg",
       imageAlt: "अमर शहीद महारानी अवंतीबाई लोधी पुरस्कार — सरकारी व अर्ध-सरकारी अधिकारी/कर्मचारी सदस्य सम्मान पोस्टर",
@@ -80,13 +80,13 @@ export default function HeroCarousel({ settings }) {
     },
     {
       id: "hero-organization-expand",
-      badge: "Organization & Membership",
+      badge: "संगठन एवं सदस्यता अभियान",
       title: "राजा हिरदे शाह सम्मान — संगठन सशक्तीकरण एवं सदस्यता अभियान",
       subtitle:
         "आलोक संघ को राज्यों और जिलों में सशक्त बनाने, सदस्यता का व्यापक विस्तार करने और समाज को एकजुट करने वाले समर्पित प्रतिनिधियों एवं कर्मठ कार्यकर्ताओं का विशेष सम्मान।",
-      ctaText: "Join Samaj Network →",
+      ctaText: "संगठन से जुड़ें →",
       ctaLink: "/contact",
-      secondaryCtaText: "View Directory",
+      secondaryCtaText: "डायरेक्टरी खोजें",
       secondaryCtaLink: "/directory",
       image: "/asset/alokadhivationposter2026/poster5.jpeg",
       imageAlt: "राजा हिरदे शाह पुरस्कार — आलोक संगठन सशक्तीकरण एवं सदस्यता सम्मान पोस्टर",
@@ -94,13 +94,13 @@ export default function HeroCarousel({ settings }) {
     },
     {
       id: "hero-ratna-award",
-      badge: "Exemplary Social Service",
+      badge: "विशिष्ट समाज सेवा सम्मान",
       title: "आलोक रत्न पुरस्कार — समग्र समाज विकास एवं जनकल्याण",
       subtitle:
         "शैक्षणिक, आर्थिक, सामाजिक-सांस्कृतिक, राजनैतिक व रोज़गार के क्षेत्र में समाज के समग्र उत्थान और आलोक अभियान को आगे बढ़ाने में उल्लेखनीय योगदान देने वाले समाजसेवियों का सर्वोच्च सम्मान।",
-      ctaText: "View Photo Gallery →",
+      ctaText: "छायाचित्र दीर्घा देखें →",
       ctaLink: "/gallery",
-      secondaryCtaText: "Mahasabha Resolutions",
+      secondaryCtaText: "महासभा संकल्प",
       secondaryCtaLink: "/mahasabha",
       image: "/asset/alokadhivationposter2026/poster2.jpeg",
       imageAlt: "आलोक रत्न पुरस्कार — समाज सेवा एवं समग्र विकास विशिष्ट सम्मान पोस्टर",
@@ -113,7 +113,7 @@ export default function HeroCarousel({ settings }) {
     const slide = slides[0];
     return (
       <section
-        aria-label="Community Highlights & Announcements Carousel"
+        aria-label="समाज मुख्य झलकियां एवं अधिवेशन सूचनाएं"
         className="relative bg-white rounded-lg border border-[#E9E2D8] shadow-xs overflow-hidden"
       >
         <div className="p-4 sm:p-6 md:p-7">
@@ -206,10 +206,10 @@ export default function HeroCarousel({ settings }) {
           nextEl: ".hero-btn-next",
         }}
         a11y={{
-          prevSlideMessage: "Previous community slide",
-          nextSlideMessage: "Next community slide",
-          firstSlideMessage: "This is the first slide",
-          lastSlideMessage: "This is the last slide",
+          prevSlideMessage: "पिछली स्लाइड",
+          nextSlideMessage: "अगली स्लाइड",
+          firstSlideMessage: "यह प्रथम स्लाइड है",
+          lastSlideMessage: "यह अंतिम स्लाइड है",
         }}
         className="w-full"
       >
@@ -289,7 +289,7 @@ export default function HeroCarousel({ settings }) {
             <button
               type="button"
               className="hero-btn-prev w-7 h-7 rounded-full bg-white border border-[#E9E2D8] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Previous slide"
+              aria-label="पिछली स्लाइड"
             >
               ←
             </button>
@@ -298,7 +298,7 @@ export default function HeroCarousel({ settings }) {
             <button
               type="button"
               className="hero-btn-next w-7 h-7 rounded-full bg-white border border-[#E9E2D8] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-xs font-bold cursor-pointer shadow-xs focus:outline-hidden focus:ring-2 focus:ring-[#F26A21]"
-              aria-label="Next slide"
+              aria-label="अगली स्लाइड"
             >
               →
             </button>

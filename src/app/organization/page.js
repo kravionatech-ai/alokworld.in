@@ -61,13 +61,13 @@ export default function OrganizationPage() {
             <FadeIn direction="up" distance={14} duration={0.5}>
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-7 shadow-xs">
                 <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-                  Structure &amp; Governance
+                  सांगठनिक संरचना एवं कार्यकारिणी
                 </span>
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] mt-2 tracking-tight">
-                  {cmsPage?.title || "National Organization Structure & Committees"}
+                  {cmsPage?.title || "अखिल भारतीय आलोक संघ सांगठनिक ढांचा एवं समितियां"}
                 </h1>
                 <p className="text-xs sm:text-sm text-[#64748B] mt-1">
-                  {cmsPage?.subtitle || "An organized framework dedicated to community welfare, youth enablement, and nationwide harmony."}
+                  {cmsPage?.subtitle || "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ की राष्ट्रीय कार्यकारिणी, सलाहकार समिति एवं विशिष्ट प्रकोष्ठ।"}
                 </p>
               </div>
             </FadeIn>
@@ -92,7 +92,7 @@ export default function OrganizationPage() {
                             {c.title}
                           </h2>
                           <span className="text-[11px] font-semibold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5] shrink-0">
-                            Active Body
+                            सक्रिय प्रकोष्ठ
                           </span>
                         </div>
                         <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed">
@@ -113,7 +113,7 @@ export default function OrganizationPage() {
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-6 shadow-xs space-y-3">
                 <div className="border-b border-[#F0E5D5] pb-2">
                   <span className="text-[11px] font-bold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-                    Official State Document
+                    आधिकारिक प्रांतीय प्रपत्र
                   </span>
                   <h2 className="text-base font-bold text-[#102F6B] mt-1.5">
                     उत्तर प्रदेश प्रांतीय कार्यकारिणी आधिकारिक विवरण तालिका

@@ -108,13 +108,13 @@ export default function DirectoryPage() {
           <section className="bg-white rounded-lg p-5 sm:p-7 mb-5 border border-[#F0E5D5] shadow-xs">
             <div className="max-w-3xl">
               <span className="inline-block text-[11px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5] mb-2">
-                Akhil Bhartiya Samaj Directory
+                अखिल भारतीय समाज डायरेक्टरी
               </span>
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-[#102F6B] tracking-tight leading-tight">
-                Samaj Community Directory &amp; Member Registry
+                अखिल भारतीय समाज सदस्य डायरेक्टरी एवं पंजिका
               </h1>
               <p className="mt-2 text-xs sm:text-sm text-[#64748B] leading-relaxed font-normal">
-                Search and discover verified community elders, doctors, engineers, advocates, merchants, and youth network across India.
+                देशभर के सभी सेवारत व सेवानिवृत्त अधिकारियों, कर्मचारियों, वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं युवा प्रतिनिधियों की सत्यापित सूची।
               </p>
             </div>
           </section>
@@ -169,14 +169,14 @@ export default function DirectoryPage() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-800 p-4 rounded-lg mb-5 text-xs flex items-center justify-between">
                 <div>
-                  <strong className="font-bold">Error loading directory: </strong>
+                  <strong className="font-bold">डायरेक्टरी लोड करने में त्रुटि: </strong>
                   <span>{error}</span>
                 </div>
                 <button
                   onClick={() => setPage(1)}
                   className="px-3 py-1 bg-red-600 text-white rounded text-xs font-bold hover:bg-red-700 cursor-pointer"
                 >
-                  Retry ↺
+                  पुनः प्रयास करें ↺
                 </button>
               </div>
             )}
@@ -185,7 +185,7 @@ export default function DirectoryPage() {
             {loading ? (
               <div className="bg-white rounded-lg border border-[#F0E5D5] p-16 text-center text-[#64748B] font-medium shadow-xs">
                 <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-                Searching community records...
+                सत्यापित समाज सदस्य रिकॉर्ड खोजे जा रहे हैं...
               </div>
             ) : (
               <MemberTable members={members} startIndex={(page - 1) * 12} />
@@ -202,7 +202,7 @@ export default function DirectoryPage() {
                   }}
                   className="btn-outline px-3.5 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
                 >
-                  ← Previous
+                  ← पिछला
                 </button>
 
                 <div className="flex items-center gap-1">
@@ -232,7 +232,7 @@ export default function DirectoryPage() {
                   }}
                   className="btn-outline px-3.5 py-1.5 text-xs font-semibold disabled:opacity-40 disabled:cursor-not-allowed shadow-xs"
                 >
-                  Next →
+                  अगला →
                 </button>
               </div>
             )}

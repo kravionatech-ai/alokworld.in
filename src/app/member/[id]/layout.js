@@ -40,8 +40,8 @@ export async function generateMetadata({ params }) {
     member.membershipStatus === "archived"
   ) {
     return {
-      title: "Member Profile Not Found",
-      description: "The requested Samaj community member profile is unavailable, unlisted, or private.",
+      title: "सदस्य प्रोफ़ाइल उपलब्ध नहीं है",
+      description: "अनुरोधित समाज सदस्य प्रोफ़ाइल अनुपलब्ध, अप्रकाशित अथवा गोपनीय है।",
       robots: {
         index: false,
         follow: false,
@@ -49,13 +49,13 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const cleanName = member.name || "Community Member";
-  const occupation = member.occupation || "Professional";
+  const cleanName = member.name || "समाज सदस्य";
+  const occupation = member.occupation || "व्यवसाय / पद";
   const location = [member.city, member.state].filter(Boolean).join(", ");
   const rawBio = member.biography ? member.biography.replace(/<[^>]*>?/gm, "").trim() : "";
   const bioSnippet = rawBio
     ? rawBio.substring(0, 150) + "..."
-    : `Verified Samaj directory profile of ${cleanName}, ${occupation}${location ? ` based in ${location}` : ""}.`;
+    : `${cleanName} (${occupation}) का सत्यापित समाज डायरेक्टरी अभिलेख${location ? ` - ${location}` : ""}।`;
 
   const canonicalPath = `/member/${member.slug || member._id || member.id}`;
   const canonicalUrl = `${baseUrl.replace(/\/+$/, "")}${canonicalPath}`;
@@ -65,16 +65,16 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${cleanName} - ${occupation}${location ? ` (${location})` : ""}`,
-    description: `${cleanName} (${occupation}) from ${location}. ${bioSnippet}`,
+    description: `${cleanName} (${occupation}) ${location ? `निवास: ${location}` : ""}। ${bioSnippet}`,
     alternates: {
       canonical: canonicalPath,
     },
     openGraph: {
-      title: `${cleanName} - ${occupation} | Samaj Directory`,
+      title: `${cleanName} - ${occupation} | समाज डायरेक्टरी`,
       description: bioSnippet,
       url: canonicalUrl,
       siteName: "alokworld.in",
-      locale: "en_IN",
+      locale: "hi_IN",
       type: "profile",
       images: [
         {
@@ -87,7 +87,7 @@ export async function generateMetadata({ params }) {
     },
     twitter: {
       card: "summary",
-      title: `${cleanName} - ${occupation} | Samaj Directory`,
+      title: `${cleanName} - ${occupation} | समाज डायरेक्टरी`,
       description: bioSnippet,
       images: [ogImage],
     },

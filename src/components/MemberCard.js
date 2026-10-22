@@ -122,19 +122,19 @@ export default function MemberCard({ member = {} }) {
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider leading-none mb-0.5">
-                Mobile
+                मोबाइल
               </div>
               {hasPhone ? (
                 <a
                   href={telHref}
                   className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
-                  title={`Call ${phone}`}
+                  title={`संपर्क: ${phone}`}
                 >
                   {phone}
                 </a>
               ) : (
                 <span className="text-[11px] text-[#64748B] italic block">
-                  {isPrivatePhone ? "Kept private by member" : "Not provided"}
+                  {isPrivatePhone ? "सदस्य द्वारा गोपनीय" : "उपलब्ध नहीं"}
                 </span>
               )}
             </div>
@@ -150,19 +150,19 @@ export default function MemberCard({ member = {} }) {
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider leading-none mb-0.5">
-                Email
+                ईमेल
               </div>
               {hasEmail ? (
                 <a
                   href={mailtoHref}
                   className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
-                  title={`Email ${email}`}
+                  title={`ईमेल: ${email}`}
                 >
                   {email}
                 </a>
               ) : (
                 <span className="text-[11px] text-[#64748B] italic block">
-                  {isPrivateEmail ? "Kept private by member" : "Not provided"}
+                  {isPrivateEmail ? "सदस्य द्वारा गोपनीय" : "उपलब्ध नहीं"}
                 </span>
               )}
             </div>
@@ -178,20 +178,20 @@ export default function MemberCard({ member = {} }) {
             <a
               href={telHref}
               className="btn-outline h-8 px-2 text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 hover:border-[#F26A21] hover:text-[#F26A21] hover:bg-[#FFF0E2] transition-all"
-              title={`Call ${name}: ${phone}`}
+              title={`कॉल करें: ${phone}`}
             >
               <span className="text-[#F26A21]">📞</span>
-              <span>Call</span>
+              <span>कॉल करें</span>
             </a>
           ) : (
             <button
               type="button"
               disabled
               className="btn-outline h-8 px-2 text-xs font-semibold opacity-40 cursor-not-allowed bg-[#F8FAFC] text-[#64748B] border-[#F0E5D5] flex items-center justify-center gap-1.5"
-              title={isPrivatePhone ? "Phone kept private by member" : "Phone not provided"}
+              title={isPrivatePhone ? "सदस्य द्वारा गोपनीय" : "उपलब्ध नहीं"}
             >
               <span className="grayscale opacity-60">📞</span>
-              <span>Call</span>
+              <span>कॉल</span>
             </button>
           )}
 
@@ -200,20 +200,20 @@ export default function MemberCard({ member = {} }) {
             <a
               href={mailtoHref}
               className="btn-outline h-8 px-2 text-xs font-semibold shadow-xs flex items-center justify-center gap-1.5 hover:border-[#F26A21] hover:text-[#F26A21] hover:bg-[#FFF0E2] transition-all"
-              title={`Email ${name}: ${email}`}
+              title={`ईमेल करें: ${email}`}
             >
               <span className="text-[#F26A21]">✉️</span>
-              <span>Email</span>
+              <span>ईमेल करें</span>
             </a>
           ) : (
             <button
               type="button"
               disabled
               className="btn-outline h-8 px-2 text-xs font-semibold opacity-40 cursor-not-allowed bg-[#F8FAFC] text-[#64748B] border-[#F0E5D5] flex items-center justify-center gap-1.5"
-              title={isPrivateEmail ? "Email kept private by member" : "Email not provided"}
+              title={isPrivateEmail ? "सदस्य द्वारा गोपनीय" : "उपलब्ध नहीं"}
             >
               <span className="grayscale opacity-60">✉️</span>
-              <span>Email</span>
+              <span>ईमेल</span>
             </button>
           )}
         </div>
@@ -223,7 +223,7 @@ export default function MemberCard({ member = {} }) {
           href={`/member/${profileIdentifier}`}
           className="btn-navy w-full h-8 px-3 text-xs font-bold shadow-xs flex items-center justify-center gap-1.5 hover:bg-[#F26A21] transition-all text-center"
         >
-          <span>View Profile</span>
+          <span>प्रोफ़ाइल देखें</span>
           <span aria-hidden="true">→</span>
         </Link>
       </div>

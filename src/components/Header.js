@@ -6,16 +6,16 @@ import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "History", href: "/history" },
-  { label: "Organization", href: "/organization" },
-  { label: "Mahasabha", href: "/mahasabha" },
-  { label: "Matrimonial", href: "/matrimonial" },
-  { label: "Directory", href: "/directory" },
-  { label: "Personalities", href: "/personalities" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "About Us", href: "/about" },
-  { label: "Contact Us", href: "/contact" },
+  { label: "मुख्य पृष्ठ", href: "/" },
+  { label: "समाज इतिहास", href: "/history" },
+  { label: "संगठन", href: "/organization" },
+  { label: "महासभा", href: "/mahasabha" },
+  { label: "वैवाहिक", href: "/matrimonial" },
+  { label: "डायरेक्टरी", href: "/directory" },
+  { label: "विभूतियां", href: "/personalities" },
+  { label: "छायाचित्र दीर्घा", href: "/gallery" },
+  { label: "परिचय", href: "/about" },
+  { label: "संपर्क", href: "/contact" },
 ];
 
 function NavLinksDesktop({ currentPath = "" }) {
@@ -148,10 +148,10 @@ export default function Header() {
                 className="inline-block focus:outline-hidden focus:ring-1 focus:ring-[#F26A21] rounded-xs"
               >
                 <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-black text-white tracking-tight leading-snug">
-                  Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha
+                  अखिल भारतीय लोधी, लोधा, लोध समाज महासभा
                 </h1>
                 <p className="text-[10.5px] sm:text-xs md:text-sm text-[#CBD5E1] font-medium mt-0.5 tracking-wide">
-                  Akhil Bhartiya Samaj Directory — alokworld.in
+                  अखिल भारतीय समाज डायरेक्टरी — alokworld.in
                 </p>
               </Link>
             </div>
@@ -162,7 +162,7 @@ export default function Header() {
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-expanded={mobileMenuOpen}
-                aria-label="Toggle navigation menu"
+                aria-label="नेविगेशन मेनू खोलें / बंद करें"
                 className="p-1.5 rounded-xs text-[#CBD5E1] hover:text-white hover:bg-[#102F6B] border border-[#162744] transition-colors focus:outline-hidden focus:ring-2 focus:ring-[#F26A21] cursor-pointer"
               >
                 {mobileMenuOpen ? (

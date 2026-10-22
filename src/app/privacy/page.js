@@ -2,11 +2,16 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata = {
-  title: "Privacy Policy - Data Protection & Directory Consent",
+  title: "गोपनीयता नीति - डेटा संरक्षण एवं डायरेक्टरी सहमति | alokworld.in",
   description:
-    "Privacy commitments, member consent policies, data masking standards, and information security standards for alokworld.in.",
+    "alokworld.in समाज डायरेक्टरी पोर्टल की गोपनीयता प्रतिबद्धताएं, सदस्य सहमति नीति, डेटा सुरक्षा एवं सूचना संरक्षा मानक।",
   alternates: {
     canonical: "/privacy",
+  },
+  openGraph: {
+    title: "गोपनीयता नीति | alokworld.in",
+    description: "alokworld.in समाज डायरेक्टरी पोर्टल की गोपनीयता प्रतिबद्धताएं एवं डेटा सुरक्षा नियम।",
+    locale: "hi_IN",
   },
 };
 
@@ -19,48 +24,48 @@ export default function PrivacyPage() {
         <div className="bg-white rounded-lg border border-[#F0E5D5] p-6 sm:p-8 shadow-xs space-y-5">
           <div className="border-b border-[#F0E5D5] pb-3">
             <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
-              Legal &amp; Privacy
+              विधिक एवं गोपनीयता
             </span>
             <h1 className="text-xl sm:text-2xl font-black text-[#102F6B] mt-2 tracking-tight">
-              Privacy Policy
+              गोपनीयता नीति (Privacy Policy)
             </h1>
             <p className="text-xs text-[#64748B] mt-1">
-              Last updated: October 2026 • Applicable to alokworld.in
+              अंतिम अद्यतन: अक्टूबर 2026 • alokworld.in समाज पोर्टल
             </p>
           </div>
 
           <div className="text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4">
             <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-              1. Information Collection and Consent
+              १. जानकारी का संकलन एवं सहमति
             </h2>
             <p className="pl-2">
-              alokworld.in operates as an online community directory portal for verified community members. We collect basic directory details (such as full name, profession, city, state, contact numbers, email addresses, and photographs) strictly with the explicit consent of the member or family representative.
+              alokworld.in सत्यापित समाज बंधुओं के लिए एक ऑनलाइन समुदाय डायरेक्टरी के रूप में कार्य करता है। हम डायरेक्टरी संबंधी मूलभूत विवरण (जैसे पूरा नाम, पद / व्यवसाय, शहर, राज्य, संपर्क सूत्र, ईमेल एवं छायाचित्र) केवल संबंधित सदस्य अथवा उनके परिवार के प्राधिकृत प्रतिनिधि की स्पष्ट सहमति के पश्चात ही संकलित करते हैं।
             </p>
 
             <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-              2. Contact Visibility and Privacy Controls
+              २. संपर्क प्रदर्शन एवं गोपनीयता नियंत्रण
             </h2>
             <p className="pl-2">
-              Every registered member profile is equipped with granular privacy switches:
+              प्रत्येक पंजीकृत सदस्य प्रोफ़ाइल में गोपनीयता के विशेष विकल्प उपलब्ध हैं:
             </p>
             <ul className="list-disc pl-7 space-y-1 text-[#64748B]">
-              <li><strong className="text-[#263449]">Public Phone Display:</strong> Only displayed publicly if the member explicitly opts in.</li>
-              <li><strong className="text-[#263449]">Public Email Display:</strong> Only displayed publicly if the member explicitly opts in.</li>
-              <li><strong className="text-[#263449]">Physical Address:</strong> Remains strictly private to prevent unauthorized solicitation unless public consent is granted.</li>
+              <li><strong className="text-[#263449]">सार्वजनिक फोन नंबर प्रदर्शन:</strong> केवल तभी सार्वजनिक रूप से प्रदर्शित होता है जब सदस्य ने स्वयं इसके लिए स्पष्ट अनुमति दी हो।</li>
+              <li><strong className="text-[#263449]">सार्वजनिक ईमेल प्रदर्शन:</strong> केवल सदस्य की स्पष्ट सहमति के पश्चात ही दृश्यमान होता है।</li>
+              <li><strong className="text-[#263449]">स्थाई / आवासीय पता:</strong> अवांछित व्यावसायिक कॉल्स व दुरुपयोग को रोकने के लिए व्यक्तिगत पते को सुरक्षित रखा जाता है।</li>
             </ul>
 
             <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-              3. Data Security and Admin Authorization
+              ३. डेटा सुरक्षा एवं प्रशासनिक प्रमाणीकरण
             </h2>
             <p className="pl-2">
-              All administrative access is protected through encrypted JSON Web Tokens (JWT) and salted bcrypt password hashing. MongoDB databases and third-party media endpoints (Cloudinary, Resend) are managed with secure server-side credentials and are never exposed to browser bundles.
+              समस्त प्रशासनिक लॉगिन एवं डेटा एक्सेस एन्क्रिप्टेड JSON Web Tokens (JWT) और सुरक्षित सॉल्टेड bcrypt पासवर्ड हैशिंग तकनीक द्वारा सुरक्षित हैं। डेटाबेस एवं मीडिया फ़ाइलें केवल सुरक्षित सर्वर-साइड क्रेडेंशियल्स के माध्यम से प्रबंधित की जाती हैं।
             </p>
 
             <h2 className="text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
-              4. Information Modification &amp; Removal
+              ४. जानकारी में संशोधन अथवा निष्कासन
             </h2>
             <p className="pl-2">
-              Members wishing to update, unpublish, or permanently delete their profile from the directory can contact our administrative secretariat anytime via the <a href="/contact" className="text-[#F26A21] hover:underline font-semibold">Contact Us</a> form or by emailing admin@alokworld.in.
+              यदि कोई सदस्य अपनी डायरेक्टरी जानकारी को संशोधित, अप्रकाशित अथवा स्थायी रूप से हटाना चाहते हैं, तो वे हमारे प्रशासनिक सचिवालय से <a href="/contact" className="text-[#F26A21] hover:underline font-semibold">संपर्क प्रपत्र</a> के माध्यम से अथवा admin@alokworld.in पर ईमेल करके कभी भी अनुरोध कर सकते हैं।
             </p>
           </div>
         </div>
