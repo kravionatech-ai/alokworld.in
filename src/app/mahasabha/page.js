@@ -20,19 +20,24 @@ export default function MahasabhaPage() {
 
   const fallbackResolutions = [
     {
-      year: "National Resolution 2026",
-      title: "Centralized Digital Directory & Merit Scholarship Mission",
-      detail: "Connecting community members across all rural and urban sectors into the centralized directory while conferring annual merit scholarships upon high-achieving students in competitive examinations.",
+      year: "राष्ट्रीय अधिवेशन संकल्प 2026",
+      title: "अखिल भारतीय समाज डायरेक्टरी एवं प्रतिभा सम्मान मिशन",
+      detail: "देशभर के सभी अधिकारियों, कर्मचारियों, प्रबुद्धजनों एवं युवाओं को एकीकृत डायरेक्टरी से जोड़ना तथा सिविल सेवा व उच्च शिक्षा में उत्कृष्ट छात्र-छात्राओं को विशेष मार्गदर्शन व प्रोत्साहन प्रदान करना।",
     },
     {
-      year: "Social Reform Resolution",
-      title: "Modesty & Simplicity in Social Celebrations",
-      detail: "Actively discouraging ostentatious spending, social waste, and dowry demands by organizing and supporting subsidized community mass wedding conventions.",
+      year: "सामाजिक सुधार संकल्प",
+      title: "दहेज, मृत्युभोज एवं फिजूलखर्ची उन्मूलन अभियान",
+      detail: "वैवाहिक समारोहों में फिजूलखर्ची, दहेज प्रथा व मृत्युभोज जैसी कुरीतियों को समाप्त करने हेतु जनजागरूकता तथा आदर्श सामूहिक विवाह सम्मेलनों को पूर्ण सहयोग।",
     },
     {
-      year: "Educational Infrastructure Initiative",
-      title: "Student Hostels & Competitive Examination Centers",
-      detail: "Establishing safe, modern community student hostels and educational mentorship centers in key hubs such as Delhi NCR, Bhopal, Jaipur, Indore, and Lucknow.",
+      year: "शैक्षणिक एवं छात्रावास संकल्प",
+      title: "दिल्ली एवं राज्य राजधानियों में आधुनिक छात्र छात्रावास",
+      detail: "उच्च शिक्षा एवं संघ लोक सेवा आयोग (UPSC) सहित प्रतियोगी परीक्षाओं की तैयारी कर रहे समाज के मेधावी छात्र-छात्राओं हेतु दिल्ली एवं प्रांतीय राजधानियों में सुरक्षित व सुसज्जित छात्रावासों की स्थापना।",
+    },
+    {
+      year: "संगठन एवं सदस्यता विधान",
+      title: "आलोक संघ सदस्यता श्रेणियां एवं कर्तव्य",
+      detail: "संस्थापक सदस्यता: ₹31,000/- | आजीवन सदस्यता: ₹1,100/- | वार्षिक सदस्यता: ₹100/-। प्रत्येक सदस्य समाज उत्थान, स्वास्थ्य शिविरों एवं निःशुल्क विधिक परामर्श शिविरों में सक्रिय योगदान हेतु संकल्पित है।",
     },
   ];
 

@@ -34,22 +34,36 @@ export default function HeroCarousel({ settings }) {
       secondaryCtaLink: "/contact",
       image:
         settings?.heroImage ||
-        "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&auto=format&fit=crop&q=80",
+        "/asset/alokadhivationposter2026/poster1.jpeg",
       imageAlt: "Samaj Community Convention & Directory Network",
     },
     {
-      id: "hero-matrimonial",
-      badge: "Samaj Matrimonial",
-      title: "Trusted Community Matrimonial & Family Network",
+      id: "hero-adhiveshan",
+      badge: "National Convention 2026",
+      title: "Akhil Bhartiya Alok Sangh National Convention 2026",
       subtitle:
-        "Connecting verified community families across India with trust, cultural alignment, and dignified match-making services.",
-      ctaText: "Explore Matrimonial Profiles →",
-      ctaLink: "/matrimonial",
-      secondaryCtaText: "Submit Matrimonial Inquiry",
-      secondaryCtaLink: "/contact",
+        "Grand national gathering uniting community officers, employees, intellectuals, and delegates from across all Indian states.",
+      ctaText: "View Convention Details →",
+      ctaLink: "/mahasabha",
+      secondaryCtaText: "View Photo Gallery",
+      secondaryCtaLink: "/gallery",
       image:
-        "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&auto=format&fit=crop&q=80",
-      imageAlt: "Samaj Matrimonial & Family Celebrations",
+        "/asset/alokadhivationposter2026/poster2.jpeg",
+      imageAlt: "Alok Sangh National Convention 2026 Poster",
+    },
+    {
+      id: "hero-education",
+      badge: "Education & Youth",
+      title: "Youth Guidance, Competitive Exams & Student Hostels",
+      subtitle:
+        "Mentoring civil services aspirants, higher education scholarships, and dedicated student hostel facilities in Delhi and state capitals.",
+      ctaText: "Explore Organization Wings →",
+      ctaLink: "/organization",
+      secondaryCtaText: "Member Directory",
+      secondaryCtaLink: "/directory",
+      image:
+        "/asset/alokadhivationposter2026/poster3.jpeg",
+      imageAlt: "Youth Mentorship & Education Programs",
     },
     {
       id: "hero-heritage",
@@ -62,22 +76,22 @@ export default function HeroCarousel({ settings }) {
       secondaryCtaText: "View Historical Personalities",
       secondaryCtaLink: "/personalities",
       image:
-        "https://images.unsplash.com/photo-1544717305-2782549b5136?w=800&auto=format&fit=crop&q=80",
+        "/asset/alokadhivationposter2026/poster4.jpeg",
       imageAlt: "Veerangana Rani Avanti Bai & Historical Heritage",
     },
     {
-      id: "hero-mahasabha",
-      badge: "National Mahasabha",
-      title: "Akhil Bhartiya Mahasabha & Youth Empowerment",
+      id: "hero-matrimonial",
+      badge: "Samaj Matrimonial",
+      title: "Trusted Community Matrimonial & Family Network",
       subtitle:
-        "Organizing regional state conventions, youth mentorship programs, civil services guidance, and community welfare initiatives.",
-      ctaText: "Explore Organization Wings →",
-      ctaLink: "/organization",
-      secondaryCtaText: "View Convention Photo Gallery",
-      secondaryCtaLink: "/gallery",
+        "Connecting verified community families across India with trust, cultural alignment, and dignified match-making services.",
+      ctaText: "Explore Matrimonial Profiles →",
+      ctaLink: "/matrimonial",
+      secondaryCtaText: "Submit Matrimonial Inquiry",
+      secondaryCtaLink: "/contact",
       image:
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
-      imageAlt: "National Mahasabha Convention & Youth Welfare",
+        "/asset/alokadhivationposter2026/poster5.jpeg",
+      imageAlt: "Samaj Matrimonial & Family Welfare",
     },
   ];
 

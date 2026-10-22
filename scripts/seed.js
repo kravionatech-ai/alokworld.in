@@ -1,3 +1,5 @@
+const fs = require("fs");
+const path = require("path");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
@@ -18,6 +20,7 @@ const AdminSchema = new mongoose.Schema(
 const MemberSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
+    slug: { type: String, lowercase: true, trim: true, index: true },
     role: { type: String, default: "Member" },
     occupation: { type: String, required: true },
     company: { type: String, default: "" },
@@ -30,11 +33,42 @@ const MemberSchema = new mongoose.Schema(
     avatar: { type: String, default: "" },
     biography: { type: String, default: "" },
     tags: [{ type: String }],
+    membershipStatus: { type: String, enum: ["active", "pending", "archived"], default: "active" },
     isApproved: { type: Boolean, default: true },
     isPublished: { type: Boolean, default: true },
+    isArchived: { type: Boolean, default: false },
     showPhone: { type: Boolean, default: true },
     showEmail: { type: Boolean, default: true },
-    showAddress: { type: Boolean, default: false },
+    showAddress: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+// GalleryItem Schema
+const GalleryItemSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true, trim: true },
+    category: { type: String, default: "Event", trim: true },
+    imageUrl: { type: String, required: true },
+    publicId: { type: String, default: "" },
+    description: { type: String, default: "", trim: true },
+    eventDate: { type: String, default: "", trim: true },
+    isPublished: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+// Personality Schema
+const PersonalitySchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, trim: true },
+    title: { type: String, required: true, trim: true },
+    era: { type: String, default: "" },
+    photo: { type: String, default: "" },
+    summary: { type: String, required: true },
+    biography: { type: String, default: "" },
+    order: { type: Number, default: 0 },
+    isPublished: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -43,32 +77,48 @@ const MemberSchema = new mongoose.Schema(
 const SiteSettingsSchema = new mongoose.Schema(
   {
     siteName: { type: String, default: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in" },
-    tagline: { type: String, default: "Community Directory, Leadership & Networking Portal" },
-    announcement: { type: String, default: "Welcome to the official Samaj Community Directory portal. Connect and unite." },
+    tagline: { type: String, default: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)" },
+    announcement: { type: String, default: "राष्ट्रीय अधिवेशन 2026 की पूर्व तैयारी एवं सदस्यता अभियान में सादर आमंत्रित हैं।" },
+    announcementEnabled: { type: Boolean, default: true },
+    heroBadge: { type: String, default: "Official Community Portal" },
+    heroTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal" },
+    heroSubtitle: { type: String, default: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India." },
+    heroCtaText: { type: String, default: "Explore Member Directory →" },
+    heroCtaLink: { type: String, default: "/directory" },
+    heroImage: { type: String, default: "/asset/alokadhivationposter2026/poster1.jpeg" },
     sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं सूचनाएं" },
     sidebarNoticeContent: { type: String, default: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।" },
+    sidebarNoticeEnabled: { type: Boolean, default: true },
     adTitle: { type: String, default: "Community Business Spotlight" },
     adBannerText: { type: String, default: "Promote your business across community network." },
-    adLink: { type: String, default: "https://alokworld.in" },
+    adLink: { type: String, default: "/contact" },
+    adEnabled: { type: Boolean, default: true },
     contactEmail: { type: String, default: "admin@alokworld.in" },
     contactPhone: { type: String, default: "+91 96085 53167" },
-    seoTitle: { type: String, default: "Samaj Community Directory | alokworld.in" },
-    seoDescription: { type: String, default: "Official Samaj Directory - search and connect with community members, elders, doctors, engineers, and professionals." },
-    seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members" },
+    contactAddress: { type: String, default: "National Secretariat, New Delhi, India" },
+    whatsappNumber: { type: String, default: "+91 96085 53167" },
+    seoTitle: { type: String, default: "Akhil Bhartiya Samaj Directory & Central Portal | alokworld.in" },
+    seoDescription: { type: String, default: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India." },
+    seoKeywords: { type: String, default: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, alok sangh" },
+    siteUrl: { type: String, default: "https://alokworld.in" },
+    ogImage: { type: String, default: "/asset/alokadhivationposter2026/poster1.jpeg" },
+    organizationName: { type: String, default: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha" },
+    googleVerificationId: { type: String, default: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg" },
+    twitterHandle: { type: String, default: "@alokworldin" },
     maintenanceMode: { type: Boolean, default: true },
     maintenanceBarEnabled: { type: Boolean, default: true },
     maintenancePopupEnabled: { type: Boolean, default: true },
     maintenanceMessage: {
       type: String,
-      default: "Website Under Maintenance — We are improving your experience. Some features may not work as expected.",
+      default: "वेबसाइट निर्माणाधीन एवं अद्यतन स्थिति में है — अखिल भारतीय समाज डायरेक्टरी",
     },
     maintenancePopupTitle: {
       type: String,
-      default: "Website Under Active Development",
+      default: "वेबसाइट निर्माणाधीन एवं अद्यतन स्थिति में है",
     },
     maintenancePopupMessage: {
       type: String,
-      default: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore.",
+      default: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
     },
   },
   { timestamps: true }
@@ -76,169 +126,128 @@ const SiteSettingsSchema = new mongoose.Schema(
 
 const Admin = mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
 const Member = mongoose.models.Member || mongoose.model("Member", MemberSchema);
+const GalleryItem = mongoose.models.GalleryItem || mongoose.model("GalleryItem", GalleryItemSchema);
+const Personality = mongoose.models.Personality || mongoose.model("Personality", PersonalitySchema);
 const SiteSettings = mongoose.models.SiteSettings || mongoose.model("SiteSettings", SiteSettingsSchema);
 
-const seedMembers = [
+// Authentic gallery items using original assets
+const authenticGallery = [
   {
-    name: "Rajesh Kumar Lodhi",
-    role: "Community Elder",
-    occupation: "Civil Engineer & Contractor",
-    company: "Lodhi Infra Builders",
-    city: "Bhopal",
-    state: "Madhya Pradesh",
-    address: "Plot 42, Arera Colony",
-    pincode: "462016",
-    phone: "+91 98260 12345",
-    email: "rajesh.lodhi@example.com",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Serving as an elder and senior structural engineer with over 28 years in infrastructure design. Dedicated to community skill building, scholarships for youth, and cultural preservation.</p>",
-    tags: ["Construction", "Social Worker", "Elder"],
-    isApproved: true,
+    title: "अखिल भारतीय आलोक संघ राष्ट्रीय अधिवेशन 2026 पोस्टर",
+    category: "National Convention",
+    eventDate: "2026",
+    imageUrl: "/asset/alokadhivationposter2026/poster1.jpeg",
+    description: "राष्ट्रीय अधिवेशन 2026 आधिकारिक पोस्टर — सामाजिक संगठन, शिक्षा एवं युवा सशक्तीकरण अभियान।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Dr. Sunita Lodha",
-    role: "Core Member",
-    occupation: "Senior Pediatrician",
-    company: "City Child Healthcare",
-    city: "Jaipur",
-    state: "Rajasthan",
-    address: "12, Malviya Nagar",
-    pincode: "302017",
-    phone: "+91 94140 67890",
-    email: "dr.sunita@example.com",
-    avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>MD in Pediatrics from SMS Medical College. Conducting free quarterly health checkup camps across rural community belts and mentoring aspiring medical students.</p>",
-    tags: ["Healthcare", "Mentor", "Child Specialist"],
-    isApproved: true,
+    title: "राष्ट्रीय अधिवेशन 2026 — सामाजिक एकता एवं अधिकार महासम्मेलन",
+    category: "National Convention",
+    eventDate: "2026",
+    imageUrl: "/asset/alokadhivationposter2026/poster2.jpeg",
+    description: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का भव्य राष्ट्रीय समागम।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Amit Verma Lodhi",
-    role: "Youth Wing Lead",
-    occupation: "Software Architect",
-    company: "TechNova Solutions",
-    city: "Bengaluru",
-    state: "Karnataka",
-    address: "HSR Layout Sector 2",
-    pincode: "560102",
-    phone: "+91 98450 11223",
-    email: "amit.vlodhi@example.com",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Cloud Architect & Tech lead in Bengaluru. Organizes youth hackathons, digital literacy drives, and career guidance workshops for young graduates.</p>",
-    tags: ["IT & Software", "Youth Network", "Tech"],
-    isApproved: true,
+    title: "आलोक राष्ट्रीय अधिवेशन 2026 — युवा मार्गदर्शन एवं शैक्षणिक उन्नति",
+    category: "Education & Youth",
+    eventDate: "2026",
+    imageUrl: "/asset/alokadhivationposter2026/poster3.jpeg",
+    description: "प्रतियोगी परीक्षाओं की तैयारी, सिविल सर्विसेज मार्गदर्शन एवं छात्रवृत्ति कार्यक्रम।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Pooja Lodh",
-    role: "Member",
-    occupation: "High School Principal & Educator",
-    company: "Adarsh Vidyalaya",
-    city: "Lucknow",
-    state: "Uttar Pradesh",
-    address: "Sector B, Aliganj",
-    pincode: "226024",
-    phone: "+91 91250 44556",
-    email: "pooja.lodh@example.com",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Passionate educator with 18 years in secondary education leadership. Focuses on girl child education, sports facilities, and merit awards.</p>",
-    tags: ["Education", "Women Empowerment"],
-    isApproved: true,
+    title: "आलोक राष्ट्रीय अधिवेशन 2026 — महिला सशक्तीकरण एवं सामाजिक उत्थान",
+    category: "Social Welfare",
+    eventDate: "2026",
+    imageUrl: "/asset/alokadhivationposter2026/poster4.jpeg",
+    description: "समाज में बालिकाओं की उच्च शिक्षा एवं महिला नेतृत्व को बढ़ावा देने हेतु विशेष सत्र।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Vikram Lodhi",
-    role: "Business Coordinator",
-    occupation: "Agri-Business & Organic Farming",
-    company: "Kisan Agro Foods",
-    city: "Indore",
-    state: "Madhya Pradesh",
-    address: "AB Road, Industrial Area",
-    pincode: "452001",
-    phone: "+91 97520 88990",
-    email: "vikram.lodhi@example.com",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Pioneering modern cold storage and fair pricing networks for community farmers across Malwa region. Active member of trade committee.</p>",
-    tags: ["Agriculture", "Exports", "Business"],
-    isApproved: true,
+    title: "आलोक राष्ट्रीय अधिवेशन 2026 — संगठनात्मक शक्ति एवं भावी कार्ययोजना",
+    category: "Organization",
+    eventDate: "2026",
+    imageUrl: "/asset/alokadhivationposter2026/poster5.jpeg",
+    description: "राष्ट्रीय कार्यकारिणी, राज्य इकाइयों एवं जिला इकाइयों की संयुक्त समीक्षा बैठक।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Advocate Manish Lodha",
-    role: "Legal Advisor",
-    occupation: "Advocate (High Court)",
-    company: "Lodha & Associates Legal",
-    city: "Delhi NCR",
-    state: "Delhi",
-    address: "Chamber 214, High Court Complex",
-    pincode: "110003",
-    phone: "+91 98110 33445",
-    email: "advocate.manish@example.com",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Practicing corporate and constitutional law in Delhi. Providing free legal counsel and arbitration services for community members in need.</p>",
-    tags: ["Legal", "Community Aid", "Advocate"],
-    isApproved: true,
+    title: "आलोक उत्तर प्रदेश प्रांतीय अधिवेशन एवं कार्यकारिणी बैठक",
+    category: "State Convention",
+    eventDate: "2025",
+    imageUrl: "/asset/listofmemberswithdesignation/alok up.jpeg",
+    description: "उत्तर प्रदेश राज्य इकाई का प्रांतीय सम्मेलन एवं संगठनात्मक विचार-विमर्श।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Neha Lodh",
-    role: "Member",
-    occupation: "Chartered Accountant (CA)",
-    company: "N. Lodh & Co. Auditing",
-    city: "Mumbai",
-    state: "Maharashtra",
-    address: "Bandra Kurla Complex",
-    pincode: "400051",
-    phone: "+91 98200 99887",
-    email: "neha.ca@example.com",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Senior auditor specializing in taxation, startup financing, and charitable trust advisory. Mentoring female entrepreneurs.</p>",
-    tags: ["Finance", "Taxation", "CA"],
-    isApproved: true,
+    title: "अखिल भारतीय समाज डायरेक्टरी मुख्य फ्रंट बैनर",
+    category: "Heritage",
+    eventDate: "2025",
+    imageUrl: "/asset/topofwebsite/web_sit_front.png",
+    description: "अखिल भारतीय लोधी, लोधा, लोध समाज डायरेक्टरी आधिकारिक कलात्मक बैनर।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
   },
   {
-    name: "Dinesh Chandra Lodhi",
-    role: "Regional Secretary",
-    occupation: "Retail & Wholesale Merchant",
-    company: "Shree Krishna Traders",
-    city: "Jabalpur",
-    state: "Madhya Pradesh",
-    address: "Ganjipura Market",
-    pincode: "482002",
-    phone: "+91 96170 55667",
-    email: "dinesh.jbp@example.com",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&auto=format&fit=crop&q=80",
-    biography: "<p>Serving as regional coordinator organizing matrimonial meets, elder recognition programs, and student felicitation ceremonies in Mahakoshal area.</p>",
-    tags: ["Trade", "Community Welfare", "Secretary"],
-    isApproved: true,
+    title: "अखिल भारतीय आलोक संघ राष्ट्रीय अधिवेशन स्मृति",
+    category: "Event",
+    eventDate: "2025",
+    imageUrl: "/asset/1002458487.jpg",
+    description: "अखिल भारतीय लोधी समाज प्रमुख प्रतिनिधियों की राष्ट्रीय संगोष्ठी।",
     isPublished: true,
-    showPhone: true,
-    showEmail: true,
-    showAddress: false,
-  }
+  },
+  {
+    title: "आलोक धौलपुर राजस्थान प्रांतीय सम्मेलन",
+    category: "State Convention",
+    eventDate: "2025",
+    imageUrl: "/asset/photo/photo/dholpur1.png",
+    description: "धौलपुर राजस्थान में आयोजित समाज कल्याण एवं प्रतिभा सम्मान समारोह।",
+    isPublished: true,
+  },
+];
+
+// Authentic historical personalities
+const authenticPersonalities = [
+  {
+    name: "Veerangana Rani Avanti Bai Lodhi",
+    title: "Immortal Heroine of the 1857 War of Independence",
+    era: "1831 - 1858",
+    photo: "/asset/topofwebsite/web_sit_front.png",
+    summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
+    biography: "<p>Veerangana Rani Avanti Bai Lodhi is an eternal symbol of supreme bravery, patriotism, and woman power in India's freedom struggle. As the warrior ruler of Ramgarh, she raised an army of 4,000 valiant fighters, inflicted heavy defeats upon the British forces, and chose self-immolation over surrender when surrounded by enemy battalions, immortalizing her name in history.</p>",
+    order: 1,
+    isPublished: true,
+  },
+  {
+    name: "Shaheed Gulab Singh Lodhi",
+    title: "Immortal Freedom Fighter & Flag Bearer",
+    era: "1903 - 1935",
+    photo: "/asset/photo/photo/Vinod Kumar Rajput.jpg",
+    summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
+    biography: "<p>Born in Fatehpur Chaurasi, Unnao, Uttar Pradesh, Shaheed Gulab Singh Lodhi was an ardent nationalist who joined Mahatma Gandhi's non-cooperation movement and the revolutionary struggle. On 23 August 1935, during a massive freedom demonstration at Jhandewala Park (Aminabad) in Lucknow, he climbed a tall banyan tree, unfurled the banned national tricolor flag, and embraced martyrdom when shot by colonial police.</p>",
+    order: 2,
+    isPublished: true,
+  },
+  {
+    name: "Swami Brahmanand Ji",
+    title: "Education Pioneer, Social Reformer & Parliamentarian",
+    era: "1894 - 1984",
+    photo: "/asset/photo/photo/Dr Badri Vishal R Singh.jpg",
+    summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
+    biography: "<p>Swami Brahmanand Ji was a revered sanyasi, social reformer, and Member of Parliament from Hamirpur. He dedicated his entire life to wiping out illiteracy, rural poverty, and untouchability. He founded Brahmanand Inter College, Brahmanand Mahavidyalaya, and numerous Sanskrit mahavidyalayas in Rath, providing free education and food to thousands of poor students.</p>",
+    order: 3,
+    isPublished: true,
+  },
+  {
+    name: "Raja Hridayshah Lodhi",
+    title: "Legendary Leader of the 1842 Bundela Rebellion",
+    era: "1806 - 1852",
+    photo: "/asset/photo/photo/lakhan rajput bhopal.jpg",
+    summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
+    biography: "<p>Raja Hridayshah of Hirapur was a key commander of the 1842 Bundela uprising against East India Company rule. His forces liberated several fortresses across Narsinghpur, Damoh, and Sagar, inspiring armed resistance across central India long before 1857.</p>",
+    order: 4,
+    isPublished: true,
+  },
 ];
 
 async function seed() {
@@ -259,40 +268,75 @@ async function seed() {
   });
   console.log(`Admin account created: ${adminEmail}`);
 
-  // 2. Seed Members
-  await Member.deleteMany({});
-  const inserted = await Member.insertMany(seedMembers);
-  console.log(`Seeded ${inserted.length} community directory members into MongoDB.`);
-
-  // 3. Seed Default Site Settings
-  const settingsCount = await SiteSettings.countDocuments();
-  if (settingsCount === 0) {
-    await SiteSettings.create({
-      siteName: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in",
-      tagline: "Community Directory, Leadership & Networking Portal",
-      announcement: "Welcome to the official Samaj Community Directory portal. Connect and unite.",
-      sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
-      sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
-      adTitle: "Community Business Spotlight",
-      adBannerText: "Promote your business across community network.",
-      adLink: "https://alokworld.in",
-      contactEmail: "admin@alokworld.in",
-      contactPhone: "+91 96085 53167",
-      seoTitle: "Samaj Community Directory | alokworld.in",
-      seoDescription: "Official Samaj Directory - search and connect with community members, elders, doctors, engineers, and professionals.",
-      seoKeywords: "samaj directory, community directory, alokworld, samaj portal, community members",
-      maintenanceMode: true,
-      maintenanceBarEnabled: true,
-      maintenancePopupEnabled: true,
-      maintenanceMessage: "Website Under Maintenance — We are improving your experience. Some features may not work as expected.",
-      maintenancePopupTitle: "Website Under Active Development",
-      maintenancePopupMessage: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore.",
-    });
-    console.log("Default site settings initialized.");
+  // 2. Load and Seed Authentic Members from JSON
+  const membersPath = path.join(__dirname, "authentic-members.json");
+  let authenticMembers = [];
+  if (fs.existsSync(membersPath)) {
+    authenticMembers = JSON.parse(fs.readFileSync(membersPath, "utf-8"));
   }
 
+  if (authenticMembers.length > 0) {
+    await Member.deleteMany({});
+    const inserted = await Member.insertMany(authenticMembers);
+    console.log(`Successfully seeded ${inserted.length} authentic members from official Excel & PDF lists!`);
+  } else {
+    console.log("Warning: authentic-members.json not found, skipping member seed.");
+  }
+
+  // 3. Seed Authentic Gallery Items
+  await GalleryItem.deleteMany({});
+  const insertedGallery = await GalleryItem.insertMany(authenticGallery);
+  console.log(`Successfully seeded ${insertedGallery.length} authentic gallery convention items.`);
+
+  // 4. Seed Authentic Personalities
+  await Personality.deleteMany({});
+  const insertedPersonalities = await Personality.insertMany(authenticPersonalities);
+  console.log(`Successfully seeded ${insertedPersonalities.length} authentic historical personalities.`);
+
+  // 5. Update or Seed Site Settings
+  await SiteSettings.deleteMany({});
+  await SiteSettings.create({
+    siteName: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in",
+    tagline: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
+    announcement: "राष्ट्रीय अधिवेशन 2026 की पूर्व तैयारी एवं सदस्यता अभियान में सादर आमंत्रित हैं।",
+    announcementEnabled: true,
+    heroBadge: "Official Community Portal",
+    heroTitle: "Akhil Bhartiya Samaj Directory & Central Portal",
+    heroSubtitle: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India.",
+    heroCtaText: "Explore Member Directory →",
+    heroCtaLink: "/directory",
+    heroImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+    sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
+    sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
+    sidebarNoticeEnabled: true,
+    keyRegions: ["लखनऊ", "भोपाल", "जयपुर", "नई दिल्ली", "ग्वालियर", "इंदौर", "हैदराबाद", "धौलपुर"],
+    adTitle: "Community Business Spotlight",
+    adBannerText: "Promote your business across community network.",
+    adLink: "/contact",
+    adEnabled: true,
+    contactEmail: "admin@alokworld.in",
+    contactPhone: "+91 96085 53167",
+    contactAddress: "National Secretariat, New Delhi, India",
+    whatsappNumber: "+91 96085 53167",
+    seoTitle: "Akhil Bhartiya Samaj Directory & Central Portal | alokworld.in",
+    seoDescription: "Official Samaj Community Directory - search and connect with verified community members, elders, doctors, engineers, and professionals across India.",
+    seoKeywords: "samaj directory, community directory, alokworld, samaj portal, community members, lodhi samaj, alok sangh",
+    siteUrl: "https://alokworld.in",
+    ogImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+    organizationName: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha",
+    googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
+    twitterHandle: "@alokworldin",
+    maintenanceMode: true,
+    maintenanceBarEnabled: true,
+    maintenancePopupEnabled: true,
+    maintenanceMessage: "वेबसाइट निर्माणाधीन एवं अद्यतन स्थिति में है — अखिल भारतीय समाज डायरेक्टरी",
+    maintenancePopupTitle: "वेबसाइट निर्माणाधीन एवं अद्यतन स्थिति में है",
+    maintenancePopupMessage: "Welcome to alokworld.in! We are actively updating features, verified directory records, and community services. Feel free to explore our portal.",
+  });
+  console.log("Site settings successfully initialized.");
+
   await mongoose.disconnect();
-  console.log("Seeding completed successfully.");
+  console.log("Seeding fully completed!");
 }
 
 seed().catch((err) => {

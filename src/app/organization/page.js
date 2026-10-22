@@ -20,29 +20,34 @@ export default function OrganizationPage() {
 
   const fallbackCommittees = [
     {
-      title: "National Advisory Council (Rashtriya Sanrakshak Mandal)",
-      desc: "Comprising esteemed community elders, retired senior civil administrators, and distinguished social patrons providing visionary strategic guidance.",
-      lead: "Guidance: Senior Advisory Board of Patrons",
+      title: "1. राष्ट्रीय परामर्शदात्री समिति (National Advisory Council)",
+      desc: "संघ की सर्वोच्च नीतिगत एवं मार्गदर्शक समिति। इसमें सभी संस्थापक सदस्य एवं वरिष्ठ प्रशासनिक मार्गदर्शक शामिल हैं जो नीतियों के प्रभावी क्रियान्वयन हेतु निर्देश प्रदान करते हैं।",
+      lead: "अध्यक्ष: सर्वश्री वीरवल सिंह (मो. 9454412070, उ०प्र०) | संस्थापक संरक्षक मंडल",
     },
     {
-      title: "Central Working Committee (Rashtriya Karyasamiti)",
-      desc: "Executing policy resolutions, orchestrating national conventions, coordinating developmental budgets, and overseeing regional state chapters.",
-      lead: "Conveners: National President & General Secretary",
+      title: "2. राष्ट्रीय संरक्षक मंडल (Council of National Patrons)",
+      desc: "वरिष्ठ सेवानिवृत्त महानिदेशक, मुख्य अभियंता एवं प्रशासनिक अधिकारियों का सम्मानित संरक्षक मंडल जो समाज के दीर्घकालिक विकास हेतु सतत मार्गदर्शन करते हैं।",
+      lead: "संरक्षक: डॉ. बद्री विशाल सिंह (से०नि० महानिदेशक, चिकित्सा), श्रीमती किरन पढेऱिया (भेल भोपाल), श्री ओम प्रकाश वर्मा (डेसू दिल्ली), श्री गजराज सिंह (जयपुर)",
     },
     {
-      title: "Youth Network & IT Cell (Rashtriya Yuva Morcha)",
-      desc: "Spearheading skill development, competitive examination mentorship, technology enablement, and nationwide digital directory operations.",
-      lead: "Incharge: National Youth & Technology Cell",
+      title: "3. केंद्रीय राष्ट्रीय कार्यकारिणी (Central National Executive)",
+      desc: "देशभर में आलोक संघ के संगठनात्मक प्रबंधन, प्रांतीय एवं जिला शाखाओं के विस्तार, वार्षिक राष्ट्रीय अधिवेशनों के आयोजन तथा समाज कल्याण योजनाओं का संचालन।",
+      lead: "राष्ट्रीय अध्यक्ष: सर्वश्री अतिवल सिंह (9999900079) | वरिष्ठ उपाध्यक्ष: सर्वश्री सुरेश शिवसिंह लोधी | कोषाध्यक्ष: डॉ. ओमकार सिंह नरवरिया",
     },
     {
-      title: "Women Empowerment Wing (Rashtriya Mahila Morcha)",
-      desc: "Championing girls' higher education, vocational self-help groups, social welfare, maternal health, and leadership initiatives.",
-      lead: "Incharge: National Women's Council",
+      title: "4. राष्ट्रीय संयोजक एवं समन्वय प्रकोष्ठ (National Coordination Wing)",
+      desc: "केंद्रीय कार्यकारिणी, राज्य इकाइयों और जिला संगठनों के मध्य समन्वय स्थापित कर राष्ट्रीय संकल्पों एवं कार्यक्रमों का सुचारू संचालन सुनिश्चित करना।",
+      lead: "राष्ट्रीय संयोजक: सर्वश्री विश्वनाथ सिंह (9369970069), श्री राम सेवक राजपूत (सहायक अभियंता लो०नि०वि० लखनऊ), डॉ. राजेश वर्मा, इं. सतेंद्र सिंह",
     },
     {
-      title: "Legal & Statutory Advisory Panel (Vidhi Prakoshth)",
-      desc: "Providing legal assistance, family and property dispute mediation, and safeguarding civil and community rights.",
-      lead: "Coordination: Panel of Senior Advocates & Jurists",
+      title: "5. राष्ट्रीय प्रवक्ता एवं जनसंपर्क प्रकोष्ठ (Media & Spokespersons)",
+      desc: "संघ की नीतियों, सामाजिक सुधार अभियानों, शिक्षा अभियानों एवं लोक कल्याणकारी गतिविधियों को समाज व मीडिया के समक्ष आधिकारिक रूप से प्रस्तुत करना।",
+      lead: "राष्ट्रीय प्रवक्ता: इं. हर्ष राजपूत (मप्र), इं. बृजेश कुमार लोधी | मीडिया प्रभारी: श्री धर्मेन्द्र सिंह (9456805229), श्री रामसेवक राजपूत",
+    },
+    {
+      title: "6. राष्ट्रीय विधिक एवं लेखा प्रकोष्ठ (Legal Advisory & Audit Wing)",
+      desc: "अधिकारियों-कर्मचारियों के संवैधानिक अधिकारों की रक्षा, निःशुल्क विधिक परामर्श एवं संगठन की पारदर्शी वित्तीय व लेखा प्रणाली का निष्पादन।",
+      lead: "विधिक सलाहकार: श्री राकेश राजपूत, श्री लखन सिंह राजपूत (अधिवक्ता भोपाल) | लेखा परीक्षक: श्री राजेंद्र सिंह (CAG भारत सरकार)",
     },
   ];
 
