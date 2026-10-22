@@ -59,7 +59,21 @@ export default function PersonalitiesCarousel({ personalities = [] }) {
                 className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] p-4"
               >
                 <div className="flex items-center gap-3 mb-2.5">
-                  <div className="w-12 h-12 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-base shrink-0 border border-[#F26A21]">
+                  {item.photo ? (
+                    <img
+                      src={item.photo}
+                      alt={item.name}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-[#F26A21] shadow-xs shrink-0 bg-white"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.parentElement?.querySelector('.pers-fallback-ssr');
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div
+                    className={`pers-fallback-ssr w-12 h-12 rounded-full bg-[#102F6B] text-white ${item.photo ? 'hidden' : 'flex'} items-center justify-center font-bold text-base shrink-0 border-2 border-[#F26A21] shadow-xs`}
+                  >
                     {item.name ? item.name.charAt(0) : "P"}
                   </div>
                   <div>
@@ -114,7 +128,21 @@ export default function PersonalitiesCarousel({ personalities = [] }) {
                   <div className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] p-4 flex flex-col justify-between h-full hover:border-[#F26A21] transition-colors">
                     <div>
                       <div className="flex items-center gap-3 mb-2.5">
-                        <div className="w-12 h-12 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-base shrink-0 border border-[#F26A21]">
+                        {item.photo ? (
+                          <img
+                            src={item.photo}
+                            alt={item.name}
+                            className="w-12 h-12 rounded-full object-cover border-2 border-[#F26A21] shadow-xs shrink-0 bg-white"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.parentElement?.querySelector('.pers-fallback-slide');
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          className={`pers-fallback-slide w-12 h-12 rounded-full bg-[#102F6B] text-white ${item.photo ? 'hidden' : 'flex'} items-center justify-center font-bold text-base shrink-0 border-2 border-[#F26A21] shadow-xs`}
+                        >
                           {item.name ? item.name.charAt(0) : "P"}
                         </div>
                         <div>

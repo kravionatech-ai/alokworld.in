@@ -71,11 +71,11 @@ export default function GalleryCarousel({ items = [] }) {
                   key={img._id || idx}
                   className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs"
                 >
-                  <div className="h-44 sm:h-48 overflow-hidden relative">
+                  <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                     <img
                       src={img.imageUrl}
                       alt={img.title || "Samaj Community Event Photo"}
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-full object-contain drop-shadow-xs"
                     />
                   </div>
                   <div className="p-3.5">
@@ -131,12 +131,12 @@ export default function GalleryCarousel({ items = [] }) {
                       onClick={() => setLightboxIndex(idx)}
                       className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all cursor-pointer group flex flex-col h-full"
                     >
-                      <div className="h-44 sm:h-48 overflow-hidden relative">
+                      <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                         <img
                           src={img.imageUrl}
                           alt={img.title || "Samaj Community Event Photo"}
                           loading="lazy"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs"
                         />
                         <div className="absolute top-2 left-2 bg-[#102F6B]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
                           {img.category || "Community"}

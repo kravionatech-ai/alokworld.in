@@ -24,7 +24,7 @@ export default function PersonalitiesPage() {
       name: "Veerangana Rani Avanti Bai Lodhi",
       title: "Immortal Heroine of the 1857 War of Independence",
       era: "1831 - 1858",
-      photo: "/asset/topofwebsite/web_sit_front.png",
+      photo: "/asset/personalities/rani_avanti_bai.png",
       summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
     },
     {
@@ -32,7 +32,7 @@ export default function PersonalitiesPage() {
       name: "Shaheed Gulab Singh Lodhi",
       title: "Immortal Freedom Fighter & Flag Bearer",
       era: "1903 - 1935",
-      photo: "",
+      photo: "/asset/personalities/shaheed_gulab_singh.png",
       summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
     },
     {
@@ -40,7 +40,7 @@ export default function PersonalitiesPage() {
       name: "Swami Brahmanand Ji",
       title: "Education Pioneer, Social Reformer & Parliamentarian",
       era: "1894 - 1984",
-      photo: "",
+      photo: "/asset/personalities/swami_brahmanand.png",
       summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
     },
     {
@@ -48,7 +48,7 @@ export default function PersonalitiesPage() {
       name: "Raja Hridayshah Lodhi",
       title: "Legendary Leader of the 1842 Bundela Rebellion",
       era: "1806 - 1852",
-      photo: "",
+      photo: "/asset/personalities/raja_hridayshah.png",
       summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
     }
   ];
@@ -113,7 +113,21 @@ export default function PersonalitiesPage() {
                       <div className="bg-white rounded-lg border border-[#F0E5D5] p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all flex flex-col justify-between h-full">
                         <div>
                           <div className="flex items-center gap-3 mb-3">
-                            <div className="w-13 h-13 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border border-[#F26A21]">
+                            {item.photo ? (
+                              <img
+                                src={item.photo}
+                                alt={item.name}
+                                className="w-14 h-14 rounded-full object-cover border-2 border-[#F26A21] shadow-xs shrink-0 bg-white"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  const fallback = e.currentTarget.parentElement?.querySelector('.pers-fallback');
+                                  if (fallback) fallback.style.display = 'flex';
+                                }}
+                              />
+                            ) : null}
+                            <div
+                              className={`pers-fallback w-14 h-14 rounded-full bg-[#102F6B] text-white ${item.photo ? 'hidden' : 'flex'} items-center justify-center font-bold text-lg shrink-0 border-2 border-[#F26A21] shadow-xs`}
+                            >
                               {item.name ? item.name.charAt(0) : "P"}
                             </div>
                             <div>

@@ -107,6 +107,31 @@ export default function OrganizationPage() {
                 ))}
               </StaggerContainer>
             )}
+
+            {/* Official State Executive Document Showcase */}
+            <FadeIn direction="up" distance={14} duration={0.5} className="mt-6">
+              <div className="bg-white rounded-lg border border-[#F0E5D5] p-5 sm:p-6 shadow-xs space-y-3">
+                <div className="border-b border-[#F0E5D5] pb-2">
+                  <span className="text-[11px] font-bold text-[#F26A21] bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
+                    Official State Document
+                  </span>
+                  <h2 className="text-base font-bold text-[#102F6B] mt-1.5">
+                    उत्तर प्रदेश प्रांतीय कार्यकारिणी आधिकारिक विवरण तालिका
+                  </h2>
+                  <p className="text-xs text-[#64748B]">
+                    अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी (आलोक) संघ उत्तर प्रदेश कार्यकारिणी पदाधिकारी एवं संपर्क सूची।
+                  </p>
+                </div>
+                <div className="rounded-lg overflow-hidden border border-[#E9E2D8] bg-[#FFFCF5] p-2 flex items-center justify-center">
+                  <img
+                    src="/asset/listofmemberswithdesignation/alok up.jpeg"
+                    alt="अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ उत्तर प्रदेश कार्यकारिणी आधिकारिक विवरण"
+                    className="w-full h-auto max-h-[600px] object-contain rounded drop-shadow-xs"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </FadeIn>
           </div>
 
           <FadeIn as="div" direction="up" distance={14} duration={0.5} delay={0.1} className="lg:col-span-4">

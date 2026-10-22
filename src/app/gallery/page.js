@@ -19,75 +19,75 @@ export default function GalleryPage() {
   const defaultGallery = [
     {
       _id: "g1",
-      title: "अखिल भारतीय आलोक संघ राष्ट्रीय अधिवेशन 2026 पोस्टर",
+      title: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह-2026 आमंत्रण पत्र",
       category: "National Convention",
-      eventDate: "2026",
+      eventDate: "15 नवम्बर 2026",
       imageUrl: "/asset/alokadhivationposter2026/poster1.jpeg",
-      description: "राष्ट्रीय अधिवेशन 2026 आधिकारिक पोस्टर — सामाजिक संगठन, शिक्षा एवं युवा सशक्तीकरण अभियान।",
+      description: "कांस्टीट्यूशन क्लब, रफी मार्ग नई दिल्ली में आयोजित होने वाले पंचम राष्ट्रीय अधिवेशन एवं प्रतिभा सम्मान समारोह का आधिकारिक आमंत्रण एवं चारों राष्ट्रीय पुरस्कारों का विवरण।",
     },
     {
       _id: "g2",
-      title: "राष्ट्रीय अधिवेशन 2026 — सामाजिक एकता एवं अधिकार महासम्मेलन",
-      category: "National Convention",
+      title: "आलोक रत्न पुरस्कार — विशिष्ट समाज सेवा सम्मान",
+      category: "National Awards",
       eventDate: "2026",
       imageUrl: "/asset/alokadhivationposter2026/poster2.jpeg",
-      description: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का भव्य राष्ट्रीय समागम।",
+      description: "वर्ष 2023-2024 एवं 2024-2025 हेतु समाज के समग्र विकास (शैक्षिक, आर्थिक, सामाजिक-सांस्कृतिक, राजनैतिक व रोज़गार) में उत्कृष्ट योगदान देने वाले वरिष्ठ समाजसेवियों हेतु सम्मान पोस्टर।",
     },
     {
       _id: "g3",
-      title: "आलोक राष्ट्रीय अधिवेशन 2026 — युवा मार्गदर्शन एवं शैक्षणिक उन्नति",
-      category: "Education & Youth",
+      title: "अमर शहीद महारानी अवंतीबाई लोधी पुरस्कार — अधिकारी-कर्मचारी सेवा",
+      category: "Public Service",
       eventDate: "2026",
       imageUrl: "/asset/alokadhivationposter2026/poster3.jpeg",
-      description: "प्रतियोगी परीक्षाओं की तैयारी, सिविल सर्विसेज मार्गदर्शन एवं छात्रवृत्ति कार्यक्रम।",
+      description: "सरकारी व अर्ध-सरकारी सेवाओं में 30 जून 2024 से 31 अक्टूबर 2026 की अवधि में नव-नियुक्त तथा निष्ठापूर्वक सेवानिवृत्त अधिकारी-कर्मचारी सदस्यों हेतु आधिकारिक सम्मान पोस्टर।",
     },
     {
       _id: "g4",
-      title: "आलोक राष्ट्रीय अधिवेशन 2026 — महिला सशक्तीकरण एवं सामाजिक उत्थान",
-      category: "Social Welfare",
+      title: "स्वामी ब्रह्मानंद सम्मान पुरस्कार — प्रतिभावान छात्र-छात्रा सम्मान",
+      category: "Education & Merit",
       eventDate: "2026",
       imageUrl: "/asset/alokadhivationposter2026/poster4.jpeg",
-      description: "समाज में बालिकाओं की उच्च शिक्षा एवं महिला नेतृत्व को बढ़ावा देने हेतु विशेष सत्र।",
+      description: "आईआईटी (IIT), एमबीबीएस (MBBS), आईआईएम (IIM), आईआईएफटी (IIFT) में नव-प्रवेशित एवं उत्कृष्ट समाज के छात्र-छात्राओं हेतु राष्ट्रीय सम्मान पोस्टर।",
     },
     {
       _id: "g5",
-      title: "आलोक राष्ट्रीय अधिवेशन 2026 — संगठनात्मक शक्ति एवं भावी कार्ययोजना",
+      title: "राजा हिरदे शाह पुरस्कार — संगठन सशक्तीकरण एवं सदस्यता अभियान",
       category: "Organization",
       eventDate: "2026",
       imageUrl: "/asset/alokadhivationposter2026/poster5.jpeg",
-      description: "राष्ट्रीय कार्यकारिणी, राज्य इकाइयों एवं जिला इकाइयों की संयुक्त समीक्षा बैठक।",
+      description: "अपने-अपने राज्यों में आलोक संगठन को मजबूत करने तथा सर्वाधिक सदस्यता बढ़ाने में अग्रणी योगदान देने वाले कर्मठ सदस्यों व पदाधिकारियों का सम्मान पोस्टर।",
     },
     {
       _id: "g6",
-      title: "आलोक उत्तर प्रदेश प्रांतीय अधिवेशन एवं कार्यकारिणी बैठक",
-      category: "State Convention",
-      eventDate: "2025",
+      title: "आलोक उत्तर प्रदेश प्रांतीय कार्यकारिणी आधिकारिक दायित्व सूची",
+      category: "State Chapter",
+      eventDate: "2025-2026",
       imageUrl: "/asset/listofmemberswithdesignation/alok up.jpeg",
-      description: "उत्तर प्रदेश राज्य इकाई का प्रांतीय सम्मेलन एवं संगठनात्मक विचार-विमर्श।",
+      description: "उत्तर प्रदेश राज्य इकाई के प्रांतीय अध्यक्ष सर्वश्री यशपाल सिंह राजपूत (लखनऊ) सहित सभी 25 वरिष्ठ पदाधिकारियों की आधिकारिक संपर्क एवं दायित्व तालिका।",
     },
     {
       _id: "g7",
-      title: "अखिल भारतीय समाज डायरेक्टरी मुख्य फ्रंट बैनर",
+      title: "अखिल भारतीय समाज डायरेक्टरी शीर्ष कलात्मक बैनर",
       category: "Heritage",
-      eventDate: "2025",
-      imageUrl: "/asset/topofwebsite/web_sit_front.png",
-      description: "अखिल भारतीय लोधी, लोधा, लोध समाज डायरेक्टरी आधिकारिक कलात्मक बैनर।",
+      eventDate: "Portal Art",
+      imageUrl: "/asset/topofwebsite/web_sit_front1.png",
+      description: "स्वामी ब्रह्मानंद जी महाराज, केंद्रीय आलोक प्रतीक एवं वीरांगना रानी अवंती बाई लोधी का आधिकारिक शीर्ष बैनर।",
     },
     {
       _id: "g8",
-      title: "अखिल भारतीय आलोक संघ राष्ट्रीय अधिवेशन स्मृति",
-      category: "Event",
-      eventDate: "2025",
+      title: "अखिल भारतीय समाज महापुरुष एवं राष्ट्रीय प्रतीक फलक",
+      category: "Heritage Icons",
+      eventDate: "Heritage",
       imageUrl: "/asset/1002458487.jpg",
-      description: "अखिल भारतीय लोधी समाज प्रमुख प्रतिनिधियों की राष्ट्रीय संगोष्ठी।",
+      description: "लोधेश्वर भगवान, वीरांगना रानी अवंतीबाई, स्वामी ब्रह्मानंद, केंद्रीय आलोक चक्र, स्वामी केशवानंद, राजा हिरदेशाह एवं अमर शहीद गुलाब सिंह के पावन स्मृति पदक।",
     },
     {
       _id: "g9",
       title: "आलोक धौलपुर राजस्थान प्रांतीय सम्मेलन",
-      category: "State Convention",
+      category: "State Chapter",
       eventDate: "2025",
       imageUrl: "/asset/photo/photo/dholpur1.png",
-      description: "धौलपुर राजस्थान में आयोजित समाज कल्याण एवं प्रतिभा सम्मान समारोह।",
+      description: "धौलपुर राजस्थान में आयोजित समाज कल्याण एवं प्रतिभा सम्मान समारोह आधिकारिक बैनर।",
     },
   ];
 
@@ -155,13 +155,13 @@ export default function GalleryPage() {
               <StaggerItem key={img._id} className="h-full">
                 <SubtleHoverCard className="h-full">
                   <div className="bg-white rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all group flex flex-col h-full">
-                    <div className="h-48 overflow-hidden bg-[#FFFCF5] relative">
+                    <div className="h-64 sm:h-72 overflow-hidden bg-[#FFFCF5] relative p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                       <img
                         src={img.imageUrl}
                         alt={img.title ? `${img.title} - Samaj Community Photo Gallery` : "Samaj Community Event Photo"}
                         loading="lazy"
                         decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs rounded"
                       />
                       <span className="absolute top-2 left-2 bg-[#102F6B]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded">
                         {img.category || "Community"}

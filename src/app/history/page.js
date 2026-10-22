@@ -37,6 +37,15 @@ export default function HistoryPage() {
               </p>
             </div>
 
+            {/* Authentic Heritage Medallion Banner */}
+            <div className="w-full rounded-lg overflow-hidden border border-[#E9E2D8] bg-[#FFFCF5] p-2 shadow-xs">
+              <img
+                src="/asset/1002458487.jpg"
+                alt="अखिल भारतीय समाज महापुरुष एवं राष्ट्रीय प्रतीक — लोधेश्वर भगवान, वीरांगना अवंतीबाई, स्वामी ब्रह्मानंद, स्वामी केशवानंद, राजा हिरदेशाह एवं शहीद गुलाब सिंह"
+                className="w-full h-auto object-contain rounded drop-shadow-2xs"
+              />
+            </div>
+
             {cmsPage?.content ? (
               <div
                 className="cms-prose text-xs sm:text-sm text-[#263449] leading-relaxed space-y-4"
