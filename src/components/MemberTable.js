@@ -26,7 +26,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
         ⇄ Scroll horizontally to view all table columns
       </div>
 
-      <div className="overflow-x-auto border border-[#F0E5D5] rounded-lg shadow-xs bg-white">
+      <div className="overflow-x-auto border border-[#E9E2D8] rounded-lg shadow-xs bg-white">
         <table className="w-full text-xs text-left bg-white border-collapse min-w-[700px]">
           <thead>
             <tr className="bg-[#102F6B] text-white">
@@ -68,7 +68,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#F0E5D5]">
+          <tbody className="divide-y divide-[#E9E2D8]">
             {members.map((member, index) => {
               const profileIdentifier = member.slug || member._id || member.id;
               const isEvenRow = index % 2 === 0;

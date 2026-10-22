@@ -110,6 +110,15 @@ const MemberSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // Source Traceability
+    sourceFile: {
+      type: String,
+      default: "",
+    },
+    sourceRow: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

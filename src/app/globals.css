@@ -9,7 +9,7 @@
   --color-white: #FFFFFF;
   --color-main-text: #263449;
   --color-secondary-text: #64748B;
-  --color-border: #F0E5D5;
+  --color-border: #E9E2D8;
 
   /* Aliases for convenience */
   --color-navy: #102F6B;
@@ -19,7 +19,7 @@
   --color-warm-cream: #FFFCF5;
   --color-light-cream: #FFFFFF;
   --color-pale-orange: #FFF0E2;
-  --color-cream-border: #F0E5D5;
+  --color-cream-border: #E9E2D8;
 }
 
 :root {

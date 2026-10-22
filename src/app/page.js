@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import LeftSidebar from "@/components/LeftSidebar";
+import RightSidebar from "@/components/RightSidebar";
 import SearchFilterBar from "@/components/SearchFilterBar";
 import MemberTable from "@/components/MemberTable";
 import Sidebar from "@/components/Sidebar";
@@ -150,17 +152,28 @@ export default function HomePage() {
           />
         )}
 
-        {/* 2-Column Responsive Layout: Directory Spotlight + Sidebar */}
+        {/* Traditional 3-Column Samaj Directory Layout: Left Sidebar + Central Table + Right Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-          {/* Main Central Directory Spotlight */}
-          <div className="lg:col-span-8 order-2 lg:order-1 space-y-4">
-            <SectionHeadingReveal className="flex items-center justify-between pb-2 border-b border-[#F0E5D5]">
+          {/* Left Column: Navigation & State Units */}
+          <div className="hidden lg:block lg:col-span-3 order-1 space-y-4">
+            <FadeIn direction="up" distance={12} duration={0.45}>
+              <LeftSidebar
+                adTitle={settings?.adTitle}
+                adBannerText={settings?.adBannerText}
+                adLink={settings?.adLink}
+              />
+            </FadeIn>
+          </div>
+
+          {/* Center Column: Central Directory Spotlight Table */}
+          <div className="col-span-1 lg:col-span-6 order-2 space-y-4">
+            <SectionHeadingReveal className="flex items-center justify-between pb-2 border-b border-[#E9E2D8]">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
                   Community Member Directory Spotlight
                 </h2>
                 <p className="text-xs text-[#64748B] mt-0.5 pl-2">
-                  Quick search and explore verified community members across India.
+                  Verified published records from MongoDB ({featuredMembers.length} active).
                 </p>
               </div>
               <InteractiveTap>
@@ -185,11 +198,12 @@ export default function HomePage() {
             </FadeIn>
 
             {loading ? (
-              <div className="bg-white rounded-lg border border-[#F0E5D5] p-12 text-center text-[#64748B] font-medium">
-                Loading members from directory...
+              <div className="bg-white rounded-lg border border-[#E9E2D8] p-12 text-center text-[#64748B] font-medium shadow-xs">
+                <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                Loading verified community records...
               </div>
             ) : (
-              <MemberTable members={featuredMembers.slice(0, 6)} startIndex={0} />
+              <MemberTable members={featuredMembers.slice(0, 8)} startIndex={0} />
             )}
 
             <div className="text-center pt-3">
@@ -198,32 +212,18 @@ export default function HomePage() {
                   href="/directory"
                   className="btn-navy px-5 py-2.5 text-xs shadow-sm inline-block"
                 >
-                  Browse All Directory Members &amp; Pagination →
+                  Browse All 99 Verified Members &amp; Pagination →
                 </Link>
               </InteractiveTap>
             </div>
           </div>
 
-          {/* Right Sidebar */}
-          <FadeIn
-            as="div"
-            direction="up"
-            distance={14}
-            duration={0.5}
-            delay={0.1}
-            className="lg:col-span-4 order-1 lg:order-2"
-          >
-            <Sidebar
-              noticeTitle={settings?.sidebarNoticeTitle}
-              noticeContent={settings?.sidebarNoticeContent}
-              adTitle={settings?.adTitle}
-              adBannerText={settings?.adBannerText}
-              adLink={settings?.adLink}
-              locations={locations}
-              selectedLocation={selectedLocation}
-              onSelectLocation={setSelectedLocation}
-            />
-          </FadeIn>
+          {/* Right Column: Verified National Leadership Spotlight */}
+          <div className="col-span-1 lg:col-span-3 order-3 space-y-4">
+            <FadeIn direction="up" distance={12} duration={0.45} delay={0.08}>
+              <RightSidebar />
+            </FadeIn>
+          </div>
         </div>
       </main>
 

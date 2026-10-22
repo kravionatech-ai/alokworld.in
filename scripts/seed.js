@@ -206,13 +206,13 @@ const authenticGallery = [
   },
 ];
 
-// Authentic historical personalities
+// Authentic historical personalities (only verified depictions, no modern photos)
 const authenticPersonalities = [
   {
     name: "Veerangana Rani Avanti Bai Lodhi",
     title: "Immortal Heroine of the 1857 War of Independence",
     era: "1831 - 1858",
-    photo: "/asset/topofwebsite/web_sit_front.png",
+    photo: "/asset/topofwebsite/web_sit_front.png", // Authentic depiction from community artwork
     summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
     biography: "<p>Veerangana Rani Avanti Bai Lodhi is an eternal symbol of supreme bravery, patriotism, and woman power in India's freedom struggle. As the warrior ruler of Ramgarh, she raised an army of 4,000 valiant fighters, inflicted heavy defeats upon the British forces, and chose self-immolation over surrender when surrounded by enemy battalions, immortalizing her name in history.</p>",
     order: 1,
@@ -222,7 +222,7 @@ const authenticPersonalities = [
     name: "Shaheed Gulab Singh Lodhi",
     title: "Immortal Freedom Fighter & Flag Bearer",
     era: "1903 - 1935",
-    photo: "/asset/photo/photo/Vinod Kumar Rajput.jpg",
+    photo: "", // No contemporary photograph in archive - neutral noble seal
     summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
     biography: "<p>Born in Fatehpur Chaurasi, Unnao, Uttar Pradesh, Shaheed Gulab Singh Lodhi was an ardent nationalist who joined Mahatma Gandhi's non-cooperation movement and the revolutionary struggle. On 23 August 1935, during a massive freedom demonstration at Jhandewala Park (Aminabad) in Lucknow, he climbed a tall banyan tree, unfurled the banned national tricolor flag, and embraced martyrdom when shot by colonial police.</p>",
     order: 2,
@@ -232,7 +232,7 @@ const authenticPersonalities = [
     name: "Swami Brahmanand Ji",
     title: "Education Pioneer, Social Reformer & Parliamentarian",
     era: "1894 - 1984",
-    photo: "/asset/photo/photo/Dr Badri Vishal R Singh.jpg",
+    photo: "", // No contemporary photograph in archive - neutral noble seal
     summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
     biography: "<p>Swami Brahmanand Ji was a revered sanyasi, social reformer, and Member of Parliament from Hamirpur. He dedicated his entire life to wiping out illiteracy, rural poverty, and untouchability. He founded Brahmanand Inter College, Brahmanand Mahavidyalaya, and numerous Sanskrit mahavidyalayas in Rath, providing free education and food to thousands of poor students.</p>",
     order: 3,
@@ -242,7 +242,7 @@ const authenticPersonalities = [
     name: "Raja Hridayshah Lodhi",
     title: "Legendary Leader of the 1842 Bundela Rebellion",
     era: "1806 - 1852",
-    photo: "/asset/photo/photo/lakhan rajput bhopal.jpg",
+    photo: "", // No contemporary photograph in archive - neutral noble seal
     summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
     biography: "<p>Raja Hridayshah of Hirapur was a key commander of the 1842 Bundela uprising against East India Company rule. His forces liberated several fortresses across Narsinghpur, Damoh, and Sagar, inspiring armed resistance across central India long before 1857.</p>",
     order: 4,
@@ -268,11 +268,14 @@ async function seed() {
   });
   console.log(`Admin account created: ${adminEmail}`);
 
-  // 2. Load and Seed Authentic Members from JSON
-  const membersPath = path.join(__dirname, "authentic-members.json");
+  // 2. Load and Seed Verified Members from JSON
+  const membersPath = path.join(__dirname, "verified-source-members.json");
+  const fallbackMembersPath = path.join(__dirname, "authentic-members.json");
   let authenticMembers = [];
   if (fs.existsSync(membersPath)) {
     authenticMembers = JSON.parse(fs.readFileSync(membersPath, "utf-8"));
+  } else if (fs.existsSync(fallbackMembersPath)) {
+    authenticMembers = JSON.parse(fs.readFileSync(fallbackMembersPath, "utf-8"));
   }
 
   if (authenticMembers.length > 0) {

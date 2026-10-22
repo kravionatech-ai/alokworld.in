@@ -34,7 +34,7 @@ export default function HeroCarousel({ settings }) {
       secondaryCtaLink: "/contact",
       image:
         settings?.heroImage ||
-        "/asset/alokadhivationposter2026/poster1.jpeg",
+        "/asset/topofwebsite/web_sit_front.png",
       imageAlt: "Samaj Community Convention & Directory Network",
     },
     {

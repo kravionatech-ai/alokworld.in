@@ -23,10 +23,10 @@ export default function DirectoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filterOptions, setFilterOptions] = useState({
-    cities: ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
-    states: ["Madhya Pradesh", "Rajasthan", "Karnataka", "Uttar Pradesh", "Delhi", "Maharashtra"],
-    professions: ["Civil Engineer", "Doctor", "Software Architect", "Chartered Accountant", "Advocate", "Educator", "Merchant"],
-    organizations: ["Lodhi Infra Builders", "City Child Healthcare", "TechNova Solutions", "Adarsh Vidyalaya", "Kisan Agro Foods"],
+    cities: ["लखनऊ", "भोपाल", "जयपुर", "नई दिल्ली", "ग्वालियर", "इंदौर", "हैदराबाद", "धौलपुर", "अलीगढ़", "आगरा"],
+    states: ["उत्तर प्रदेश", "मध्य प्रदेश", "राजस्थान", "दिल्ली", "हरियाणा / पंजाब", "उत्तराखंड", "तेलंगाना", "अखिल भारतीय"],
+    professions: [],
+    organizations: [],
   });
 
   // Load site settings

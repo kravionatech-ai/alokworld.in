@@ -17,14 +17,14 @@ export default function PersonalitiesPage() {
   const [personalities, setPersonalities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Default historical icons in clean English
+  // Default historical icons verified against project archives
   const defaultList = [
     {
       _id: "p1",
       name: "Veerangana Rani Avanti Bai Lodhi",
       title: "Immortal Heroine of the 1857 War of Independence",
       era: "1831 - 1858",
-      photo: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=300&auto=format&fit=crop&q=80",
+      photo: "/asset/topofwebsite/web_sit_front.png",
       summary: "Queen of Ramgarh who led troops with extraordinary courage against British colonial forces during the First War of Indian Independence of 1857, making the supreme sacrifice for the motherland.",
     },
     {
@@ -32,7 +32,7 @@ export default function PersonalitiesPage() {
       name: "Shaheed Gulab Singh Lodhi",
       title: "Immortal Freedom Fighter & Flag Bearer",
       era: "1903 - 1935",
-      photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&auto=format&fit=crop&q=80",
+      photo: "",
       summary: "Valiant young revolutionary who fearlessly hoisted the Indian tricolor in defiance of British bullets at Aminabad Park, Lucknow, sacrificing his life for national independence.",
     },
     {
@@ -40,7 +40,7 @@ export default function PersonalitiesPage() {
       name: "Swami Brahmanand Ji",
       title: "Education Pioneer, Social Reformer & Parliamentarian",
       era: "1894 - 1984",
-      photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&auto=format&fit=crop&q=80",
+      photo: "",
       summary: "Visionary saint and Member of Parliament who spearheaded an educational revolution across Bundelkhand, establishing dozens of schools, gurukuls, and colleges to empower underprivileged communities.",
     },
     {
@@ -48,7 +48,7 @@ export default function PersonalitiesPage() {
       name: "Raja Hridayshah Lodhi",
       title: "Legendary Leader of the 1842 Bundela Rebellion",
       era: "1806 - 1852",
-      photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80",
+      photo: "",
       summary: "Brave ruler of Hirapur who organized and led the historic armed uprising against exploitative British agrarian and taxation policies in 1842.",
     }
   ];

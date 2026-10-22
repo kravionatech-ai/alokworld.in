@@ -2,84 +2,114 @@
 
 import Link from "next/link";
 
+const verifiedOfficeBearers = [
+  {
+    name: "सर्वश्री अतिवल सिंह",
+    role: "राष्ट्रीय अध्यक्ष",
+    location: "उत्तर प्रदेश",
+    phone: "+91 99999 00079",
+    avatar: "",
+  },
+  {
+    name: "सर्वश्री वीरवल सिंह",
+    role: "अध्यक्ष परामर्शदात्री समिति",
+    location: "उत्तर प्रदेश",
+    phone: "+91 94544 12070",
+    avatar: "",
+  },
+  {
+    name: "सर्वश्री डा० ओमकार सिंह नरवरिया",
+    role: "राष्ट्रीय कोषाध्यक्ष",
+    location: "नई दिल्ली",
+    phone: "+91 98734 83657",
+    avatar: "/asset/photo/photo/Dr Omkar_Singh.jpg",
+  },
+  {
+    name: "डॉ. बद्री विशाल सिंह",
+    role: "राष्ट्रीय संरक्षक (से०नि० महानिदेशक)",
+    location: "लखनऊ, उत्तर प्रदेश",
+    phone: "",
+    avatar: "/asset/photo/photo/Dr Badri Vishal R Singh.jpg",
+  },
+  {
+    name: "इंजीनियर हर्ष राजपूत",
+    role: "राष्ट्रीय प्रवक्ता",
+    location: "भोपाल, मध्य प्रदेश",
+    phone: "",
+    avatar: "/asset/photo/photo/Er. Harsh Rajput.jpg",
+  },
+];
+
 export default function RightSidebar() {
   return (
     <aside className="space-y-4">
-      {/* National Office Bearers */}
-      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
-          National Office Bearers
+      {/* 1. Verified National Office Bearers Spotlight */}
+      <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21] flex items-center justify-between">
+          <span>National Office Bearers</span>
+          <span className="text-[10px] bg-[#FFF0E2] text-[#F26A21] px-1.5 py-0.5 rounded font-mono">आलोक</span>
         </div>
-        <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
-            👤
-          </div>
-          <p className="text-xs font-bold text-[#102F6B]">Shri Rakesh Lodhi</p>
-          <p className="text-[10px] text-[#64748B]">Agra, Uttar Pradesh</p>
-          <p className="text-[11px] text-[#F26A21] font-semibold mt-0.5">National Treasurer</p>
-          <p className="text-xs font-bold text-[#263449] mt-1 font-mono">9412720183</p>
+        <div className="divide-y divide-[#E9E2D8]">
+          {verifiedOfficeBearers.map((ob, idx) => (
+            <div key={idx} className="p-3 flex items-start gap-3 hover:bg-[#FFFCF5] transition-colors">
+              {ob.avatar ? (
+                <img
+                  src={ob.avatar}
+                  alt={ob.name}
+                  width={42}
+                  height={42}
+                  className="w-10 h-10 rounded-full object-cover border border-[#E9E2D8] shrink-0"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full bg-[#102F6B] text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#F26A21]">
+                  {ob.name.charAt(0)}
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-[#102F6B] truncate">{ob.name}</p>
+                <p className="text-[11px] font-semibold text-[#F26A21] leading-tight">{ob.role}</p>
+                <p className="text-[10px] text-[#64748B] mt-0.5">{ob.location}</p>
+                {ob.phone && (
+                  <a
+                    href={`tel:${ob.phone.replace(/[^\d+]/g, "")}`}
+                    className="text-[11px] font-mono font-medium text-[#102F6B] hover:text-[#F26A21] hover:underline block mt-0.5"
+                  >
+                    {ob.phone}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-
-      {/* State Office Bearers */}
-      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
-          State Office Bearers
-        </div>
-        <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
-            👤
-          </div>
-          <p className="text-xs font-bold text-[#102F6B]">Maharaj Lodhi (Social Worker)</p>
-          <p className="text-[10px] text-[#64748B]">Vice President, Uttar Pradesh</p>
-          <p className="text-xs font-bold text-[#263449] mt-1 font-mono">9455714545</p>
-        </div>
-      </div>
-
-      {/* Ministers & Public Representatives */}
-      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
-          Public Representatives &amp; Leaders
-        </div>
-        <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
-            👤
-          </div>
-          <p className="text-xs font-bold text-[#102F6B]">Shri Ramchandra Lodhi</p>
-          <p className="text-[10px] text-[#64748B]">Former Minister, Madhya Pradesh</p>
-        </div>
-      </div>
-
-      {/* Civil Servants & Professionals */}
-      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
-          Civil Servants &amp; Professionals
-        </div>
-        <div className="p-3.5 text-center">
-          <div className="w-14 h-14 mx-auto bg-[#FFF0E2] rounded-full flex items-center justify-center text-xl mb-2 border-2 border-[#F0E5D5]">
-            👤
-          </div>
-          <p className="text-xs font-bold text-[#102F6B]">Amar Pal Ji</p>
-          <p className="text-[11px] font-bold text-[#F26A21] mt-0.5">IAS Officer</p>
+        <div className="p-2.5 bg-[#FFFCF5] text-center border-t border-[#E9E2D8]">
+          <Link
+            href="/organization"
+            className="text-[11px] font-bold text-[#F26A21] hover:underline"
+          >
+            View Complete Executive Council →
+          </Link>
         </div>
       </div>
 
-      {/* Advertisement Box */}
-      <div className="border border-[#F0E5D5] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2 border-b-2 border-[#F26A21]">
-          Community Spotlight
+      {/* 2. Official Secretariat Contact Notice */}
+      <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
+        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
+          Secretariat Directory Helpdesk
         </div>
-        <div className="p-4 text-center text-xs text-[#64748B]">
-          <div className="border border-dashed border-[#F0E5D5] p-4 rounded-lg bg-[#FFFCF5]">
-            <p className="font-semibold text-[#102F6B]">Enterprise Advertisement</p>
-            <p className="text-[10px] mt-1 text-[#64748B]">Contact the secretariat to feature your business</p>
-            <Link
-              href="/contact"
-              className="btn-primary mt-2 px-3 py-1 text-[11px]"
-            >
-              Contact Us →
-            </Link>
+        <div className="p-4 text-xs text-[#263449] space-y-2">
+          <p className="leading-relaxed">
+            All community members and office bearers are invited to verify and update their professional records.
+          </p>
+          <div className="pt-2 border-t border-[#E9E2D8] text-[11px] text-[#64748B] space-y-1">
+            <p>Email: <a href="mailto:admin@alokworld.in" className="text-[#F26A21] font-medium">admin@alokworld.in</a></p>
+            <p>Phone: <a href="tel:+919608553167" className="text-[#F26A21] font-medium">+91 96085 53167</a></p>
           </div>
+          <Link
+            href="/contact"
+            className="block text-center w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors mt-2"
+          >
+            Submit Listing / Inquiry →
+          </Link>
         </div>
       </div>
     </aside>

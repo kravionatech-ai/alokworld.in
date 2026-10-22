@@ -53,7 +53,7 @@ export default function SearchFilterBar({
   };
 
   return (
-    <div className="bg-white rounded-lg p-4 sm:p-5 border border-[#F0E5D5] shadow-xs mb-5 space-y-3.5">
+    <div className="bg-white rounded-lg p-4 sm:p-5 border border-[#E9E2D8] shadow-xs mb-5 space-y-3.5">
       {/* Primary Row: Search Input + City Filter + Sort + Toggle */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
         {/* Search input */}

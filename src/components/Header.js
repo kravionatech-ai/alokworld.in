@@ -121,10 +121,25 @@ export default function Header() {
   return (
     <header className="w-full relative z-30">
       {/* ================================================================= */}
-      {/* 1. TOP BRAND HEADER: Compact Deep Navy (#091D42) with White Text */}
+      {/* 1. TOP COMMUNITY BANNER: Authentic banner from topofwebsite      */}
+      {/* ================================================================= */}
+      <div className="w-full bg-[#091D42] border-b border-[#162744]">
+        <div className="max-w-[1100px] mx-auto px-2 sm:px-4 pt-2 pb-1 text-center">
+          <Link href="/" className="inline-block w-full focus:outline-hidden" title="Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha">
+            <img
+              src="/asset/topofwebsite/web_sit_front1.png"
+              alt="Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha — alokworld.in"
+              className="w-full max-h-[120px] sm:max-h-[150px] md:max-h-[180px] object-contain mx-auto"
+            />
+          </Link>
+        </div>
+      </div>
+
+      {/* ================================================================= */}
+      {/* 2. BRAND TITLE STRIP: Compact Deep Navy (#091D42) with White Text */}
       {/* ================================================================= */}
       <div className="bg-[#091D42] border-b border-[#162744]">
-        <div className="max-w-[1100px] mx-auto px-4 py-3 sm:py-3.5">
+        <div className="max-w-[1100px] mx-auto px-4 py-2 sm:py-2.5">
           <div className="flex items-center justify-between gap-3">
             {/* Center Brand Title & Subtitle */}
             <div className="flex-1 text-center">
@@ -135,7 +150,7 @@ export default function Header() {
                 <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-black text-white tracking-tight leading-snug">
                   Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha
                 </h1>
-                <p className="text-[10px] sm:text-xs md:text-sm text-[#CBD5E1] font-medium mt-0.5 tracking-wide">
+                <p className="text-[10.5px] sm:text-xs md:text-sm text-[#CBD5E1] font-medium mt-0.5 tracking-wide">
                   Akhil Bhartiya Samaj Directory — alokworld.in
                 </p>
               </Link>
@@ -166,7 +181,7 @@ export default function Header() {
       </div>
 
       {/* ================================================================= */}
-      {/* 2. NAVIGATION BAR: Navy (#102F6B) with Subtle Orange Accent       */}
+      {/* 3. NAVIGATION BAR: Navy (#102F6B) with Subtle Orange Accent       */}
       {/* ================================================================= */}
       <nav
         aria-label="Main Navigation"

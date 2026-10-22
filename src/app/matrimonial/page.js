@@ -12,81 +12,17 @@ export default function MatrimonialPage() {
   const [cityFilter, setCityFilter] = useState("All");
   const [loading, setLoading] = useState(true);
 
-  // Default sample matrimonial entries in clear English
-  const defaultProfiles = [
-    {
-      _id: "m1",
-      fullName: "Ankit Lodhi",
-      gender: "Male",
-      dob: "15 Oct 1996 (Age: 29)",
-      height: "5 ft 10 in",
-      education: "B.Tech (Computer Science), NIT Bhopal",
-      occupation: "Senior Software Engineer @ MNC",
-      annualIncome: "₹24 LPA",
-      city: "Bengaluru",
-      state: "Karnataka",
-      gotra: "Kashyap",
-      fatherName: "Shri Kailash Lodhi (Retd. Govt Officer)",
-      familyCity: "Bhopal, MP",
-    },
-    {
-      _id: "m2",
-      fullName: "Pooja Lodha",
-      gender: "Female",
-      dob: "22 Aug 1998 (Age: 27)",
-      height: "5 ft 4 in",
-      education: "MBBS, MD (General Medicine)",
-      occupation: "Doctor (Resident Physician)",
-      annualIncome: "₹18 LPA",
-      city: "Jaipur",
-      state: "Rajasthan",
-      gotra: "Vashishta",
-      fatherName: "Dr. R. K. Lodha (Civil Surgeon)",
-      familyCity: "Jaipur, Rajasthan",
-    },
-    {
-      _id: "m3",
-      fullName: "Rohit Lodhi",
-      gender: "Male",
-      dob: "04 May 1995 (Age: 30)",
-      height: "5 ft 9 in",
-      education: "Chartered Accountant (CA), B.Com",
-      occupation: "Assistant Director (Auditing Firm)",
-      annualIncome: "₹20 LPA",
-      city: "Mumbai",
-      state: "Maharashtra",
-      gotra: "Bharadwaj",
-      fatherName: "Shri Suresh Chandra Lodhi (Businessman)",
-      familyCity: "Indore, MP",
-    },
-    {
-      _id: "m4",
-      fullName: "Neha Lodhi",
-      gender: "Female",
-      dob: "12 Dec 1999 (Age: 26)",
-      height: "5 ft 5 in",
-      education: "M.Sc (Biotechnology), Delhi University",
-      occupation: "Research Associate @ Healthcare Labs",
-      annualIncome: "₹12 LPA",
-      city: "Delhi NCR",
-      state: "Delhi",
-      gotra: "Gautam",
-      fatherName: "Shri Mahendra Singh Lodhi (Govt Principal)",
-      familyCity: "Lucknow, UP",
-    },
-  ];
-
   useEffect(() => {
     fetch("/api/matrimonial")
       .then((res) => res.json())
       .then((data) => {
-        if (data?.profiles && data.profiles.length > 0) {
+        if (data?.profiles && Array.isArray(data.profiles)) {
           setProfiles(data.profiles);
         } else {
-          setProfiles(defaultProfiles);
+          setProfiles([]);
         }
       })
-      .catch(() => setProfiles(defaultProfiles))
+      .catch(() => setProfiles([]))
       .finally(() => setLoading(false));
   }, []);
 

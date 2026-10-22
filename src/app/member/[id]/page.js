@@ -51,7 +51,7 @@ function MemberProfileDetail({ params }) {
       <div className="flex items-center justify-between mb-5">
         <Link
           href="/directory"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#F0E5D5] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9E2D8] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors"
         >
           ← Back to Directory
         </Link>
@@ -59,7 +59,7 @@ function MemberProfileDetail({ params }) {
         {member && (
           <button
             onClick={handleCopyLink}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#F0E5D5] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] bg-white border border-[#E9E2D8] px-3.5 py-1.5 rounded-lg shadow-xs transition-colors cursor-pointer"
             title="Copy profile link to clipboard"
           >
             <span>🔗</span>
@@ -69,13 +69,13 @@ function MemberProfileDetail({ params }) {
       </div>
 
       {loading ? (
-        <div className="bg-white rounded-lg border border-[#F0E5D5] p-16 text-center text-[#64748B] font-medium shadow-xs">
+        <div className="bg-white rounded-lg border border-[#E9E2D8] p-16 text-center text-[#64748B] font-medium shadow-xs">
           <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
           Loading member profile...
         </div>
       ) : error || !member ? (
-        <div className="bg-white p-10 rounded-lg border border-[#F0E5D5] text-center shadow-xs space-y-3">
-          <div className="w-14 h-14 mx-auto rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5] flex items-center justify-center text-2xl font-bold">
+        <div className="bg-white p-10 rounded-lg border border-[#E9E2D8] text-center shadow-xs space-y-3">
+          <div className="w-14 h-14 mx-auto rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#E9E2D8] flex items-center justify-center text-2xl font-bold">
             🔒
           </div>
           <h2 className="text-lg font-black text-[#102F6B]">Profile Not Available</h2>
@@ -93,9 +93,9 @@ function MemberProfileDetail({ params }) {
         </div>
       ) : (
         <FadeIn direction="up" distance={14} duration={0.5}>
-          <div className="bg-white rounded-lg border border-[#F0E5D5] shadow-xs overflow-hidden">
+          <div className="bg-white rounded-lg border border-[#E9E2D8] shadow-xs overflow-hidden">
           {/* Top Profile Header Banner */}
-          <div className="bg-[#FFFCF5] p-5 sm:p-7 border-b border-[#F0E5D5] flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="bg-[#FFFCF5] p-5 sm:p-7 border-b border-[#E9E2D8] flex flex-col sm:flex-row items-center sm:items-start gap-5">
             {member.avatar ? (
               <img
                 src={member.avatar}
@@ -103,7 +103,7 @@ function MemberProfileDetail({ params }) {
                 width={112}
                 height={112}
                 decoding="async"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#F0E5D5] shadow-xs shrink-0 bg-white"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#E9E2D8] shadow-xs shrink-0 bg-white"
               />
             ) : (
               <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-lg bg-[#102F6B] text-white flex items-center justify-center font-bold text-3xl shadow-xs border-2 border-[#F26A21] shrink-0">
@@ -113,14 +113,14 @@ function MemberProfileDetail({ params }) {
 
             <div className="text-center sm:text-left flex-1 min-w-0">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
-                <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5] uppercase">
+                <span className="inline-block px-2.5 py-0.5 rounded text-xs font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#E9E2D8] uppercase">
                   {member.role || "Samaj Member"}
                 </span>
-                <span className="text-[#F0E5D5]">•</span>
+                <span className="text-[#E9E2D8]">•</span>
                 <span className="text-xs font-medium text-[#102F6B]">Verified Community Record</span>
                 {member.slug && (
                   <>
-                    <span className="text-[#F0E5D5]">•</span>
+                    <span className="text-[#E9E2D8]">•</span>
                     <span className="text-[11px] font-mono text-[#64748B]">@{member.slug}</span>
                   </>
                 )}
@@ -140,8 +140,8 @@ function MemberProfileDetail({ params }) {
           {/* Profile Body & Contact Details */}
           <div className="p-5 sm:p-7 space-y-6">
             {/* Contact Details Card with Privacy Badges */}
-            <div className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] p-4 sm:p-5 space-y-3">
-              <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
+            <div className="bg-[#FFFCF5] rounded-lg border border-[#E9E2D8] p-4 sm:p-5 space-y-3">
+              <div className="flex items-center justify-between border-b border-[#E9E2D8] pb-2">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-l-3 border-[#F26A21] pl-2">
                   Verified Contact &amp; Geographic Information
                 </h3>
@@ -192,7 +192,7 @@ function MemberProfileDetail({ params }) {
                 </div>
 
                 {member.address && (
-                  <div className="sm:col-span-2 pt-2 border-t border-[#F0E5D5]/60">
+                  <div className="sm:col-span-2 pt-2 border-t border-[#E9E2D8]/60">
                     <span className="text-[#64748B] block text-[11px] font-medium">Full Residential / Office Address:</span>
                     <p className="font-medium text-[#263449] mt-0.5">
                       {member.address} {member.pincode && `- ${member.pincode}`}
@@ -204,7 +204,7 @@ function MemberProfileDetail({ params }) {
 
             {/* Biography Section */}
             <div>
-              <h3 className="text-xs font-bold text-[#102F6B] uppercase tracking-wider mb-2.5 pb-2 border-b border-[#F0E5D5]">
+              <h3 className="text-xs font-bold text-[#102F6B] uppercase tracking-wider mb-2.5 pb-2 border-b border-[#E9E2D8]">
                 Biography &amp; Community Contributions
               </h3>
               {member.biography ? (
@@ -219,17 +219,17 @@ function MemberProfileDetail({ params }) {
               )}
             </div>
 
-            {/* Specializations & Tags */}
+            {/* Specializations & Categories */}
             {member.tags && member.tags.length > 0 && (
-              <div className="pt-2 border-t border-[#F0E5D5]">
-                <h4 className="text-xs font-semibold text-[#64748B] mb-2">Specializations &amp; Affinity Groups:</h4>
+              <div className="pt-2 border-t border-[#E9E2D8]">
+                <h4 className="text-xs font-semibold text-[#64748B] mb-2">Designation &amp; Committee Affiliations:</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {member.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-xs font-medium px-2.5 py-1 bg-[#FFF0E2] text-[#102F6B] border border-[#F0E5D5] rounded"
+                      className="text-xs font-medium px-2.5 py-1 bg-[#FFF0E2] text-[#102F6B] border border-[#E9E2D8] rounded"
                     >
-                      #{tag}
+                      {tag.replace(/^#/, "")}
                     </span>
                   ))}
                 </div>

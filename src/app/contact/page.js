@@ -46,9 +46,9 @@ export default function ContactPage() {
 
       <main className="flex-1 max-w-[700px] w-full mx-auto px-3 sm:px-4 py-8">
         <FadeIn direction="up" distance={16} duration={0.5}>
-          <div className="bg-white rounded-lg border border-[#F0E5D5] p-6 sm:p-8 shadow-xs">
+          <div className="bg-white rounded-lg border border-[#E9E2D8] p-6 sm:p-8 shadow-xs">
             <div className="text-center mb-6">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#F0E5D5]">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F26A21] bg-[#FFF0E2] px-2.5 py-0.5 rounded border border-[#E9E2D8]">
                 Get In Touch
               </span>
               <h1 className="text-xl sm:text-2xl font-black text-[#102F6B] mt-2 tracking-tight">
