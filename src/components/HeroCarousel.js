@@ -24,7 +24,7 @@ export default function HeroCarousel({ settings }) {
     {
       id: "hero-main",
       badge: settings?.heroBadge || "आधिकारिक समुदाय पोर्टल",
-      title: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
+      title: settings?.heroTitle || "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
       subtitle:
         settings?.heroSubtitle ||
         "अखिल भारतीय समाज डायरेक्टरी — देशभर के सेवारत व सेवानिवृत्त अधिकारियों, कर्मचारियों, प्रबुद्धजनों एवं युवाओं का सशक्त व पारदर्शी डिजिटल मंच।",
@@ -32,7 +32,7 @@ export default function HeroCarousel({ settings }) {
       ctaLink: settings?.heroCtaLink || "/directory",
       secondaryCtaText: "कार्यकारिणी संरचना",
       secondaryCtaLink: "/organization",
-      image: "/asset/topofwebsite/web_sit_front1.png",
+      image: settings?.heroImage || "/asset/topofwebsite/web_sit_front1.png",
       imageAlt: "अखिल भारतीय लोधी अधिकारी कर्मचारी संघ — स्वामी ब्रह्मानंद जी महाराज, आलोक प्रतीक एवं वीरांगना रानी अवंती बाई लोधी",
       objectFit: "contain",
     },

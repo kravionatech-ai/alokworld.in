@@ -221,7 +221,7 @@ export default function HomePage() {
           {/* Right Column: Verified National Leadership Spotlight */}
           <div className="col-span-1 lg:col-span-3 order-3 space-y-4">
             <FadeIn direction="up" distance={12} duration={0.45} delay={0.08}>
-              <RightSidebar />
+              <RightSidebar settings={settings} />
             </FadeIn>
           </div>
         </div>

@@ -40,7 +40,7 @@ const verifiedOfficeBearers = [
   },
 ];
 
-export default function RightSidebar() {
+export default function RightSidebar({ settings }) {
   return (
     <aside className="space-y-4">
       {/* 1. Verified National Office Bearers Spotlight */}
@@ -91,27 +91,29 @@ export default function RightSidebar() {
         </div>
       </div>
 
-      {/* 2. Official Secretariat Contact Notice */}
-      <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
-          केंद्रीय सचिवालय सहायता केंद्र
-        </div>
-        <div className="p-4 text-xs text-[#263449] space-y-2">
-          <p className="leading-relaxed">
-            समस्त समाज बंधुओं एवं पदाधिकारियों से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।
-          </p>
-          <div className="pt-2 border-t border-[#E9E2D8] text-[11px] text-[#64748B] space-y-1">
-            <p>ईमेल: <a href="mailto:admin@alokworld.in" className="text-[#F26A21] font-medium">admin@alokworld.in</a></p>
-            <p>दूरभाष: <a href="tel:+919608553167" className="text-[#F26A21] font-medium">+91 96085 53167</a></p>
+      {/* 2. Official Secretariat Contact Notice / Sidebar Community Notice */}
+      {settings?.sidebarNoticeEnabled !== false && (
+        <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
+          <div className="bg-[#102F6B] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
+            {settings?.sidebarNoticeTitle || "केंद्रीय सचिवालय सहायता केंद्र"}
           </div>
-          <Link
-            href="/contact"
-            className="block text-center w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors mt-2"
-          >
-            विवरण संशोधन / संपर्क करें →
-          </Link>
+          <div className="p-4 text-xs text-[#263449] space-y-2">
+            <p className="leading-relaxed">
+              {settings?.sidebarNoticeContent || "समस्त समाज बंधुओं एवं पदाधिकारियों से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।"}
+            </p>
+            <div className="pt-2 border-t border-[#E9E2D8] text-[11px] text-[#64748B] space-y-1">
+              <p>ईमेल: <a href={`mailto:${settings?.contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] font-medium">{settings?.contactEmail || "admin@alokworld.in"}</a></p>
+              <p>दूरभाष: <a href={`tel:${(settings?.contactPhone || "+91 96085 53167").replace(/[^\d+]/g, "")}`} className="text-[#F26A21] font-medium">{settings?.contactPhone || "+91 96085 53167"}</a></p>
+            </div>
+            <Link
+              href="/contact"
+              className="block text-center w-full py-2 bg-[#102F6B] text-white text-xs font-bold rounded hover:bg-[#F26A21] transition-colors mt-2"
+            >
+              विवरण संशोधन / संपर्क करें →
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 }
