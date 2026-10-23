@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "प्रशासन नियंत्रण कक्ष | alokworld.in",
-  description: "सुरक्षित प्रशासनिक सीएमएस नियंत्रण केंद्र",
+  title: "Admin Control Center | alokworld.in",
+  description: "Secure Administrative CMS Control Panel",
   robots: {
     index: false,
     follow: false,
@@ -13,5 +13,5 @@ export const metadata = {
 };
 
 export default function AdminLayout({ children }) {
-  return children;
+  return <div lang="en">{children}</div>;
 }

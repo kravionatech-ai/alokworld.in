@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "प्रमाणीकरण विफल रहा");
+      if (!res.ok) throw new Error(data.error || "Authentication failed. Please verify your credentials.");
 
       router.push("/admin");
       router.refresh();
@@ -42,10 +42,10 @@ export default function AdminLoginPage() {
           🏛️
         </div>
         <h2 className="text-xl sm:text-2xl font-black text-[#102F6B] tracking-tight">
-          प्रशासन नियंत्रण पोर्टल प्रवेश
+          Admin Control Portal Login
         </h2>
         <p className="mt-1 text-xs text-[#64748B]">
-          अखिल भारतीय समाज डायरेक्टरी • alokworld.in
+          Akhil Bhartiya Samaj Directory • alokworld.in
         </p>
       </div>
 
@@ -60,7 +60,7 @@ export default function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-[#263449] mb-1">
-                प्रशासक ईमेल पता
+                Administrator Email Address
               </label>
               <input
                 type="email"
@@ -74,7 +74,7 @@ export default function AdminLoginPage() {
 
             <div>
               <label className="block text-xs font-semibold text-[#263449] mb-1">
-                पासवर्ड / कूटशब्द
+                Password
               </label>
               <input
                 type="password"
@@ -91,15 +91,15 @@ export default function AdminLoginPage() {
               disabled={loading}
               className="btn-primary w-full py-2.5 text-xs sm:text-sm shadow-xs disabled:opacity-50 cursor-pointer"
             >
-              {loading ? "सत्यापन जारी है..." : "प्रशासन डैशबोर्ड में प्रवेश करें →"}
+              {loading ? "Authenticating credentials..." : "Sign in to Admin Dashboard →"}
             </button>
           </form>
 
           <div className="mt-6 pt-4 border-t border-[#F0E5D5] flex items-center justify-between text-[11px] text-[#64748B]">
             <Link href="/" className="hover:text-[#F26A21] text-[#102F6B] underline font-medium">
-              ← मुख्य डायरेक्टरी पर वापस जाएं
+              ← Return to Main Directory
             </Link>
-            <span className="text-[#64748B]">पूर्वनिर्धारित: admin@alokworld.in</span>
+            <span className="text-[#64748B]">alokworld.in</span>
           </div>
         </div>
       </div>

@@ -156,7 +156,7 @@ function Icon({ name, className = "w-3.5 h-3.5" }) {
 export default function RichTextEditor({
   value = "",
   onChange,
-  placeholder = "यहाँ संपादकीय सामग्री लिखें एवं प्रारूपित करें...",
+  placeholder = "Write and format editorial content here...",
   minHeight = "240px",
   className = "",
   disabled = false,
@@ -408,7 +408,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="पूर्ववत करें (Ctrl+Z)"
+              title="Undo (Ctrl+Z)"
               disabled={!editor || !editor.can().undo()}
               onClick={() => editor?.chain().focus().undo().run()}
               className="p-1 rounded-xs text-[#263449] hover:bg-[#EAE4D9] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
@@ -417,7 +417,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="पुनः करें (Ctrl+Y)"
+              title="Redo (Ctrl+Y)"
               disabled={!editor || !editor.can().redo()}
               onClick={() => editor?.chain().focus().redo().run()}
               className="p-1 rounded-xs text-[#263449] hover:bg-[#EAE4D9] disabled:opacity-30 disabled:hover:bg-transparent cursor-pointer"
@@ -430,7 +430,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="सामान्य अनुच्छेद (P)"
+              title="Normal Paragraph"
               onClick={() => editor?.chain().focus().setParagraph().run()}
               className={`px-1.5 py-0.5 rounded-xs font-medium text-[11px] ${
                 editor?.isActive("paragraph") && !editor?.isActive("heading")
@@ -442,7 +442,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="शीर्षक १ (H1)"
+              title="Heading 1"
               onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()}
               className={`px-1.5 py-0.5 rounded-xs font-bold text-[11px] ${
                 editor?.isActive("heading", { level: 1 })
@@ -454,7 +454,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="शीर्षक २ (H2)"
+              title="Heading 2"
               onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()}
               className={`px-1.5 py-0.5 rounded-xs font-bold text-[11px] ${
                 editor?.isActive("heading", { level: 2 })
@@ -466,7 +466,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="शीर्षक ३ (H3)"
+              title="Heading 3"
               onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()}
               className={`px-1.5 py-0.5 rounded-xs font-bold text-[11px] ${
                 editor?.isActive("heading", { level: 3 })
@@ -482,7 +482,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="बोल्ड / गहरा (Ctrl+B)"
+              title="Bold (Ctrl+B)"
               onClick={() => editor?.chain().focus().toggleBold().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("bold") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -492,7 +492,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="तिरछा / इटैलिक (Ctrl+I)"
+              title="Italic (Ctrl+I)"
               onClick={() => editor?.chain().focus().toggleItalic().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("italic") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -502,7 +502,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="रेखांकित / अंडरलाइन (Ctrl+U)"
+              title="Underline (Ctrl+U)"
               onClick={() => editor?.chain().focus().toggleUnderline().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("underline") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -512,7 +512,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="स्ट्राइकथ्रू"
+              title="Strikethrough"
               onClick={() => editor?.chain().focus().toggleStrike().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("strike") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -526,7 +526,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="बाएं संरेखित करें"
+              title="Align Left"
               onClick={() => editor?.chain().focus().setTextAlign("left").run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive({ textAlign: "left" })
@@ -538,7 +538,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="मध्य संरेखित करें"
+              title="Align Center"
               onClick={() => editor?.chain().focus().setTextAlign("center").run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive({ textAlign: "center" })
@@ -550,7 +550,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="दाएं संरेखित करें"
+              title="Align Right"
               onClick={() => editor?.chain().focus().setTextAlign("right").run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive({ textAlign: "right" })
@@ -562,7 +562,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="समान संरेखण (Justify)"
+              title="Justify"
               onClick={() => editor?.chain().focus().setTextAlign("justify").run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive({ textAlign: "justify" })
@@ -578,7 +578,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="बिंदुवार सूची (Bullets)"
+              title="Bulleted List"
               onClick={() => editor?.chain().focus().toggleBulletList().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("bulletList") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -588,7 +588,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="क्रमांकित सूची (Numbers)"
+              title="Numbered List"
               onClick={() => editor?.chain().focus().toggleOrderedList().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("orderedList") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -602,7 +602,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="उद्धरण (Quote)"
+              title="Blockquote"
               onClick={() => editor?.chain().focus().toggleBlockquote().run()}
               className={`p-1 rounded-xs ${
                 editor?.isActive("blockquote") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -612,7 +612,7 @@ export default function RichTextEditor({
             </button>
             <button
               type="button"
-              title="क्षैतिज विभाजक रेखा"
+              title="Horizontal Divider"
               onClick={() => editor?.chain().focus().setHorizontalRule().run()}
               className="p-1 rounded-xs text-[#263449] hover:bg-[#EAE4D9]"
             >
@@ -624,7 +624,7 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="लिंक जोड़ें"
+              title="Insert Link"
               onClick={openLinkModal}
               className={`p-1 rounded-xs ${
                 editor?.isActive("link") ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
@@ -635,7 +635,7 @@ export default function RichTextEditor({
             {editor?.isActive("link") && (
               <button
                 type="button"
-                title="लिंक हटाएं"
+                title="Remove Link"
                 onClick={handleRemoveLink}
                 className="p-1 rounded-xs text-red-700 hover:bg-red-50"
               >
@@ -648,12 +648,12 @@ export default function RichTextEditor({
           <div className="flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="छायाचित्र जोड़ें (क्लाउडिनरी अथवा URL)"
+              title="Insert Image (Cloudinary or URL)"
               onClick={() => setImageModalOpen(true)}
               className="p-1 rounded-xs text-[#263449] hover:bg-[#EAE4D9] flex items-center gap-1"
             >
               <Icon name="image" />
-              <span className="text-[10px] font-medium hidden sm:inline">छायाचित्र</span>
+              <span className="text-[10px] font-medium hidden sm:inline">Image</span>
             </button>
           </div>
 
@@ -661,14 +661,14 @@ export default function RichTextEditor({
           <div className="relative flex items-center border-r border-[#E2DDD5] pr-1 mr-1">
             <button
               type="button"
-              title="तालिका संपादन"
+              title="Table Operations"
               onClick={() => setTableMenuOpen(!tableMenuOpen)}
               className={`p-1 rounded-xs flex items-center gap-1 ${
                 isInsideTable ? "bg-[#102F6B] text-white" : "text-[#263449] hover:bg-[#EAE4D9]"
               }`}
             >
               <Icon name="table" />
-              <span className="text-[10px] font-medium hidden sm:inline">तालिका</span>
+              <span className="text-[10px] font-medium hidden sm:inline">Table</span>
             </button>
 
             {/* Table Dropdown Menu */}
@@ -689,7 +689,7 @@ export default function RichTextEditor({
                     }
                     className="w-full text-left px-3 py-1.5 hover:bg-[#FAF8F3] text-[#1E293B]"
                   >
-                    तालिका जोड़ें (३ × ३)
+                    Insert Table (3 × 3)
                   </button>
                 ) : (
                   <>
@@ -698,21 +698,21 @@ export default function RichTextEditor({
                       onClick={() => editor?.chain().focus().addRowBefore().run()}
                       className="w-full text-left px-3 py-1 hover:bg-[#FAF8F3] text-[#1E293B]"
                     >
-                      + ऊपर पंक्ति जोड़ें
+                      + Add Row Above
                     </button>
                     <button
                       type="button"
                       onClick={() => editor?.chain().focus().addRowAfter().run()}
                       className="w-full text-left px-3 py-1 hover:bg-[#FAF8F3] text-[#1E293B]"
                     >
-                      + नीचे पंक्ति जोड़ें
+                      + Add Row Below
                     </button>
                     <button
                       type="button"
                       onClick={() => editor?.chain().focus().deleteRow().run()}
                       className="w-full text-left px-3 py-1 hover:bg-red-50 text-red-700"
                     >
-                      पंक्ति हटाएं
+                      Delete Row
                     </button>
                     <div className="border-t border-[#E2DDD5] my-1" />
                     <button
@@ -720,21 +720,21 @@ export default function RichTextEditor({
                       onClick={() => editor?.chain().focus().addColumnBefore().run()}
                       className="w-full text-left px-3 py-1 hover:bg-[#FAF8F3] text-[#1E293B]"
                     >
-                      + बाएं कॉलम जोड़ें
+                      + Add Column Left
                     </button>
                     <button
                       type="button"
                       onClick={() => editor?.chain().focus().addColumnAfter().run()}
                       className="w-full text-left px-3 py-1 hover:bg-[#FAF8F3] text-[#1E293B]"
                     >
-                      + दाएं कॉलम जोड़ें
+                      + Add Column Right
                     </button>
                     <button
                       type="button"
                       onClick={() => editor?.chain().focus().deleteColumn().run()}
                       className="w-full text-left px-3 py-1 hover:bg-red-50 text-red-700"
                     >
-                      कॉलम हटाएं
+                      Delete Column
                     </button>
                     <div className="border-t border-[#E2DDD5] my-1" />
                     <button
@@ -742,7 +742,7 @@ export default function RichTextEditor({
                       onClick={() => editor?.chain().focus().deleteTable().run()}
                       className="w-full text-left px-3 py-1 hover:bg-red-50 text-red-700 font-semibold"
                     >
-                      संपूर्ण तालिका हटाएं
+                      Delete Whole Table
                     </button>
                   </>
                 )}
@@ -753,7 +753,7 @@ export default function RichTextEditor({
           {/* Clear Formatting */}
           <button
             type="button"
-            title="प्रारूपण हटाएं (Clear Formatting)"
+            title="Clear Formatting"
             onClick={() => editor?.chain().focus().unsetAllMarks().clearNodes().run()}
             className="p-1 rounded-xs text-[#64748B] hover:text-[#1E293B] hover:bg-[#EAE4D9]"
           >
@@ -772,7 +772,7 @@ export default function RichTextEditor({
                 : "text-[#55657E] hover:text-[#102F6B]"
             }`}
           >
-            विजुअल
+            Visual
           </button>
           <button
             type="button"
@@ -783,7 +783,7 @@ export default function RichTextEditor({
                 : "text-[#55657E] hover:text-[#102F6B]"
             }`}
           >
-            &lt;/&gt; कोड (Source)
+            &lt;/&gt; Source
           </button>
         </div>
       </div>
@@ -804,7 +804,7 @@ export default function RichTextEditor({
           rows={12}
           value={sourceCode}
           onChange={handleSourceChange}
-          placeholder="<div>कच्चा HTML कोड (Raw HTML)...</div>"
+          placeholder="<div>Raw HTML code...</div>"
           style={{ minHeight }}
           className="w-full p-3 font-mono text-xs bg-[#FCFBF8] text-[#1E293B] border-0 outline-hidden resize-y leading-relaxed"
         />
@@ -817,7 +817,7 @@ export default function RichTextEditor({
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-[#E2DDD5] shadow-xl max-w-sm w-full p-4 rounded-xs text-xs space-y-3">
             <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
-              <span className="font-bold text-[#102F6B]">हाइपरलिंक जोड़ें / संपादित करें</span>
+              <span className="font-bold text-[#102F6B]">Insert / Edit Link</span>
               <button
                 type="button"
                 onClick={() => setLinkModalOpen(false)}
@@ -830,12 +830,12 @@ export default function RichTextEditor({
             <form onSubmit={handleApplyLink} className="space-y-3">
               <div>
                 <label className="block text-[11px] font-semibold text-[#1E293B] mb-1">
-                  गंतव्य URL पता (वेब, mailto: या tel:)
+                  Destination URL (Web, mailto: or tel:)
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="https://example.com अथवा mailto:info@..."
+                  placeholder="https://example.com or mailto:info@..."
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   className="w-full px-2.5 py-1.5 border border-[#D5CEC4] rounded-xs font-mono text-xs"
@@ -848,7 +848,7 @@ export default function RichTextEditor({
                   checked={linkOpenInNewTab}
                   onChange={(e) => setLinkOpenInNewTab(e.target.checked)}
                 />
-                <span>लिंक को नए ब्राउज़र टैब में खोलें</span>
+                <span>Open link in new browser tab</span>
               </label>
 
               <div className="flex items-center justify-between pt-2 border-t border-[#E2DDD5]">
@@ -858,7 +858,7 @@ export default function RichTextEditor({
                     onClick={handleRemoveLink}
                     className="text-red-700 hover:underline text-[11px]"
                   >
-                    लिंक हटाएं
+                    Remove Link
                   </button>
                 ) : (
                   <div />
@@ -870,13 +870,13 @@ export default function RichTextEditor({
                     onClick={() => setLinkModalOpen(false)}
                     className="px-2.5 py-1 border border-[#D5CEC4] text-[#55657E] hover:bg-[#FAF8F3] rounded-xs"
                   >
-                    रद्द करें
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     className="px-3 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white font-medium rounded-xs"
                   >
-                    लिंक लागू करें
+                    Apply Link
                   </button>
                 </div>
               </div>
@@ -892,7 +892,7 @@ export default function RichTextEditor({
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-[#E2DDD5] shadow-xl max-w-md w-full p-4 rounded-xs text-xs space-y-3">
             <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
-              <span className="font-bold text-[#102F6B]">छायाचित्र सम्मिलित करें</span>
+              <span className="font-bold text-[#102F6B]">Insert Image</span>
               <button
                 type="button"
                 onClick={() => setImageModalOpen(false)}
@@ -913,7 +913,7 @@ export default function RichTextEditor({
                     : "text-[#55657E] hover:bg-[#FAF8F3]"
                 }`}
               >
-                क्लाउडिनरी पर अपलोड करें
+                Upload to Cloudinary
               </button>
               <button
                 type="button"
@@ -924,7 +924,7 @@ export default function RichTextEditor({
                     : "text-[#55657E] hover:bg-[#FAF8F3]"
                 }`}
               >
-                वेब URL द्वारा
+                From Image URL
               </button>
             </div>
 
@@ -938,7 +938,7 @@ export default function RichTextEditor({
               <div className="space-y-3 py-1">
                 <div>
                   <label className="block text-[11px] font-semibold text-[#1E293B] mb-1">
-                    छायाचित्र फ़ाइल चुनें (JPEG, PNG, WebP, GIF &lt; 5MB)
+                    Select Image File (JPEG, PNG, WebP, GIF &lt; 5MB)
                   </label>
                   <input
                     ref={fileInputRef}
@@ -952,11 +952,11 @@ export default function RichTextEditor({
 
                 <div>
                   <label className="block text-[11px] font-semibold text-[#1E293B] mb-1">
-                    छायाचित्र विवरण / कैप्शन (वैकल्पिक)
+                    Image Caption / Alt Text (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="उदा. समाज सम्मेलन 2026"
+                    placeholder="e.g. Community Gathering 2026"
                     value={imageAlt}
                     onChange={(e) => setImageAlt(e.target.value)}
                     className="w-full px-2.5 py-1.5 border border-[#D5CEC4] rounded-xs text-xs"
@@ -965,7 +965,7 @@ export default function RichTextEditor({
 
                 {uploadingImage && (
                   <div className="p-3 bg-[#FAF8F3] border border-[#E2DDD5] text-center text-[#102F6B] font-medium animate-pulse rounded-xs">
-                    क्लाउडिनरी सीडीएन पर छायाचित्र सुरक्षित अपलोड हो रहा है...
+                    Uploading image securely to Cloudinary CDN...
                   </div>
                 )}
               </div>
@@ -973,7 +973,7 @@ export default function RichTextEditor({
               <form onSubmit={handleInsertUrlImage} className="space-y-3 py-1">
                 <div>
                   <label className="block text-[11px] font-semibold text-[#1E293B] mb-1">
-                    छायाचित्र वेब URL
+                    Image URL
                   </label>
                   <input
                     type="url"
@@ -987,11 +987,11 @@ export default function RichTextEditor({
 
                 <div>
                   <label className="block text-[11px] font-semibold text-[#1E293B] mb-1">
-                    छायाचित्र विवरण / कैप्शन (वैकल्पिक)
+                    Image Caption / Alt Text (Optional)
                   </label>
                   <input
                     type="text"
-                    placeholder="उदा. समाज भवन चित्र"
+                    placeholder="e.g. Community Memorial Hall"
                     value={imageAlt}
                     onChange={(e) => setImageAlt(e.target.value)}
                     className="w-full px-2.5 py-1.5 border border-[#D5CEC4] rounded-xs text-xs"
@@ -1004,13 +1004,13 @@ export default function RichTextEditor({
                     onClick={() => setImageModalOpen(false)}
                     className="px-2.5 py-1 border border-[#D5CEC4] text-[#55657E] hover:bg-[#FAF8F3] rounded-xs"
                   >
-                    रद्द करें
+                    Cancel
                   </button>
                   <button
                     type="submit"
                     className="px-3 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white font-medium rounded-xs"
                   >
-                    छायाचित्र जोड़ें
+                    Insert Image
                   </button>
                 </div>
               </form>
