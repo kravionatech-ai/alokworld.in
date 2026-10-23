@@ -104,7 +104,7 @@ export default function HomePage() {
         <FadeIn direction="up" distance={10} duration={0.4}>
           <AnnouncementSlider
             announcements={announcementsList}
-            title={settings?.announcementBadge || "Samaj Notice"}
+            title={settings?.announcementBadge || "समाज संदेश"}
           />
         </FadeIn>
 
@@ -200,7 +200,7 @@ export default function HomePage() {
             {loading ? (
               <div className="bg-white rounded-lg border border-[#E9E2D8] p-12 text-center text-[#64748B] font-medium shadow-xs">
                 <div className="w-8 h-8 border-3 border-[#102F6B] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
-                Loading verified community records...
+                सत्यापित समाज सदस्य रिकॉर्ड लोड हो रहे हैं...
               </div>
             ) : (
               <MemberTable members={featuredMembers.slice(0, 8)} startIndex={0} />
@@ -212,7 +212,7 @@ export default function HomePage() {
                   href="/directory"
                   className="btn-navy px-5 py-2.5 text-xs shadow-sm inline-block"
                 >
-                  Browse All Verified Directory Records &amp; Pagination →
+                  सभी सत्यापित डायरेक्टरी रिकॉर्ड देखें →
                 </Link>
               </InteractiveTap>
             </div>

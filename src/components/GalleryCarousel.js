@@ -134,12 +134,12 @@ export default function GalleryCarousel({ items = [] }) {
                       <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                         <img
                           src={img.imageUrl}
-                          alt={img.title || "Samaj Community Event Photo"}
+                          alt={img.title || "समाज कार्यक्रम छायाचित्र"}
                           loading="lazy"
                           className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs"
                         />
                         <div className="absolute top-2 left-2 bg-[#102F6B]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                          {img.category || "Community"}
+                          {img.category || "समाज"}
                         </div>
                         {img.eventDate && (
                           <div className="absolute top-2 right-2 bg-white/90 text-[#102F6B] text-[10px] font-bold px-2 py-0.5 rounded shadow-xs border border-[#F0E5D5]">
@@ -176,7 +176,7 @@ export default function GalleryCarousel({ items = [] }) {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Image Lightbox Carousel"
+          aria-label="छायाचित्र लाइटबॉक्स कैरोसेल"
           className="fixed inset-0 z-50 bg-black/85 flex flex-col items-center justify-center p-3 sm:p-6 backdrop-blur-xs"
           onClick={() => setLightboxIndex(null)}
         >

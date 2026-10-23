@@ -76,14 +76,14 @@ export default function Sidebar({
               <button
                 type="button"
                 className="sidebar-notice-prev w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-                aria-label="Previous notice"
+                aria-label="पिछली सूचना"
               >
                 ‹
               </button>
               <button
                 type="button"
                 className="sidebar-notice-next w-5 h-5 rounded bg-[#FFFCF5] border border-[#F0E5D5] text-[#102F6B] hover:bg-[#102F6B] hover:text-white transition-colors flex items-center justify-center text-[10px] font-bold cursor-pointer"
-                aria-label="Next notice"
+                aria-label="अगली सूचना"
               >
                 ›
               </button>
@@ -123,8 +123,8 @@ export default function Sidebar({
                   nextEl: ".sidebar-notice-next",
                 }}
                 a11y={{
-                  prevSlideMessage: "Previous notice",
-                  nextSlideMessage: "Next notice",
+                  prevSlideMessage: "पिछली सूचना",
+                  nextSlideMessage: "अगली सूचना",
                 }}
                 className="w-full"
               >

@@ -181,7 +181,7 @@ export default function HeroCarousel({ settings }) {
       direction="up"
       distance={16}
       duration={0.55}
-      aria-label="Community Highlights & Announcements Carousel"
+      aria-label="समाज मुख्य विशेषताएं एवं घोषणाएं कैरोसेल"
       className="relative bg-white rounded-lg border border-[#E9E2D8] shadow-xs overflow-hidden"
     >
       <Swiper

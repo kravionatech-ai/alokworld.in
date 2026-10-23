@@ -38,12 +38,12 @@ export default function MemberCard({ member = {} }) {
           <Link
             href={`/member/${profileIdentifier}`}
             className="shrink-0 group/avatar block"
-            title={`View ${name || "Member"}'s profile`}
+            title={`${name || "सदस्य"} का प्रोफ़ाइल देखें`}
           >
             {avatar ? (
               <img
                 src={avatar}
-                alt={name ? `${name} - Samaj Community Member` : "Samaj Community Member"}
+                alt={name ? `${name} - समाज सदस्य` : "समाज सदस्य"}
                 width={56}
                 height={56}
                 loading="lazy"
@@ -55,7 +55,7 @@ export default function MemberCard({ member = {} }) {
                 className="w-14 h-14 rounded-full bg-[#102F6B] text-white flex items-center justify-center font-bold text-lg shrink-0 border-2 border-[#F26A21] shadow-xs group-hover/avatar:bg-[#091D42] transition-colors"
                 aria-hidden="true"
               >
-                {name ? name.charAt(0).toUpperCase() : "M"}
+                {name ? name.replace(/^श्री\s+|^डॉ\.\s*|^इं०?\s*|^श्रीमती\s*/, "").charAt(0).toUpperCase() : "स"}
               </div>
             )}
           </Link>
@@ -64,13 +64,13 @@ export default function MemberCard({ member = {} }) {
           <div className="flex-1 min-w-0">
             <Link href={`/member/${profileIdentifier}`} className="block">
               <h3 className="text-base font-bold text-[#102F6B] leading-snug group-hover:text-[#F26A21] transition-colors break-words">
-                {name || "Community Member"}
+                {name || "समाज सदस्य"}
               </h3>
             </Link>
 
             <div className="mt-1 flex flex-wrap items-center gap-1.5">
               <span className="inline-block text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
-                {role || "Member"}
+                {role || "सदस्य"}
               </span>
             </div>
           </div>
@@ -84,7 +84,7 @@ export default function MemberCard({ member = {} }) {
               💼
             </span>
             <span className="leading-snug break-words">
-              {occupation || "Community Member"}
+              {occupation || "समाज सदस्य"}
             </span>
           </div>
 
@@ -104,7 +104,7 @@ export default function MemberCard({ member = {} }) {
               📍
             </span>
             <span className="truncate">
-              {city || "India"}
+              {city || "भारत"}
               {state ? `, ${state}` : ""}
             </span>
           </div>
@@ -122,13 +122,13 @@ export default function MemberCard({ member = {} }) {
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider leading-none mb-0.5">
-                मोबाइल
+                मोबाइल नंबर
               </div>
               {hasPhone ? (
                 <a
                   href={telHref}
                   className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
-                  title={`संपर्क: ${phone}`}
+                  title={`कॉल करें: ${phone}`}
                 >
                   {phone}
                 </a>
@@ -156,7 +156,7 @@ export default function MemberCard({ member = {} }) {
                 <a
                   href={mailtoHref}
                   className="text-xs font-semibold text-[#102F6B] hover:text-[#F26A21] hover:underline transition-colors block truncate"
-                  title={`ईमेल: ${email}`}
+                  title={`ईमेल करें: ${email}`}
                 >
                   {email}
                 </a>

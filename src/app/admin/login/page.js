@@ -24,7 +24,7 @@ export default function AdminLoginPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Authentication failed");
+      if (!res.ok) throw new Error(data.error || "प्रमाणीकरण विफल रहा");
 
       router.push("/admin");
       router.refresh();
@@ -99,7 +99,7 @@ export default function AdminLoginPage() {
             <Link href="/" className="hover:text-[#F26A21] text-[#102F6B] underline font-medium">
               ← मुख्य डायरेक्टरी पर वापस जाएं
             </Link>
-            <span className="text-[#64748B]">Default: admin@alokworld.in</span>
+            <span className="text-[#64748B]">पूर्वनिर्धारित: admin@alokworld.in</span>
           </div>
         </div>
       </div>

@@ -84,7 +84,7 @@ export default function MaintenanceNotice() {
       {!barDismissed && settings.maintenanceBarEnabled && (
         <aside
           role="alert"
-          aria-label="Maintenance Announcement"
+          aria-label="रखरखाव एवं विकास सूचना"
           className="relative z-40 bg-[#091D42] text-white border-b-2 border-[#F26A21] px-3 py-2.5 text-xs transition-all duration-200"
         >
           <div className="max-w-[1100px] mx-auto flex items-center justify-between gap-3">

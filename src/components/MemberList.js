@@ -11,10 +11,10 @@ export default function MemberList({ members = [] }) {
           🔍
         </div>
         <h3 className="text-base font-bold text-[#102F6B] mb-1">
-          No Community Members Found
+          कोई समाज सदस्य नहीं मिला
         </h3>
         <p className="text-xs text-[#64748B] max-w-sm mx-auto">
-          Please try searching with another name, profession, or select &quot;All Locations&quot; from the filter.
+          कृपया किसी अन्य नाम, पद या स्थान से खोजें अथवा फ़िल्टर से &quot;सभी स्थान&quot; चुनें।
         </p>
       </div>
     );

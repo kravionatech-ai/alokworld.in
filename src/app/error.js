@@ -22,10 +22,10 @@ export default function ErrorBoundary({ error, reset }) {
 
           <div className="space-y-2">
             <h1 className="text-2xl sm:text-3xl font-black text-[#102F6B] tracking-tight">
-              An Unexpected Error Occurred
+              तकनीकी त्रुटि उत्पन्न हुई
             </h1>
             <p className="text-xs sm:text-sm text-[#64748B] max-w-md mx-auto leading-relaxed">
-              We encountered a temporary processing issue while loading this page. Our technical team has been notified.
+              इस पृष्ठ को लोड करते समय एक अस्थायी तकनीकी समस्या आई है। हमारी तकनीकी टीम को सूचित कर दिया गया है।
             </p>
           </div>
 
@@ -34,19 +34,19 @@ export default function ErrorBoundary({ error, reset }) {
               onClick={() => reset()}
               className="btn-primary text-xs px-5 py-2.5 font-bold shadow-xs cursor-pointer"
             >
-              🔄 Try Again
+              🔄 पुनः प्रयास करें
             </button>
             <Link
               href="/"
               className="btn-navy text-xs px-5 py-2.5 font-bold shadow-xs"
             >
-              Return to Homepage
+              ← मुख्य पृष्ठ पर वापस जाएं
             </Link>
             <Link
               href="/contact"
               className="btn-outline text-xs px-4 py-2.5 font-semibold shadow-xs"
             >
-              Report Issue to Secretariat
+              सचिवालय से संपर्क करें
             </Link>
           </div>
         </div>

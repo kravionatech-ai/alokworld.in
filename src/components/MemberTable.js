@@ -40,7 +40,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[170px]"
               >
-                पूरा नाम एवं दायित्व
+                पूरा नाम एवं पद
               </th>
               <th
                 scope="col"
@@ -52,19 +52,19 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[130px]"
               >
-                संपर्क सूत्र
+                संपर्क नंबर
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-left text-white border-b-2 border-[#091D42] min-w-[180px]"
               >
-                पद / व्यवसाय एवं विभाग
+                पद एवं व्यवसाय
               </th>
               <th
                 scope="col"
                 className="px-3.5 py-3 font-bold text-xs tracking-wider text-center text-white border-b-2 border-[#091D42] w-[90px]"
               >
-                विवरण
+                विवरण देखें
               </th>
             </tr>
           </thead>
@@ -94,12 +94,12 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                       <Link
                         href={`/member/${profileIdentifier}`}
                         className="shrink-0 block"
-                        title={`View ${member.name || "Member"}'s profile`}
+                        title={`${member.name || "सदस्य"} का प्रोफ़ाइल देखें`}
                       >
                         {member.avatar ? (
                           <img
                             src={member.avatar}
-                            alt={member.name || "Member"}
+                            alt={member.name || "सदस्य"}
                             width={34}
                             height={34}
                             loading="lazy"
@@ -111,7 +111,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                             className="w-8.5 h-8.5 rounded-full bg-[#102F6B] text-white flex items-center justify-center font-bold text-xs shrink-0 border border-[#F26A21] shadow-2xs"
                             aria-hidden="true"
                           >
-                            {member.name ? member.name.replace(/^श्री\s+|^डॉ\.\s*|^इं०?\s*|^श्रीमती\s*/, "").charAt(0).toUpperCase() : "M"}
+                            {member.name ? member.name.replace(/^श्री\s+|^डॉ\.\s*|^इं०?\s*|^श्रीमती\s*/, "").charAt(0).toUpperCase() : "स"}
                           </div>
                         )}
                       </Link>
@@ -120,7 +120,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                           href={`/member/${profileIdentifier}`}
                           className="font-bold text-[#102F6B] hover:text-[#F26A21] transition-colors text-xs sm:text-[13px] block leading-snug"
                         >
-                          {member.name || "Community Member"}
+                          {member.name || "समाज सदस्य"}
                         </Link>
                         {member.role && (
                           <span className="text-[#F26A21] font-semibold text-[10.5px] block mt-0.5 tracking-tight truncate max-w-[220px]">
@@ -150,7 +150,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                       <a
                         href={`tel:${cleanPhone}`}
                         className="text-[#102F6B] hover:text-[#F26A21] font-mono font-medium underline transition-colors whitespace-nowrap inline-flex items-center gap-1"
-                        title={`Call ${member.name}: ${member.phone}`}
+                        title={`${member.name} को कॉल करें: ${member.phone}`}
                       >
                         <span className="text-[#F26A21] text-[10px]" aria-hidden="true">
                           📞
@@ -183,7 +183,7 @@ export default function MemberTable({ members = [], startIndex = 0 }) {
                       className="text-[#F26A21] font-bold text-xs hover:text-[#091D42] hover:underline transition-colors inline-flex items-center gap-0.5"
                       title={`${member.name} का संपूर्ण विवरण देखें`}
                     >
-                      <span>विवरण</span>
+                      <span>विवरण देखें</span>
                       <span aria-hidden="true">→</span>
                     </Link>
                   </td>

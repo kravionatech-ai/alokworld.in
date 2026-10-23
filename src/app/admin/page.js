@@ -9,7 +9,7 @@ const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
   loading: () => (
     <div className="h-64 border border-[#D5CEC4] bg-[#FAF8F3] flex items-center justify-center text-xs text-[#55657E] animate-pulse rounded-xs">
-      Loading visual rich-text editor...
+      विजुअल रिच-टेक्स्ट संपादक लोड हो रहा है...
     </div>
   ),
 });
@@ -160,15 +160,15 @@ export default function AdminDashboard() {
     biography: "",
     tags: "",
     membershipStatus: "active",
-    isApproved: true,
-    isPublished: true,
+    isअनुमोदित: true,
+    isप्रकाशित: true,
     isArchived: false,
     showPhone: true,
     showEmail: true,
     showAddress: false,
   });
 
-  // 2. Page Content CMS State
+  // 2. पृष्ठ सामग्री प्रबंधन (CMS) State
   const [pagesList, setPagesList] = useState([]);
   const [selectedPageSlug, setSelectedPageSlug] = useState("about");
   const [pageEditorMode, setPageEditorMode] = useState("edit");
@@ -205,10 +205,10 @@ export default function AdminDashboard() {
     tagline: "",
     announcement: "",
     announcementEnabled: true,
-    heroBadge: "Official Community Portal",
-    heroTitle: "Akhil Bhartiya Samaj Directory & Central Portal",
-    heroSubtitle: "A comprehensive digital network connecting community members, elders, doctors, engineers, advocates, merchants, and youth network across India.",
-    heroCtaText: "Explore Member Directory →",
+    heroBadge: "आधिकारिक समाज पोर्टल",
+    heroTitle: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय पोर्टल",
+    heroSubtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक) एवं समाज डायरेक्टरी — देशभर के सभी सत्यापित सदस्यों, वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं युवाओं को जोड़ने वाला आधिकारिक मंच।",
+    heroCtaText: "सदस्य डायरेक्टरी देखें →",
     heroCtaLink: "/directory",
     heroImage: "",
     sidebarNoticeTitle: "",
@@ -248,7 +248,7 @@ export default function AdminDashboard() {
   const [auditFilterAction, setAuditFilterAction] = useState("All");
   const [auditSearch, setAuditSearch] = useState("");
 
-  // 6. Admin Team & Roles State
+  // 6. Admin Team & भूमिकाs State
   const [adminUsers, setAdminUsers] = useState([]);
   const [newAdminForm, setNewAdminForm] = useState({
     name: "",
@@ -257,7 +257,7 @@ export default function AdminDashboard() {
     password: "",
   });
 
-  // 7. Messages / Inquiries State
+  // 7. Messages / पूछताछ व संदेश State
   const [messages, setMessages] = useState([]);
 
   // Confirmation Modal for Destructive Operations
@@ -266,7 +266,7 @@ export default function AdminDashboard() {
     title: "",
     message: "",
     targetName: "",
-    confirmText: "Confirm",
+    confirmText: "पुष्टि करें",
     confirmBtnClass: "bg-red-700 hover:bg-red-800 text-white",
     action: null,
   });
@@ -404,7 +404,7 @@ export default function AdminDashboard() {
       title,
       message,
       targetName,
-      confirmText: confirmText || "Confirm Action",
+      confirmText: confirmText || "पुष्टि करें",
       confirmBtnClass: confirmBtnClass || "bg-red-700 hover:bg-red-800 text-white",
       action: onConfirm,
     });
@@ -532,10 +532,10 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isApproved: newStatus }),
       });
-      if (!res.ok) throw new Error("Failed to update approval status");
+      if (!res.ok) throw new Error("अनुमोदन स्थिति अद्यतन करने में विफल");
       const data = await res.json();
       setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
-      showBanner(`Member "${m.name}" set to ${newStatus ? "Approved" : "Pending"}.`);
+      showBanner(`सदस्य "${m.name}" को ${newStatus ? "अनुमोदित" : "प्रतीक्षारत"} किया गया।`);
     } catch (err) {
       showBanner(err.message, true);
     }
@@ -550,10 +550,10 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPublished: newPub }),
       });
-      if (!res.ok) throw new Error("Failed to update visibility");
+      if (!res.ok) throw new Error("दृश्यता अद्यतन करने में विफल");
       const data = await res.json();
       setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
-      showBanner(`Member "${m.name}" visibility set to ${newPub ? "Published" : "Unlisted"}.`);
+      showBanner(`सदस्य "${m.name}" की दृश्यता ${newPub ? "प्रकाशित" : "अप्रकाशित"} निर्धारित की गई।`);
     } catch (err) {
       showBanner(err.message, true);
     }
@@ -564,12 +564,10 @@ export default function AdminDashboard() {
     const nextState = !isCurrentlyArchived;
 
     requestConfirmation({
-      title: nextState ? "Archive Member Record" : "Restore Member Record",
-      message: nextState
-        ? "Archived members remain stored in the database but are excluded from active public searches."
-        : "Restoring this record will re-enable public directory visibility if approved.",
+      title: nextState ? "सदस्य रिकॉर्ड संग्रहीत करें" : "सदस्य रिकॉर्ड पुनर्स्थापित करें",
+      message: nextState ? "संग्रहीत सदस्य डेटाबेस में सुरक्षित रहते हैं, किंतु सार्वजनिक खोजों से बाहर रहते हैं।" : "इस रिकॉर्ड को पुनर्स्थापित करने पर अनुमोदन उपरांत यह पुनः सार्वजनिक डायरेक्टरी में दृश्यमान होगा।",
       targetName: m.name,
-      confirmText: nextState ? "Archive Member" : "Restore Member",
+      confirmText: nextState ? "सदस्य संग्रहीत करें" : "सदस्य पुनर्स्थापित करें",
       confirmBtnClass: nextState ? "bg-slate-700 hover:bg-slate-800 text-white" : "bg-emerald-700 hover:bg-emerald-800 text-white",
       onConfirm: async () => {
         try {
@@ -582,10 +580,10 @@ export default function AdminDashboard() {
               membershipStatus: nextState ? "archived" : "active",
             }),
           });
-          if (!res.ok) throw new Error("Failed to archive/restore member");
+          if (!res.ok) throw new Error("सदस्य संग्रहीत/पुनर्स्थापित करने में विफल");
           const data = await res.json();
           setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
-          showBanner(`Member "${m.name}" ${nextState ? "archived" : "restored"}.`);
+          showBanner(`सदस्य "${m.name}" को ${nextState ? "संग्रहीत" : "पुनर्स्थापित"} किया गया।`);
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -595,18 +593,18 @@ export default function AdminDashboard() {
 
   const confirmDeleteMember = (m) => {
     requestConfirmation({
-      title: "Delete Member Record",
-      message: "Are you sure you want to permanently delete this member record? This cannot be undone.",
+      title: "सदस्य रिकॉर्ड हटाएं",
+      message: "क्या आप निश्चित रूप से इस सदस्य रिकॉर्ड को स्थायी रूप से हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।",
       targetName: m.name,
-      confirmText: "Delete Permanently",
+      confirmText: "स्थायी रूप से हटाएं",
       confirmBtnClass: "bg-red-700 hover:bg-red-800 text-white",
       onConfirm: async () => {
         try {
           const id = m._id || m.id;
           const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete member");
+          if (!res.ok) throw new Error("सदस्य हटाने में विफल");
           setMembers((prev) => prev.filter((item) => item._id !== id && item.id !== id));
-          showBanner(`Member "${m.name}" deleted.`);
+          showBanner(`सदस्य "${m.name}" सफलतापूर्वक हटा दिया गया।`);
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -633,9 +631,9 @@ export default function AdminDashboard() {
           body: JSON.stringify(payload),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to update member");
+        if (!res.ok) throw new Error(data.error || "सदस्य अद्यतन करने में विफल");
         setMembers((prev) => prev.map((item) => (item._id === editingMemberId || item.id === editingMemberId ? data.member : item)));
-        showBanner(`Member "${payload.name}" updated.`);
+        showBanner(`सदस्य "${payload.name}" सफलतापूर्वक अद्यतन किया गया।`);
       } else {
         const res = await fetch("/api/members", {
           method: "POST",
@@ -643,9 +641,9 @@ export default function AdminDashboard() {
           body: JSON.stringify(payload),
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to create member");
+        if (!res.ok) throw new Error(data.error || "सदस्य जोड़ने में विफल");
         setMembers((prev) => [data.member, ...prev]);
-        showBanner(`Member "${payload.name}" added.`);
+        showBanner(`सदस्य "${payload.name}" सफलतापूर्वक जोड़ा गया।`);
       }
       resetMemberForm();
       setActiveTab("members");
@@ -684,16 +682,16 @@ export default function AdminDashboard() {
 
       if (targetField === "member") {
         setMemberForm((prev) => ({ ...prev, avatar: data.url }));
-        showBanner("Photo uploaded.");
+        showBanner("छायाचित्र सफलतापूर्वक अपलोड किया गया।");
       } else if (targetField === "gallery") {
         setGalleryForm((prev) => ({ ...prev, imageUrl: data.url, publicId: data.publicId }));
-        showBanner("Gallery image uploaded.");
+        showBanner("गैलरी छायाचित्र सफलतापूर्वक अपलोड किया गया।");
       } else if (targetField === "ogImage") {
         setSettings((prev) => ({ ...prev, ogImage: data.url }));
-        showBanner("Social image uploaded.");
+        showBanner("सोशल छायाचित्र अपलोड किया गया।");
       } else if (targetField === "heroImage") {
         setSettings((prev) => ({ ...prev, heroImage: data.url }));
-        showBanner("Hero banner image uploaded! Remember to save settings.");
+        showBanner("हीरो बैनर छायाचित्र अपलोड किया गया! कृपया सेटिंग्स सुरक्षित करें।");
       }
     } catch (err) {
       showBanner(err.message, true);
@@ -748,7 +746,7 @@ export default function AdminDashboard() {
         return [...prev, data.page];
       });
 
-      showBanner(`Page "${data.page.title || selectedPageSlug}" saved.`);
+      showBanner(`पृष्ठ "${data.page.title || selectedPageSlug}" सुरक्षित किया गया।`);
     } catch (err) {
       showBanner(err.message, true);
     } finally {
@@ -758,16 +756,16 @@ export default function AdminDashboard() {
 
   const handleDeletePage = (slug) => {
     requestConfirmation({
-      title: "Reset to Default Template",
-      message: "Are you sure you want to remove custom content for this page? The hardcoded system template will be used.",
+      title: "डिफ़ॉल्ट प्रारूप पर रीसेट करें",
+      message: "क्या आप इस पृष्ठ की कस्टम सामग्री हटाना चाहते हैं? इसके स्थान पर सिस्टम का डिफ़ॉल्ट टेम्पलेट उपयोग किया जाएगा।",
       targetName: slug,
-      confirmText: "Reset Content",
+      confirmText: "सामग्री रीसेट करें",
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/pages/${slug}`, { method: "DELETE" });
           if (!res.ok) throw new Error("Failed to delete page");
           setPagesList((prev) => prev.filter((p) => p.slug !== slug));
-          showBanner(`Page "${slug}" reset to default.`);
+          showBanner(`पृष्ठ "${slug}" डिफ़ॉल्ट पर रीसेट कर दिया गया।`);
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -792,7 +790,7 @@ export default function AdminDashboard() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to update item");
         setGalleryItems((prev) => prev.map((it) => (it._id === editingGalleryId ? data.item : it)));
-        showBanner("Gallery photo updated.");
+        showBanner("गैलरी छायाचित्र अद्यतन किया गया।");
       } else {
         const res = await fetch("/api/gallery", {
           method: "POST",
@@ -802,7 +800,7 @@ export default function AdminDashboard() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Failed to add item");
         setGalleryItems((prev) => [data.item, ...prev]);
-        showBanner("Photo added to gallery.");
+        showBanner("गैलरी में नया छायाचित्र जोड़ा गया।");
       }
       setGalleryModalOpen(false);
       setEditingGalleryId(null);
@@ -824,16 +822,16 @@ export default function AdminDashboard() {
 
   const handleDeleteGalleryItem = (item) => {
     requestConfirmation({
-      title: "Delete Gallery Photo",
-      message: "This photo record will be removed from the public gallery.",
+      title: "गैलरी छायाचित्र हटाएं",
+      message: "यह छायाचित्र रिकॉर्ड सार्वजनिक गैलरी से हटा दिया जाएगा।",
       targetName: item.title,
-      confirmText: "Delete Photo",
+      confirmText: "छायाचित्र हटाएं",
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/gallery/${item._id}`, { method: "DELETE" });
           if (!res.ok) throw new Error("Failed to delete");
           setGalleryItems((prev) => prev.filter((it) => it._id !== item._id));
-          showBanner(`Photo "${item.title}" removed.`);
+          showBanner(`छायाचित्र "${item.title}" हटा दिया गया।`);
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -863,7 +861,7 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to update settings");
-      showBanner("Settings saved successfully.");
+      showBanner("सेटिंग्स सफलतापूर्वक सुरक्षित की गईं।");
     } catch (err) {
       showBanner(err.message, true);
     } finally {
@@ -889,7 +887,7 @@ export default function AdminDashboard() {
 
       setAdminUsers((prev) => [data.user, ...prev]);
       setNewAdminForm({ name: "", email: "", role: "editor", password: "" });
-      showBanner(`User "${data.user.email}" added.`);
+      showBanner(`प्रशासक "${data.user.email}" जोड़ा गया।`);
     } catch (err) {
       showBanner(err.message, true);
     } finally {
@@ -899,17 +897,17 @@ export default function AdminDashboard() {
 
   const handleDeleteAdmin = (adminUser) => {
     requestConfirmation({
-      title: "Revoke Administrator Access",
-      message: "Are you sure you want to revoke this administrator's CMS login privileges?",
+      title: "प्रशासक पहुंच निरस्त करें",
+      message: "क्या आप निश्चित रूप से इस प्रशासक की सीएमएस लॉगिन अनुमतियां निरस्त करना चाहते हैं?",
       targetName: `${adminUser.name} (${adminUser.email})`,
-      confirmText: "Revoke Access",
+      confirmText: "पहुंच निरस्त करें",
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/admin/users?id=${adminUser._id}`, { method: "DELETE" });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || "Failed to delete user");
           setAdminUsers((prev) => prev.filter((u) => u._id !== adminUser._id));
-          showBanner(`User "${adminUser.email}" removed.`);
+          showBanner(`प्रशासक "${adminUser.email}" हटा दिया गया।`);
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -922,16 +920,16 @@ export default function AdminDashboard() {
   // ==========================================
   const handleDeleteMessage = (id) => {
     requestConfirmation({
-      title: "Delete Inquiry Message",
-      message: "Are you sure you want to delete this received contact inquiry?",
+      title: "पूछताछ संदेश हटाएं",
+      message: "क्या आप निश्चित रूप से इस प्राप्त संपर्क संदेश को हटाना चाहते हैं?",
       targetName: `Inquiry #${id}`,
-      confirmText: "Delete",
+      confirmText: "हटाएं",
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/contact?id=${id}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete message");
+          if (!res.ok) throw new Error("संदेश हटाने में विफल");
           setMessages((prev) => prev.filter((m) => m.id !== id && m._id !== id));
-          showBanner("Message deleted.");
+          showBanner("संदेश हटा दिया गया।");
         } catch (err) {
           showBanner(err.message, true);
         }
@@ -950,32 +948,32 @@ export default function AdminDashboard() {
   // ==========================================
   const navigationSections = [
     {
-      title: "Dashboard",
+      title: "डैशबोर्ड",
       items: [
-        { id: "overview", label: "Overview & Metrics", icon: "overview" },
-        { id: "system_health", label: "Site & System Health", icon: "server" },
+        { id: "overview", label: "अवलोकन एवं आंकड़े (Overview)", icon: "overview" },
+        { id: "system_health", label: "साइट एवं सिस्टम स्थिति", icon: "server" },
       ],
     },
     {
-      title: "Content Management",
+      title: "सामग्री प्रबंधन (CMS)",
       items: [
-        { id: "pages", label: "Page Content", icon: "document", count: pagesList.length },
+        { id: "pages", label: "पृष्ठ सामग्री (सीएमएस पृष्ठ)", icon: "document", count: pagesList.length },
         {
           id: "hero_widgets",
-          label: "Hero & Announcements",
+          label: "हीरो बैनर एवं घोषणाएं",
           icon: "widgets",
           activeIndicator: settings.announcementEnabled,
         },
-        { id: "navigation", label: "Header Navigation Menu", icon: "navigation" },
-        { id: "gallery", label: "Photo Gallery", icon: "photo", count: galleryItems.length },
+        { id: "navigation", label: "शीर्ष नेविगेशन मेनू", icon: "navigation" },
+        { id: "gallery", label: "छायाचित्र दीर्घा", icon: "photo", count: galleryItems.length },
       ],
     },
     {
-      title: "Members & Community",
+      title: "सदस्य एवं समाज",
       items: [
         {
           id: "members",
-          label: "Member Directory",
+          label: "सदस्य निर्देशिका",
           icon: "users",
           count: memberStats.total,
           onClick: () => {
@@ -985,7 +983,7 @@ export default function AdminDashboard() {
         },
         {
           id: "add_member",
-          label: "Register New Member",
+          label: "नया सदस्य जोड़ें",
           icon: "user-plus",
           onClick: () => {
             resetMemberForm();
@@ -994,7 +992,7 @@ export default function AdminDashboard() {
         },
         {
           id: "messages",
-          label: "Inquiries & Submissions",
+          label: "संदेश एवं पूछताछ",
           icon: "mail",
           count: messages.length,
           activeIndicator: messages.some((m) => !m.isRead),
@@ -1002,29 +1000,29 @@ export default function AdminDashboard() {
       ],
     },
     {
-      title: "Website Configuration",
+      title: "वेबसाइट सेटिंग्स",
       items: [
-        { id: "site_settings", label: "Site Info & Contacts", icon: "settings" },
+        { id: "site_settings", label: "साइट जानकारी एवं संपर्क", icon: "settings" },
         {
           id: "maintenance",
-          label: "Maintenance Mode",
+          label: "रखरखाव मोड (Maintenance)",
           icon: "shield",
           activeIndicator: settings.maintenanceMode,
         },
       ],
     },
     {
-      title: "Technical SEO",
+      title: "तकनीकी एसईओ (SEO)",
       items: [
-        { id: "seo_settings", label: "Technical SEO & Meta", icon: "search" },
+        { id: "seo_settings", label: "एसईओ एवं मेटा सेटिंग्स", icon: "search" },
       ],
     },
     {
-      title: "Administration",
+      title: "प्रशासन एवं सुरक्षा",
       items: [
-        { id: "audit_logs", label: "Audit Trail", icon: "clipboard" },
+        { id: "audit_logs", label: "ऑडिट लॉग्स (कार्यवाही विवरण)", icon: "clipboard" },
         ...(currentUser?.role === "superadmin"
-          ? [{ id: "admin_team", label: "Staff & Permissions", icon: "key", count: adminUsers.length }]
+          ? [{ id: "admin_team", label: "प्रशासक टीम एवं अनुमतियां", icon: "key", count: adminUsers.length }]
           : []),
       ],
     },
@@ -1034,7 +1032,7 @@ export default function AdminDashboard() {
     return (
       <div className="min-h-screen bg-[#F8F6F0] flex items-center justify-center p-4">
         <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs font-mono text-[#55657E]">
-          Loading administrative desk...
+          प्रशासनिक नियंत्रण कक्ष लोड हो रहा है...
         </div>
       </div>
     );
@@ -1060,7 +1058,7 @@ export default function AdminDashboard() {
           <Link href="/admin" className="flex items-center gap-1.5 font-bold text-sm tracking-tight text-[#102F6B]">
             <span>alokworld<span className="text-[#D9531E]">.in</span></span>
             <span className="text-[#A09A90] font-normal mx-0.5">/</span>
-            <span className="text-xs font-medium text-[#55657E] hidden xs:inline">Centralized Control Desk</span>
+            <span className="text-xs font-medium text-[#55657E] hidden xs:inline">केंद्रीय नियंत्रण कक्ष</span>
           </Link>
         </div>
 
@@ -1079,7 +1077,7 @@ export default function AdminDashboard() {
             target="_blank"
             className="text-[#102F6B] hover:text-[#D9531E] font-medium transition-colors flex items-center gap-1"
           >
-            <span>Live Site</span>
+            <span>वेबसाइट देखें</span>
             <span className="text-[11px]">↗</span>
           </Link>
 
@@ -1089,7 +1087,7 @@ export default function AdminDashboard() {
             onClick={handleLogout}
             className="text-red-700 hover:text-red-900 font-medium transition-colors cursor-pointer"
           >
-            Log out
+            लॉग आउट
           </button>
         </div>
       </header>
@@ -1117,11 +1115,11 @@ export default function AdminDashboard() {
         >
           {/* Mobile Header */}
           <div className="md:hidden h-12 px-4 flex items-center justify-between border-b border-[#1B2A40] bg-[#091424]">
-            <span className="font-bold text-xs text-white">Website Control Center</span>
+            <span className="font-bold text-xs text-white">वेबसाइट नियंत्रण केंद्र</span>
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="text-slate-400 hover:text-white p-1 cursor-pointer"
-              aria-label="Close drawer"
+              aria-label="नेविगेशन बंद करें"
             >
               ✕
             </button>
@@ -1213,13 +1211,13 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Publication Overview</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">प्रकाशन अवलोकन एवं सांख्यिकी</h1>
                   <p className="text-xs text-[#55657E]">
-                    System summary and recent directory activity.
+                    सिस्टम सारांश एवं हाल की निर्देशिका गतिविधियां।
                   </p>
                 </div>
                 <div className="text-xs text-[#55657E] font-mono">
-                  {settings.maintenanceMode ? "● Maintenance Warning Active" : "● Live Production"}
+                  {settings.maintenanceMode ? "● रखरखाव सूचना सक्रिय" : "● लाइव पोर्टल सक्रिय"}
                 </div>
               </div>
 
@@ -1232,9 +1230,9 @@ export default function AdminDashboard() {
                     setStatusFilter("all");
                   }}
                 >
-                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">Total Members</div>
+                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">कुल सदस्य</div>
                   <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{memberStats.total}</div>
-                  <div className="text-[10px] text-[#55657E] mt-0.5">Directory DB</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">निर्देशिका डेटाबेस</div>
                 </div>
 
                 <div
@@ -1246,7 +1244,7 @@ export default function AdminDashboard() {
                 >
                   <div className="text-[10px] uppercase font-semibold text-emerald-800">Approved</div>
                   <div className="text-xl sm:text-2xl font-bold text-emerald-800 mt-0.5">{memberStats.approved}</div>
-                  <div className="text-[10px] text-[#55657E] mt-0.5">Publicly active</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">सार्वजनिक सक्रिय</div>
                 </div>
 
                 <div
@@ -1258,10 +1256,10 @@ export default function AdminDashboard() {
                     setStatusFilter("pending");
                   }}
                 >
-                  <div className="text-[10px] uppercase font-semibold text-amber-800">Pending Review</div>
+                  <div className="text-[10px] uppercase font-semibold text-amber-800">समीक्षा प्रतीक्षित</div>
                   <div className="text-xl sm:text-2xl font-bold text-amber-800 mt-0.5">{memberStats.pending}</div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">
-                    {memberStats.pending > 0 ? "● Action required" : "All reviewed"}
+                    {memberStats.pending > 0 ? "● समीक्षा अपेक्षित" : "सभी स्वीकृत"}
                   </div>
                 </div>
 
@@ -1271,7 +1269,7 @@ export default function AdminDashboard() {
                 >
                   <div className="text-[10px] uppercase font-semibold text-[#102F6B]">CMS Pages</div>
                   <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{pagesList.length}</div>
-                  <div className="text-[10px] text-[#55657E] mt-0.5">Rich articles</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">संपादकीय आलेख</div>
                 </div>
 
                 <div
@@ -1280,7 +1278,7 @@ export default function AdminDashboard() {
                 >
                   <div className="text-[10px] uppercase font-semibold text-[#55657E]">Photo Gallery</div>
                   <div className="text-xl sm:text-2xl font-bold text-[#1E293B] mt-0.5">{galleryItems.length}</div>
-                  <div className="text-[10px] text-[#55657E] mt-0.5">Cloudinary media</div>
+                  <div className="text-[10px] text-[#55657E] mt-0.5">क्लाउडिनरी मीडिया</div>
                 </div>
 
                 <div
@@ -1292,10 +1290,10 @@ export default function AdminDashboard() {
                   <div className="text-[10px] text-[#55657E] mt-0.5">
                     {messages.filter((m) => !m.isRead).length > 0 ? (
                       <span className="text-[#D9531E] font-medium font-mono">
-                        {messages.filter((m) => !m.isRead).length} new unread
+                        {messages.filter((m) => !m.isRead).length} नए अपठित
                       </span>
                     ) : (
-                      "All answered"
+                      "सभी उत्तरित"
                     )}
                   </div>
                 </div>
@@ -1306,23 +1304,23 @@ export default function AdminDashboard() {
                 <div className="flex items-center gap-4 flex-wrap text-[11px]">
                   <div className="flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span className="text-[#55657E]">Database:</span>
+                    <span className="text-[#55657E]">डेटाबेस:</span>
                     <span className="font-semibold text-[#1E293B]">MongoDB Online</span>
                   </div>
                   <span className="text-[#E2DDD5]">|</span>
                   <div className="flex items-center gap-1.5">
                     <span className={`w-2 h-2 rounded-full ${settings.announcementEnabled ? "bg-[#D9531E]" : "bg-slate-400"}`}></span>
-                    <span className="text-[#55657E]">Announcement:</span>
+                    <span className="text-[#55657E]">घोषणा पट्टी:</span>
                     <span className="font-semibold text-[#1E293B]">
-                      {settings.announcementEnabled ? "Live Strip Active" : "Disabled"}
+                      {settings.announcementEnabled ? "सक्रिय" : "निष्क्रिय"}
                     </span>
                   </div>
                   <span className="text-[#E2DDD5]">|</span>
                   <div className="flex items-center gap-1.5">
                     <span className={`w-2 h-2 rounded-full ${settings.maintenanceMode ? "bg-amber-500" : "bg-emerald-500"}`}></span>
-                    <span className="text-[#55657E]">Maintenance Advisory:</span>
+                    <span className="text-[#55657E]">रखरखाव सूचना:</span>
                     <span className="font-semibold text-[#1E293B]">
-                      {settings.maintenanceMode ? "Advisory Banner ON" : "Production Normal"}
+                      {settings.maintenanceMode ? "सूचना पट्टी सक्रिय" : "सामान्य स्थिति"}
                     </span>
                   </div>
                 </div>
@@ -1333,25 +1331,25 @@ export default function AdminDashboard() {
                     onClick={() => setActiveTab("system_health")}
                     className="text-[11px] text-[#102F6B] hover:text-[#D9531E] font-medium underline"
                   >
-                    View System Diagnostics →
+                    सिस्टम स्थिति एवं निदान देखें →
                   </button>
                 </div>
               </div>
 
               {/* Quick Actions Bar */}
               <div className="flex items-center gap-2 pt-1 flex-wrap text-xs">
-                <span className="font-semibold text-[#102F6B] mr-1">Quick Actions:</span>
+                <span className="font-semibold text-[#102F6B] mr-1">त्वरित कार्य:</span>
                 <button
                   onClick={() => { resetMemberForm(); setActiveTab("add_member"); }}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  + Add Member
+                  + सदस्य जोड़ें
                 </button>
                 <button
                   onClick={() => setActiveTab("pages")}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  Edit CMS Pages
+                  पृष्ठ सामग्री संपादित करें
                 </button>
                 <button
                   onClick={() => setActiveTab("hero_widgets")}
@@ -1363,19 +1361,19 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab("gallery")}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  Upload Photos
+                  छायाचित्र अपलोड करें
                 </button>
                 <button
                   onClick={() => setActiveTab("site_settings")}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  Site Settings
+                  साइट सेटिंग्स
                 </button>
                 <button
                   onClick={() => setActiveTab("audit_logs")}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  View Audit Trail
+                  ऑडिट लॉग्स देखें
                 </button>
               </div>
 
@@ -1384,12 +1382,12 @@ export default function AdminDashboard() {
                 {/* Recent Members */}
                 <div className="bg-white border border-[#E2DDD5] rounded-xs">
                   <div className="p-3 border-b border-[#E2DDD5] flex items-center justify-between font-bold text-xs text-[#102F6B]">
-                    <span>Recent Member Registrations</span>
+                    <span>हाल के सदस्य पंजीकरण</span>
                     <button
                       onClick={() => { setActiveTab("members"); setStatusFilter("all"); }}
                       className="text-[#D9531E] hover:underline font-normal text-[11px]"
                     >
-                      View All →
+                      सभी देखें →
                     </button>
                   </div>
                   <div className="divide-y divide-[#EFECE6] text-xs">
@@ -1412,7 +1410,7 @@ export default function AdminDashboard() {
                 {/* Recent Audit Logs */}
                 <div className="bg-white border border-[#E2DDD5] rounded-xs">
                   <div className="p-3 border-b border-[#E2DDD5] flex items-center justify-between font-bold text-xs text-[#102F6B]">
-                    <span>Administrative Activity Log</span>
+                    <span>प्रशासनिक गतिविधि लॉग</span>
                     <button
                       onClick={() => setActiveTab("audit_logs")}
                       className="text-[#D9531E] hover:underline font-normal text-[11px]"
@@ -1448,7 +1446,7 @@ export default function AdminDashboard() {
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B]">Member Directory</h1>
                   <p className="text-xs text-[#55657E]">
-                    Community member roster, verification status, and directory publication.
+                    समाज सदस्य सूची, सत्यापन स्थिति एवं निर्देशिका प्रकाशन।
                   </p>
                 </div>
                 <button
@@ -1467,11 +1465,11 @@ export default function AdminDashboard() {
                 {/* Status Segmented Tabs */}
                 <div className="flex items-center gap-1 flex-wrap">
                   {[
-                    { id: "all", label: "All", count: memberStats.total },
-                    { id: "active", label: "Approved", count: memberStats.approved },
-                    { id: "pending", label: "Pending", count: memberStats.pending },
-                    { id: "unlisted", label: "Unlisted" },
-                    { id: "archived", label: "Archived", count: memberStats.archived },
+                    { id: "all", label: "सभी", count: memberStats.total },
+                    { id: "active", label: "अनुमोदित", count: memberStats.approved },
+                    { id: "pending", label: "प्रतीक्षारत", count: memberStats.pending },
+                    { id: "unlisted", label: "अप्रकाशित" },
+                    { id: "archived", label: "संग्रहीत", count: memberStats.archived },
                   ].map((s) => (
                     <button
                       key={s.id}
@@ -1500,17 +1498,17 @@ export default function AdminDashboard() {
                     onChange={(e) => setMemberSort(e.target.value)}
                     className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
                   >
-                    <option value="newest">Sort: Newest</option>
-                    <option value="oldest">Sort: Oldest</option>
-                    <option value="name_asc">Name: A–Z</option>
-                    <option value="name_desc">Name: Z–A</option>
-                    <option value="city_asc">City: A–Z</option>
+                    <option value="newest">क्रम: नवीनतम</option>
+                    <option value="oldest">क्रम: प्राचीनतम</option>
+                    <option value="name_asc">नाम: अ से ज्ञ</option>
+                    <option value="name_desc">नाम: ज्ञ से अ</option>
+                    <option value="city_asc">शहर: अ से ज्ञ</option>
                   </select>
 
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search name, city, profession..."
+                      placeholder="नाम, पद, शहर, विभाग द्वारा खोजें..."
                       value={adminSearch}
                       onChange={(e) => setAdminSearch(e.target.value)}
                       className="h-8 pl-7 pr-3 w-52 sm:w-64 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
@@ -1536,19 +1534,19 @@ export default function AdminDashboard() {
                   <table className="w-full text-left text-xs min-w-[720px]">
                     <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-semibold">
                       <tr>
-                        <th className="py-2.5 px-3">Member</th>
-                        <th className="py-2.5 px-3">Profession &amp; Role</th>
-                        <th className="py-2.5 px-3">Location</th>
-                        <th className="py-2.5 px-3">Approval</th>
-                        <th className="py-2.5 px-3">Visibility</th>
-                        <th className="py-2.5 px-3 text-right">Actions</th>
+                        <th className="py-2.5 px-3">सदस्य</th>
+                        <th className="py-2.5 px-3">पद एवं व्यवसाय</th>
+                        <th className="py-2.5 px-3">स्थान</th>
+                        <th className="py-2.5 px-3">अनुमोदन</th>
+                        <th className="py-2.5 px-3">दृश्यता</th>
+                        <th className="py-2.5 px-3 text-right">कार्यवाही</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#EFECE6]">
                       {paginatedMembers.length === 0 ? (
                         <tr>
                           <td colSpan={6} className="py-10 text-center text-[#55657E]">
-                            No members found matching the current criteria.
+                            वर्तमान मानदंडों के अनुसार कोई सदस्य नहीं मिला।
                           </td>
                         </tr>
                       ) : (
@@ -1620,7 +1618,7 @@ export default function AdminDashboard() {
                                 </button>
                                 {isArchived && (
                                   <span className="block text-[10px] text-slate-500 font-mono mt-0.5">
-                                    [Archived]
+                                    [संग्रहीत]
                                   </span>
                                 )}
                               </td>
@@ -1639,7 +1637,7 @@ export default function AdminDashboard() {
                                     }`}
                                   ></span>
                                   <span className={m.isPublished ? "text-[#102F6B]" : "text-[#55657E]"}>
-                                    {m.isPublished ? "Published" : "Unlisted"}
+                                    {m.isPublished ? "Published" : "अप्रकाशित"}
                                   </span>
                                 </button>
                               </td>
@@ -1658,7 +1656,7 @@ export default function AdminDashboard() {
                                     onClick={() => toggleMemberArchive(m)}
                                     className="text-[#55657E] hover:text-[#1E293B] hover:underline cursor-pointer"
                                   >
-                                    {isArchived ? "Restore" : "Archive"}
+                                    {isArchived ? "पुनर्स्थापित करें" : "संग्रहीत करें"}
                                   </button>
                                   {currentUser?.role === "superadmin" && (
                                     <>
@@ -1684,7 +1682,7 @@ export default function AdminDashboard() {
                 {/* Pagination Footer */}
                 <div className="bg-[#FAF8F3] px-3 py-2 border-t border-[#E2DDD5] text-xs text-[#55657E] flex flex-col sm:flex-row items-center justify-between gap-2">
                   <div>
-                    Showing{" "}
+                    प्रदर्शित{" "}
                     <span className="font-semibold text-[#1E293B]">
                       {filteredMembers.length === 0 ? 0 : (membersPage - 1) * MEMBERS_PER_PAGE + 1}
                     </span>
@@ -1692,7 +1690,7 @@ export default function AdminDashboard() {
                     <span className="font-semibold text-[#1E293B]">
                       {Math.min(membersPage * MEMBERS_PER_PAGE, filteredMembers.length)}
                     </span>{" "}
-                    of <span className="font-semibold text-[#1E293B]">{filteredMembers.length}</span> members
+                    कुल <span className="font-semibold text-[#1E293B]">{filteredMembers.length}</span> सदस्य
                   </div>
 
                   {totalMemberPages > 1 && (
@@ -1741,10 +1739,10 @@ export default function AdminDashboard() {
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B]">
-                    {editingMemberId ? `Edit Record: ${memberForm.name}` : "Register Community Member"}
+                    {editingMemberId ? `रिकॉर्ड संपादित करें: ${memberForm.name}` : "समाज सदस्य पंजीकृत करें"}
                   </h1>
                   <p className="text-xs text-[#55657E]">
-                    Enter verified credentials, address, and directory privacy consent.
+                    सत्यापित विवरण, पता एवं निर्देशिका गोपनीयता सहमति दर्ज करें।
                   </p>
                 </div>
                 <button
@@ -1755,7 +1753,7 @@ export default function AdminDashboard() {
                   }}
                   className="text-xs text-[#102F6B] hover:underline"
                 >
-                  ← Return to Member Directory
+                  ← सदस्य निर्देशिका पर वापस जाएं
                 </button>
               </div>
 
@@ -1763,12 +1761,12 @@ export default function AdminDashboard() {
                 {/* Identity */}
                 <div className="space-y-3">
                   <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Identity &amp; Profile Picture
+                    पहचान एवं प्रोफ़ाइल छायाचित्र
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="sm:col-span-2 space-y-3">
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Full Name *</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">पूरा नाम *</label>
                         <input
                           type="text"
                           required
@@ -1778,25 +1776,25 @@ export default function AdminDashboard() {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Profile Slug</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">प्रोफ़ाइल स्लग (URL)</label>
                         <input
                           type="text"
                           value={memberForm.slug}
                           onChange={(e) => setMemberForm({ ...memberForm, slug: e.target.value })}
-                          placeholder="e.g. rajesh-kumar-lodhi"
+                          placeholder="उदा. rajesh-kumar-lodhi"
                           className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs font-mono text-xs focus:border-[#102F6B] outline-hidden"
                         />
                         <span className="text-[11px] text-[#55657E] mt-0.5 block">
-                          Leave blank to generate automatically.
+                          स्वतः उत्पन्न करने हेतु रिक्त छोड़ें।
                         </span>
                       </div>
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Community Role</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">सामाजिक दायित्व / पद</label>
                         <input
                           type="text"
                           value={memberForm.role}
                           onChange={(e) => setMemberForm({ ...memberForm, role: e.target.value })}
-                          placeholder="e.g. Community Elder, Core Member"
+                          placeholder="उदा. वरिष्ठ संरक्षक, कार्यकारिणी सदस्य"
                           className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                         />
                       </div>
@@ -1812,7 +1810,7 @@ export default function AdminDashboard() {
                         )}
                       </div>
                       <label className="px-2.5 py-1 bg-white border border-[#D5CEC4] hover:border-[#102F6B] text-[11px] font-medium cursor-pointer rounded-xs">
-                        {uploadingImage ? "Uploading..." : "Upload Photo"}
+                        {uploadingImage ? "अपलोड हो रहा है..." : "छायाचित्र अपलोड करें"}
                         <input
                           type="file"
                           accept="image/*"
@@ -1823,7 +1821,7 @@ export default function AdminDashboard() {
                       </label>
                       <input
                         type="url"
-                        placeholder="Image URL"
+                        placeholder="छायाचित्र URL"
                         value={memberForm.avatar}
                         onChange={(e) => setMemberForm({ ...memberForm, avatar: e.target.value })}
                         className="w-full text-[10px] p-1 border border-[#D5CEC4] bg-white rounded-xs"
@@ -1835,32 +1833,32 @@ export default function AdminDashboard() {
                 {/* Professional & Location */}
                 <div className="space-y-3">
                   <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Profession &amp; Location
+                    पद, व्यवसाय एवं स्थान
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Profession / Occupation *</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">पद एवं व्यवसाय *</label>
                       <input
                         type="text"
                         required
                         value={memberForm.occupation}
                         onChange={(e) => setMemberForm({ ...memberForm, occupation: e.target.value })}
-                        placeholder="e.g. Civil Engineer & Contractor"
+                        placeholder="उदा. सिविल इंजीनियर / प्राध्यापक / चिकित्सक"
                         className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Company / Organization</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">विभाग / प्रतिष्ठान / संगठन</label>
                       <input
                         type="text"
                         value={memberForm.company}
                         onChange={(e) => setMemberForm({ ...memberForm, company: e.target.value })}
-                        placeholder="e.g. Lodhi Infra Builders"
+                        placeholder="उदा. लोक निर्माण विभाग / निजी प्रतिष्ठान"
                         className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">City *</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">शहर / नगर *</label>
                       <input
                         type="text"
                         required
@@ -1870,7 +1868,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">State *</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">राज्य *</label>
                       <input
                         type="text"
                         required
@@ -1880,7 +1878,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Postal PIN Code</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">पिन कोड</label>
                       <input
                         type="text"
                         value={memberForm.pincode}
@@ -1889,7 +1887,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Street Address</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">स्थाई / कार्यालय का पूरा पता</label>
                       <input
                         type="text"
                         value={memberForm.address}
@@ -1903,11 +1901,11 @@ export default function AdminDashboard() {
                 {/* Contact & Biography */}
                 <div className="space-y-3">
                   <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Contact &amp; Biography
+                    संपर्क सूत्र एवं जीवन-परिचय
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Phone Number</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">मोबाइल / फोन नंबर</label>
                       <input
                         type="text"
                         value={memberForm.phone}
@@ -1917,29 +1915,29 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Email Address</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">ईमेल पता</label>
                       <input
                         type="email"
                         value={memberForm.email}
                         onChange={(e) => setMemberForm({ ...memberForm, email: e.target.value })}
-                        placeholder="name@example.com"
+                        placeholder="उदा. name@example.com"
                         className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                       />
                     </div>
                     <div className="col-span-full">
                       <div className="flex items-center justify-between mb-1">
                         <label className="block font-medium text-[#1E293B]">
-                          Biography &amp; Career Highlights (WYSIWYG Rich Text)
+                          जीवन-परिचय, उपलब्धियां एवं सामाजिक योगदान
                         </label>
                         <span className="text-[10px] text-[#55657E]">
-                          Supports bold, italics, lists, headings, links, and Hindi/English
+                          बोल्ड, इटैलिक, सूची, शीर्षक, लिंक एवं हिंदी/अंग्रेजी का समर्थन
                         </span>
                       </div>
                       <RichTextEditor
                         value={memberForm.biography}
                         onChange={(html) => setMemberForm((prev) => ({ ...prev, biography: html }))}
                         minHeight="180px"
-                        placeholder="Write biographical details, community contributions, and professional honors..."
+                        placeholder="विस्तृत जीवन-परिचय, सामाजिक योगदान एवं उपलब्धियां लिखें..."
                       />
                     </div>
                   </div>
@@ -1948,7 +1946,7 @@ export default function AdminDashboard() {
                 {/* Privacy & Permissions */}
                 <div className="space-y-3">
                   <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Directory Visibility &amp; Consent
+                    निर्देशिका दृश्यता एवं सहमति
                   </h2>
                   <div className="p-3 bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs space-y-2">
                     <label className="flex items-center gap-2 cursor-pointer font-medium text-[#1E293B]">
@@ -1957,7 +1955,7 @@ export default function AdminDashboard() {
                         checked={memberForm.isApproved}
                         onChange={(e) => setMemberForm({ ...memberForm, isApproved: e.target.checked })}
                       />
-                      <span>Approved Community Member</span>
+                      <span>अनुमोदित समाज सदस्य</span>
                     </label>
 
                     <label className="flex items-center gap-2 cursor-pointer font-medium text-[#1E293B]">
@@ -1966,7 +1964,7 @@ export default function AdminDashboard() {
                         checked={memberForm.isPublished}
                         onChange={(e) => setMemberForm({ ...memberForm, isPublished: e.target.checked })}
                       />
-                      <span>Publicly Listed in Samaj Directory</span>
+                      <span>समाज निर्देशिका में सार्वजनिक रूप से प्रदर्शित</span>
                     </label>
 
                     <div className="pt-1 border-t border-[#E2DDD5] grid grid-cols-1 sm:grid-cols-3 gap-2 text-[#55657E]">
@@ -1976,7 +1974,7 @@ export default function AdminDashboard() {
                           checked={memberForm.showPhone}
                           onChange={(e) => setMemberForm({ ...memberForm, showPhone: e.target.checked })}
                         />
-                        <span>Show Phone Number</span>
+                        <span>फोन नंबर सार्वजनिक प्रदर्शित करें</span>
                       </label>
                       <label className="flex items-center gap-1.5 cursor-pointer">
                         <input
@@ -1984,7 +1982,7 @@ export default function AdminDashboard() {
                           checked={memberForm.showEmail}
                           onChange={(e) => setMemberForm({ ...memberForm, showEmail: e.target.checked })}
                         />
-                        <span>Show Email Address</span>
+                        <span>ईमेल पता सार्वजनिक प्रदर्शित करें</span>
                       </label>
                       <label className="flex items-center gap-1.5 cursor-pointer">
                         <input
@@ -1992,7 +1990,7 @@ export default function AdminDashboard() {
                           checked={memberForm.showAddress}
                           onChange={(e) => setMemberForm({ ...memberForm, showAddress: e.target.checked })}
                         />
-                        <span>Show Full Street Address</span>
+                        <span>पूरा पता सार्वजनिक प्रदर्शित करें</span>
                       </label>
                     </div>
                   </div>
@@ -2007,14 +2005,14 @@ export default function AdminDashboard() {
                     }}
                     className="px-3 py-1.5 border border-[#D5CEC4] bg-white rounded-xs text-[#55657E] hover:text-[#1E293B] cursor-pointer"
                   >
-                    Cancel
+                    रद्द करें
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
                     className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-4 py-1.5 font-medium rounded-xs cursor-pointer shadow-xs"
                   >
-                    {submitting ? "Saving..." : editingMemberId ? "Update Member" : "Save Member"}
+                    {submitting ? "सुरक्षित हो रहा है..." : editingMemberId ? "सदस्य अद्यतन करें" : "सदस्य सुरक्षित करें"}
                   </button>
                 </div>
               </form>
@@ -2030,7 +2028,7 @@ export default function AdminDashboard() {
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B]">Page Content CMS</h1>
                   <p className="text-xs text-[#55657E]">
-                    Edit titles, hero headers, and formatted rich content across community portal routes.
+                    पोर्टल के विभिन्न पृष्ठों के शीर्षक, बैनर एवं सामग्री को संपादित करें।
                   </p>
                 </div>
                 <select
@@ -2038,21 +2036,21 @@ export default function AdminDashboard() {
                   onChange={(e) => handleSelectPage(e.target.value)}
                   className="h-8 px-2.5 rounded-xs border border-[#D5CEC4] bg-white text-xs font-semibold text-[#102F6B]"
                 >
-                  <option value="about">About Us (/about)</option>
-                  <option value="history">Samaj History (/history)</option>
-                  <option value="organization">Organization (/organization)</option>
-                  <option value="mahasabha">Mahasabha (/mahasabha)</option>
-                  <option value="personalities">Personalities (/personalities)</option>
-                  <option value="contact">Contact (/contact)</option>
-                  <option value="privacy">Privacy Policy (/privacy)</option>
-                  <option value="terms">Terms of Service (/terms)</option>
+                  <option value="about">हमारे बारे में (/about)</option>
+                  <option value="history">समाज इतिहास (/history)</option>
+                  <option value="organization">संगठन एवं कार्यकारिणी (/organization)</option>
+                  <option value="mahasabha">राष्ट्रीय महासभा (/mahasabha)</option>
+                  <option value="personalities">महान विभूतियां (/personalities)</option>
+                  <option value="contact">सचिवालय संपर्क (/contact)</option>
+                  <option value="privacy">गोपनीयता नीति (/privacy)</option>
+                  <option value="terms">नियम एवं शर्तें (/terms)</option>
                 </select>
               </div>
 
               <form onSubmit={handleSavePage} className="bg-white border border-[#E2DDD5] p-5 rounded-xs space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Page Title *</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">पृष्ठ शीर्षक *</label>
                     <input
                       type="text"
                       required
@@ -2062,7 +2060,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Subtitle / Tagline</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">उपशीर्षक / टैगलाइन</label>
                     <input
                       type="text"
                       value={pageForm.subtitle}
@@ -2071,7 +2069,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Hero Banner Title</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">मुख्य बैनर शीर्षक</label>
                     <input
                       type="text"
                       value={pageForm.bannerTitle}
@@ -2080,7 +2078,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Hero Banner Subtitle</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">मुख्य बैनर उपशीर्षक</label>
                     <input
                       type="text"
                       value={pageForm.bannerSubtitle}
@@ -2093,10 +2091,10 @@ export default function AdminDashboard() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="font-medium text-[#1E293B]">
-                      Visual Page Content (WYSIWYG Document Editor)
+                      विजुअल पृष्ठ सामग्री (संपादक)
                     </label>
                     <span className="text-[11px] text-[#55657E]">
-                      Format headings, tables, Hindi/English text, links, and Cloudinary media visually.
+                      शीर्षक, तालिकाएं, हिंदी पाठ, लिंक एवं छायाचित्र आसानी से प्रारूपित करें।
                     </span>
                   </div>
 
@@ -2104,7 +2102,7 @@ export default function AdminDashboard() {
                     value={pageForm.content}
                     onChange={(html) => setPageForm((prev) => ({ ...prev, content: html }))}
                     minHeight="340px"
-                    placeholder="Compose structured page content with headings, lists, tables, and images..."
+                    placeholder="शीर्षकों, सूचियों, तालिकाओं एवं छायाचित्रों के साथ सामग्री लिखें..."
                   />
                 </div>
 
@@ -2114,7 +2112,7 @@ export default function AdminDashboard() {
                     onClick={() => handleDeletePage(selectedPageSlug)}
                     className="text-xs text-red-700 hover:underline cursor-pointer"
                   >
-                    Reset Content to System Default
+                    सामग्री को पूर्वनिर्धारित पर रीसेट करें
                   </button>
 
                   <button
@@ -2122,7 +2120,7 @@ export default function AdminDashboard() {
                     disabled={submitting}
                     className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-4 py-1.5 font-medium rounded-xs cursor-pointer shadow-xs"
                   >
-                    {submitting ? "Saving..." : "Save Page Content"}
+                    {submitting ? "सुरक्षित हो रहा है..." : "पृष्ठ सामग्री सुरक्षित करें"}
                   </button>
                 </div>
               </form>
@@ -2136,9 +2134,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Header Navigation Menu</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">शीर्ष नेविगेशन मेनू</h1>
                   <p className="text-xs text-[#55657E]">
-                    Standard public navigation links across the community portal.
+                    पोर्टल के सार्वजनिक नेविगेशन लिंक।
                   </p>
                 </div>
                 <button
@@ -2147,13 +2145,13 @@ export default function AdminDashboard() {
                   disabled={submitting}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
                 >
-                  {submitting ? "Saving..." : "Save Menu"}
+                  {submitting ? "सुरक्षित हो रहा है..." : "मेनू सुरक्षित करें"}
                 </button>
               </div>
 
               <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-3 text-xs">
                 <p className="text-[#55657E]">
-                  Default navigation bar consists of 10 primary links. Admin access links are strictly removed from public visibility.
+                  सार्वजनिक नेविगेशन बार में १० मुख्य लिंक सम्मिलित हैं। प्रशासनिक लिंक सार्वजनिक दृश्यता से सुरक्षित रखे गए हैं।
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-xs text-[#1E293B]">
                   {["Home (/)", "History (/history)", "Organization (/organization)", "Mahasabha (/mahasabha)", "Matrimonial (/matrimonial)", "Directory (/directory)", "Personalities (/personalities)", "Gallery (/gallery)", "About Us (/about)", "Contact (/contact)"].map((link) => (
@@ -2173,9 +2171,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Hero Section &amp; Announcements</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">मुख्य हीरो बैनर एवं घोषणाएं</h1>
                   <p className="text-xs text-[#55657E]">
-                    Configure homepage hero banner, top announcement ticker, and community notices.
+                    होमपेज हीरो बैनर, शीर्ष सूचना टिकर एवं सामुदायिक संदेश कॉन्फ़िगर करें।
                   </p>
                 </div>
                 <button
@@ -2184,7 +2182,7 @@ export default function AdminDashboard() {
                   disabled={submitting}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
                 >
-                  {submitting ? "Saving..." : "Save Changes"}
+                  {submitting ? "सुरक्षित हो रहा है..." : "परिवर्तन सुरक्षित करें"}
                 </button>
               </div>
 
@@ -2192,11 +2190,11 @@ export default function AdminDashboard() {
                 {/* Hero Section */}
                 <div className="space-y-3">
                   <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Homepage Hero Banner
+                    होमपेज मुख्य हीरो बैनर
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Hero Badge</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">हीरो बैज / लेबल</label>
                       <input
                         type="text"
                         value={settings.heroBadge}
@@ -2205,7 +2203,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Hero Title</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">मुख्य शीर्षक</label>
                       <input
                         type="text"
                         value={settings.heroTitle}
@@ -2214,7 +2212,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div className="col-span-full">
-                      <label className="block font-medium text-[#1E293B] mb-1">Hero Subtitle</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">उपशीर्षक</label>
                       <textarea
                         rows={2}
                         value={settings.heroSubtitle}
@@ -2223,7 +2221,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">CTA Button Label</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">बटन टेक्स्ट</label>
                       <input
                         type="text"
                         value={settings.heroCtaText}
@@ -2232,7 +2230,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">CTA Destination URL</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">बटन लिंक</label>
                       <input
                         type="text"
                         value={settings.heroCtaLink}
@@ -2242,7 +2240,7 @@ export default function AdminDashboard() {
                     </div>
                     <div className="col-span-full">
                       <label className="block font-medium text-[#1E293B] mb-1">
-                        Optional Hero Banner Image (Cloudinary CDN URL)
+                        वैकल्पिक हीरो बैनर छायाचित्र (क्लाउडिनरी URL)
                       </label>
                       <div className="flex items-center gap-2">
                         <input
@@ -2253,7 +2251,7 @@ export default function AdminDashboard() {
                           className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
                         />
                         <label className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shrink-0">
-                          <span>{uploadingImage ? "Uploading..." : "Upload File"}</span>
+                          <span>{uploadingImage ? "अपलोड हो रहा है..." : "फ़ाइल अपलोड करें"}</span>
                           <input
                             type="file"
                             accept="image/*"
@@ -2268,7 +2266,7 @@ export default function AdminDashboard() {
                             onClick={() => setSettings({ ...settings, heroImage: "" })}
                             className="px-2 py-1.5 text-xs text-red-700 hover:bg-red-50 border border-red-200 rounded-xs cursor-pointer"
                           >
-                            Clear
+                            हटाएं
                           </button>
                         )}
                       </div>
@@ -2280,10 +2278,10 @@ export default function AdminDashboard() {
                 <div className="space-y-2 pt-3 border-t border-[#E2DDD5]">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Live Portal Preview (Desktop View)
+                      लाइव पोर्टल पूर्वावलोकन (डेस्कटॉप दृश्य)
                     </h3>
                     <span className="text-[10px] text-[#55657E]">
-                      Real-time interactive rendering of hero section &amp; announcement
+                      हीरो अनुभाग एवं सूचना पट्टी का वास्तविक समय पूर्वावलोकन
                     </span>
                   </div>
 
@@ -2356,7 +2354,7 @@ export default function AdminDashboard() {
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
                     <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Top Header Announcement Strip
+                      शीर्ष घोषणा टिकर पट्टी
                     </h2>
                     <label className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-[#1E293B]">
                       <input
@@ -2364,11 +2362,11 @@ export default function AdminDashboard() {
                         checked={settings.announcementEnabled}
                         onChange={(e) => setSettings({ ...settings, announcementEnabled: e.target.checked })}
                       />
-                      <span>Active</span>
+                      <span>सक्रिय</span>
                     </label>
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Announcement Message</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">घोषणा संदेश</label>
                     <textarea
                       rows={2}
                       value={settings.announcement}
@@ -2378,11 +2376,11 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Sidebar Community Notice */}
+                {/* साइडबार सामुदायिक सूचना */}
                 <div className="space-y-3 pt-2">
                   <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
                     <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Sidebar Community Notice
+                      साइडबार सामुदायिक सूचना
                     </h2>
                     <label className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-[#1E293B]">
                       <input
@@ -2390,12 +2388,12 @@ export default function AdminDashboard() {
                         checked={settings.sidebarNoticeEnabled}
                         onChange={(e) => setSettings({ ...settings, sidebarNoticeEnabled: e.target.checked })}
                       />
-                      <span>Active</span>
+                      <span>सक्रिय</span>
                     </label>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Notice Heading</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">सूचना शीर्षक</label>
                       <input
                         type="text"
                         value={settings.sidebarNoticeTitle}
@@ -2404,7 +2402,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Notice Content</label>
+                      <label className="block font-medium text-[#1E293B] mb-1">सूचना विवरण</label>
                       <textarea
                         rows={2}
                         value={settings.sidebarNoticeContent}
@@ -2427,7 +2425,7 @@ export default function AdminDashboard() {
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B]">Photo Gallery</h1>
                   <p className="text-xs text-[#55657E]">
-                    Community convention archives and event photographs.
+                    राष्ट्रीय अधिवेशन एवं कार्यक्रम छायाचित्र संग्रह।
                   </p>
                 </div>
                 <button
@@ -2446,7 +2444,7 @@ export default function AdminDashboard() {
                   }}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer shadow-xs"
                 >
-                  + Add Photo
+                  + छायाचित्र जोड़ें
                 </button>
               </div>
 
@@ -2493,13 +2491,13 @@ export default function AdminDashboard() {
                 <div className="fixed inset-0 bg-[#0D1B2A]/40 z-50 flex items-center justify-center p-4">
                   <div className="bg-white max-w-md w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3 text-xs">
                     <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2 font-bold text-[#102F6B]">
-                      <span>{editingGalleryId ? "Edit Photo" : "Add Photo"}</span>
+                      <span>{editingGalleryId ? "छायाचित्र संपादित करें" : "छायाचित्र जोड़ें"}</span>
                       <button onClick={() => setGalleryModalOpen(false)} className="text-slate-500 font-bold">✕</button>
                     </div>
 
                     <form onSubmit={handleSaveGalleryItem} className="space-y-3">
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Title *</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">शीर्षक *</label>
                         <input
                           type="text"
                           required
@@ -2509,20 +2507,20 @@ export default function AdminDashboard() {
                         />
                       </div>
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Category</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">श्रेणी</label>
                         <select
                           value={galleryForm.category}
                           onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
                           className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                         >
-                          <option value="National Convention">National Convention</option>
-                          <option value="Community Gathering">Community Gathering</option>
-                          <option value="Youth Meet">Youth Meet</option>
-                          <option value="Historical Heritage">Historical Heritage</option>
+                          <option value="National Convention">राष्ट्रीय महाधिवेशन</option>
+                          <option value="Community Gathering">सामाजिक सम्मेलन</option>
+                          <option value="Youth Meet">युवा सम्मेलन</option>
+                          <option value="Historical Heritage">ऐतिहासिक धरोहर</option>
                         </select>
                       </div>
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Image URL / Upload</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">छायाचित्र URL / फ़ाइल</label>
                         <input
                           type="url"
                           required
@@ -2555,7 +2553,7 @@ export default function AdminDashboard() {
                           disabled={submitting}
                           className="bg-[#102F6B] text-white px-3 py-1 rounded-xs font-medium cursor-pointer"
                         >
-                          {submitting ? "Saving..." : "Save Photo"}
+                          {submitting ? "सुरक्षित हो रहा है..." : "छायाचित्र सुरक्षित करें"}
                         </button>
                       </div>
                     </form>
@@ -2572,9 +2570,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Technical SEO &amp; Indexing</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">तकनीकी एसईओ एवं इंडेक्सिंग</h1>
                   <p className="text-xs text-[#55657E]">
-                    Search engine metadata, canonical domain, Open Graph directives, and verification.
+                    सर्च इंजन मेटाडेटा, कैनोनिकल डोमेन, ओपन ग्राफ एवं सत्यापन टोकन।
                   </p>
                 </div>
                 <button
@@ -2583,14 +2581,14 @@ export default function AdminDashboard() {
                   disabled={submitting}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
                 >
-                  {submitting ? "Saving..." : "Save SEO"}
+                  {submitting ? "सुरक्षित हो रहा है..." : "एसईओ सुरक्षित करें"}
                 </button>
               </div>
 
               <div className="bg-white border border-[#E2DDD5] p-5 rounded-xs space-y-3 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Default Meta Title</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">मुख्य मेटा शीर्षक</label>
                     <input
                       type="text"
                       value={settings.seoTitle}
@@ -2599,7 +2597,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Canonical Base URL</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">कैनोनिकल बेस URL</label>
                     <input
                       type="url"
                       value={settings.siteUrl}
@@ -2608,7 +2606,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Organization Name (Schema.org)</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">संगठन नाम (Schema.org)</label>
                     <input
                       type="text"
                       value={settings.organizationName}
@@ -2617,7 +2615,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Google Search Console Verification Token</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">गूगल सर्च कंसोल सत्यापन टोकन</label>
                     <input
                       type="text"
                       value={settings.googleVerificationId}
@@ -2626,7 +2624,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div className="col-span-full">
-                    <label className="block font-medium text-[#1E293B] mb-1">Meta Description</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">मेटा विवरण</label>
                     <textarea
                       rows={2}
                       value={settings.seoDescription}
@@ -2635,7 +2633,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div className="col-span-full">
-                    <label className="block font-medium text-[#1E293B] mb-1">Meta Keywords</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">मेटा कीवर्ड्स</label>
                     <input
                       type="text"
                       value={settings.seoKeywords}
@@ -2655,9 +2653,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Site Information &amp; Contacts</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">साइट जानकारी एवं संपर्क सूत्र</h1>
                   <p className="text-xs text-[#55657E]">
-                    Secretariat contact phone, inquiry email address, and physical location.
+                    सचिवालय संपर्क दूरभाष, ईमेल पता एवं कार्यालय का पता।
                   </p>
                 </div>
                 <button
@@ -2666,14 +2664,14 @@ export default function AdminDashboard() {
                   disabled={submitting}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
                 >
-                  {submitting ? "Saving..." : "Save Information"}
+                  {submitting ? "सुरक्षित हो रहा है..." : "जानकारी सुरक्षित करें"}
                 </button>
               </div>
 
               <div className="bg-white border border-[#E2DDD5] p-5 rounded-xs space-y-3 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Portal Name</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">पोर्टल नाम</label>
                     <input
                       type="text"
                       value={settings.siteName}
@@ -2682,7 +2680,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Tagline</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">टैगलाइन</label>
                     <input
                       type="text"
                       value={settings.tagline}
@@ -2691,7 +2689,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Secretariat Email</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">सचिवालय ईमेल</label>
                     <input
                       type="email"
                       value={settings.contactEmail}
@@ -2700,7 +2698,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Official Phone</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">आधिकारिक दूरभाष</label>
                     <input
                       type="text"
                       value={settings.contactPhone}
@@ -2709,7 +2707,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">WhatsApp Line</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">व्हाट्सएप नंबर</label>
                     <input
                       type="text"
                       value={settings.whatsappNumber}
@@ -2718,7 +2716,7 @@ export default function AdminDashboard() {
                     />
                   </div>
                   <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Physical Address</label>
+                    <label className="block font-medium text-[#1E293B] mb-1">कार्यालय का पता</label>
                     <input
                       type="text"
                       value={settings.contactAddress}
@@ -2738,9 +2736,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Maintenance Mode</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">रखरखाव मोड (Maintenance)</h1>
                   <p className="text-xs text-[#55657E]">
-                    Control active development notice bars and visitor advisories.
+                    विकास कार्य सूचना पट्टी एवं आगंतुक परामर्श नियंत्रित करें।
                   </p>
                 </div>
                 <button
@@ -2749,16 +2747,16 @@ export default function AdminDashboard() {
                   disabled={submitting}
                   className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
                 >
-                  {submitting ? "Saving..." : "Save Settings"}
+                  {submitting ? "सुरक्षित हो रहा है..." : "सेटिंग्स सुरक्षित करें"}
                 </button>
               </div>
 
               <div className="bg-white border border-[#E2DDD5] p-5 rounded-xs space-y-4 text-xs">
                 <div className="p-3 bg-[#FAF8F3] border border-[#E2DDD5] flex items-center justify-between rounded-xs">
                   <div>
-                    <div className="font-semibold text-[#1E293B]">Maintenance Mode Active</div>
+                    <div className="font-semibold text-[#1E293B]">रखरखाव मोड सक्रिय</div>
                     <div className="text-[11px] text-[#55657E]">
-                      Displays top development advisory bar on all public pages.
+                      सभी सार्वजनिक पृष्ठों पर शीर्ष विकास सूचना पट्टी प्रदर्शित होती है।
                     </div>
                   </div>
                   <input
@@ -2770,7 +2768,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <label className="block font-medium text-[#1E293B] mb-1">Advisory Notice Message</label>
+                  <label className="block font-medium text-[#1E293B] mb-1">परामर्श सूचना संदेश</label>
                   <textarea
                     rows={3}
                     value={settings.maintenanceMessage}
@@ -2789,9 +2787,9 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Audit Trail</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">ऑडिट लॉग्स (कार्यवाही विवरण)</h1>
                   <p className="text-xs text-[#55657E]">
-                    Security record of administrator sign-ins, edits, and deletions.
+                    प्रशासक लॉगिन, संपादन एवं विलोपन का सुरक्षा ऑडिट अभिलेख।
                   </p>
                 </div>
                 <select
@@ -2802,12 +2800,12 @@ export default function AdminDashboard() {
                   }}
                   className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs font-medium text-[#1E293B]"
                 >
-                  <option value="All">All Events</option>
-                  <option value="ADMIN_LOGIN">Admin Logins</option>
-                  <option value="ADMIN_LOGOUT">Admin Logouts</option>
-                  <option value="create_member">Member Creations</option>
-                  <option value="update_member">Member Updates</option>
-                  <option value="delete_member">Member Deletions</option>
+                  <option value="All">सभी घटनाएं</option>
+                  <option value="ADMIN_LOGIN">प्रशासक लॉगिन</option>
+                  <option value="ADMIN_LOGOUT">प्रशासक लॉगआउट</option>
+                  <option value="create_member">सदस्य निर्माण</option>
+                  <option value="update_member">सदस्य अद्यतन</option>
+                  <option value="delete_member">सदस्य विलोपन</option>
                 </select>
               </div>
 
@@ -2816,19 +2814,19 @@ export default function AdminDashboard() {
                   <table className="w-full text-left text-xs min-w-[650px]">
                     <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-semibold">
                       <tr>
-                        <th className="py-2 px-3">Timestamp</th>
-                        <th className="py-2 px-3">Administrator</th>
-                        <th className="py-2 px-3">Action</th>
-                        <th className="py-2 px-3">Entity</th>
-                        <th className="py-2 px-3">Details</th>
-                        <th className="py-2 px-3 text-right">IP Address</th>
+                        <th className="py-2 px-3">समय</th>
+                        <th className="py-2 px-3">प्रशासक</th>
+                        <th className="py-2 px-3">कार्यवाही</th>
+                        <th className="py-2 px-3">इकाई</th>
+                        <th className="py-2 px-3">विवरण</th>
+                        <th className="py-2 px-3 text-right">आईपी पता</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#EFECE6]">
                       {auditLogs.length === 0 ? (
                         <tr>
                           <td colSpan={6} className="py-8 text-center text-[#55657E]">
-                            No audit records found.
+                            कोई ऑडिट रिकॉर्ड नहीं मिला।
                           </td>
                         </tr>
                       ) : (
@@ -2861,7 +2859,7 @@ export default function AdminDashboard() {
 
                 {auditTotalPages > 1 && (
                   <div className="bg-[#FAF8F3] px-3 py-2 border-t border-[#E2DDD5] text-xs text-[#55657E] flex items-center justify-between">
-                    <span>{auditTotal} total logged events</span>
+                    <span>{auditTotal} कुल दर्ज घटनाएं</span>
                     <div className="space-x-1">
                       <button
                         disabled={auditPage <= 1}
@@ -2891,9 +2889,9 @@ export default function AdminDashboard() {
           {activeTab === "admin_team" && currentUser?.role === "superadmin" && (
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3">
-                <h1 className="text-lg font-bold text-[#102F6B]">Staff &amp; Permissions</h1>
+                <h1 className="text-lg font-bold text-[#102F6B]">प्रशासक टीम एवं अनुमतियां</h1>
                 <p className="text-xs text-[#55657E]">
-                  Authorized administrators and role access levels.
+                  अधिकृत प्रशासक एवं पद स्तर।
                 </p>
               </div>
 
@@ -2902,10 +2900,10 @@ export default function AdminDashboard() {
                   <table className="w-full text-left text-xs">
                     <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E]">
                       <tr>
-                        <th className="py-2 px-3">Name</th>
-                        <th className="py-2 px-3">Email</th>
-                        <th className="py-2 px-3">Role</th>
-                        <th className="py-2 px-3 text-right">Action</th>
+                        <th className="py-2 px-3">नाम</th>
+                        <th className="py-2 px-3">ईमेल</th>
+                        <th className="py-2 px-3">भूमिका</th>
+                        <th className="py-2 px-3 text-right">कार्यवाही</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#EFECE6]">
@@ -2924,7 +2922,7 @@ export default function AdminDashboard() {
                                 onClick={() => handleDeleteAdmin(u)}
                                 className="text-red-700 hover:underline cursor-pointer text-xs"
                               >
-                                Revoke
+                                निरस्त करें
                               </button>
                             )}
                           </td>
@@ -2936,11 +2934,11 @@ export default function AdminDashboard() {
 
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-3 text-xs">
                   <div className="font-bold text-[#102F6B] border-b border-[#E2DDD5] pb-1">
-                    Add Team Account
+                    नया प्रशासक खाता जोड़ें
                   </div>
                   <form onSubmit={handleCreateAdmin} className="space-y-2.5">
                     <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Full Name</label>
+                      <label className="block text-[#1E293B] font-medium mb-1">पूरा नाम</label>
                       <input
                         type="text"
                         required
@@ -2960,7 +2958,7 @@ export default function AdminDashboard() {
                       />
                     </div>
                     <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Password</label>
+                      <label className="block text-[#1E293B] font-medium mb-1">पासवर्ड</label>
                       <input
                         type="password"
                         required
@@ -2976,8 +2974,8 @@ export default function AdminDashboard() {
                         onChange={(e) => setNewAdminForm({ ...newAdminForm, role: e.target.value })}
                         className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                       >
-                        <option value="editor">Editor</option>
-                        <option value="superadmin">Superadmin</option>
+                        <option value="editor">संपादक (Editor)</option>
+                        <option value="superadmin">मुख्य प्रशासक (Superadmin)</option>
                       </select>
                     </div>
                     <button
@@ -2985,7 +2983,7 @@ export default function AdminDashboard() {
                       disabled={submitting}
                       className="w-full bg-[#102F6B] hover:bg-[#0D1B2A] text-white py-1.5 font-medium rounded-xs cursor-pointer shadow-xs"
                     >
-                      {submitting ? "Adding..." : "Add Administrator"}
+                      {submitting ? "जोड़ा जा रहा है..." : "प्रशासक जोड़ें"}
                     </button>
                   </form>
                 </div>
@@ -3000,20 +2998,20 @@ export default function AdminDashboard() {
             <div className="space-y-3">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Contact Inquiries</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">संपर्क संदेश एवं पूछताछ</h1>
                   <p className="text-xs text-[#55657E]">
-                    Messages submitted by public visitors through the secretariat helpdesk form.
+                    सचिवालय संपर्क फॉर्म के माध्यम से आगंतुकों द्वारा भेजे गए संदेश।
                   </p>
                 </div>
                 <span className="text-xs text-[#55657E]">
-                  Total: {messages.length} inquiries
+                  कुल: {messages.length} संदेश
                 </span>
               </div>
 
               <div className="space-y-2">
                 {messages.length === 0 ? (
                   <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
-                    No inquiries recorded yet.
+                    अभी तक कोई संदेश दर्ज नहीं हुआ है।
                   </div>
                 ) : (
                   messages.map((msg) => (
@@ -3042,7 +3040,7 @@ export default function AdminDashboard() {
                             onClick={() => handleToggleMessageRead(msg.id || msg._id)}
                             className="text-[#102F6B] hover:underline cursor-pointer"
                           >
-                            {msg.isRead ? "Mark Unread" : "Mark Read"}
+                            {msg.isRead ? "अपठित चिन्हित करें" : "पढ़ा हुआ चिन्हित करें"}
                           </button>
                           <span className="text-[#D5CEC4]">·</span>
                           <button
@@ -3053,7 +3051,7 @@ export default function AdminDashboard() {
                           </button>
                         </div>
                       </div>
-                      <div className="font-medium text-[#1E293B]">Subject: {msg.subject || "General Inquiry"}</div>
+                      <div className="font-medium text-[#1E293B]">विषय: {msg.subject || "सामान्य पूछताछ"}</div>
                       <p className="text-[#55657E] leading-relaxed bg-[#FAF8F3] p-2 border border-[#E2DDD5] rounded-xs">
                         {msg.message}
                       </p>
@@ -3071,9 +3069,9 @@ export default function AdminDashboard() {
             <div className="space-y-4">
               <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Site &amp; System Integration Health</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">साइट एवं सिस्टम स्थिति व एकीकरण</h1>
                   <p className="text-xs text-[#55657E]">
-                    Real-time connection monitoring, database telemetry, and infrastructure diagnostics.
+                    वास्तविक समय कनेक्शन निगरानी, डेटाबेस टेलीमेट्री एवं सिस्टम निदान।
                   </p>
                 </div>
                 <button
@@ -3084,11 +3082,11 @@ export default function AdminDashboard() {
                     fetchSettings();
                     fetchGallery();
                     fetchMessages();
-                    setStatusMsg("Refreshed all system telemetry and connection health checks.");
+                    setStatusMsg("सभी सिस्टम टेलीमेट्री एवं कनेक्शन स्वास्थ्य जांच को ताज़ा किया गया।");
                   }}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  Refresh Health Checks
+                  पुनः जांच करें ↺
                 </button>
               </div>
 
@@ -3097,18 +3095,18 @@ export default function AdminDashboard() {
                 {/* 1. Database Connection */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">MongoDB Database</span>
+                    <span className="font-bold text-xs text-[#102F6B]">मोंगोडीबी डेटाबेस (MongoDB)</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      CONNECTED
+                      सक्रिय
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    Local MongoDB database active with Mongoose ODM connection pool.
+                    मोंगूज ओडीएम कनेक्शन पूल के साथ स्थानीय मोंगोडीबी सक्रिय है।
                   </p>
                   <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
-                    <div className="flex justify-between"><span>Members:</span> <span className="font-bold text-[#1E293B]">{memberStats.total} records</span></div>
-                    <div className="flex justify-between"><span>CMS Pages:</span> <span className="font-bold text-[#1E293B]">{pagesList.length} documents</span></div>
-                    <div className="flex justify-between"><span>Gallery Media:</span> <span className="font-bold text-[#1E293B]">{galleryItems.length} photos</span></div>
+                    <div className="flex justify-between"><span>Members:</span> <span className="font-bold text-[#1E293B]">{memberStats.total} रिकॉर्ड्स</span></div>
+                    <div className="flex justify-between"><span>CMS Pages:</span> <span className="font-bold text-[#1E293B]">{pagesList.length} दस्तावेज</span></div>
+                    <div className="flex justify-between"><span>Gallery Media:</span> <span className="font-bold text-[#1E293B]">{galleryItems.length} छायाचित्र</span></div>
                     <div className="flex justify-between"><span>Contact Inquiries:</span> <span className="font-bold text-[#1E293B]">{messages.length} messages</span></div>
                   </div>
                 </div>
@@ -3116,13 +3114,13 @@ export default function AdminDashboard() {
                 {/* 2. Media Storage / CDN */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">Cloudinary Media CDN</span>
+                    <span className="font-bold text-xs text-[#102F6B]">क्लाउडिनरी मीडिया सीडीएन</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      ACTIVE
+                      सक्रिय
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    Image uploads routed through authenticated server-side buffer endpoints.
+                    प्रमाणीकृत सर्वर-साइड एंडपॉइंट के माध्यम से छायाचित्र अपलोड होते हैं।
                   </p>
                   <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
                     <div className="flex justify-between"><span>API Gateway:</span> <span className="text-[#1E293B]">/api/upload</span></div>
@@ -3134,13 +3132,13 @@ export default function AdminDashboard() {
                 {/* 3. Authentication & Proxy */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">Authentication Proxy</span>
+                    <span className="font-bold text-xs text-[#102F6B]">प्रमाणीकरण प्रॉक्सी (Next.js)</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      ENFORCED
+                      लागू
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    JWT cryptographic tokens in HTTP-only cookies verified by Next.js proxy middleware.
+                    नेक्स्ट.जेएस प्रॉक्सी मिडलवेयर द्वारा एचटीटीपी-ओनली कुकीज में जेडब्ल्यूटी टोकन सत्यापित होते हैं।
                   </p>
                   <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
                     <div className="flex justify-between"><span>Active User:</span> <span className="text-[#1E293B] font-bold truncate max-w-[140px]">{currentUser?.email}</span></div>
@@ -3152,20 +3150,20 @@ export default function AdminDashboard() {
                 {/* 4. Technical SEO Endpoints */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">Search Engine Crawl Directives</span>
+                    <span className="font-bold text-xs text-[#102F6B]">सर्च इंजन क्रॉल निर्देश (SEO)</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      ONLINE
+                      ऑनलाइन
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    Dynamic XML sitemap and robots.txt index published routes and public members.
+                    गतिशील XML साइटमैप एवं robots.txt सभी प्रकाशित मार्गों एवं सदस्यों को अनुक्रमित करते हैं।
                   </p>
                   <div className="text-[11px] pt-2 border-t border-[#EFECE6] flex items-center justify-between">
                     <a href="/sitemap.xml" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
-                      View sitemap.xml ↗
+                      sitemap.xml देखें ↗
                     </a>
                     <a href="/robots.txt" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
-                      View robots.txt ↗
+                      robots.txt देखें ↗
                     </a>
                   </div>
                 </div>
@@ -3173,13 +3171,13 @@ export default function AdminDashboard() {
                 {/* 5. Email Dispatch Service */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">Email Dispatch Gateway</span>
+                    <span className="font-bold text-xs text-[#102F6B]">ईमेल प्रेषण गेटवे</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      CONFIGURED
+                      कॉन्फ़िगर
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    Contact inquiries persist to database and dispatch notifications via Resend API.
+                    संपर्क पूछताछ डेटाबेस में सुरक्षित होती है और सूचनाएं प्रेषित की जाती हैं।
                   </p>
                   <div className="text-[11px] font-mono text-[#55657E] pt-2 border-t border-[#EFECE6] space-y-1">
                     <div className="flex justify-between"><span>Total Inquiries:</span> <span className="font-bold text-[#1E293B]">{messages.length}</span></div>
@@ -3190,13 +3188,13 @@ export default function AdminDashboard() {
                 {/* 6. OWASP Security Headers */}
                 <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-[#102F6B]">HTTP Security Headers</span>
+                    <span className="font-bold text-xs text-[#102F6B]">एचटीटीपी सुरक्षा हेडर (OWASP)</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
                       ACTIVE
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    OWASP security headers injected on all HTTP requests through proxy middleware.
+                    प्रॉक्सी मिडलवेयर के माध्यम से सभी अनुरोधों पर OWASP सुरक्षा हेडर लागू होते हैं।
                   </p>
                   <div className="text-[10px] font-mono text-emerald-800 pt-2 border-t border-[#EFECE6] space-y-0.5">
                     <div>✓ HSTS: max-age=63072000; preload</div>
