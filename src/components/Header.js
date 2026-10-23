@@ -25,14 +25,14 @@ function NavLinksDesktop({ currentPath = "" }) {
   };
 
   return (
-    <div className="hidden md:flex items-center justify-center flex-wrap gap-x-0.5 lg:gap-x-1">
+    <div className="hidden md:flex items-center justify-center h-10 gap-x-0.5 lg:gap-x-1 flex-nowrap">
       {NAV_LINKS.map((link) => {
         const active = isActive(link.href);
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`px-2 lg:px-2.5 py-2.5 text-[11.5px] lg:text-xs font-semibold tracking-wide transition-colors duration-150 relative border-b-2 whitespace-nowrap focus:outline-hidden focus:bg-[#0D2659] ${
+            className={`h-10 flex items-center px-2 lg:px-2.5 text-[11.5px] lg:text-xs font-semibold tracking-wide transition-colors duration-150 relative border-b-2 whitespace-nowrap focus:outline-hidden focus:bg-[#0D2659] ${
               active
                 ? "text-white border-[#F26A21] bg-[#091D42]/70 font-bold"
                 : "text-[#E2E8F0] border-transparent hover:text-white hover:bg-[#0D2659]"
@@ -86,10 +86,10 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
 
   return (
     <>
-      {/* Mobile Toggle Row */}
+      {/* Mobile Toggle Row (40px high) */}
       <div
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="flex md:hidden items-center justify-between py-2 px-1 cursor-pointer select-none"
+        className="flex md:hidden items-center justify-between h-10 px-2 cursor-pointer select-none"
       >
         <span className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
           <span className="text-[#F26A21]">☰</span>
@@ -113,7 +113,7 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
         </button>
       </div>
 
-      {/* Desktop Links */}
+      {/* Desktop Links (40px high) */}
       <NavLinksDesktop currentPath={pathname || ""} />
 
       {/* Mobile Animated Dropdown */}
@@ -151,10 +151,13 @@ export default function Header() {
   return (
     <header className="w-full relative z-30">
       {/* ================================================================= */}
-      {/* 1. TOP COMMUNITY BANNER: Authentic banner from topofwebsite      */}
+      {/* 1. TOP COMMUNITY BANNER: Authentic banner resized & centered     */}
       {/* ================================================================= */}
-      <div className="w-full bg-[#091D42] py-1 sm:py-1.5 px-2">
-        <div className="max-w-[1000px] w-full mx-auto">
+      <div
+        className="site-banner-container bg-[#091D42]"
+        style={{ width: "100%", padding: "6px 12px" }}
+      >
+        <div className="max-w-[850px] w-full mx-auto">
           <Link
             href="/"
             className="block w-full focus:outline-hidden"
@@ -166,14 +169,14 @@ export default function Header() {
               width={1337}
               height={483}
               priority="true"
-              className="w-full h-auto block mx-auto object-contain max-w-[1000px] max-h-[220px] sm:max-h-[250px] md:max-h-[270px]"
+              className="site-banner-image"
               style={{
-                width: "100%",
-                maxWidth: "1000px",
-                height: "auto",
                 display: "block",
+                width: "100%",
+                maxWidth: "850px",
+                height: "auto",
+                marginInline: "auto",
                 objectFit: "contain",
-                margin: "0 auto",
               }}
             />
           </Link>
@@ -181,10 +184,10 @@ export default function Header() {
       </div>
 
       {/* ================================================================= */}
-      {/* 2. BRAND TITLE STRIP: Compact Deep Navy (#091D42) directly below  */}
+      {/* 2. BRAND TITLE STRIP: Compact Deep Navy (#091D42, 68–75px high)    */}
       {/* ================================================================= */}
       <div className="w-full bg-[#091D42] border-t border-[#162744] border-b border-[#162744]">
-        <div className="max-w-[1000px] mx-auto px-4 py-2 sm:py-2.5 text-center">
+        <div className="max-w-[850px] mx-auto px-3 sm:px-4 py-2.5 sm:py-3 text-center flex flex-col items-center justify-center min-h-[68px] sm:min-h-[72px]">
           <Link
             href="/"
             className="inline-block focus:outline-hidden focus:ring-1 focus:ring-[#F26A21] rounded-xs"
@@ -200,7 +203,7 @@ export default function Header() {
       </div>
 
       {/* ================================================================= */}
-      {/* 3. NAVIGATION BAR: Navy (#102F6B) with Subtle Orange Accent       */}
+      {/* 3. NAVIGATION BAR: Navy (#102F6B, ~40px high)                     */}
       {/* ================================================================= */}
       <nav
         aria-label="Main Navigation"

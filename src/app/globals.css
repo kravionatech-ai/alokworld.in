@@ -393,3 +393,22 @@ table {
   }
 }
 
+/* ================================================================= */
+/* Compact Header Community Banner & Container                        */
+/* ================================================================= */
+.site-banner-container {
+  width: 100%;
+  padding: 6px 12px;
+  background-color: #091D42;
+}
+
+.site-banner-image {
+  display: block;
+  width: 100%;
+  max-width: 850px;
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
+}
+
+
