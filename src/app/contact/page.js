@@ -12,6 +12,7 @@ export default function ContactPage() {
     phone: "",
     subject: "",
     message: "",
+    honeypot: "",
   });
   const [status, setStatus] = useState({ loading: false, msg: "", error: false });
 
@@ -89,10 +90,11 @@ export default function ContactPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                    ईमेल पता
+                    ईमेल पता <span className="text-[#F26A21]">*</span>
                   </label>
                   <input
                     type="email"
+                    required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="उदा. ramesh@alokworld.in"
@@ -100,6 +102,18 @@ export default function ContactPage() {
                   />
                 </div>
               </div>
+
+              {/* Anti-spam honeypot (hidden from human visitors) */}
+              <input
+                type="text"
+                name="honeypot"
+                value={formData.honeypot}
+                onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>

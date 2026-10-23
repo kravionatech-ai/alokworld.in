@@ -257,8 +257,31 @@ export default function AdminDashboard() {
     password: "",
   });
 
-  // 7. Messages / पूछताछ व संदेश State
+  // 7. Messages / Email & Contact Management State
   const [messages, setMessages] = useState([]);
+  const [emailsList, setEmailsList] = useState([]);
+  const [emailStats, setEmailStats] = useState({
+    sent: 0,
+    delivered: 0,
+    failed: 0,
+    bounced: 0,
+    received: 0,
+    unreadInbound: 0,
+    totalOutbound: 0,
+  });
+  const [messagesSubTab, setMessagesSubTab] = useState("inquiries"); // "inquiries" | "received" | "sent"
+  const [emailFilterStatus, setEmailFilterStatus] = useState("all");
+  const [emailSearch, setEmailSearch] = useState("");
+  const [replyModal, setReplyModal] = useState({
+    isOpen: false,
+    inquiryId: null,
+    recipientEmail: "",
+    subject: "",
+    message: "",
+    sending: false,
+  });
+  const [selectedEmailDetail, setSelectedEmailDetail] = useState(null);
+  const [dashboardStats, setDashboardStats] = useState(null);
 
   // Confirmation Modal for Destructive Operations
   const [confirmModal, setConfirmModal] = useState({
@@ -339,6 +362,21 @@ export default function AdminDashboard() {
       .then((r) => r.json())
       .then((d) => {
         if (d?.messages) setMessages(d.messages);
+      })
+      .catch(console.error);
+
+    fetch("/api/admin/emails")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.logs) setEmailsList(d.logs);
+        if (d?.stats) setEmailStats(d.stats);
+      })
+      .catch(console.error);
+
+    fetch("/api/admin/stats")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d) setDashboardStats(d);
       })
       .catch(console.error);
   };
@@ -937,10 +975,86 @@ export default function AdminDashboard() {
     });
   };
 
-  const handleToggleMessageRead = (id) => {
-    setMessages((prev) =>
-      prev.map((m) => (m.id === id || m._id === id ? { ...m, isRead: !m.isRead } : m))
-    );
+  const handleToggleMessageRead = async (id, currentVal) => {
+    try {
+      const nextVal = !currentVal;
+      await fetch("/api/contact", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, isRead: nextVal }),
+      });
+      setMessages((prev) =>
+        prev.map((m) => (m.id === id || m._id === id ? { ...m, isRead: nextVal } : m))
+      );
+    } catch (err) {
+      console.warn("Could not toggle read:", err);
+    }
+  };
+
+  const handleOpenReply = (inquiry) => {
+    setReplyModal({
+      isOpen: true,
+      inquiryId: inquiry._id || inquiry.id,
+      recipientEmail: inquiry.email,
+      subject: `Re: ${inquiry.subject || "अखिल भारतीय लोधी समाज संपर्क"}`,
+      message: `नमस्ते ${inquiry.name} जी,\n\nआपके संदेश के संदर्भ में:\n\nसस्नेह,\nकेंद्रीय सचिवालय,\nअखिल भारतीय लोधी अधिकारी-कर्मचारी संघ`,
+      sending: false,
+    });
+  };
+
+  const handleSendReplySubmit = async (e) => {
+    e.preventDefault();
+    if (!replyModal.recipientEmail || !replyModal.subject || !replyModal.message) return;
+    setReplyModal((prev) => ({ ...prev, sending: true }));
+
+    try {
+      const res = await fetch("/api/admin/emails/reply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          inquiryId: replyModal.inquiryId,
+          recipientEmail: replyModal.recipientEmail,
+          subject: replyModal.subject,
+          message: replyModal.message,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "उत्तर प्रेषित करने में विफल");
+
+      showBanner(`ईमेल उत्तर ${replyModal.recipientEmail} को सफलतापूर्वक भेजा गया।`);
+      setReplyModal({ isOpen: false, inquiryId: null, recipientEmail: "", subject: "", message: "", sending: false });
+
+      // Refresh emails and messages
+      fetch("/api/admin/emails").then((r) => r.json()).then((d) => {
+        if (d?.logs) setEmailsList(d.logs);
+        if (d?.stats) setEmailStats(d.stats);
+      });
+      fetch("/api/contact").then((r) => r.json()).then((d) => {
+        if (d?.messages) setMessages(d.messages);
+      });
+    } catch (err) {
+      showBanner(err.message, true);
+      setReplyModal((prev) => ({ ...prev, sending: false }));
+    }
+  };
+
+  const handleRetryEmail = async (logId) => {
+    try {
+      const res = await fetch("/api/admin/emails/retry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "पुनः प्रयास विफल");
+      showBanner("ईमेल पुनः सफलतापूर्वक प्रेषित किया गया।");
+      fetch("/api/admin/emails").then((r) => r.json()).then((d) => {
+        if (d?.logs) setEmailsList(d.logs);
+        if (d?.stats) setEmailStats(d.stats);
+      });
+    } catch (err) {
+      showBanner(err.message, true);
+    }
   };
 
   // ==========================================
@@ -992,7 +1106,7 @@ export default function AdminDashboard() {
         },
         {
           id: "messages",
-          label: "संदेश एवं पूछताछ",
+          label: "ईमेल एवं संपर्क प्रबंधन",
           icon: "mail",
           count: messages.length,
           activeIndicator: messages.some((m) => !m.isRead),
@@ -1221,7 +1335,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              {/* 6-Metric Operational Summary Strip */}
+              {/* Operational Summary Strip (Live MongoDB & Email Telemetry) */}
               <div className="bg-white border border-[#E2DDD5] divide-y sm:divide-y-0 sm:divide-x divide-[#E2DDD5] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 rounded-xs">
                 <div
                   className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
@@ -1231,7 +1345,9 @@ export default function AdminDashboard() {
                   }}
                 >
                   <div className="text-[10px] uppercase font-semibold text-[#55657E]">कुल सदस्य</div>
-                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{memberStats.total}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">
+                    {dashboardStats?.members?.total ?? memberStats.total}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">निर्देशिका डेटाबेस</div>
                 </div>
 
@@ -1243,13 +1359,15 @@ export default function AdminDashboard() {
                   }}
                 >
                   <div className="text-[10px] uppercase font-semibold text-emerald-800">Approved</div>
-                  <div className="text-xl sm:text-2xl font-bold text-emerald-800 mt-0.5">{memberStats.approved}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-emerald-800 mt-0.5">
+                    {dashboardStats?.members?.approved ?? memberStats.approved}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">सार्वजनिक सक्रिय</div>
                 </div>
 
                 <div
                   className={`p-3.5 cursor-pointer transition-colors ${
-                    memberStats.pending > 0 ? "bg-amber-50/60 hover:bg-amber-50" : "hover:bg-[#FAF8F3]"
+                    (dashboardStats?.members?.pending ?? memberStats.pending) > 0 ? "bg-amber-50/60 hover:bg-amber-50" : "hover:bg-[#FAF8F3]"
                   }`}
                   onClick={() => {
                     setActiveTab("members");
@@ -1257,9 +1375,11 @@ export default function AdminDashboard() {
                   }}
                 >
                   <div className="text-[10px] uppercase font-semibold text-amber-800">समीक्षा प्रतीक्षित</div>
-                  <div className="text-xl sm:text-2xl font-bold text-amber-800 mt-0.5">{memberStats.pending}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-amber-800 mt-0.5">
+                    {dashboardStats?.members?.pending ?? memberStats.pending}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">
-                    {memberStats.pending > 0 ? "● समीक्षा अपेक्षित" : "सभी स्वीकृत"}
+                    {(dashboardStats?.members?.pending ?? memberStats.pending) > 0 ? "● समीक्षा अपेक्षित" : "सभी स्वीकृत"}
                   </div>
                 </div>
 
@@ -1268,7 +1388,9 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab("pages")}
                 >
                   <div className="text-[10px] uppercase font-semibold text-[#102F6B]">CMS Pages</div>
-                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{pagesList.length}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">
+                    {dashboardStats?.cms?.pages ?? pagesList.length}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">संपादकीय आलेख</div>
                 </div>
 
@@ -1277,7 +1399,9 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab("gallery")}
                 >
                   <div className="text-[10px] uppercase font-semibold text-[#55657E]">Photo Gallery</div>
-                  <div className="text-xl sm:text-2xl font-bold text-[#1E293B] mt-0.5">{galleryItems.length}</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#1E293B] mt-0.5">
+                    {dashboardStats?.cms?.gallery ?? galleryItems.length}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">क्लाउडिनरी मीडिया</div>
                 </div>
 
@@ -1285,18 +1409,57 @@ export default function AdminDashboard() {
                   className="p-3.5 cursor-pointer hover:bg-[#FAF8F3] transition-colors"
                   onClick={() => setActiveTab("messages")}
                 >
-                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">Inquiries</div>
-                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">{messages.length}</div>
+                  <div className="text-[10px] uppercase font-semibold text-[#55657E]">पूछताछ व ईमेल्स</div>
+                  <div className="text-xl sm:text-2xl font-bold text-[#102F6B] mt-0.5">
+                    {dashboardStats?.inquiries?.total ?? messages.length}
+                  </div>
                   <div className="text-[10px] text-[#55657E] mt-0.5">
-                    {messages.filter((m) => !m.isRead).length > 0 ? (
+                    {(dashboardStats?.inquiries?.unread ?? messages.filter((m) => !m.isRead).length) > 0 ? (
                       <span className="text-[#D9531E] font-medium font-mono">
-                        {messages.filter((m) => !m.isRead).length} नए अपठित
+                        {dashboardStats?.inquiries?.unread ?? messages.filter((m) => !m.isRead).length} नए अपठित
                       </span>
                     ) : (
                       "सभी उत्तरित"
                     )}
                   </div>
                 </div>
+              </div>
+
+              {/* Email Gateway & Telemetry Strip */}
+              <div className="bg-white border border-[#E2DDD5] p-3 rounded-xs text-xs flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-4 flex-wrap text-[11px]">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span className="text-[#55657E]">प्रेषित ईमेल्स:</span>
+                    <span className="font-semibold text-[#102F6B]">
+                      {dashboardStats?.emails?.sent ?? emailStats.sent} (वितरित: {dashboardStats?.emails?.delivered ?? emailStats.delivered})
+                    </span>
+                  </div>
+                  <span className="text-[#E2DDD5]">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className={`w-2 h-2 rounded-full ${(dashboardStats?.emails?.failed ?? emailStats.failed) > 0 ? "bg-red-500" : "bg-emerald-500"}`}></span>
+                    <span className="text-[#55657E]">ईमेल विफलताएं:</span>
+                    <span className={`font-semibold ${(dashboardStats?.emails?.failed ?? emailStats.failed) > 0 ? "text-red-700" : "text-[#1E293B]"}`}>
+                      {dashboardStats?.emails?.failed ?? emailStats.failed}
+                    </span>
+                  </div>
+                  <span className="text-[#E2DDD5]">|</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500"></span>
+                    <span className="text-[#55657E]">इनबाउंड ईमेल्स:</span>
+                    <span className="font-semibold text-[#1E293B]">
+                      {dashboardStats?.emails?.received ?? emailStats.received} प्राप्त
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("messages")}
+                  className="text-xs text-[#102F6B] hover:text-[#D9531E] font-semibold cursor-pointer underline"
+                >
+                  ईमेल प्रबंधन केंद्र खोलें →
+                </button>
               </div>
 
               {/* System & Portal Live Status Strip */}
@@ -3026,77 +3189,411 @@ export default function AdminDashboard() {
           )}
 
           {/* ========================================================================= */}
-          {/* VIEW: INQUIRIES */}
-          {/* ========================================================================= */}
+          {/* VIEW: INQUIRIES & EMAIL MANAGEMENT */}
           {activeTab === "messages" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
+            <div className="space-y-3.5">
+              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">संपर्क संदेश एवं पूछताछ</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">ईमेल एवं संपर्क प्रबंधन</h1>
                   <p className="text-xs text-[#55657E]">
-                    सचिवालय संपर्क फॉर्म के माध्यम से आगंतुकों द्वारा भेजे गए संदेश।
+                    सार्वजनिक संपर्क पूछताछ, प्राप्त ईमेल्स, एवं प्रेषित ईमेल्स का लाइव डिलीवरी स्थिति इतिहास।
                   </p>
                 </div>
-                <span className="text-xs text-[#55657E]">
-                  कुल: {messages.length} संदेश
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-[#55657E]">
+                    कुल पूछताछ: <strong className="text-[#102F6B] font-bold">{messages.length}</strong>
+                  </span>
+                  <span className="text-[#D5CEC4]">·</span>
+                  <span className="text-xs text-[#55657E]">
+                    प्रेषित ईमेल्स: <strong className="text-[#102F6B] font-bold">{emailStats.sent + emailStats.delivered + emailStats.failed + emailStats.bounced}</strong>
+                  </span>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                {messages.length === 0 ? (
-                  <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
-                    अभी तक कोई संदेश दर्ज नहीं हुआ है।
-                  </div>
-                ) : (
-                  messages.map((msg) => (
-                    <div
-                      key={msg.id || msg._id}
-                      className={`p-3 border rounded-xs text-xs space-y-1.5 ${
-                        msg.isRead ? "bg-white border-[#E2DDD5]" : "bg-[#FFFBF5] border-[#D9531E]"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-[#102F6B]">{msg.name}</span>
-                          <span className="text-[#D5CEC4]">·</span>
-                          <a href={`mailto:${msg.email}`} className="text-[#D9531E] hover:underline font-mono text-[11px]">
-                            {msg.email}
-                          </a>
-                          {msg.phone && (
-                            <>
-                              <span className="text-[#D5CEC4]">·</span>
-                              <span className="text-[#55657E] font-mono text-[11px]">{msg.phone}</span>
-                            </>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 text-[11px]">
-                          <button
-                            onClick={() => handleToggleMessageRead(msg.id || msg._id)}
-                            className="text-[#102F6B] hover:underline cursor-pointer"
-                          >
-                            {msg.isRead ? "अपठित चिन्हित करें" : "पढ़ा हुआ चिन्हित करें"}
-                          </button>
-                          <span className="text-[#D5CEC4]">·</span>
-                          <button
-                            onClick={() => handleDeleteMessage(msg.id || msg._id)}
-                            className="text-red-700 hover:underline cursor-pointer"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                      <div className="font-medium text-[#1E293B]">विषय: {msg.subject || "सामान्य पूछताछ"}</div>
-                      <p className="text-[#55657E] leading-relaxed bg-[#FAF8F3] p-2 border border-[#E2DDD5] rounded-xs">
-                        {msg.message}
-                      </p>
-                    </div>
-                  ))
-                )}
+              {/* Sub-tab Navigation */}
+              <div className="flex items-center gap-1.5 border-b border-[#E2DDD5] pb-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setMessagesSubTab("inquiries")}
+                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
+                    messagesSubTab === "inquiries"
+                      ? "bg-[#102F6B] text-white"
+                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
+                  }`}
+                >
+                  संपर्क पूछताछ ({messages.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMessagesSubTab("received")}
+                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
+                    messagesSubTab === "received"
+                      ? "bg-[#102F6B] text-white"
+                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
+                  }`}
+                >
+                  प्राप्त ईमेल्स ({emailsList.filter((e) => e.direction === "inbound").length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMessagesSubTab("sent")}
+                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
+                    messagesSubTab === "sent"
+                      ? "bg-[#102F6B] text-white"
+                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
+                  }`}
+                >
+                  प्रेषित ईमेल्स एवं लाइव स्थिति ({emailsList.filter((e) => e.direction === "outbound").length})
+                </button>
               </div>
+
+              {/* ========================================================= */}
+              {/* SUB-TAB 1: CONTACT INQUIRIES                               */}
+              {/* ========================================================= */}
+              {messagesSubTab === "inquiries" && (
+                <div className="space-y-2.5">
+                  {messages.length === 0 ? (
+                    <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
+                      अभी तक कोई संपर्क संदेश दर्ज नहीं हुआ है।
+                    </div>
+                  ) : (
+                    messages.map((msg) => (
+                      <div
+                        key={msg.id || msg._id}
+                        className={`p-3.5 border rounded-xs text-xs space-y-2 transition-all ${
+                          msg.isRead ? "bg-white border-[#E2DDD5]" : "bg-[#FFFBF5] border-[#F26A21] shadow-xs"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F0E5D5] pb-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-bold text-[#102F6B] text-sm">{msg.name}</span>
+                            <span className="text-[#D5CEC4]">·</span>
+                            <a href={`mailto:${msg.email}`} className="text-[#F26A21] hover:underline font-mono text-[11px] font-medium">
+                              {msg.email}
+                            </a>
+                            {msg.phone && (
+                              <>
+                                <span className="text-[#D5CEC4]">·</span>
+                                <span className="text-[#55657E] font-mono text-[11px]">📞 {msg.phone}</span>
+                              </>
+                            )}
+                            <span className="text-[#D5CEC4]">·</span>
+                            <span className="text-[10px] text-[#64748B]">
+                              {msg.createdAt ? new Date(msg.createdAt).toLocaleString("hi-IN") : "हाल ही में"}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {/* Notification Status Badge */}
+                            <span
+                              className={`px-2 py-0.5 text-[10px] font-semibold rounded-xs border ${
+                                msg.notificationStatus === "sent"
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  : msg.notificationStatus === "failed"
+                                  ? "bg-red-50 text-red-800 border-red-200"
+                                  : "bg-amber-50 text-amber-800 border-amber-200"
+                              }`}
+                            >
+                              सूचना: {msg.notificationStatus === "sent" ? "प्रेषित ✓" : msg.notificationStatus === "failed" ? "विफल ✕" : "प्रतीक्षारत"}
+                            </span>
+
+                            {/* Actions */}
+                            <button
+                              type="button"
+                              onClick={() => handleOpenReply(msg)}
+                              className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs text-[11px] font-medium cursor-pointer shadow-xs"
+                            >
+                              ✉️ उत्तर दें
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleMessageRead(msg._id || msg.id, msg.isRead)}
+                              className="px-2 py-1 bg-white border border-[#D5CEC4] text-[#55657E] hover:text-[#102F6B] rounded-xs text-[11px] cursor-pointer"
+                            >
+                              {msg.isRead ? "अपठित" : "पढ़ा हुआ"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteMessage(msg._id || msg.id)}
+                              className="px-2 py-1 bg-white border border-red-200 text-red-700 hover:bg-red-50 rounded-xs text-[11px] cursor-pointer"
+                            >
+                              हटाएं
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="font-semibold text-[#102F6B]">विषय: {msg.subject || "सामान्य पूछताछ"}</div>
+                        <p className="text-[#263449] leading-relaxed bg-[#FAF8F3] p-2.5 border border-[#E2DDD5] rounded-xs whitespace-pre-wrap">
+                          {msg.message}
+                        </p>
+
+                        {/* Display Thread of Previous Replies */}
+                        {Array.isArray(msg.replies) && msg.replies.length > 0 && (
+                          <div className="mt-2 pt-2 border-t border-[#E2DDD5] space-y-1.5">
+                            <span className="text-[10px] font-bold uppercase text-[#55657E] tracking-wider">
+                              सचिवालय द्वारा भेजे गए उत्तर ({msg.replies.length}):
+                            </span>
+                            {msg.replies.map((rep, idx) => (
+                              <div key={idx} className="bg-white p-2 border border-[#E2DDD5] rounded-xs text-[11px] space-y-1">
+                                <div className="flex items-center justify-between text-[#64748B]">
+                                  <span>द्वारा: {rep.adminEmail}</span>
+                                  <span>{rep.sentAt ? new Date(rep.sentAt).toLocaleString("hi-IN") : ""}</span>
+                                </div>
+                                <div className="font-medium text-[#102F6B]">{rep.subject}</div>
+                                <p className="text-[#55657E] whitespace-pre-wrap">{rep.message}</p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* SUB-TAB 2: RECEIVED INBOUND EMAILS                         */}
+              {/* ========================================================= */}
+              {messagesSubTab === "received" && (
+                <div className="space-y-3">
+                  <div className="bg-[#FAF8F3] p-3 border border-[#E2DDD5] rounded-xs text-xs text-[#55657E]">
+                    <strong>इनबाउंड ईमेल सुविधा:</strong> डोमेन <code className="text-[#102F6B] font-mono">contact@alokworld.in</code> पर प्राप्त होने वाले ईमेल्स वेबहुक <code className="text-[#102F6B] font-mono">/api/webhooks/inbound-email</code> द्वारा स्वतः रिकॉर्ड होते हैं।
+                  </div>
+
+                  {emailsList.filter((e) => e.direction === "inbound").length === 0 ? (
+                    <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
+                      अभी तक कोई इनबाउंड ईमेल प्राप्त नहीं हुआ है।
+                    </div>
+                  ) : (
+                    <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-x-auto">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[#102F6B] font-bold">
+                            <th className="py-2.5 px-3">समय</th>
+                            <th className="py-2.5 px-3">प्रेषक (From)</th>
+                            <th className="py-2.5 px-3">विषय (Subject)</th>
+                            <th className="py-2.5 px-3">स्थिति</th>
+                            <th className="py-2.5 px-3 text-right">कार्यवाही</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E2DDD5]">
+                          {emailsList
+                            .filter((e) => e.direction === "inbound")
+                            .map((em) => (
+                              <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
+                                <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
+                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("hi-IN") : ""}
+                                </td>
+                                <td className="py-2 px-3 font-medium text-[#1E293B] max-w-[180px] truncate">
+                                  {em.from}
+                                </td>
+                                <td className="py-2 px-3 text-[#102F6B] max-w-[240px] truncate font-medium">
+                                  {em.subject}
+                                </td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold rounded-xs">
+                                    प्राप्त (Received)
+                                  </span>
+                                </td>
+                                <td className="py-2 px-3 text-right space-x-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedEmailDetail(em)}
+                                    className="text-[#102F6B] hover:underline cursor-pointer text-xs"
+                                  >
+                                    विवरण देखें
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      handleOpenReply({
+                                        _id: em._id,
+                                        name: em.from,
+                                        email: em.from,
+                                        subject: em.subject,
+                                      })
+                                    }
+                                    className="text-[#F26A21] hover:underline cursor-pointer text-xs font-semibold"
+                                  >
+                                    उत्तर दें
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ========================================================= */}
+              {/* SUB-TAB 3: SENT EMAIL HISTORY & LIVE DELIVERY STATUS        */}
+              {/* ========================================================= */}
+              {messagesSubTab === "sent" && (
+                <div className="space-y-3">
+                  {/* Delivery Metric Cards */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                    <div className="bg-white border border-[#E2DDD5] p-3 rounded-xs text-center">
+                      <div className="text-[10px] uppercase font-bold text-[#55657E]">कुल प्रेषित</div>
+                      <div className="text-xl font-bold text-[#102F6B] mt-0.5">
+                        {emailStats.sent + emailStats.delivered + emailStats.failed + emailStats.bounced}
+                      </div>
+                    </div>
+                    <div className="bg-white border border-emerald-200 p-3 rounded-xs text-center">
+                      <div className="text-[10px] uppercase font-bold text-emerald-800">सफल वितरण (Delivered)</div>
+                      <div className="text-xl font-bold text-emerald-800 mt-0.5">
+                        {emailStats.delivered}
+                      </div>
+                    </div>
+                    <div className="bg-white border border-blue-200 p-3 rounded-xs text-center">
+                      <div className="text-[10px] uppercase font-bold text-blue-800">प्रेषित (Sent / Accepted)</div>
+                      <div className="text-xl font-bold text-blue-800 mt-0.5">
+                        {emailStats.sent}
+                      </div>
+                    </div>
+                    <div className="bg-white border border-red-200 p-3 rounded-xs text-center">
+                      <div className="text-[10px] uppercase font-bold text-red-800">विफल (Failed)</div>
+                      <div className="text-xl font-bold text-red-800 mt-0.5">
+                        {emailStats.failed}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Filter Toolbar */}
+                  <div className="bg-white border border-[#E2DDD5] p-2.5 rounded-xs flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div className="flex items-center gap-2">
+                      <label className="font-semibold text-[#102F6B]">स्थिति फ़िल्टर:</label>
+                      <select
+                        value={emailFilterStatus}
+                        onChange={(e) => setEmailFilterStatus(e.target.value)}
+                        className="px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs"
+                      >
+                        <option value="all">सभी स्थितियां</option>
+                        <option value="delivered">सफल वितरण (Delivered)</option>
+                        <option value="sent">प्रेषित (Sent)</option>
+                        <option value="failed">विफल (Failed)</option>
+                        <option value="bounced">बाउंस (Bounced)</option>
+                      </select>
+                    </div>
+
+                    <input
+                      type="text"
+                      placeholder="प्राप्तकर्ता अथवा विषय खोजें..."
+                      value={emailSearch}
+                      onChange={(e) => setEmailSearch(e.target.value)}
+                      className="px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs min-w-[200px]"
+                    />
+                  </div>
+
+                  {/* Outbound Table */}
+                  {emailsList.filter((e) => e.direction === "outbound").length === 0 ? (
+                    <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
+                      अभी तक कोई आउटबाउंड ईमेल रिकॉर्ड नहीं मिला।
+                    </div>
+                  ) : (
+                    <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-x-auto">
+                      <table className="w-full text-left text-xs border-collapse">
+                        <thead>
+                          <tr className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[#102F6B] font-bold">
+                            <th className="py-2.5 px-3">समय</th>
+                            <th className="py-2.5 px-3">प्राप्तकर्ता (To)</th>
+                            <th className="py-2.5 px-3">विषय (Subject)</th>
+                            <th className="py-2.5 px-3">प्रकार</th>
+                            <th className="py-2.5 px-3">प्रोवाइडर ID</th>
+                            <th className="py-2.5 px-3">लाइव स्थिति</th>
+                            <th className="py-2.5 px-3 text-right">कार्यवाही</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E2DDD5]">
+                          {emailsList
+                            .filter((e) => e.direction === "outbound")
+                            .filter((e) => (emailFilterStatus === "all" ? true : e.status === emailFilterStatus))
+                            .filter((e) => {
+                              if (!emailSearch) return true;
+                              const s = emailSearch.toLowerCase();
+                              return (
+                                (e.subject && e.subject.toLowerCase().includes(s)) ||
+                                (Array.isArray(e.to) && e.to.some((t) => t.toLowerCase().includes(s)))
+                              );
+                            })
+                            .map((em) => (
+                              <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
+                                <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
+                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("hi-IN") : ""}
+                                </td>
+                                <td className="py-2 px-3 font-mono text-[11px] text-[#1E293B] max-w-[160px] truncate">
+                                  {Array.isArray(em.to) ? em.to.join(", ") : em.to}
+                                </td>
+                                <td className="py-2 px-3 text-[#102F6B] max-w-[220px] truncate font-medium">
+                                  {em.subject}
+                                </td>
+                                <td className="py-2 px-3 text-[10px] text-[#55657E]">
+                                  {em.emailType === "contact_notification"
+                                    ? "सचिवालय सूचना"
+                                    : em.emailType === "visitor_confirmation"
+                                    ? "आगंतुक पुष्टिकरण"
+                                    : em.emailType === "admin_reply"
+                                    ? "सचिवालय उत्तर"
+                                    : "सिस्टम"}
+                                </td>
+                                <td className="py-2 px-3 font-mono text-[10px] text-[#64748B] max-w-[110px] truncate">
+                                  {em.providerMessageId || "—"}
+                                </td>
+                                <td className="py-2 px-3 whitespace-nowrap">
+                                  <span
+                                    className={`px-2 py-0.5 text-[10px] font-bold rounded-xs border ${
+                                      em.status === "delivered"
+                                        ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                        : em.status === "sent"
+                                        ? "bg-blue-50 text-blue-800 border-blue-200"
+                                        : em.status === "failed"
+                                        ? "bg-red-50 text-red-800 border-red-200"
+                                        : em.status === "bounced"
+                                        ? "bg-purple-50 text-purple-800 border-purple-200"
+                                        : "bg-amber-50 text-amber-800 border-amber-200"
+                                    }`}
+                                  >
+                                    {em.status === "delivered"
+                                      ? "वितरित (Delivered)"
+                                      : em.status === "sent"
+                                      ? "प्रेषित (Sent)"
+                                      : em.status === "failed"
+                                      ? "विफल (Failed)"
+                                      : em.status === "bounced"
+                                      ? "बाउंस (Bounced)"
+                                      : "प्रतीक्षारत"}
+                                  </span>
+                                </td>
+                                <td className="py-2 px-3 text-right space-x-1.5 whitespace-nowrap">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedEmailDetail(em)}
+                                    className="text-[#102F6B] hover:underline cursor-pointer text-xs"
+                                  >
+                                    विवरण
+                                  </button>
+                                  {em.status === "failed" && (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRetryEmail(em._id || em.id)}
+                                      className="text-[#F26A21] hover:underline cursor-pointer text-xs font-bold"
+                                    >
+                                      पुनः प्रयास
+                                    </button>
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
-          {/* ========================================================================= */}
           {/* VIEW: SYSTEM & DATABASE HEALTH                                            */}
           {/* ========================================================================= */}
           {activeTab === "system_health" && (
@@ -3245,6 +3742,142 @@ export default function AdminDashboard() {
       {/* ========================================================================= */}
       {/* 3. CONFIRMATION MODAL (Clean, Editorial, Non-disruptive) */}
       {/* ========================================================================= */}
+      {/* REPLY MODAL */}
+      {replyModal.isOpen && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white max-w-lg w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3.5 text-xs shadow-xl">
+            <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
+              <span className="font-bold text-sm text-[#102F6B]">आधिकारिक ईमेल उत्तर प्रेषित करें</span>
+              <button
+                type="button"
+                onClick={() => setReplyModal({ isOpen: false, inquiryId: null, recipientEmail: "", subject: "", message: "", sending: false })}
+                className="text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSendReplySubmit} className="space-y-3">
+              <div>
+                <label className="block font-semibold text-[#1E293B] mb-1">प्राप्तकर्ता ईमेल:</label>
+                <input
+                  type="email"
+                  readOnly
+                  value={replyModal.recipientEmail}
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-[#FAF8F3] rounded-xs font-mono text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#1E293B] mb-1">ईमेल विषय:</label>
+                <input
+                  type="text"
+                  required
+                  value={replyModal.subject}
+                  onChange={(e) => setReplyModal({ ...replyModal, subject: e.target.value })}
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-[#1E293B] mb-1">उत्तर संदेश विवरण:</label>
+                <textarea
+                  required
+                  rows={6}
+                  value={replyModal.message}
+                  onChange={(e) => setReplyModal({ ...replyModal, message: e.target.value })}
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden text-xs leading-relaxed"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E2DDD5]">
+                <button
+                  type="button"
+                  onClick={() => setReplyModal({ isOpen: false, inquiryId: null, recipientEmail: "", subject: "", message: "", sending: false })}
+                  className="px-3 py-1.5 border border-[#D5CEC4] rounded-xs text-[#55657E] cursor-pointer"
+                >
+                  रद्द करें
+                </button>
+                <button
+                  type="submit"
+                  disabled={replyModal.sending}
+                  className="px-4 py-1.5 bg-[#102F6B] hover:bg-[#091D42] text-white font-medium rounded-xs cursor-pointer shadow-xs"
+                >
+                  {replyModal.sending ? "प्रेषित हो रहा है..." : "ईमेल भेजें →"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EMAIL DETAIL MODAL */}
+      {selectedEmailDetail && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white max-w-lg w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3 text-xs shadow-xl">
+            <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
+              <span className="font-bold text-sm text-[#102F6B]">ईमेल विवरण एवं टेलीमेट्री</span>
+              <button
+                type="button"
+                onClick={() => setSelectedEmailDetail(null)}
+                className="text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-2 bg-[#FAF8F3] p-3 border border-[#E2DDD5] rounded-xs">
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">दिशा:</span>
+                <span className="font-bold uppercase text-[#102F6B]">{selectedEmailDetail.direction}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">प्रेषक (From):</span>
+                <span className="font-mono">{selectedEmailDetail.from}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">प्राप्तकर्ता (To):</span>
+                <span className="font-mono">{Array.isArray(selectedEmailDetail.to) ? selectedEmailDetail.to.join(", ") : selectedEmailDetail.to}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">विषय:</span>
+                <span className="font-bold">{selectedEmailDetail.subject}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">प्रोवाइडर ID:</span>
+                <span className="font-mono text-[11px]">{selectedEmailDetail.providerMessageId || "—"}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[#64748B] font-semibold">स्थिति:</span>
+                <span className="font-bold text-[#F26A21]">{selectedEmailDetail.status}</span>
+              </div>
+              {selectedEmailDetail.errorMessage && (
+                <div className="p-2 bg-red-50 border border-red-200 text-red-800 rounded-xs text-[11px]">
+                  <strong>त्रुटि विवरण:</strong> {selectedEmailDetail.errorMessage}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <span className="font-semibold text-[#1E293B] block mb-1">संदेश सामग्री:</span>
+              <div className="p-2.5 bg-white border border-[#E2DDD5] rounded-xs max-h-48 overflow-y-auto whitespace-pre-wrap leading-relaxed text-[#263449]">
+                {selectedEmailDetail.textBody || selectedEmailDetail.htmlBody || "(No content)"}
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-[#E2DDD5]">
+              <button
+                type="button"
+                onClick={() => setSelectedEmailDetail(null)}
+                className="px-3 py-1.5 bg-[#102F6B] text-white rounded-xs cursor-pointer font-medium"
+              >
+                बंद करें
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {confirmModal.isOpen && (
         <div className="fixed inset-0 bg-[#0D1B2A]/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white max-w-sm w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3 text-xs shadow-lg">
