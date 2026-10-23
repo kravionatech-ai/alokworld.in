@@ -5,6 +5,7 @@ import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { generateUniqueMemberSlug } from "@/lib/slug";
 import { recordAudit } from "@/lib/audit";
 import { membersData as fallbackMembers } from "@/data/members";
+import { getSearchTokens, generateMemberSearchTags } from "@/lib/transliteration";
 
 // Helper for email validation
 function isValidEmail(email) {
@@ -90,18 +91,30 @@ export async function GET(req) {
         filter.company = { $regex: new RegExp(organization, "i") };
       }
 
-      // Search keyword filter across multiple key attributes
+      // Search keyword filter across multiple key attributes with bilingual support (Hindi & English)
       if (q) {
-        filter.$or = [
-          { name: { $regex: q, $options: "i" } },
-          { occupation: { $regex: q, $options: "i" } },
-          { company: { $regex: q, $options: "i" } },
-          { city: { $regex: q, $options: "i" } },
-          { state: { $regex: q, $options: "i" } },
-          { address: { $regex: q, $options: "i" } },
-          { biography: { $regex: q, $options: "i" } },
-          { tags: { $in: [new RegExp(q, "i")] } },
-        ];
+        const tokens = getSearchTokens(q);
+        const orClauses = [];
+
+        for (const token of tokens) {
+          const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+          const regex = new RegExp(escaped, "i");
+          orClauses.push({ name: regex });
+          orClauses.push({ occupation: regex });
+          orClauses.push({ company: regex });
+          orClauses.push({ city: regex });
+          orClauses.push({ state: regex });
+          orClauses.push({ address: regex });
+          orClauses.push({ biography: regex });
+          orClauses.push({ tags: { $in: [regex] } });
+        }
+
+        const digits = q.replace(/\D/g, "");
+        if (digits.length >= 3) {
+          orClauses.push({ phone: { $regex: digits, $options: "i" } });
+        }
+
+        filter.$or = orClauses;
       }
 
       // Sorting: prioritize order (official hierarchy)
@@ -171,17 +184,27 @@ export async function GET(req) {
       results = results.filter((m) => m.company && m.company.toLowerCase().includes(organization.toLowerCase()));
     }
     if (q) {
-      const lower = q.toLowerCase();
-      results = results.filter(
-        (m) =>
-          m.name.toLowerCase().includes(lower) ||
-          m.occupation.toLowerCase().includes(lower) ||
-          m.city.toLowerCase().includes(lower) ||
-          m.state.toLowerCase().includes(lower) ||
-          (m.company && m.company.toLowerCase().includes(lower)) ||
-          (m.biography && m.biography.toLowerCase().includes(lower)) ||
-          (m.tags && m.tags.some((t) => t.toLowerCase().includes(lower)))
-      );
+      const tokens = getSearchTokens(q).map((t) => t.toLowerCase());
+      const digits = q.replace(/\D/g, "");
+      results = results.filter((m) => {
+        const fullText = [
+          m.name,
+          m.occupation,
+          m.city,
+          m.state,
+          m.company,
+          m.address,
+          m.biography,
+          ...(m.tags || []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        const textMatches = tokens.some((t) => fullText.includes(t));
+        const phoneMatches = digits.length >= 3 && m.phone && m.phone.replace(/\D/g, "").includes(digits);
+        return textMatches || phoneMatches;
+      });
     }
 
     // Sorting fallback
@@ -324,6 +347,10 @@ export async function POST(req) {
     // 5. Derive membership status
     const statusVal = membershipStatus || (isArchived ? "archived" : isApproved ? "active" : "pending");
 
+    const manualTags = Array.isArray(tags) ? tags : typeof tags === "string" ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+    const autoTags = generateMemberSearchTags({ name, role, occupation, company, city, state, tags: manualTags });
+    const finalTags = Array.from(new Set([...manualTags, ...autoTags]));
+
     const newMember = await Member.create({
       name: name.trim(),
       slug: uniqueSlug,
@@ -338,7 +365,7 @@ export async function POST(req) {
       email: cleanEmail,
       avatar: avatar || "",
       biography: sanitizedBio,
-      tags: Array.isArray(tags) ? tags : typeof tags === "string" ? tags.split(",").map((t) => t.trim()).filter(Boolean) : [],
+      tags: finalTags,
       membershipStatus: statusVal,
       isApproved: isApproved !== undefined ? Boolean(isApproved) : true,
       isPublished: isPublished !== undefined ? Boolean(isPublished) : true,

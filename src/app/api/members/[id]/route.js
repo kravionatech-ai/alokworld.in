@@ -5,6 +5,7 @@ import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { generateUniqueMemberSlug } from "@/lib/slug";
 import { recordAudit } from "@/lib/audit";
 import { membersData as fallbackMembers } from "@/data/members";
+import { generateMemberSearchTags } from "@/lib/transliteration";
 
 function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -202,6 +203,17 @@ export async function PUT(req, { params }) {
     if (body.tags && typeof body.tags === "string") {
       body.tags = body.tags.split(",").map((t) => t.trim()).filter(Boolean);
     }
+
+    const mergedForTags = {
+      name: body.name || member.name,
+      role: body.role || member.role,
+      occupation: body.occupation || member.occupation,
+      company: body.company !== undefined ? body.company : member.company,
+      city: body.city || member.city,
+      state: body.state || member.state,
+      tags: body.tags || member.tags || [],
+    };
+    body.tags = generateMemberSearchTags(mergedForTags);
 
     Object.assign(member, body);
     await member.save();

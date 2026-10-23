@@ -62,7 +62,7 @@ export default function SearchFilterBar({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
-            placeholder="नाम, पद, शहर, विभाग, संगठन द्वारा खोजें..."
+            placeholder="नाम, पद, शहर, फोन द्वारा खोजें (हिंदी या English में)..."
             className="w-full pl-3 pr-14 py-2.5 bg-white text-[#263449] placeholder-[#64748B] text-xs sm:text-sm rounded border border-[#F0E5D5] focus:border-[#102F6B] focus:ring-2 focus:ring-[#102F6B]/15 transition-all outline-hidden font-medium"
           />
           {searchQuery && (

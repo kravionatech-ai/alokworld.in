@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { getSearchTokens } from "@/lib/transliteration";
 
 const RichTextEditor = dynamic(() => import("@/components/RichTextEditor"), {
   ssr: false,
@@ -128,6 +129,21 @@ export default function AdminDashboard() {
   // Layout & Navigation State
   const [activeTab, setActiveTab] = useState("members");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [adminLang, setAdminLang] = useState("en"); // "en" | "hi" (bilingual admin toggle)
+
+  useEffect(() => {
+    try {
+      const savedLang = localStorage.getItem("alok_admin_lang");
+      if (savedLang === "hi" || savedLang === "en") setAdminLang(savedLang);
+    } catch {}
+  }, []);
+
+  const changeAdminLang = (lang) => {
+    setAdminLang(lang);
+    try {
+      localStorage.setItem("alok_admin_lang", lang);
+    } catch {}
+  };
 
   // Feedback notifications
   const [statusMsg, setStatusMsg] = useState("");
@@ -463,13 +479,26 @@ export default function AdminDashboard() {
       if (statusFilter === "unlisted" && m.isPublished) return false;
 
       if (adminSearch) {
-        const q = adminSearch.toLowerCase().trim();
-        const matchesName = m.name?.toLowerCase().includes(q);
-        const matchesCity = m.city?.toLowerCase().includes(q);
-        const matchesOccupation = m.occupation?.toLowerCase().includes(q);
-        const matchesCompany = m.company?.toLowerCase().includes(q);
-        const matchesSlug = m.slug?.toLowerCase().includes(q);
-        if (!matchesName && !matchesCity && !matchesOccupation && !matchesCompany && !matchesSlug) {
+        const tokens = getSearchTokens(adminSearch).map((t) => t.toLowerCase());
+        const digits = adminSearch.replace(/\D/g, "");
+        const memberText = [
+          m.name,
+          m.city,
+          m.state,
+          m.occupation,
+          m.company,
+          m.phone,
+          m.email,
+          m.slug,
+          ...(m.tags || []),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        const textMatches = tokens.some((t) => memberText.includes(t));
+        const phoneMatches = digits.length >= 3 && m.phone && m.phone.replace(/\D/g, "").includes(digits);
+        if (!textMatches && !phoneMatches) {
           return false;
         }
       }
@@ -1058,36 +1087,37 @@ export default function AdminDashboard() {
   };
 
   // ==========================================
-  // EDITORIAL NAVIGATION STRUCTURE (6 ORGANIZED GROUPS)
+  // EDITORIAL NAVIGATION STRUCTURE (5 ORGANIZED GROUPS - BILINGUAL)
   // ==========================================
+  const isHi = adminLang === "hi";
   const navigationSections = [
     {
-      title: "Dashboard",
+      title: isHi ? "डैशबोर्ड" : "Dashboard",
       items: [
-        { id: "overview", label: "Overview & Analytics", icon: "overview" },
-        { id: "system_health", label: "System & Server Health", icon: "server" },
+        { id: "overview", label: isHi ? "सिंहावलोकन एवं आंकड़े" : "Overview & Analytics", icon: "overview" },
+        { id: "system_health", label: isHi ? "सिस्टम व सर्वर स्थिति" : "System & Server Health", icon: "server" },
       ],
     },
     {
-      title: "Content Management (CMS)",
+      title: isHi ? "कंटेंट प्रबंधन (CMS)" : "Content Management (CMS)",
       items: [
-        { id: "pages", label: "Page Content (CMS)", icon: "document", count: pagesList.length },
+        { id: "pages", label: isHi ? "पेज सामग्री (CMS)" : "Page Content (CMS)", icon: "document", count: pagesList.length },
         {
           id: "hero_widgets",
-          label: "Hero Banner & Announcements",
+          label: isHi ? "मुख्य बैनर एवं घोषणाएं" : "Hero Banner & Announcements",
           icon: "widgets",
           activeIndicator: settings.announcementEnabled,
         },
-        { id: "navigation", label: "Top Navigation Menu", icon: "navigation" },
-        { id: "gallery", label: "Photo Gallery", icon: "photo", count: galleryItems.length },
+        { id: "navigation", label: isHi ? "शीर्ष नेविगेशन मेनू" : "Top Navigation Menu", icon: "navigation" },
+        { id: "gallery", label: isHi ? "छायाचित्र दीर्घा" : "Photo Gallery", icon: "photo", count: galleryItems.length },
       ],
     },
     {
-      title: "Members & Community",
+      title: isHi ? "सदस्य एवं समुदाय" : "Members & Community",
       items: [
         {
           id: "members",
-          label: "Member Directory",
+          label: isHi ? "सदस्य निर्देशिका" : "Member Directory",
           icon: "users",
           count: memberStats.total,
           onClick: () => {
@@ -1097,7 +1127,7 @@ export default function AdminDashboard() {
         },
         {
           id: "add_member",
-          label: "Add New Member",
+          label: isHi ? "नया सदस्य जोड़ें" : "Add New Member",
           icon: "user-plus",
           onClick: () => {
             resetMemberForm();
@@ -1106,7 +1136,7 @@ export default function AdminDashboard() {
         },
         {
           id: "messages",
-          label: "Email & Contact Management",
+          label: isHi ? "ईमेल एवं संपर्क संदेश" : "Email & Contact Management",
           icon: "mail",
           count: messages.length,
           activeIndicator: messages.some((m) => !m.isRead),
@@ -1114,30 +1144,21 @@ export default function AdminDashboard() {
       ],
     },
     {
-      title: "Website Settings",
+      title: isHi ? "वेबसाइट सेटिंग्स" : "Website Settings",
       items: [
-        { id: "site_settings", label: "Site Settings & Contact", icon: "settings" },
+        { id: "site_settings", label: isHi ? "साइट सेटिंग्स एवं संपर्क" : "Site Settings & Contact", icon: "settings" },
         {
           id: "maintenance",
-          label: "Maintenance Mode",
+          label: isHi ? "रखरखाव मोड" : "Maintenance Mode",
           icon: "shield",
           activeIndicator: settings.maintenanceMode,
         },
       ],
     },
     {
-      title: "Technical SEO",
+      title: isHi ? "तकनीकी एसईओ" : "Technical SEO",
       items: [
-        { id: "seo_settings", label: "SEO & Meta Settings", icon: "search" },
-      ],
-    },
-    {
-      title: "Administration & Security",
-      items: [
-        { id: "audit_logs", label: "Audit Logs", icon: "clipboard" },
-        ...(currentUser?.role === "superadmin"
-          ? [{ id: "admin_team", label: "Admin Team & Roles", icon: "key", count: adminUsers.length }]
-          : []),
+        { id: "seo_settings", label: isHi ? "एसईओ एवं मेटा सेटिंग्स" : "SEO & Meta Settings", icon: "search" },
       ],
     },
   ];
@@ -1184,6 +1205,34 @@ export default function AdminDashboard() {
             </span>
           </div>
 
+          {/* Bilingual Language Switcher for Admin Panel */}
+          <div className="flex items-center bg-[#F2EDE4] p-0.5 rounded border border-[#E2DDD5] text-xs font-semibold">
+            <button
+              type="button"
+              onClick={() => changeAdminLang("en")}
+              className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+                adminLang === "en"
+                  ? "bg-white text-[#102F6B] shadow-2xs font-bold"
+                  : "text-[#55657E] hover:text-[#102F6B]"
+              }`}
+              title="Admin Panel in English"
+            >
+              EN
+            </button>
+            <button
+              type="button"
+              onClick={() => changeAdminLang("hi")}
+              className={`px-2 py-0.5 rounded-xs transition-colors cursor-pointer ${
+                adminLang === "hi"
+                  ? "bg-[#102F6B] text-white shadow-2xs font-bold"
+                  : "text-[#55657E] hover:text-[#102F6B]"
+              }`}
+              title="एडमिन पैनल हिंदी में"
+            >
+              हिन्दी
+            </button>
+          </div>
+
           <span className="text-[#E2DDD5] hidden sm:inline">|</span>
 
           <Link
@@ -1191,7 +1240,7 @@ export default function AdminDashboard() {
             target="_blank"
             className="text-[#102F6B] hover:text-[#D9531E] font-medium transition-colors flex items-center gap-1"
           >
-            <span>View Website</span>
+            <span>{adminLang === "hi" ? "वेबसाइट देखें" : "View Website"}</span>
             <span className="text-[11px]">↗</span>
           </Link>
 
@@ -1201,7 +1250,7 @@ export default function AdminDashboard() {
             onClick={handleLogout}
             className="text-red-700 hover:text-red-900 font-medium transition-colors cursor-pointer"
           >
-            Sign Out
+            {adminLang === "hi" ? "लॉग आउट" : "Sign Out"}
           </button>
         </div>
       </header>
@@ -1530,13 +1579,7 @@ export default function AdminDashboard() {
                   onClick={() => setActiveTab("site_settings")}
                   className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
                 >
-                  Site Settings
-                </button>
-                <button
-                  onClick={() => setActiveTab("audit_logs")}
-                  className="px-2.5 py-1 bg-white border border-[#E2DDD5] hover:border-[#102F6B] text-[#102F6B] font-medium rounded-xs cursor-pointer shadow-2xs"
-                >
-                  View Audit Logs
+                  {isHi ? "साइट सेटिंग्स" : "Site Settings"}
                 </button>
               </div>
 
@@ -1545,12 +1588,12 @@ export default function AdminDashboard() {
                 {/* Recent Members */}
                 <div className="bg-white border border-[#E2DDD5] rounded-xs">
                   <div className="p-3 border-b border-[#E2DDD5] flex items-center justify-between font-bold text-xs text-[#102F6B]">
-                    <span>Recent Member Registrations</span>
+                    <span>{isHi ? "नवीनतम सदस्य पंजीकरण" : "Recent Member Registrations"}</span>
                     <button
                       onClick={() => { setActiveTab("members"); setStatusFilter("all"); }}
-                      className="text-[#D9531E] hover:underline font-normal text-[11px]"
+                      className="text-[#D9531E] hover:underline font-normal text-[11px] cursor-pointer"
                     >
-                      View All →
+                      {isHi ? "सभी देखें →" : "View All →"}
                     </button>
                   </div>
                   <div className="divide-y divide-[#EFECE6] text-xs">
@@ -1562,7 +1605,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="text-right">
                           <span className={`text-[11px] font-medium ${m.isApproved ? "text-emerald-700" : "text-amber-700"}`}>
-                            {m.isApproved ? "Approved" : "Pending"}
+                            {m.isApproved ? (isHi ? "स्वीकृत" : "Approved") : (isHi ? "प्रतीक्षारत" : "Pending")}
                           </span>
                         </div>
                       </div>
@@ -1570,29 +1613,35 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* Recent Audit Logs */}
+                {/* Recent Inquiries & Messages */}
                 <div className="bg-white border border-[#E2DDD5] rounded-xs">
                   <div className="p-3 border-b border-[#E2DDD5] flex items-center justify-between font-bold text-xs text-[#102F6B]">
-                    <span>Administrative Activity Logs</span>
+                    <span>{isHi ? "नवीनतम संदेश एवं पूछताछ" : "Recent Inquiries & Messages"}</span>
                     <button
-                      onClick={() => setActiveTab("audit_logs")}
-                      className="text-[#D9531E] hover:underline font-normal text-[11px]"
+                      onClick={() => setActiveTab("messages")}
+                      className="text-[#D9531E] hover:underline font-normal text-[11px] cursor-pointer"
                     >
-                      View All →
+                      {isHi ? "सभी देखें →" : "View All →"}
                     </button>
                   </div>
                   <div className="divide-y divide-[#EFECE6] text-xs">
-                    {auditLogs.slice(0, 5).map((log) => (
-                      <div key={log._id} className="p-2.5 flex items-center justify-between hover:bg-[#FAF8F3]">
-                        <div className="min-w-0 pr-2">
-                          <span className="font-mono text-[11px] text-[#102F6B] mr-1.5">{log.action}</span>
-                          <span className="text-[#55657E] text-[11px] truncate block">{log.details || log.targetEntity}</span>
-                        </div>
-                        <span className="text-[10px] text-[#A09A90] shrink-0 font-mono">
-                          {new Date(log.createdAt).toLocaleDateString()}
-                        </span>
+                    {messages.length === 0 ? (
+                      <div className="p-4 text-center text-[#8896AB] italic">
+                        {isHi ? "कोई नया संदेश नहीं है।" : "No inquiries received yet."}
                       </div>
-                    ))}
+                    ) : (
+                      messages.slice(0, 5).map((msg) => (
+                        <div key={msg._id} className="p-2.5 flex items-center justify-between hover:bg-[#FAF8F3]">
+                          <div className="min-w-0 pr-2">
+                            <span className="font-semibold text-[#102F6B] mr-1.5">{msg.name}</span>
+                            <span className="text-[#55657E] text-[11px] truncate block">{msg.subject || msg.message}</span>
+                          </div>
+                          <span className="text-[10px] text-[#A09A90] shrink-0 font-mono">
+                            {new Date(msg.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -1628,11 +1677,11 @@ export default function AdminDashboard() {
                 {/* Status Segmented Tabs */}
                 <div className="flex items-center gap-1 flex-wrap">
                   {[
-                    { id: "all", label: "All", count: memberStats.total },
-                    { id: "active", label: "Approved", count: memberStats.approved },
-                    { id: "pending", label: "Pending", count: memberStats.pending },
-                    { id: "unlisted", label: "Draft / Unlisted" },
-                    { id: "archived", label: "Archived", count: memberStats.archived },
+                    { id: "all", label: isHi ? "सभी सदस्य" : "All", count: memberStats.total },
+                    { id: "active", label: isHi ? "स्वीकृत" : "Approved", count: memberStats.approved },
+                    { id: "pending", label: isHi ? "प्रतीक्षारत" : "Pending", count: memberStats.pending },
+                    { id: "unlisted", label: isHi ? "अप्रकाशित" : "Draft / Unlisted" },
+                    { id: "archived", label: isHi ? "संग्रहीत" : "Archived", count: memberStats.archived },
                   ].map((s) => (
                     <button
                       key={s.id}
@@ -1661,20 +1710,20 @@ export default function AdminDashboard() {
                     onChange={(e) => setMemberSort(e.target.value)}
                     className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
                   >
-                    <option value="newest">Sort: Newest</option>
-                    <option value="oldest">Sort: Oldest</option>
-                    <option value="name_asc">Sort: Name A-Z</option>
-                    <option value="name_desc">Sort: Name Z-A</option>
-                    <option value="city_asc">Sort: City A-Z</option>
+                    <option value="newest">{isHi ? "क्रम: नवीनतम" : "Sort: Newest"}</option>
+                    <option value="oldest">{isHi ? "क्रम: पुरातन" : "Sort: Oldest"}</option>
+                    <option value="name_asc">{isHi ? "क्रम: नाम A-Z" : "Sort: Name A-Z"}</option>
+                    <option value="name_desc">{isHi ? "क्रम: नाम Z-A" : "Sort: Name Z-A"}</option>
+                    <option value="city_asc">{isHi ? "क्रम: शहर अनुसार" : "Sort: City A-Z"}</option>
                   </select>
 
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search by name, role, city, department..."
+                      placeholder={isHi ? "नाम, पद, शहर, फोन (हिंदी या English में खोजें)..." : "Search in Hindi or English (name, city, role)..."}
                       value={adminSearch}
                       onChange={(e) => setAdminSearch(e.target.value)}
-                      className="h-8 pl-7 pr-3 w-52 sm:w-64 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
+                      className="h-8 pl-7 pr-3 w-56 sm:w-72 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
                     />
                     <span className="absolute left-2 top-2 text-[#8896AB] pointer-events-none">
                       <Icon name="search" className="w-3.5 h-3.5" />
@@ -2977,216 +3026,6 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {/* ========================================================================= */}
-          {/* VIEW: AUDIT TRAIL */}
-          {/* ========================================================================= */}
-          {activeTab === "audit_logs" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
-                <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">System Audit Logs</h1>
-                  <p className="text-xs text-[#55657E]">
-                    Immutable trail of administrative logins, member record changes, and configuration updates.
-                  </p>
-                </div>
-                <select
-                  value={auditFilterAction}
-                  onChange={(e) => {
-                    setAuditFilterAction(e.target.value);
-                    setAuditPage(1);
-                  }}
-                  className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs font-medium text-[#1E293B]"
-                >
-                  <option value="All">All Events</option>
-                  <option value="ADMIN_LOGIN">ADMIN_LOGIN</option>
-                  <option value="ADMIN_LOGOUT">ADMIN_LOGOUT</option>
-                  <option value="create_member">MEMBER_CREATE</option>
-                  <option value="update_member">MEMBER_UPDATE</option>
-                  <option value="delete_member">MEMBER_DELETE</option>
-                </select>
-              </div>
-
-              <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden">
-                <div className="overflow-x-auto w-full">
-                  <table className="w-full text-left text-xs min-w-[650px]">
-                    <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-semibold">
-                      <tr>
-                        <th className="py-2 px-3">Timestamp</th>
-                        <th className="py-2 px-3">Administrator</th>
-                        <th className="py-2 px-3">Action</th>
-                        <th className="py-2 px-3">Entity</th>
-                        <th className="py-2 px-3">Details</th>
-                        <th className="py-2 px-3 text-right">IP Address</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#EFECE6]">
-                      {auditLogs.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className="py-8 text-center text-[#55657E]">
-                            No audit logs found matching criteria.
-                          </td>
-                        </tr>
-                      ) : (
-                        auditLogs.map((log) => (
-                          <tr key={log._id} className="hover:bg-[#FAF8F3]">
-                            <td className="py-2 px-3 font-mono text-[11px] text-[#55657E] whitespace-nowrap">
-                              {new Date(log.createdAt).toLocaleString()}
-                            </td>
-                            <td className="py-2 px-3 font-medium text-[#1E293B]">
-                              {log.adminName || log.adminEmail}
-                            </td>
-                            <td className="py-2 px-3">
-                              <span className="font-mono text-[11px] text-[#102F6B] font-semibold">
-                                {log.action}
-                              </span>
-                            </td>
-                            <td className="py-2 px-3 text-[#55657E]">{log.targetEntity || "—"}</td>
-                            <td className="py-2 px-3 text-[#55657E] max-w-xs truncate" title={log.details}>
-                              {log.details || "—"}
-                            </td>
-                            <td className="py-2 px-3 text-right font-mono text-[11px] text-[#8896AB]">
-                              {log.ipAddress}
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-
-                {auditTotalPages > 1 && (
-                  <div className="bg-[#FAF8F3] px-3 py-2 border-t border-[#E2DDD5] text-xs text-[#55657E] flex items-center justify-between">
-                    <span>{auditTotal} total recorded events</span>
-                    <div className="space-x-1">
-                      <button
-                        disabled={auditPage <= 1}
-                        onClick={() => setAuditPage((p) => Math.max(1, p - 1))}
-                        className="px-2 py-0.5 bg-white border border-[#D5CEC4] rounded-xs disabled:opacity-40"
-                      >
-                        Prev
-                      </button>
-                      <span className="px-2 font-mono font-medium">{auditPage}/{auditTotalPages}</span>
-                      <button
-                        disabled={auditPage >= auditTotalPages}
-                        onClick={() => setAuditPage((p) => Math.min(auditTotalPages, p + 1))}
-                        className="px-2 py-0.5 bg-white border border-[#D5CEC4] rounded-xs disabled:opacity-40"
-                      >
-                        Next
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* ========================================================================= */}
-          {/* VIEW: STAFF & PERMISSIONS (Superadmin) */}
-          {/* ========================================================================= */}
-          {activeTab === "admin_team" && currentUser?.role === "superadmin" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3">
-                <h1 className="text-lg font-bold text-[#102F6B]">Admin Team & Role Permissions</h1>
-                <p className="text-xs text-[#55657E]">
-                  Manage staff accounts, administrative roles, and permission levels.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2 bg-white border border-[#E2DDD5] rounded-xs overflow-hidden">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E]">
-                      <tr>
-                        <th className="py-2 px-3">Name</th>
-                        <th className="py-2 px-3">Email</th>
-                        <th className="py-2 px-3">Role</th>
-                        <th className="py-2 px-3 text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#EFECE6]">
-                      {adminUsers.map((u) => (
-                        <tr key={u._id} className="hover:bg-[#FAF8F3]">
-                          <td className="py-2 px-3 font-medium text-[#1E293B]">{u.name}</td>
-                          <td className="py-2 px-3 text-[#55657E] font-mono text-[11px]">{u.email}</td>
-                          <td className="py-2 px-3">
-                            <span className="text-[11px] uppercase font-mono font-medium text-[#102F6B]">
-                              {u.role}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3 text-right">
-                            {u._id !== currentUser?.id && (
-                              <button
-                                onClick={() => handleDeleteAdmin(u)}
-                                className="text-red-700 hover:underline cursor-pointer text-xs"
-                              >
-                                Revoke
-                              </button>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-3 text-xs">
-                  <div className="font-bold text-[#102F6B] border-b border-[#E2DDD5] pb-1">
-                    Add New Administrator Account
-                  </div>
-                  <form onSubmit={handleCreateAdmin} className="space-y-2.5">
-                    <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Full Name</label>
-                      <input
-                        type="text"
-                        required
-                        value={newAdminForm.name}
-                        onChange={(e) => setNewAdminForm({ ...newAdminForm, name: e.target.value })}
-                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Email</label>
-                      <input
-                        type="email"
-                        required
-                        value={newAdminForm.email}
-                        onChange={(e) => setNewAdminForm({ ...newAdminForm, email: e.target.value })}
-                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Initial Password</label>
-                      <input
-                        type="password"
-                        required
-                        value={newAdminForm.password}
-                        onChange={(e) => setNewAdminForm({ ...newAdminForm, password: e.target.value })}
-                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[#1E293B] font-medium mb-1">Role</label>
-                      <select
-                        value={newAdminForm.role}
-                        onChange={(e) => setNewAdminForm({ ...newAdminForm, role: e.target.value })}
-                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      >
-                        <option value="editor">Editor</option>
-                        <option value="superadmin">Superadmin</option>
-                      </select>
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full bg-[#102F6B] hover:bg-[#0D1B2A] text-white py-1.5 font-medium rounded-xs cursor-pointer shadow-xs"
-                    >
-                      {submitting ? "Creating..." : "Create Administrator"}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* ========================================================================= */}
           {/* VIEW: INQUIRIES & EMAIL MANAGEMENT */}

@@ -215,26 +215,10 @@ async function setProperData() {
   const memberCount = await db.collection("members").countDocuments();
   console.log(`Current members in DB: ${memberCount}`);
 
-  if (memberCount === 0 || memberCount < authenticMembers.length) {
-    console.log(`Seeding ${authenticMembers.length} verified members...`);
-    await db.collection("members").deleteMany({});
-    await db.collection("members").insertMany(authenticMembers);
-    console.log(`Seeded ${authenticMembers.length} verified members successfully.`);
-  } else {
-    // Ensure all 94 have active/approved/published flags
-    await db.collection("members").updateMany(
-      {},
-      {
-        $set: {
-          isApproved: true,
-          isPublished: true,
-          isArchived: false,
-          membershipStatus: "active",
-        },
-      }
-    );
-    console.log(`Verified all ${memberCount} members are approved, published, and active.`);
-  }
+  console.log(`Synchronizing ${authenticMembers.length} verified members with bilingual search tags...`);
+  await db.collection("members").deleteMany({});
+  await db.collection("members").insertMany(authenticMembers);
+  console.log(`Successfully updated ${authenticMembers.length} members with bilingual search tags.`);
 
   console.log("\n=======================================================");
   console.log("4. VERIFYING 4 HISTORICAL PERSONALITIES");
