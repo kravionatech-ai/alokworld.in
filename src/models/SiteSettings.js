@@ -60,9 +60,9 @@ const SiteSettingsSchema = new mongoose.Schema(
     twitterHandle: { type: String, default: "@alokworldin" },
     
     // Maintenance Mode Configurations
-    maintenanceMode: { type: Boolean, default: true },
-    maintenanceBarEnabled: { type: Boolean, default: true },
-    maintenancePopupEnabled: { type: Boolean, default: true },
+    maintenanceMode: { type: Boolean, default: false },
+    maintenanceBarEnabled: { type: Boolean, default: false },
+    maintenancePopupEnabled: { type: Boolean, default: false },
     maintenanceMessage: {
       type: String,
       default: "सूचना: पोर्टल पर तकनीकी सुधार एवं डेटा सत्यापन कार्य प्रगति पर है। कुछ सेवाएं अस्थायी रूप से प्रभावित हो सकती हैं।",

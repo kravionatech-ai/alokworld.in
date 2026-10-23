@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 
 const defaultMaintenanceSettings = {
-  maintenanceMode: true,
-  maintenanceBarEnabled: true,
-  maintenancePopupEnabled: true,
+  maintenanceMode: false,
+  maintenanceBarEnabled: false,
+  maintenancePopupEnabled: false,
   maintenanceMessage:
     "आवश्यक सूचना: हमारी वेबसाइट वर्तमान में विकास और अद्यतन प्रक्रिया में है। हम आपकी सुविधा हेतु निरंतर सुधार कर रहे हैं।",
   maintenancePopupTitle: "वेबसाइट सक्रिय विकास और अद्यतन में है",

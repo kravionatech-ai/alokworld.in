@@ -25,17 +25,17 @@ function NavLinksDesktop({ currentPath = "" }) {
   };
 
   return (
-    <div className="hidden md:flex items-center justify-center h-10 gap-x-0.5 lg:gap-x-1 flex-nowrap">
+    <div className="hidden md:flex items-center justify-center h-[42px] gap-x-0.5 lg:gap-x-1 flex-nowrap">
       {NAV_LINKS.map((link) => {
         const active = isActive(link.href);
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`h-10 flex items-center px-2 lg:px-2.5 text-[11.5px] lg:text-xs font-semibold tracking-wide transition-colors duration-150 relative border-b-2 whitespace-nowrap focus:outline-hidden focus:bg-[#0D2659] ${
+            className={`h-[42px] flex items-center px-2 lg:px-2.5 text-[11.5px] lg:text-xs font-semibold tracking-wide transition-colors duration-150 relative border-b-[3px] whitespace-nowrap focus:outline-hidden focus:bg-[#112F5C] ${
               active
-                ? "text-white border-[#F26A21] bg-[#091D42]/70 font-bold"
-                : "text-[#E2E8F0] border-transparent hover:text-white hover:bg-[#0D2659]"
+                ? "text-white border-[#F26A21] bg-[#0F2952] font-bold"
+                : "text-[#E2E8F0] border-transparent hover:text-white hover:bg-[#1C4685]"
             }`}
             aria-current={active ? "page" : undefined}
           >
@@ -54,7 +54,7 @@ function NavLinksMobile({ currentPath = "", onSelect }) {
   };
 
   return (
-    <div className="space-y-0.5 py-2 border-t border-[#091D42]">
+    <div className="space-y-0.5 py-2 border-t border-[#112F5C] bg-[#163A70]">
       {NAV_LINKS.map((link) => {
         const active = isActive(link.href);
         return (
@@ -62,10 +62,10 @@ function NavLinksMobile({ currentPath = "", onSelect }) {
             key={link.href}
             href={link.href}
             onClick={onSelect}
-            className={`block px-3 py-2 text-xs font-medium rounded-xs transition-colors ${
+            className={`block px-3.5 py-2.5 text-xs font-medium rounded-xs transition-colors ${
               active
-                ? "text-white bg-[#091D42] border-l-4 border-[#F26A21] font-bold pl-2.5"
-                : "text-[#CBD5E1] hover:text-white hover:bg-[#091D42]/60"
+                ? "text-white bg-[#0F2952] border-l-4 border-[#F26A21] font-bold pl-3"
+                : "text-[#E2E8F0] hover:text-white hover:bg-[#1C4685]"
             }`}
             aria-current={active ? "page" : undefined}
           >
@@ -89,17 +89,17 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
       {/* Mobile Toggle Row (40px high) */}
       <div
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="flex md:hidden items-center justify-between h-10 px-2 cursor-pointer select-none"
+        className="flex md:hidden items-center justify-between h-10 px-3 cursor-pointer select-none"
       >
-        <span className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5">
-          <span className="text-[#F26A21]">☰</span>
+        <span className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
+          <span className="text-[#F26A21] text-sm">☰</span>
           <span>नेविगेशन मेनू</span>
         </span>
         <button
           type="button"
           aria-expanded={mobileMenuOpen}
           aria-label="Toggle navigation menu"
-          className="p-1 rounded text-[#CBD5E1] hover:text-white hover:bg-[#091D42] transition-colors focus:outline-hidden"
+          className="p-1.5 rounded text-[#E2E8F0] hover:text-white hover:bg-[#1C4685] transition-colors focus:outline-hidden"
         >
           {mobileMenuOpen ? (
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -113,7 +113,7 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
         </button>
       </div>
 
-      {/* Desktop Links (40px high) */}
+      {/* Desktop Links (42px high) */}
       <NavLinksDesktop currentPath={pathname || ""} />
 
       {/* Mobile Animated Dropdown */}
@@ -123,8 +123,8 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: "easeInOut" }}
-            className="md:hidden bg-[#102F6B] pb-2 overflow-hidden"
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+            className="md:hidden bg-[#163A70] pb-2 overflow-hidden shadow-lg border-b border-[#0C2454]"
           >
             <NavLinksMobile
               currentPath={pathname || ""}
@@ -149,67 +149,67 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="w-full relative z-30">
+    <>
       {/* ================================================================= */}
-      {/* 1. TOP COMMUNITY BANNER: Authentic banner resized & centered     */}
+      {/* 1. TOP HEADER (BANNER + TITLE): Deep Navy (#091D42)               */}
+      {/*    Scrolls naturally with page                                    */}
       {/* ================================================================= */}
-      <div
-        className="site-banner-container bg-[#091D42]"
-        style={{ width: "100%", padding: "6px 12px" }}
-      >
-        <div className="max-w-[850px] w-full mx-auto">
-          <Link
-            href="/"
-            className="block w-full focus:outline-hidden"
-            title="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
-          >
-            <img
-              src="/asset/topofwebsite/web_sit_front1.png"
-              alt="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ — alokworld.in"
-              width={1337}
-              height={483}
-              priority="true"
-              className="site-banner-image"
-              style={{
-                display: "block",
-                width: "100%",
-                maxWidth: "850px",
-                height: "auto",
-                marginInline: "auto",
-                objectFit: "contain",
-              }}
-            />
-          </Link>
+      <header className="w-full bg-[#091D42]">
+        {/* Section A — Original Organization Banner */}
+        <div className="w-full pt-2 sm:pt-3 pb-1 px-2 sm:px-4">
+          <div className="max-w-[850px] w-full mx-auto">
+            <Link
+              href="/"
+              className="block w-full focus:outline-hidden"
+              title="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
+            >
+              <img
+                src="/asset/topofwebsite/web_sit_front1.png"
+                alt="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ — alokworld.in"
+                width={1337}
+                height={483}
+                priority="true"
+                className="site-banner-image"
+                style={{
+                  display: "block",
+                  width: "100%",
+                  maxWidth: "850px",
+                  height: "auto",
+                  marginInline: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </Link>
+          </div>
         </div>
-      </div>
+
+        {/* Section B — Organization Identity */}
+        <div className="w-full pt-1 pb-2.5 sm:pb-3 px-3 sm:px-4 text-center">
+          <div className="max-w-[850px] mx-auto flex flex-col items-center justify-center">
+            <Link
+              href="/"
+              className="inline-block focus:outline-hidden focus:ring-1 focus:ring-[#F26A21] rounded-xs"
+            >
+              <h1 className="text-base sm:text-lg md:text-xl lg:text-[22px] font-bold text-white tracking-wide leading-tight">
+                अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ
+              </h1>
+              <p className="text-[11px] sm:text-xs md:text-sm text-[#CBD5E1] font-medium tracking-wide mt-0.5 sm:mt-1">
+                अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in
+              </p>
+            </Link>
+          </div>
+        </div>
+      </header>
 
       {/* ================================================================= */}
-      {/* 2. BRAND TITLE STRIP: Compact Deep Navy (#091D42, 68–75px high)    */}
-      {/* ================================================================= */}
-      <div className="w-full bg-[#091D42] border-t border-[#162744] border-b border-[#162744]">
-        <div className="max-w-[850px] mx-auto px-3 sm:px-4 py-2.5 sm:py-3 text-center flex flex-col items-center justify-center min-h-[68px] sm:min-h-[72px]">
-          <Link
-            href="/"
-            className="inline-block focus:outline-hidden focus:ring-1 focus:ring-[#F26A21] rounded-xs"
-          >
-            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-white tracking-tight leading-snug">
-              अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ
-            </h1>
-            <p className="text-[11px] sm:text-xs md:text-sm text-[#CBD5E1] font-semibold mt-0.5 tracking-wide">
-              अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in
-            </p>
-          </Link>
-        </div>
-      </div>
-
-      {/* ================================================================= */}
-      {/* 3. NAVIGATION BAR: Navy (#102F6B, ~40px high)                     */}
+      {/* 2. SECTION C: STICKY NAVIGATION BAR (Stays sticky at top: 0)     */}
+      {/*    Navy Blue (#163A70) with Orange (#F26A21) active highlight    */}
       {/* ================================================================= */}
       <nav
         aria-label="Main Navigation"
-        className="w-full bg-[#102F6B] border-b border-[#0C2454] shadow-xs"
+        className="sticky top-0 z-[1000] w-full bg-[#163A70] border-b border-[#0C2454] shadow-md"
       >
-        <div className="max-w-[1000px] mx-auto px-2 sm:px-4">
+        <div className="max-w-[1020px] mx-auto px-2 sm:px-4">
           <Suspense fallback={<NavLinksDesktop currentPath="" />}>
             <ActiveNavContainer
               mobileMenuOpen={mobileMenuOpen}
@@ -218,6 +218,6 @@ export default function Header() {
           </Suspense>
         </div>
       </nav>
-    </header>
+    </>
   );
 }

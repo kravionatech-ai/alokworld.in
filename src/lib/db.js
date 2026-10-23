@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 import { membersData as authenticMembers } from "../data/members.js";
 import Member from "../models/Member.js";
+import SiteSettings from "../models/SiteSettings.js";
+import Personality from "../models/Personality.js";
+import GalleryItem from "../models/GalleryItem.js";
+import PageContent from "../models/PageContent.js";
+import Admin from "../models/Admin.js";
+import bcrypt from "bcryptjs";
 
 let cached = global.mongoose;
 
@@ -9,66 +15,144 @@ if (!cached) {
 }
 
 /**
- * Seed initial 94 verified authentic member records only if the members collection is empty.
- * Preserves all authentic records without fabricating demo or dummy data.
+ * Seed verified data into MongoDB if collections are empty.
+ * Zero dummy data: only authentic records and verified assets.
  */
-async function seedInitialMembersIfEmpty() {
+async function seedInitialDataIfEmpty() {
   try {
-    const count = await Member.countDocuments();
-    if (count === 0 && Array.isArray(authenticMembers) && authenticMembers.length > 0) {
-      console.log(`Seeding ${authenticMembers.length} verified authentic members into MongoDB Atlas...`);
+    // 1. Seed members if empty
+    const memberCount = await Member.countDocuments();
+    if (memberCount === 0 && Array.isArray(authenticMembers) && authenticMembers.length > 0) {
+      console.log(`[Database] Seeding ${authenticMembers.length} verified authentic members...`);
       await Member.insertMany(authenticMembers, { ordered: false });
-      console.log("Verified authentic members successfully seeded into MongoDB Atlas.");
+      console.log("[Database] Verified authentic members successfully seeded.");
+    }
+
+    // 2. Seed site settings if empty
+    const settingsCount = await SiteSettings.countDocuments();
+    if (settingsCount === 0) {
+      console.log("[Database] Initializing live site settings...");
+      await SiteSettings.create({
+        siteName: "अखिल भारतीय समाज डिरेक्टरी - alokworld.in",
+        tagline: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
+        announcement: "राष्ट्रीय अधिवेशन 2026 की पूर्व तैयारी एवं सदस्यता अभियान में सादर आमंत्रित हैं।",
+        announcementEnabled: true,
+        heroBadge: "आधिकारिक समुदाय पोर्टल",
+        heroTitle: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल",
+        heroSubtitle: "देश भर के समाज बंधुओं, वरिष्ठ मार्गदर्शकों, चिकित्सकों, अभियंताओं, प्रशासनिक अधिकारियों, अधिवक्ताओं एवं युवाओं को जोड़ने वाला डिजिटल मंच।",
+        heroCtaText: "सदस्य डायरेक्टरी देखें →",
+        heroCtaLink: "/directory",
+        heroImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+        sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
+        sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
+        sidebarNoticeEnabled: true,
+        keyRegions: ["लखनऊ", "भोपाल", "जयपुर", "नई दिल्ली", "ग्वालियर", "इंदौर", "हैदराबाद", "धौलपुर"],
+        adTitle: "समाज व्यापार एवं उद्योग संवर्धन",
+        adBannerText: "राष्ट्रव्यापी समाज डायरेक्टरी नेटवर्क के माध्यम से अपने व्यवसाय एवं प्रतिष्ठान का प्रचार करें।",
+        adLink: "/contact",
+        adEnabled: true,
+        contactEmail: "admin@alokworld.in",
+        contactPhone: "+91 96085 53167",
+        contactAddress: "केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली, भारत",
+        whatsappNumber: "+91 96085 53167",
+        seoTitle: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल | alokworld.in",
+        seoDescription: "अखिल भारतीय लोधी, लोधा, लोध समाज की आधिकारिक डिजिटल डायरेक्टरी - देश भर के सत्यापित समाज बंधुओं, वरिष्ठ मार्गदर्शकों एवं प्रबुद्ध अधिकारियों से जुड़ें।",
+        seoKeywords: "समाज डायरेक्टरी, लोधी समाज, लोधा महासभा, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी, लोध समाज डायरेक्टरी",
+        siteUrl: "https://alokworld.in",
+        ogImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+        organizationName: "अखिल भारतीय लोधी, लोधा, लोध समाज महासभा",
+        googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
+        twitterHandle: "@alokworldin",
+        maintenanceMode: false,
+        maintenanceBarEnabled: false,
+        maintenancePopupEnabled: false,
+        maintenanceMessage: "पोर्टल लाइव एवं सक्रिय है।",
+        maintenancePopupTitle: "अखिल भारतीय समाज डायरेक्टरी",
+        maintenancePopupMessage: "alokworld.in पर आपका स्वागत है!",
+      });
+      console.log("[Database] Live site settings initialized.");
+    }
+
+    // 3. Seed admin if empty
+    const adminCount = await Admin.countDocuments();
+    if (adminCount === 0) {
+      const email = (process.env.INITIAL_ADMIN_EMAIL || "admin@alokworld.in").toLowerCase();
+      const password = process.env.INITIAL_ADMIN_PASSWORD || "AdminSecure@2026";
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await Admin.create({
+        email,
+        password: hashedPassword,
+        name: "Super Administrator",
+        role: "superadmin",
+      });
+      console.log(`[Database] Default superadmin account initialized: ${email}`);
     }
   } catch (err) {
-    // If partial unique index error or connection delay, log warning gracefully
-    console.warn("Member initialization check notice:", err.message);
+    console.warn("[Database] Initialization check notice:", err.message);
   }
 }
 
 /**
- * Reusable, cached MongoDB Atlas connection helper for Next.js App Router.
- * Prevents redundant connection pooling across serverless invocations.
+ * Resilient, cached MongoDB connection helper for Next.js App Router.
+ * Automatically tries primary URI (e.g. Atlas or local) and falls back to local MongoDB
+ * if the primary URI times out or encounters network whitelist restrictions.
  */
 export async function connectDB() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) {
-    console.warn("MongoDB URI is not configured in environment variables.");
-    return null;
-  }
-
   if (cached.conn && mongoose.connection.readyState === 1) {
     return cached.conn;
   }
 
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-      maxPoolSize: 10,
-    };
-
-    cached.promise = mongoose
-      .connect(uri, opts)
-      .then(async (mongooseInstance) => {
-        // Seed authentic members if collection is empty
-        await seedInitialMembersIfEmpty();
-        return mongooseInstance;
-      })
-      .catch((err) => {
-        console.warn("MongoDB Atlas connection warning:", err.message);
-        cached.promise = null;
-        return null;
-      });
+  if (cached.promise) {
+    try {
+      cached.conn = await cached.promise;
+      return cached.conn;
+    } catch {
+      cached.promise = null;
+    }
   }
+
+  const primaryUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/alokworld";
+  const fallbackUri = process.env.MONGODB_FALLBACK_URI || "mongodb://127.0.0.1:27017/alokworld";
+
+  const opts = {
+    bufferCommands: false,
+    serverSelectionTimeoutMS: 3000,
+    socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+  };
+
+  cached.promise = (async () => {
+    try {
+      const conn = await mongoose.connect(primaryUri, opts);
+      await seedInitialDataIfEmpty();
+      return conn;
+    } catch (primaryError) {
+      console.warn(`[Database] Primary connection failed (${primaryUri.split("@").pop()}): ${primaryError.message}`);
+
+      // Try fallback if primary was different from fallback
+      if (primaryUri !== fallbackUri) {
+        console.log(`[Database] Attempting fallback to: ${fallbackUri}`);
+        try {
+          const fallbackConn = await mongoose.connect(fallbackUri, opts);
+          console.log("[Database] Connected successfully via fallback URI.");
+          await seedInitialDataIfEmpty();
+          return fallbackConn;
+        } catch (fallbackError) {
+          console.error("[Database] Fallback connection also failed:", fallbackError.message);
+          throw fallbackError;
+        }
+      }
+      throw primaryError;
+    }
+  })();
 
   try {
     cached.conn = await cached.promise;
-  } catch (e) {
+    return cached.conn;
+  } catch (err) {
     cached.promise = null;
+    cached.conn = null;
+    console.warn("[Database] Could not establish database connection:", err.message);
     return null;
   }
-
-  return cached.conn;
 }
