@@ -2530,10 +2530,11 @@ export default function AdminDashboard() {
                           className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden mb-1.5"
                         />
                         <label className="px-2 py-0.5 bg-white border border-[#D5CEC4] text-[11px] font-medium cursor-pointer rounded-xs inline-block">
-                          {uploadingImage ? "Uploading..." : "Upload File"}
+                          {uploadingImage ? "अपलोड हो रहा है..." : "छायाचित्र अपलोड करें"}
                           <input
                             type="file"
                             accept="image/*"
+                            disabled={uploadingImage}
                             onChange={(e) => handleImageUpload(e, "gallery")}
                             className="hidden"
                           />
@@ -2546,7 +2547,7 @@ export default function AdminDashboard() {
                           onClick={() => setGalleryModalOpen(false)}
                           className="px-3 py-1 border border-[#D5CEC4] rounded-xs text-[#55657E]"
                         >
-                          Cancel
+                          रद्द करें
                         </button>
                         <button
                           type="submit"
@@ -2640,6 +2641,39 @@ export default function AdminDashboard() {
                       onChange={(e) => setSettings({ ...settings, seoKeywords: e.target.value })}
                       className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                     />
+                  </div>
+                  <div className="col-span-full">
+                    <label className="block font-medium text-[#1E293B] mb-1">
+                      सोशल मीडिया शेयर छायाचित्र (Open Graph Image - 1200×630px)
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="https://res.cloudinary.com/..."
+                        value={settings.ogImage || ""}
+                        onChange={(e) => setSettings({ ...settings, ogImage: e.target.value })}
+                        className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
+                      />
+                      <label className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shrink-0">
+                        <span>{uploadingImage ? "अपलोड हो रहा है..." : "छायाचित्र अपलोड करें"}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploadingImage}
+                          onChange={(e) => handleImageUpload(e, "ogImage")}
+                          className="hidden"
+                        />
+                      </label>
+                      {settings.ogImage && (
+                        <button
+                          type="button"
+                          onClick={() => setSettings({ ...settings, ogImage: "" })}
+                          className="px-2 py-1.5 text-xs text-red-700 hover:bg-red-50 border border-red-200 rounded-xs cursor-pointer"
+                        >
+                          हटाएं
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
