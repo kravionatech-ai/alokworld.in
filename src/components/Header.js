@@ -155,25 +155,25 @@ export default function Header() {
       {/*    Scrolls naturally with page                                    */}
       {/* ================================================================= */}
       <header className="w-full bg-[#091D42]">
-        {/* Section A — Original Organization Banner */}
-        <div className="w-full pt-2 sm:pt-3 pb-1 px-2 sm:px-4">
-          <div className="max-w-[850px] w-full mx-auto">
+        {/* Section A — Original Organization Banner (Compact Heritage Strip) */}
+        <div className="w-full pt-2 sm:pt-2.5 pb-1 px-3 sm:px-4">
+          <div className="max-w-[700px] w-full mx-auto">
             <Link
               href="/"
               className="block w-full focus:outline-hidden"
               title="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
             >
               <img
-                src="/asset/topofwebsite/web_sit_front1.png"
-                alt="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ — alokworld.in"
-                width={1337}
-                height={483}
+                src="/asset/topofwebsite/heritage_banner_strip.jpg"
+                alt="अखिल भारतीय समाज महापुरुष एवं राष्ट्रीय प्रतीक — लोधेश्वर भगवान, वीरांगना अवंतीबाई, स्वामी ब्रह्मानंद, स्वामी केशवानंद, राजा हिरदेशाह एवं शहीद गुलाब सिंह"
+                width={1080}
+                height={162}
                 priority="true"
                 className="site-banner-image"
                 style={{
                   display: "block",
                   width: "100%",
-                  maxWidth: "850px",
+                  maxWidth: "700px",
                   height: "auto",
                   marginInline: "auto",
                   objectFit: "contain",
