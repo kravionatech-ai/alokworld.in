@@ -17,6 +17,24 @@ const SiteSettingsSchema = new mongoose.Schema(
     heroCtaLink: { type: String, default: "/directory" },
     heroImage: { type: String, default: "" },
 
+    // Event & Live Countdown Management
+    eventEnabled: { type: Boolean, default: true },
+    eventTopBarEnabled: { type: Boolean, default: true },
+    eventPopupEnabled: { type: Boolean, default: true },
+    eventTitle: { type: String, default: "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026" },
+    eventSubtitle: { type: String, default: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का ऐतिहासिक राष्ट्रीय सम्मेलन" },
+    eventBadge: { type: String, default: "विशेष आगामी कार्यक्रम" },
+    eventDate: { type: String, default: "2026-11-02T10:00:00" },
+    eventLocation: { type: String, default: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली" },
+    eventCountdownLabel: { type: String, default: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती" },
+    eventDescription: {
+      type: String,
+      default: "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
+    },
+    eventImage: { type: String, default: "/asset/alokadhivationposter2026/poster1.jpeg" },
+    eventCtaText: { type: String, default: "अधिवेशन विवरण एवं पंजीकरण →" },
+    eventCtaLink: { type: String, default: "/mahasabha" },
+
     // Sidebar Widgets Configuration
     sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं महत्वपूर्ण सूचनाएं" },
     sidebarNoticeContent: { type: String, default: "समस्त समाज बंधुओं से अनुरोध है कि डायरेक्टरी में अपना एवं अपने परिवार का प्रामाणिक विवरण अद्यतन रखें।" },

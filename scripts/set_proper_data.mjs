@@ -23,6 +23,23 @@ async function setProperData() {
     heroCtaText: "सदस्य डायरेक्टरी देखें →",
     heroCtaLink: "/directory",
     heroImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+
+    // Event & Countdown (2 Nov Live Target)
+    eventEnabled: true,
+    eventTopBarEnabled: true,
+    eventPopupEnabled: true,
+    eventTitle: "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026",
+    eventSubtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का ऐतिहासिक राष्ट्रीय सम्मेलन",
+    eventBadge: "विशेष आगामी कार्यक्रम",
+    eventDate: "2026-11-02T10:00:00",
+    eventLocation: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
+    eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
+    eventDescription:
+      "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
+    eventImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+    eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
+    eventCtaLink: "/mahasabha",
+
     sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
     sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
     sidebarNoticeEnabled: true,

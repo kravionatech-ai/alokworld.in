@@ -116,6 +116,12 @@ function Icon({ name, className = "w-4 h-4 shrink-0" }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.7 4.05a2.25 2.25 0 011.8-.9h9a2.25 2.25 0 011.8.9l2.55 4.5a4.5 4.5 0 01.9 2.7" />
         </svg>
       );
+    case "calendar":
+      return (
+        <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z" />
+        </svg>
+      );
     default:
       return null;
   }
@@ -227,6 +233,21 @@ export default function AdminDashboard() {
     heroCtaText: "Explore Member Directory →",
     heroCtaLink: "/directory",
     heroImage: "",
+    // Event & Live Countdown State (2 Nov Target)
+    eventEnabled: true,
+    eventTopBarEnabled: true,
+    eventPopupEnabled: true,
+    eventTitle: "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026",
+    eventSubtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का ऐतिहासिक राष्ट्रीय सम्मेलन",
+    eventBadge: "विशेष आगामी कार्यक्रम",
+    eventDate: "2026-11-02T10:00:00",
+    eventLocation: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
+    eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
+    eventDescription:
+      "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
+    eventImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+    eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
+    eventCtaLink: "/mahasabha",
     sidebarNoticeTitle: "",
     sidebarNoticeContent: "",
     sidebarNoticeEnabled: true,
@@ -1107,6 +1128,12 @@ export default function AdminDashboard() {
           label: isHi ? "मुख्य बैनर एवं घोषणाएं" : "Hero Banner & Announcements",
           icon: "widgets",
           activeIndicator: settings.announcementEnabled,
+        },
+        {
+          id: "events",
+          label: isHi ? "कार्यक्रम एवं उल्टी गिनती (Events)" : "Events & Live Countdown",
+          icon: "calendar",
+          activeIndicator: settings.eventEnabled,
         },
         { id: "navigation", label: isHi ? "शीर्ष नेविगेशन मेनू" : "Top Navigation Menu", icon: "navigation" },
         { id: "gallery", label: isHi ? "छायाचित्र दीर्घा" : "Photo Gallery", icon: "photo", count: galleryItems.length },

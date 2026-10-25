@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import TopEventCountdownBar from "@/components/TopEventCountdownBar";
+import EventPopupModal from "@/components/EventPopupModal";
 
 const NAV_LINKS = [
   { label: "मुख्य पृष्ठ", href: "/" },
@@ -137,8 +139,23 @@ function ActiveNavContainer({ mobileMenuOpen, setMobileMenuOpen }) {
   );
 }
 
-export default function Header() {
+export default function Header({ siteName, settings: propSettings }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [settings, setSettings] = useState(propSettings || null);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (propSettings) {
+      setSettings(propSettings);
+    } else {
+      fetch("/api/settings")
+        .then((r) => r.json())
+        .then((d) => {
+          if (d?.settings) setSettings(d.settings);
+        })
+        .catch(console.error);
+    }
+  }, [propSettings]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -148,8 +165,33 @@ export default function Header() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Auto-open Event Popup Modal once per session/day if enabled
+  useEffect(() => {
+    if (settings && settings.eventEnabled !== false && settings.eventPopupEnabled !== false) {
+      try {
+        const dismissedUntil = localStorage.getItem("alok_event_popup_dismissed_until");
+        if (!dismissedUntil || Date.now() > Number(dismissedUntil)) {
+          const timer = setTimeout(() => {
+            setIsEventModalOpen(true);
+          }, 1000);
+          return () => clearTimeout(timer);
+        }
+      } catch (err) {
+        // Ignore localStorage error if cookies disabled
+      }
+    }
+  }, [settings]);
+
   return (
     <>
+      {/* ================================================================= */}
+      {/* 0. TOP EVENT COUNTDOWN TICKER STRIP                               */}
+      {/* ================================================================= */}
+      <TopEventCountdownBar
+        eventSettings={settings}
+        onOpenModal={() => setIsEventModalOpen(true)}
+      />
+
       {/* ================================================================= */}
       {/* 1. TOP HEADER (BANNER + TITLE): Deep Navy (#091D42)               */}
       {/*    Scrolls naturally with page                                    */}
@@ -218,6 +260,15 @@ export default function Header() {
           </Suspense>
         </div>
       </nav>
+
+      {/* ================================================================= */}
+      {/* 3. EVENT POPUP MODAL DIALOG                                       */}
+      {/* ================================================================= */}
+      <EventPopupModal
+        isOpen={isEventModalOpen}
+        onClose={() => setIsEventModalOpen(false)}
+        eventSettings={settings}
+      />
     </>
   );
 }

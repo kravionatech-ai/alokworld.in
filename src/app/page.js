@@ -97,7 +97,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFCF5] text-[#263449]">
-      <Header siteName={settings?.siteName} />
+      <Header siteName={settings?.siteName} settings={settings} />
 
       <main className="flex-1 max-w-[1100px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-6">
         {/* Compact Community Announcements Slider */}
