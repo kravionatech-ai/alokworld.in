@@ -14,6 +14,7 @@ const EmailLogSchema = new mongoose.Schema(
         "contact_notification",
         "visitor_confirmation",
         "admin_reply",
+        "direct_email",
         "inbound_email",
         "system",
       ],

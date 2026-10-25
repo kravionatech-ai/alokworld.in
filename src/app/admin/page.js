@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
+import InquiryChatModal from "@/components/admin/InquiryChatModal";
+import ComposeEmailModal from "@/components/admin/ComposeEmailModal";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
