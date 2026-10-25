@@ -17,7 +17,6 @@ export async function GET() {
     { path: "/mahasabha", changefreq: "monthly", priority: "0.8" },
     { path: "/gallery", changefreq: "weekly", priority: "0.8" },
     { path: "/personalities", changefreq: "monthly", priority: "0.8" },
-    { path: "/matrimonial", changefreq: "weekly", priority: "0.8" },
     { path: "/contact", changefreq: "monthly", priority: "0.7" },
     { path: "/privacy", changefreq: "yearly", priority: "0.3" },
     { path: "/terms", changefreq: "yearly", priority: "0.3" },

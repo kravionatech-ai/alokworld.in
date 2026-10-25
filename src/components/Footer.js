@@ -44,13 +44,12 @@ export default function Footer({ contactEmail, contactPhone }) {
             </ul>
           </StaggerItem>
 
-          {/* Col 3: Matrimonial & Gallery & Legal */}
+          {/* Col 3: Gallery & Legal */}
           <StaggerItem className="space-y-2">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#102F6B] border-b border-[#F26A21]/30 pb-1">
               सेवाएं एवं नियम
             </h4>
             <ul className="space-y-1.5 text-xs">
-              <li><Link href="/matrimonial" className="text-[#263449] hover:text-[#F26A21] transition-colors">समाज वैवाहिक</Link></li>
               <li><Link href="/gallery" className="text-[#263449] hover:text-[#F26A21] transition-colors">छायाचित्र दीर्घा</Link></li>
               <li><Link href="/about" className="text-[#263449] hover:text-[#F26A21] transition-colors">हमारे बारे में</Link></li>
               <li><Link href="/contact" className="text-[#263449] hover:text-[#F26A21] transition-colors">सचिवालय संपर्क</Link></li>

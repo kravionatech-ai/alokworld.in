@@ -12,7 +12,6 @@ const NAV_LINKS = [
   { label: "इतिहास", href: "/history" },
   { label: "संगठन", href: "/organization" },
   { label: "महासभा", href: "/mahasabha" },
-  { label: "वैवाहिक परिचय", href: "/matrimonial" },
   { label: "सदस्य निर्देशिका", href: "/directory" },
   { label: "महान विभूतियाँ", href: "/personalities" },
   { label: "चित्र दीर्घा", href: "/gallery" },

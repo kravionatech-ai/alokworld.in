@@ -10,7 +10,6 @@ const navigationLinks = [
   { label: "इतिहास एवं गौरवशाली विरासत", href: "/history" },
   { label: "ऐतिहासिक विभूतियां", href: "/personalities" },
   { label: "अधिवेशन छायाचित्र दीर्घा", href: "/gallery" },
-  { label: "समाज वैवाहिक मंच", href: "/matrimonial" },
   { label: "केंद्रीय सचिवालय संपर्क", href: "/contact" },
   { label: "alokworld.in परिचय", href: "/about" },
 ];

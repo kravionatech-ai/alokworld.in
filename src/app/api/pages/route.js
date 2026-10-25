@@ -73,7 +73,7 @@ const DEFAULT_PAGES = [
     content: `<h3>Apex Representative Assembly</h3>
 <p>The Akhil Bhartiya Mahasabha is the highest deliberative assembly of the community. Convened periodically at national conventions, the Mahasabha debates crucial social reforms, passes community resolutions, and establishes long-term developmental policies.</p>
 <h3>Historical Conventions & Milestones</h3>
-<p>Over several decades, national conventions held in historic cultural centers across India have addressed vital social topics, including education modernism, simple wedding conventions, matrimonial facilitation, and digital directory creation.</p>
+<p>Over several decades, national conventions held in historic cultural centers across India have addressed vital social topics, including education modernism, simple wedding conventions, youth empowerment, and digital directory creation.</p>
 <h3>Ongoing Programs</h3>
 <p>The Mahasabha's ongoing initiatives focus on strengthening regional unity, establishing community centers (Bhawan), and digitizing community archives for future generations.</p>`,
   },
@@ -87,7 +87,7 @@ const DEFAULT_PAGES = [
     metaTitle: "Samaj Community Directory | alokworld.in",
     metaDescription: "Official Samaj Directory - search and connect with community members, elders, doctors, engineers, and professionals.",
     content: `<h3>Central Community Digital Network</h3>
-<p>Welcome to alokworld.in — the unified digital portal for our community. Here, members across India and worldwide can discover verified community contacts, stay informed about national events, explore matrimonial matches, and contribute to social welfare programs.</p>`,
+<p>Welcome to alokworld.in — the unified digital portal for our community. Here, members across India and worldwide can discover verified community contacts, stay informed about national events, explore historical personalities, and contribute to social welfare programs.</p>`,
   },
 ];
 
