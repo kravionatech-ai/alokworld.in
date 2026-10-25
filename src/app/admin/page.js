@@ -312,7 +312,10 @@ export default function AdminDashboard() {
     unreadInbound: 0,
     totalOutbound: 0,
   });
-  const [messagesSubTab, setMessagesSubTab] = useState("inquiries"); // "inquiries" | "received" | "sent"
+  const [messagesSubTab, setMessagesSubTab] = useState("received"); // "received" | "sent"
+  const [composeEmailModalOpen, setComposeEmailModalOpen] = useState(false);
+  const [chatModalInquiry, setChatModalInquiry] = useState(null);
+  const [receivedFilter, setReceivedFilter] = useState("all"); // "all" | "unread" | "read"
   const [emailFilterStatus, setEmailFilterStatus] = useState("all");
   const [emailSearch, setEmailSearch] = useState("");
   const [replyModal, setReplyModal] = useState({
@@ -1095,6 +1098,91 @@ export default function AdminDashboard() {
       showBanner(err.message, true);
       setReplyModal((prev) => ({ ...prev, sending: false }));
     }
+  };
+
+  const handleToggleEmailRead = async (logId, currentRead) => {
+    try {
+      await fetch("/api/admin/emails", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logId, isRead: !currentRead }),
+      });
+      setEmailsList((prev) =>
+        prev.map((e) => ((e._id || e.id) === logId ? { ...e, isRead: !currentRead } : e))
+      );
+      setMessages((prev) =>
+        prev.map((m) => ((m._id || m.id) === logId ? { ...m, isRead: !currentRead } : m))
+      );
+      fetch("/api/admin/emails").then((r) => r.json()).then((d) => {
+        if (d?.stats) setEmailStats(d.stats);
+      });
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleDeleteEmailLog = (logId, subject) => {
+    requestConfirmation({
+      title: isHi ? "ईमेल रिकॉर्ड हटाएं" : "Delete Email Record",
+      message: isHi ? "क्या आप इस ईमेल संदेश रिकॉर्ड को हटाना चाहते हैं?" : "Are you sure you want to delete this email record?",
+      targetName: subject || logId,
+      confirmText: isHi ? "हटाएं" : "Delete",
+      onConfirm: async () => {
+        try {
+          const res = await fetch(`/api/admin/emails?id=${logId}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("Failed to delete email record");
+          setEmailsList((prev) => prev.filter((e) => (e._id || e.id) !== logId));
+          showBanner(isHi ? "ईमेल रिकॉर्ड सफलतापूर्वक हटा दिया गया।" : "Email record deleted successfully.");
+          fetch("/api/admin/emails").then((r) => r.json()).then((d) => {
+            if (d?.stats) setEmailStats(d.stats);
+          });
+        } catch (err) {
+          showBanner(err.message, true);
+        }
+      },
+    });
+  };
+
+  const handleMarkAllEmailsRead = async () => {
+    try {
+      await fetch("/api/admin/emails", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markAllRead: true, direction: "inbound" }),
+      });
+      setEmailsList((prev) =>
+        prev.map((e) => (e.direction === "inbound" ? { ...e, isRead: true } : e))
+      );
+      setMessages((prev) => prev.map((m) => ({ ...m, isRead: true })));
+      setEmailStats((prev) => ({ ...prev, unreadInbound: 0 }));
+      showBanner(isHi ? "सभी प्राप्त संदेशों को पठित चिह्नित किया गया।" : "All received messages marked as read.");
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleOpenEmailChat = (em) => {
+    if (em.contactInquiryId) {
+      const matched = messages.find((m) => String(m._id || m.id) === String(em.contactInquiryId));
+      if (matched) {
+        setChatModalInquiry(matched);
+        return;
+      }
+    }
+    const senderName = em.metadata?.senderName || em.from?.replace(/<.*>/, "").trim() || em.from;
+    const senderEmail = em.metadata?.senderEmail || (em.from?.match(/<([^>]+)>/)?.[1] || em.from);
+    const senderPhone = em.metadata?.senderPhone || "";
+    setChatModalInquiry({
+      _id: em.contactInquiryId || em._id || em.id,
+      name: senderName,
+      email: senderEmail,
+      phone: senderPhone,
+      subject: em.subject,
+      message: em.textBody || em.htmlBody,
+      createdAt: em.createdAt,
+      isRead: em.isRead,
+      replies: [],
+    });
   };
 
   const handleRetryEmail = async (logId) => {
@@ -3503,270 +3591,334 @@ export default function AdminDashboard() {
           {/* ========================================================================= */}
           {/* VIEW: INQUIRIES & EMAIL MANAGEMENT */}
           {activeTab === "messages" && (
-            <div className="space-y-3.5">
-              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+            <div className="space-y-4">
+              {/* Header Title & Top Toolbar */}
+              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Email & Contact Inquiries Management</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B] flex items-center gap-2">
+                    <span>{isHi ? "ईमेल एवं संदेश संचार केंद्र" : "Email & Communication Hub"}</span>
+                    {emailStats.unreadInbound > 0 && (
+                      <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-[#F26A21] text-white animate-pulse">
+                        {emailStats.unreadInbound} {isHi ? "नए संदेश" : "New"}
+                      </span>
+                    )}
+                  </h1>
                   <p className="text-xs text-[#55657E]">
-                    Monitor visitor inquiries, view inbound messages, track delivery statuses via Resend, and dispatch replies.
+                    {isHi
+                      ? "वेबसाइट से प्राप्त संदेश (Received), प्रेषित ईमेल (Sent) एवं नया ईमेल भेजने (Compose) का एकीकृत प्रबंधन।"
+                      : "Manage inbound website inquiries, track sent outbox delivery, and compose direct emails."}
                   </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#55657E]">
-                    Total Inquiries: <strong className="text-[#102F6B] font-bold">{messages.length}</strong>
-                  </span>
-                  <span className="text-[#D5CEC4]">·</span>
-                  <span className="text-xs text-[#55657E]">
-                    Outbound Emails: <strong className="text-[#102F6B] font-bold">{emailStats.sent + emailStats.delivered + emailStats.failed + emailStats.bounced}</strong>
-                  </span>
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Compose Email Button */}
+                  <button
+                    type="button"
+                    onClick={() => setComposeEmailModalOpen(true)}
+                    className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#D9531E] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>✉️</span>
+                    <span>{isHi ? "नया ईमेल भेजें" : "Compose Email"}</span>
+                  </button>
+
+                  {/* Mark All Read */}
+                  {messagesSubTab === "received" && emailStats.unreadInbound > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleMarkAllEmailsRead}
+                      className="px-3 py-1.5 bg-white hover:bg-[#FAF8F3] text-[#102F6B] border border-[#D5CEC4] text-xs font-semibold rounded-xs cursor-pointer shadow-2xs flex items-center gap-1 transition-colors"
+                    >
+                      <span>✓</span>
+                      <span>{isHi ? "सभी पठित चिह्नित करें" : "Mark All Read"}</span>
+                    </button>
+                  )}
+
+                  {/* Refresh Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      loadAllData();
+                      showBanner(isHi ? "ईमेल एवं संदेश डेटा रिफ्रेश किया गया।" : "Data refreshed.");
+                    }}
+                    className="px-3 py-1.5 bg-white hover:bg-[#FAF8F3] text-[#55657E] border border-[#D5CEC4] text-xs font-semibold rounded-xs cursor-pointer shadow-2xs flex items-center gap-1 transition-colors"
+                    title="रिफ्रेश करें"
+                  >
+                    <span>🔄</span>
+                    <span className="hidden sm:inline">{isHi ? "रिफ्रेश" : "Refresh"}</span>
+                  </button>
                 </div>
               </div>
 
-              {/* Sub-tab Navigation */}
-              <div className="flex items-center gap-1.5 border-b border-[#E2DDD5] pb-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setMessagesSubTab("inquiries")}
-                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
-                    messagesSubTab === "inquiries"
-                      ? "bg-[#102F6B] text-white"
-                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
-                  }`}
-                >
-                  Visitor Inquiries ({messages.length})
-                </button>
+              {/* Sub-tab Navigation (Inbox / Outbox) */}
+              <div className="flex items-center gap-2 border-b border-[#E2DDD5] pb-2 text-xs">
                 <button
                   type="button"
                   onClick={() => setMessagesSubTab("received")}
-                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
+                  className={`px-3.5 py-1.5 rounded-xs font-bold cursor-pointer transition-colors flex items-center gap-2 ${
                     messagesSubTab === "received"
-                      ? "bg-[#102F6B] text-white"
-                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
+                      ? "bg-[#102F6B] text-white shadow-xs"
+                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#102F6B] border border-[#E2DDD5]"
                   }`}
                 >
-                  Received Emails (Inbound) ({emailsList.filter((e) => e.direction === "inbound").length})
+                  <span>📥</span>
+                  <span>{isHi ? "प्राप्त ईमेल / इनबॉक्स (Received)" : "Received / Inbox"}</span>
+                  <span className={`text-[10.5px] px-1.5 py-0.2 rounded-full font-mono ${
+                    messagesSubTab === "received" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
+                  }`}>
+                    {emailsList.filter((e) => e.direction === "inbound").length}
+                  </span>
+                  {emailStats.unreadInbound > 0 && (
+                    <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
+                  )}
                 </button>
+
                 <button
                   type="button"
                   onClick={() => setMessagesSubTab("sent")}
-                  className={`px-3 py-1.5 rounded-xs font-semibold cursor-pointer transition-colors ${
+                  className={`px-3.5 py-1.5 rounded-xs font-bold cursor-pointer transition-colors flex items-center gap-2 ${
                     messagesSubTab === "sent"
-                      ? "bg-[#102F6B] text-white"
-                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#1E293B] border border-[#E2DDD5]"
+                      ? "bg-[#102F6B] text-white shadow-xs"
+                      : "bg-[#FAF8F3] text-[#55657E] hover:text-[#102F6B] border border-[#E2DDD5]"
                   }`}
                 >
-                  Sent Email History & Telemetry ({emailsList.filter((e) => e.direction === "outbound").length})
+                  <span>📤</span>
+                  <span>{isHi ? "भेजे गए ईमेल / आउटबॉक्स (Sent)" : "Sent / Outbox"}</span>
+                  <span className={`text-[10.5px] px-1.5 py-0.2 rounded-full font-mono ${
+                    messagesSubTab === "sent" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
+                  }`}>
+                    {emailsList.filter((e) => e.direction === "outbound").length}
+                  </span>
                 </button>
               </div>
 
               {/* ========================================================= */}
-              {/* SUB-TAB 1: CONTACT INQUIRIES                               */}
-              {/* ========================================================= */}
-              {messagesSubTab === "inquiries" && (
-                <div className="space-y-2.5">
-                  {messages.length === 0 ? (
-                    <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
-                      No contact inquiries recorded yet.
-                    </div>
-                  ) : (
-                    messages.map((msg) => (
-                      <div
-                        key={msg.id || msg._id}
-                        className={`p-3.5 border rounded-xs text-xs space-y-2 transition-all ${
-                          msg.isRead ? "bg-white border-[#E2DDD5]" : "bg-[#FFFBF5] border-[#F26A21] shadow-xs"
-                        }`}
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F0E5D5] pb-2">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-bold text-[#102F6B] text-sm">{msg.name}</span>
-                            <span className="text-[#D5CEC4]">·</span>
-                            <a href={`mailto:${msg.email}`} className="text-[#F26A21] hover:underline font-mono text-[11px] font-medium">
-                              {msg.email}
-                            </a>
-                            {msg.phone && (
-                              <>
-                                <span className="text-[#D5CEC4]">·</span>
-                                <span className="text-[#55657E] font-mono text-[11px]">📞 {msg.phone}</span>
-                              </>
-                            )}
-                            <span className="text-[#D5CEC4]">·</span>
-                            <span className="text-[10px] text-[#64748B]">
-                              {msg.createdAt ? new Date(msg.createdAt).toLocaleString("en-US") : "Recent"}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            {/* Notification Status Badge */}
-                            <span
-                              className={`px-2 py-0.5 text-[10px] font-semibold rounded-xs border ${
-                                msg.notificationStatus === "sent"
-                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
-                                  : msg.notificationStatus === "failed"
-                                  ? "bg-red-50 text-red-800 border-red-200"
-                                  : "bg-amber-50 text-amber-800 border-amber-200"
-                              }`}
-                            >
-                              Notification: {msg.notificationStatus === "sent" ? "Sent ✓" : msg.notificationStatus === "failed" ? "Failed ✕" : "Pending"}
-                            </span>
-
-                            {/* Actions */}
-                            <button
-                              type="button"
-                              onClick={() => handleOpenReply(msg)}
-                              className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs text-[11px] font-medium cursor-pointer shadow-xs"
-                            >
-                              ✉️ Reply
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleToggleMessageRead(msg._id || msg.id, msg.isRead)}
-                              className="px-2 py-1 bg-white border border-[#D5CEC4] text-[#55657E] hover:text-[#102F6B] rounded-xs text-[11px] cursor-pointer"
-                            >
-                              {msg.isRead ? "Mark Unread" : "Mark Read"}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteMessage(msg._id || msg.id)}
-                              className="px-2 py-1 bg-white border border-red-200 text-red-700 hover:bg-red-50 rounded-xs text-[11px] cursor-pointer"
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="font-semibold text-[#102F6B]">Subject: {msg.subject || "General Inquiry"}</div>
-                        <p className="text-[#263449] leading-relaxed bg-[#FAF8F3] p-2.5 border border-[#E2DDD5] rounded-xs whitespace-pre-wrap">
-                          {msg.message}
-                        </p>
-
-                        {/* Display Thread of Previous Replies */}
-                        {Array.isArray(msg.replies) && msg.replies.length > 0 && (
-                          <div className="mt-2 pt-2 border-t border-[#E2DDD5] space-y-1.5">
-                            <span className="text-[10px] font-bold uppercase text-[#55657E] tracking-wider">
-                              Secretariat Replies ({msg.replies.length}):
-                            </span>
-                            {msg.replies.map((rep, idx) => (
-                              <div key={idx} className="bg-white p-2 border border-[#E2DDD5] rounded-xs text-[11px] space-y-1">
-                                <div className="flex items-center justify-between text-[#64748B]">
-                                  <span>By: {rep.adminEmail}</span>
-                                  <span>{rep.sentAt ? new Date(rep.sentAt).toLocaleString("en-IN") : ""}</span>
-                                </div>
-                                <div className="font-medium text-[#102F6B]">{rep.subject}</div>
-                                <p className="text-[#55657E] whitespace-pre-wrap">{rep.message}</p>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-
-              {/* ========================================================= */}
-              {/* SUB-TAB 2: RECEIVED INBOUND EMAILS                         */}
+              {/* SUB-TAB 1: RECEIVED EMAILS (INBOX)                        */}
               {/* ========================================================= */}
               {messagesSubTab === "received" && (
                 <div className="space-y-3">
-                  <div className="bg-[#FAF8F3] p-3 border border-[#E2DDD5] rounded-xs text-xs text-[#55657E]">
-                    <strong>Inbound Email Gateway:</strong> Emails sent to <code className="text-[#102F6B] font-mono">contact@alokworld.in</code> are automatically recorded via webhook <code className="text-[#102F6B] font-mono">/api/webhooks/inbound-email</code>.
+                  {/* Filter Toolbar */}
+                  <div className="bg-white border border-[#E2DDD5] p-2.5 rounded-xs flex flex-wrap items-center justify-between gap-2.5 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-[#102F6B] mr-1">{isHi ? "फ़िल्टर:" : "Filter:"}</span>
+                      <button
+                        type="button"
+                        onClick={() => setReceivedFilter("all")}
+                        className={`px-2.5 py-1 rounded text-xs font-semibold cursor-pointer ${
+                          receivedFilter === "all" ? "bg-[#102F6B] text-white" : "bg-[#FAF8F3] text-[#55657E] border border-[#E2DDD5]"
+                        }`}
+                      >
+                        {isHi ? "सभी (All)" : "All"} ({emailsList.filter((e) => e.direction === "inbound").length})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReceivedFilter("unread")}
+                        className={`px-2.5 py-1 rounded text-xs font-semibold cursor-pointer flex items-center gap-1 ${
+                          receivedFilter === "unread" ? "bg-[#F26A21] text-white" : "bg-[#FAF8F3] text-[#55657E] border border-[#E2DDD5]"
+                        }`}
+                      >
+                        <span>{isHi ? "अपठित (Unread)" : "Unread"}</span>
+                        <span className="font-mono">({emailsList.filter((e) => e.direction === "inbound" && !e.isRead).length})</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setReceivedFilter("read")}
+                        className={`px-2.5 py-1 rounded text-xs font-semibold cursor-pointer ${
+                          receivedFilter === "read" ? "bg-[#102F6B] text-white" : "bg-[#FAF8F3] text-[#55657E] border border-[#E2DDD5]"
+                        }`}
+                      >
+                        {isHi ? "पठित (Read)" : "Read"} ({emailsList.filter((e) => e.direction === "inbound" && e.isRead).length})
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder={isHi ? "प्रेषक, ईमेल या विषय खोजें..." : "Search sender, email, subject..."}
+                        value={emailSearch}
+                        onChange={(e) => setEmailSearch(e.target.value)}
+                        className="px-3 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs min-w-[220px] focus:border-[#102F6B] outline-hidden"
+                      />
+                      {emailSearch && (
+                        <button
+                          type="button"
+                          onClick={() => setEmailSearch("")}
+                          className="text-xs text-[#55657E] hover:text-[#102F6B]"
+                        >
+                          ✕
+                        </button>
+                      )}
+                    </div>
                   </div>
 
-                  {emailsList.filter((e) => e.direction === "inbound").length === 0 ? (
-                    <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
-                      No inbound emails received yet.
-                    </div>
-                  ) : (
-                    <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-x-auto">
-                      <table className="w-full text-left text-xs border-collapse">
-                        <thead>
-                          <tr className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[#102F6B] font-bold">
-                            <th className="py-2.5 px-3">Time</th>
-                            <th className="py-2.5 px-3">From (Sender)</th>
-                            <th className="py-2.5 px-3">Subject</th>
-                            <th className="py-2.5 px-3">Status</th>
-                            <th className="py-2.5 px-3 text-right">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#E2DDD5]">
-                          {emailsList
-                            .filter((e) => e.direction === "inbound")
-                            .map((em) => (
-                              <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
-                                <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
-                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("en-IN") : ""}
-                                </td>
-                                <td className="py-2 px-3 font-medium text-[#1E293B] max-w-[180px] truncate">
-                                  {em.from}
-                                </td>
-                                <td className="py-2 px-3 text-[#102F6B] max-w-[240px] truncate font-medium">
-                                  {em.subject}
-                                </td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-0.5 bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold rounded-xs">
-                                    Received
+                  {/* Inbound Email Cards List */}
+                  {(() => {
+                    const inboundList = emailsList
+                      .filter((e) => e.direction === "inbound")
+                      .filter((e) => {
+                        if (receivedFilter === "unread") return !e.isRead;
+                        if (receivedFilter === "read") return e.isRead;
+                        return true;
+                      })
+                      .filter((e) => {
+                        if (!emailSearch) return true;
+                        const s = emailSearch.toLowerCase();
+                        return (
+                          (e.subject && e.subject.toLowerCase().includes(s)) ||
+                          (e.from && e.from.toLowerCase().includes(s)) ||
+                          (e.textBody && e.textBody.toLowerCase().includes(s))
+                        );
+                      });
+
+                    if (inboundList.length === 0) {
+                      return (
+                        <div className="bg-white border border-[#E2DDD5] p-8 text-center text-xs text-[#55657E] space-y-2">
+                          <div className="text-2xl">📭</div>
+                          <div className="font-semibold text-sm text-[#102F6B]">
+                            {isHi ? "कोई संदेश उपलब्ध नहीं है" : "No messages found"}
+                          </div>
+                          <p className="text-xs text-[#64748B]">
+                            {isHi
+                              ? "वेबसाइट के संपर्क पृष्ठ (/contact) से प्राप्त संदेश यहाँ तुरंत दिखाई देंगे।"
+                              : "Inquiries submitted from the website contact page will appear here."}
+                          </p>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div className="space-y-2.5">
+                        {inboundList.map((em) => {
+                          const senderName = em.metadata?.senderName || em.from?.replace(/<.*>/, "").trim() || em.from;
+                          const senderEmail = em.metadata?.senderEmail || (em.from?.match(/<([^>]+)>/)?.[1] || em.from);
+                          const senderPhone = em.metadata?.senderPhone || "";
+                          const isUnread = !em.isRead;
+
+                          return (
+                            <div
+                              key={em._id || em.id}
+                              className={`p-4 border rounded-xs text-xs space-y-2.5 transition-all ${
+                                isUnread
+                                  ? "bg-[#FFFBF5] border-l-4 border-l-[#F26A21] border-[#E2DDD5] shadow-xs"
+                                  : "bg-white border-[#E2DDD5] border-l-4 border-l-emerald-600/40"
+                              }`}
+                            >
+                              {/* Top Bar: Sender Info + Status Badges + Action Buttons */}
+                              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#F0E5D5] pb-2">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="font-bold text-[#102F6B] text-sm">{senderName}</span>
+                                  <span className="text-[#D5CEC4]">·</span>
+                                  <a
+                                    href={`mailto:${senderEmail}`}
+                                    className="text-[#F26A21] hover:underline font-mono text-[11px] font-semibold"
+                                  >
+                                    {senderEmail}
+                                  </a>
+                                  {senderPhone && (
+                                    <>
+                                      <span className="text-[#D5CEC4]">·</span>
+                                      <a
+                                        href={`tel:${senderPhone}`}
+                                        className="text-[#55657E] hover:text-[#102F6B] font-mono text-[11px]"
+                                      >
+                                        📞 {senderPhone}
+                                      </a>
+                                    </>
+                                  )}
+                                  <span className="text-[#D5CEC4]">·</span>
+                                  <span className="text-[10.5px] text-[#64748B] font-mono">
+                                    {em.createdAt ? new Date(em.createdAt).toLocaleString("en-IN") : ""}
                                   </span>
-                                </td>
-                                <td className="py-2 px-3 text-right space-x-2">
+                                </div>
+
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  {/* Unread / Read Badge */}
+                                  <span
+                                    className={`px-2 py-0.5 text-[10px] font-bold rounded-xs border ${
+                                      isUnread
+                                        ? "bg-amber-100 text-amber-900 border-amber-300"
+                                        : "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                    }`}
+                                  >
+                                    {isUnread ? (isHi ? "🔵 नया संदेश" : "Unread") : (isHi ? "✓ पठित" : "Read")}
+                                  </span>
+
+                                  {/* Chat & Reply Button */}
                                   <button
                                     type="button"
-                                    onClick={() => setSelectedEmailDetail(em)}
-                                    className="text-[#102F6B] hover:underline cursor-pointer text-xs"
+                                    onClick={() => handleOpenEmailChat(em)}
+                                    className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs text-[11px] font-bold cursor-pointer shadow-xs flex items-center gap-1"
                                   >
-                                    View Details
+                                    <span>💬</span>
+                                    <span>{isHi ? "चैट व उत्तर" : "Reply"}</span>
                                   </button>
+
+                                  {/* Mark Read/Unread Toggle */}
                                   <button
                                     type="button"
-                                    onClick={() =>
-                                      handleOpenReply({
-                                        _id: em._id,
-                                        name: em.from,
-                                        email: em.from,
-                                        subject: em.subject,
-                                      })
-                                    }
-                                    className="text-[#F26A21] hover:underline cursor-pointer text-xs font-semibold"
+                                    onClick={() => handleToggleEmailRead(em._id || em.id, em.isRead)}
+                                    className="px-2 py-1 bg-white border border-[#D5CEC4] text-[#55657E] hover:text-[#102F6B] rounded-xs text-[11px] cursor-pointer"
                                   >
-                                    Reply
+                                    {em.isRead ? (isHi ? "अपठित करें" : "Mark Unread") : (isHi ? "पठित करें" : "Mark Read")}
                                   </button>
-                                </td>
-                              </tr>
-                            ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
+
+                                  {/* Delete */}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteEmailLog(em._id || em.id, em.subject)}
+                                    className="px-2 py-1 bg-white border border-red-200 text-red-700 hover:bg-red-50 rounded-xs text-[11px] cursor-pointer"
+                                  >
+                                    {isHi ? "हटाएं" : "Delete"}
+                                  </button>
+                                </div>
+                              </div>
+
+                              {/* Subject */}
+                              <div className="font-bold text-[#102F6B] text-xs flex items-center gap-1.5">
+                                <span className="text-[#F26A21]">विषय / Subject:</span>
+                                <span>{em.subject || "(No Subject)"}</span>
+                              </div>
+
+                              {/* Message Preview */}
+                              <div className="text-[#263449] leading-relaxed bg-[#FAF8F3] p-3 border border-[#E2DDD5] rounded-xs whitespace-pre-wrap text-xs">
+                                {em.textBody || em.htmlBody?.replace(/<[^>]+>/g, " ").trim() || "(No content)"}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
 
               {/* ========================================================= */}
-              {/* SUB-TAB 3: SENT EMAIL HISTORY & LIVE DELIVERY STATUS        */}
+              {/* SUB-TAB 2: SENT EMAILS (OUTBOX)                           */}
               {/* ========================================================= */}
               {messagesSubTab === "sent" && (
                 <div className="space-y-3">
                   {/* Delivery Metric Cards */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                     <div className="bg-white border border-[#E2DDD5] p-3 rounded-xs text-center">
-                      <div className="text-[10px] uppercase font-bold text-[#55657E]">Total Sent</div>
-                      <div className="text-xl font-bold text-[#102F6B] mt-0.5">
-                        {emailStats.sent + emailStats.delivered + emailStats.failed + emailStats.bounced}
+                      <div className="text-[10px] uppercase font-bold text-[#55657E]">{isHi ? "कुल प्रेषित" : "Total Sent"}</div>
+                      <div className="text-xl font-bold text-[#102F6B] mt-0.5 font-mono">
+                        {emailsList.filter((e) => e.direction === "outbound").length}
                       </div>
                     </div>
                     <div className="bg-white border border-emerald-200 p-3 rounded-xs text-center">
-                      <div className="text-[10px] uppercase font-bold text-emerald-800">Delivered</div>
-                      <div className="text-xl font-bold text-emerald-800 mt-0.5">
+                      <div className="text-[10px] uppercase font-bold text-emerald-800">{isHi ? "सफलतापूर्वक डिलीवर" : "Delivered"}</div>
+                      <div className="text-xl font-bold text-emerald-800 mt-0.5 font-mono">
                         {emailStats.delivered}
                       </div>
                     </div>
                     <div className="bg-white border border-blue-200 p-3 rounded-xs text-center">
-                      <div className="text-[10px] uppercase font-bold text-blue-800">Sent / Accepted</div>
-                      <div className="text-xl font-bold text-blue-800 mt-0.5">
+                      <div className="text-[10px] uppercase font-bold text-blue-800">{isHi ? "स्वीकार / प्रेषित" : "Sent / Accepted"}</div>
+                      <div className="text-xl font-bold text-blue-800 mt-0.5 font-mono">
                         {emailStats.sent}
                       </div>
                     </div>
                     <div className="bg-white border border-red-200 p-3 rounded-xs text-center">
-                      <div className="text-[10px] uppercase font-bold text-red-800">Failed</div>
-                      <div className="text-xl font-bold text-red-800 mt-0.5">
+                      <div className="text-[10px] uppercase font-bold text-red-800">{isHi ? "विफल (Failed)" : "Failed"}</div>
+                      <div className="text-xl font-bold text-red-800 mt-0.5 font-mono">
                         {emailStats.failed}
                       </div>
                     </div>
@@ -3775,23 +3927,23 @@ export default function AdminDashboard() {
                   {/* Filter Toolbar */}
                   <div className="bg-white border border-[#E2DDD5] p-2.5 rounded-xs flex flex-wrap items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <label className="font-semibold text-[#102F6B]">Status Filter:</label>
+                      <label className="font-semibold text-[#102F6B]">{isHi ? "स्थिति फ़िल्टर:" : "Status Filter:"}</label>
                       <select
                         value={emailFilterStatus}
                         onChange={(e) => setEmailFilterStatus(e.target.value)}
                         className="px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs"
                       >
-                        <option value="all">All Statuses</option>
-                        <option value="delivered">Delivered</option>
-                        <option value="sent">Sent</option>
-                        <option value="failed">Failed</option>
-                        <option value="bounced">Bounced</option>
+                        <option value="all">{isHi ? "सभी स्थितियां (All)" : "All Statuses"}</option>
+                        <option value="sent">{isHi ? "प्रेषित (Sent)" : "Sent"}</option>
+                        <option value="delivered">{isHi ? "डिलीवर (Delivered)" : "Delivered"}</option>
+                        <option value="failed">{isHi ? "विफल (Failed)" : "Failed"}</option>
+                        <option value="bounced">{isHi ? "बाउंस (Bounced)" : "Bounced"}</option>
                       </select>
                     </div>
 
                     <input
                       type="text"
-                      placeholder="Search by recipient or subject..."
+                      placeholder={isHi ? "प्राप्तकर्ता या विषय खोजें..." : "Search recipient or subject..."}
                       value={emailSearch}
                       onChange={(e) => setEmailSearch(e.target.value)}
                       className="px-2.5 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs min-w-[200px]"
@@ -3801,20 +3953,19 @@ export default function AdminDashboard() {
                   {/* Outbound Table */}
                   {emailsList.filter((e) => e.direction === "outbound").length === 0 ? (
                     <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs text-[#55657E]">
-                      No outbound email records found.
+                      {isHi ? "कोई प्रेषित ईमेल रिकॉर्ड नहीं मिला।" : "No outbound email records found."}
                     </div>
                   ) : (
                     <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-x-auto">
                       <table className="w-full text-left text-xs border-collapse">
                         <thead>
                           <tr className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[#102F6B] font-bold">
-                            <th className="py-2.5 px-3">Dispatched At</th>
-                            <th className="py-2.5 px-3">To (Recipient)</th>
-                            <th className="py-2.5 px-3">Subject</th>
-                            <th className="py-2.5 px-3">Type</th>
-                            <th className="py-2.5 px-3">Provider ID</th>
-                            <th className="py-2.5 px-3">Live Status</th>
-                            <th className="py-2.5 px-3 text-right">Actions</th>
+                            <th className="py-2.5 px-3">{isHi ? "प्रेषित समय" : "Dispatched At"}</th>
+                            <th className="py-2.5 px-3">{isHi ? "प्राप्तकर्ता (To)" : "To (Recipient)"}</th>
+                            <th className="py-2.5 px-3">{isHi ? "विषय" : "Subject"}</th>
+                            <th className="py-2.5 px-3">{isHi ? "प्रकार" : "Type"}</th>
+                            <th className="py-2.5 px-3">{isHi ? "लाइव स्थिति" : "Status"}</th>
+                            <th className="py-2.5 px-3 text-right">{isHi ? "कार्रवाई" : "Actions"}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-[#E2DDD5]">
@@ -3831,7 +3982,7 @@ export default function AdminDashboard() {
                             })
                             .map((em) => (
                               <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
-                                <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
+                                <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap font-mono">
                                   {em.createdAt ? new Date(em.createdAt).toLocaleString("en-IN") : ""}
                                 </td>
                                 <td className="py-2 px-3 font-mono text-[11px] text-[#1E293B] max-w-[160px] truncate">
@@ -3842,15 +3993,12 @@ export default function AdminDashboard() {
                                 </td>
                                 <td className="py-2 px-3 text-[10px] text-[#55657E]">
                                   {em.emailType === "contact_notification"
-                                    ? "Secretariat Notification"
+                                    ? (isHi ? "सचिवालय सूचना" : "Secretariat Notification")
                                     : em.emailType === "visitor_confirmation"
-                                    ? "Visitor Confirmation"
+                                    ? (isHi ? "आगंतुक पुष्टिकरण" : "Visitor Confirmation")
                                     : em.emailType === "admin_reply"
-                                    ? "Admin Reply"
-                                    : "System"}
-                                </td>
-                                <td className="py-2 px-3 font-mono text-[10px] text-[#64748B] max-w-[110px] truncate">
-                                  {em.providerMessageId || "—"}
+                                    ? (isHi ? "सचिवालय उत्तर" : "Admin Reply")
+                                    : (isHi ? "सीधा संदेश" : "Direct Email")}
                                 </td>
                                 <td className="py-2 px-3 whitespace-nowrap">
                                   <span
@@ -3867,11 +4015,11 @@ export default function AdminDashboard() {
                                     }`}
                                   >
                                     {em.status === "delivered"
-                                      ? "Delivered"
+                                      ? "Delivered ✓"
                                       : em.status === "sent"
                                       ? "Sent"
                                       : em.status === "failed"
-                                      ? "Failed"
+                                      ? "Failed ✕"
                                       : em.status === "bounced"
                                       ? "Bounced"
                                       : "Pending"}
@@ -3881,9 +4029,9 @@ export default function AdminDashboard() {
                                   <button
                                     type="button"
                                     onClick={() => setSelectedEmailDetail(em)}
-                                    className="text-[#102F6B] hover:underline cursor-pointer text-xs"
+                                    className="text-[#102F6B] hover:underline cursor-pointer text-xs font-semibold"
                                   >
-                                    Telemetry
+                                    {isHi ? "ईमेल देखें" : "View Details"}
                                   </button>
                                   {em.status === "failed" && (
                                     <button
@@ -3891,9 +4039,16 @@ export default function AdminDashboard() {
                                       onClick={() => handleRetryEmail(em._id || em.id)}
                                       className="text-[#F26A21] hover:underline cursor-pointer text-xs font-bold"
                                     >
-                                      Retry Send
+                                      {isHi ? "पुनः भेजें" : "Retry"}
                                     </button>
                                   )}
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteEmailLog(em._id || em.id, em.subject)}
+                                    className="text-red-700 hover:underline cursor-pointer text-xs"
+                                  >
+                                    {isHi ? "हटाएं" : "Delete"}
+                                  </button>
                                 </td>
                               </tr>
                             ))}
@@ -3905,6 +4060,7 @@ export default function AdminDashboard() {
               )}
             </div>
           )}
+
 
           {/* VIEW: SYSTEM & DATABASE HEALTH                                            */}
           {/* ========================================================================= */}
@@ -4122,6 +4278,30 @@ export default function AdminDashboard() {
           </div>
         </div>
       )}
+
+      {/* Compose Direct Email Modal */}
+      <ComposeEmailModal
+        isOpen={composeEmailModalOpen}
+        onClose={() => setComposeEmailModalOpen(false)}
+        members={members}
+        adminLang={adminLang}
+        onEmailDispatched={() => {
+          loadAllData();
+          showBanner(isHi ? "ईमेल सफलतापूर्वक प्रेषित किया गया!" : "Email dispatched successfully!");
+        }}
+      />
+
+      {/* Inquiry Conversational Chat & Reply Modal */}
+      <InquiryChatModal
+        isOpen={Boolean(chatModalInquiry)}
+        onClose={() => setChatModalInquiry(null)}
+        inquiry={chatModalInquiry}
+        adminUser={currentUser}
+        adminLang={adminLang}
+        onInquiryUpdated={() => {
+          loadAllData();
+        }}
+      />
 
       {/* EMAIL DETAIL MODAL */}
       {selectedEmailDetail && (

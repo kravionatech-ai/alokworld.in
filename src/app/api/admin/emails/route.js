@@ -97,3 +97,61 @@ export async function GET(req) {
     return NextResponse.json({ error: "Failed to fetch email logs" }, { status: 500 });
   }
 }
+
+export async function PATCH(req) {
+  try {
+    const token = req.cookies.get("admin_token")?.value;
+    const admin = token ? verifyAdminToken(token) : null;
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const { logId, isRead, markAllRead, direction } = await req.json();
+    await connectDB();
+
+    if (markAllRead) {
+      const filter = { isRead: false };
+      if (direction && direction !== "all") filter.direction = direction;
+      await EmailLog.updateMany(filter, { $set: { isRead: true } });
+      return NextResponse.json({ success: true, message: "Marked all as read" });
+    }
+
+    if (!logId) {
+      return NextResponse.json({ error: "logId is required" }, { status: 400 });
+    }
+
+    const updated = await EmailLog.findByIdAndUpdate(
+      logId,
+      { $set: { isRead: Boolean(isRead) } },
+      { new: true }
+    );
+
+    return NextResponse.json({ success: true, log: updated });
+  } catch (err) {
+    console.error("PATCH /api/admin/emails error:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  try {
+    const token = req.cookies.get("admin_token")?.value;
+    const admin = token ? verifyAdminToken(token) : null;
+    if (!admin) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const logId = searchParams.get("id");
+    if (!logId) {
+      return NextResponse.json({ error: "id parameter is required" }, { status: 400 });
+    }
+
+    await connectDB();
+    await EmailLog.findByIdAndDelete(logId);
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("DELETE /api/admin/emails error:", err.message);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}

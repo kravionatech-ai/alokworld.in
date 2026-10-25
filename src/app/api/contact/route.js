@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Contact from "@/models/Contact";
-import { sendTransactionalEmail } from "@/lib/email";
+import { sendTransactionalEmail, recordInboundEmail } from "@/lib/email";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { recordAudit } from "@/lib/audit";
@@ -85,6 +85,36 @@ export async function POST(req) {
       notificationStatus: "pending",
       confirmationStatus: "pending",
     });
+
+    // Record incoming website contact message into EmailLog so it immediately appears in the "Received / प्राप्त संदेश" inbox
+    try {
+      await recordInboundEmail({
+        from: `${name.trim()} <${cleanEmail}>`,
+        to: ["admin@alokworld.in"],
+        subject: subject.trim(),
+        textBody: sanitizedMessage,
+        htmlBody: `
+          <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #102F6B;">
+            <p><strong>प्रेषक (Name):</strong> ${name.trim()}</p>
+            <p><strong>ईमेल (Email):</strong> <a href="mailto:${cleanEmail}">${cleanEmail}</a></p>
+            <p><strong>फोन (Phone):</strong> ${phone ? phone.trim() : "प्रदान नहीं किया गया"}</p>
+            <p><strong>विषय (Subject):</strong> ${subject.trim()}</p>
+            <hr style="border: 0; border-top: 1px solid #E2DDD5; margin: 12px 0;" />
+            <div style="background-color: #FAF8F3; padding: 12px; border-radius: 6px; white-space: pre-wrap; font-size: 13px;">${sanitizedMessage}</div>
+          </div>
+        `,
+        contactInquiryId: contact._id,
+        metadata: {
+          contactId: contact._id,
+          source: "website_contact_form",
+          senderName: name.trim(),
+          senderPhone: phone ? phone.trim() : "",
+          senderEmail: cleanEmail,
+        },
+      });
+    } catch (inboundErr) {
+      console.warn("Could not record inbound EmailLog:", inboundErr.message);
+    }
 
     const adminNotificationRecipient = process.env.CONTACT_NOTIFICATION_EMAIL || "admin@alokworld.in";
 

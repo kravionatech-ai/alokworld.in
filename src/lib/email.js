@@ -207,6 +207,7 @@ export async function recordInboundEmail({
   htmlBody = "",
   attachments = [],
   metadata = {},
+  contactInquiryId = null,
 }) {
   await connectDB();
   const recipients = Array.isArray(to) ? to : [to];
@@ -223,6 +224,7 @@ export async function recordInboundEmail({
     isRead: false,
     attachments,
     metadata,
+    contactInquiryId: contactInquiryId || metadata?.contactId || null,
   });
 
   return log;
