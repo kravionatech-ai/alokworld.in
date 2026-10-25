@@ -1141,9 +1141,7 @@ export default function AdminDashboard() {
           label: isHi ? "कार्यक्रम एवं उल्टी गिनती (Events)" : "Events & Live Countdown",
           icon: "calendar",
           activeIndicator: settings.eventEnabled,
-        },
-        { id: "navigation", label: isHi ? "शीर्ष नेविगेशन मेनू" : "Top Navigation Menu", icon: "navigation" },
-        { id: "gallery", label: isHi ? "छायाचित्र दीर्घा" : "Photo Gallery", icon: "photo", count: galleryItems.length },
+        },        { id: "gallery", label: isHi ? "छायाचित्र दीर्घा" : "Photo Gallery", icon: "photo", count: galleryItems.length },
       ],
     },
     {
@@ -2370,43 +2368,6 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </form>
-            </div>
-          )}
-
-          {/* ========================================================================= */}
-          {/* VIEW: HEADER NAVIGATION */}
-          {/* ========================================================================= */}
-          {activeTab === "navigation" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
-                <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Top Navigation Menu</h1>
-                  <p className="text-xs text-[#55657E]">
-                    Review links displayed in the persistent navy navigation bar across public pages.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSaveSettings}
-                  disabled={submitting}
-                  className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
-                >
-                  {submitting ? "Saving..." : "Save Navigation"}
-                </button>
-              </div>
-
-              <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-3 text-xs">
-                <p className="text-[#55657E]">
-                  The public navigation bar displays 10 verified community links. Administrative controls are kept private.
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-xs text-[#1E293B]">
-                  {["Home (/)", "History (/history)", "Organization (/organization)", "Mahasabha (/mahasabha)", "Matrimonial (/matrimonial)", "Directory (/directory)", "Personalities (/personalities)", "Gallery (/gallery)", "About Us (/about)", "Contact (/contact)"].map((link) => (
-                    <div key={link} className="p-2 border border-[#E2DDD5] bg-[#FAF8F3] rounded-xs text-center">
-                      {link}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           )}
 
