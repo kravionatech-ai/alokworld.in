@@ -103,7 +103,7 @@ export default function RightSidebar({ settings }) {
             </p>
             <div className="pt-2 border-t border-[#E9E2D8] text-[11px] text-[#64748B] space-y-1">
               <p>ईमेल: <a href={`mailto:${settings?.contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] font-medium">{settings?.contactEmail || "admin@alokworld.in"}</a></p>
-              <p>दूरभाष: <a href={`tel:${(settings?.contactPhone || "+91 96085 53167").replace(/[^\d+]/g, "")}`} className="text-[#F26A21] font-medium">{settings?.contactPhone || "+91 96085 53167"}</a></p>
+              <p>दूरभाष: <a href={`tel:${(settings?.contactPhone || "+91 98734 83657").replace(/[^\d+]/g, "")}`} className="text-[#F26A21] font-medium">{settings?.contactPhone || "+91 98734 83657"}</a></p>
             </div>
             <Link
               href="/contact"

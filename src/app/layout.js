@@ -79,7 +79,7 @@ const jsonLdWebsite = {
       },
       contactPoint: {
         "@type": "ContactPoint",
-        telephone: "+91 96085 53167",
+        telephone: "+91 98734 83657",
         contactType: "केंद्रीय सचिवालय",
         areaServed: "IN",
         availableLanguage: ["Hindi", "English"],

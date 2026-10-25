@@ -65,7 +65,7 @@ export default function Footer({ contactEmail, contactPhone }) {
             </h4>
             <div className="space-y-1.5 text-xs text-[#64748B]">
               <p>ईमेल: <a href={`mailto:${contactEmail || "admin@alokworld.in"}`} className="text-[#F26A21] hover:underline font-medium">{contactEmail || "admin@alokworld.in"}</a></p>
-              <p>दूरभाष: <a href={`tel:${contactPhone || "+919608553167"}`} className="text-[#F26A21] hover:underline font-medium">{contactPhone || "+91 96085 53167"}</a></p>
+              <p>दूरभाष: <a href={`tel:${(contactPhone || "+919873483657").replace(/[^\d+]/g, "")}`} className="text-[#F26A21] hover:underline font-medium">{contactPhone || "+91 98734 83657"}</a></p>
               <p className="text-[11px] text-[#64748B]">कार्यालय समय: सोमवार - शनिवार (प्रातः 10:00 से सायं 6:00 बजे)</p>
             </div>
           </StaggerItem>

@@ -53,9 +53,9 @@ const SiteSettingsSchema = new mongoose.Schema(
 
     // Contact & Secretariat Information
     contactEmail: { type: String, default: "admin@alokworld.in" },
-    contactPhone: { type: String, default: "+91 96085 53167" },
+    contactPhone: { type: String, default: "+91 98734 83657" },
     contactAddress: { type: String, default: "केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली, भारत" },
-    whatsappNumber: { type: String, default: "+91 96085 53167" },
+    whatsappNumber: { type: String, default: "+91 98734 83657" },
 
     // Navigation Menu Management
     navigationLinks: [
