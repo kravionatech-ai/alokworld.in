@@ -200,7 +200,7 @@ const authenticGallery = [
     title: "आलोक धौलपुर राजस्थान प्रांतीय सम्मेलन",
     category: "State Convention",
     eventDate: "2025",
-    imageUrl: "/asset/photo/photo/dholpur1.png",
+    imageUrl: "/asset/photo/dholpur1.png",
     description: "धौलपुर राजस्थान में आयोजित समाज कल्याण एवं प्रतिभा सम्मान समारोह।",
     isPublished: true,
   },

@@ -2627,7 +2627,269 @@ export default function AdminDashboard() {
 
           {/* ========================================================================= */}
           {/* VIEW: PHOTO GALLERY */}
+                    {/* ========================================================================= */}
+          {/* VIEW: EVENTS & LIVE COUNTDOWN (2 NOV WEBSITE LIVE)                       */}
           {/* ========================================================================= */}
+          {activeTab === "events" && (
+            <div className="space-y-4">
+              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h1 className="text-lg font-bold text-[#102F6B] flex items-center gap-2">
+                    <span>{isHi ? "वेबसाइट लाइव एवं उल्टी गिनती (2 नवंबर 2026)" : "Events & Live Countdown (2 Nov 2026)"}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${settings.eventEnabled ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"}`}>
+                      {settings.eventEnabled ? (isHi ? "सक्रिय (Live)" : "Active") : (isHi ? "निष्क्रिय" : "Disabled")}
+                    </span>
+                  </h1>
+                  <p className="text-xs text-[#55657E]">
+                    {isHi
+                      ? "2 नवंबर 2026 को वेबसाइट लाइव करने हेतु शीर्ष उल्टी गिनती पट्टी एवं पॉपअप का सरल प्रबंधन।"
+                      : "Manage the sticky header countdown ticker and visitor announcement targeting 2 November 2026."}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* 1-Click 2 Nov Preset */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSettings((prev) => ({
+                        ...prev,
+                        eventEnabled: true,
+                        eventTopBarEnabled: true,
+                        eventPopupEnabled: true,
+                        eventTitle: "वेबसाइट लाइव — 2 नवंबर 2026",
+                        eventBadge: "वेबसाइट लाइव उल्टी गिनती",
+                        eventDate: "2026-11-02T10:00:00",
+                        eventCountdownLabel: "वेबसाइट लाइव होने में शेष समय",
+                        eventLocation: "नई दिल्ली",
+                        eventDescription: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) का आधिकारिक डिजिटल समाज पोर्टल 2 नवंबर 2026 को लाइव होगा।",
+                        eventCtaText: "मुख्य पृष्ठ पर जाएं →",
+                        eventCtaLink: "/",
+                      }));
+                      showBanner(isHi ? "2 नवंबर 2026 'वेबसाइट लाइव' प्रीसेट लागू किया गया! कृपया 'सेटिंग्स सुरक्षित करें' दबाएं।" : "2 Nov 2026 preset applied! Click Save to apply.");
+                    }}
+                    className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] border border-[#D5CEC4] text-xs font-bold rounded-xs cursor-pointer shadow-2xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>✨</span>
+                    <span>{isHi ? "2 नवंबर 2026 प्रीसेट लागू करें" : "Apply 2 Nov Preset"}</span>
+                  </button>
+
+                  {/* Save Button */}
+                  <button
+                    type="button"
+                    onClick={handleSaveSettings}
+                    disabled={submitting}
+                    className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-4 py-1.5 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <span>💾</span>
+                    <span>{submitting ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Settings")}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Real-time Live Countdown Preview Box */}
+              <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white p-4 rounded-lg border border-[#F26A21]/50 shadow-md space-y-3">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
+                      {isHi ? "लाइव प्रीव्यू (यह हेडर में दिखेगा)" : "Live Header Preview"}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-300 font-mono">
+                    लक्ष्य: 2 नवंबर 2026
+                  </span>
+                </div>
+
+                <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-1">
+                  <div className="flex items-center gap-2 text-center md:text-left flex-wrap">
+                    <span className="bg-[#F26A21] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shadow-xs">
+                      {settings.eventBadge || "वेबसाइट लाइव उल्टी गिनती"}
+                    </span>
+                    <span className="text-sm font-bold text-white">
+                      {settings.eventTitle || "वेबसाइट लाइव — 2 नवंबर 2026"}
+                    </span>
+                  </div>
+
+                  {/* Countdown Ticker Box */}
+                  <div className="flex items-center gap-1.5 font-mono bg-black/40 px-3 py-1.5 rounded border border-white/10 text-white">
+                    <div className="flex flex-col items-center">
+                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                        {Math.max(0, Math.floor((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) / (1000 * 60 * 60 * 24)))}
+                      </span>
+                      <span className="text-[9px] text-[#CBD5E1]">दिन</span>
+                    </div>
+                    <span className="text-[#F26A21] font-bold pb-2">:</span>
+                    <div className="flex flex-col items-center">
+                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                        {Math.max(0, Math.floor(((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}
+                      </span>
+                      <span className="text-[9px] text-[#CBD5E1]">घंटे</span>
+                    </div>
+                    <span className="text-[#F26A21] font-bold pb-2">:</span>
+                    <div className="flex flex-col items-center">
+                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                        {Math.max(0, Math.floor(((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) % (1000 * 60)) / (1000 * 60)))}
+                      </span>
+                      <span className="text-[9px] text-[#CBD5E1]">मिनट</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Settings Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Card 1: Toggle Displays */}
+                <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
+                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
+                    {isHi ? "1. सक्रियता एवं प्रदर्शन नियंत्रण" : "1. Display Controls"}
+                  </h3>
+
+                  <label className="flex items-start gap-3 p-2.5 rounded bg-[#FAF8F3] border border-[#E2DDD5] cursor-pointer hover:bg-[#FFF8F0] transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(settings.eventTopBarEnabled)}
+                      onChange={(e) => setSettings({ ...settings, eventTopBarEnabled: e.target.checked })}
+                      className="mt-0.5 w-4 h-4 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
+                    />
+                    <div>
+                      <div className="font-bold text-xs text-[#102F6B]">
+                        {isHi ? "शीर्ष हेडर लाइव उल्टी गिनती पट्टी दिखाएं" : "Show Sticky Top Countdown Ticker Bar"}
+                      </div>
+                      <p className="text-[11px] text-[#64748B]">
+                        {isHi
+                          ? "वेबसाइट के सबसे ऊपर गहरे नीले रंग में 2 नवंबर 2026 तक की उल्टी गिनती पट्टी प्रदर्शित होगी।"
+                          : "Displays the prominent countdown bar at the very top of all pages."}
+                      </p>
+                    </div>
+                  </label>
+
+                  <label className="flex items-start gap-3 p-2.5 rounded bg-[#FAF8F3] border border-[#E2DDD5] cursor-pointer hover:bg-[#FFF8F0] transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(settings.eventPopupEnabled)}
+                      onChange={(e) => setSettings({ ...settings, eventPopupEnabled: e.target.checked })}
+                      className="mt-0.5 w-4 h-4 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
+                    />
+                    <div>
+                      <div className="font-bold text-xs text-[#102F6B]">
+                        {isHi ? "आगंतुक पॉपअप विंडो दिखाएं (Visitor Popup Modal)" : "Show Visitor Announcement Popup"}
+                      </div>
+                      <p className="text-[11px] text-[#64748B]">
+                        {isHi
+                          ? "वेबसाइट खुलने पर आगंतुकों को 2 नवंबर लाइव की सूचना और पोस्टर का पॉपअप प्रदर्शित होगा।"
+                          : "Displays an attractive pop-up modal to first-time daily visitors with target date & poster."}
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Card 2: Target Date & Badge */}
+                <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
+                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
+                    {isHi ? "2. लक्ष्य दिनांक एवं समय" : "2. Target Date & Time"}
+                  </h3>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                      {isHi ? "वेबसाइट लाइव होने की तिथि व समय:" : "Live Target Date & Time:"}
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={settings.eventDate ? settings.eventDate.slice(0, 16) : "2026-11-02T10:00"}
+                      onChange={(e) => setSettings({ ...settings, eventDate: e.target.value })}
+                      className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-[#FAF8F3] rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                    />
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-[#64748B]">
+                      <span>डिफ़ॉल्ट: 2 नवंबर 2026, सुबह 10:00 बजे</span>
+                      <button
+                        type="button"
+                        onClick={() => setSettings({ ...settings, eventDate: "2026-11-02T10:00:00" })}
+                        className="text-[#F26A21] hover:underline font-bold cursor-pointer"
+                      >
+                        2 Nov 2026 रीसेट
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                      {isHi ? "बैज लेबल (Badge Label):" : "Badge Label:"}
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.eventBadge || ""}
+                      onChange={(e) => setSettings({ ...settings, eventBadge: e.target.value })}
+                      placeholder="वेबसाइट लाइव उल्टी गिनती"
+                      className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                    />
+                  </div>
+                </div>
+
+                {/* Card 3: Event Title & Description */}
+                <div className="md:col-span-2 bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
+                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
+                    {isHi ? "3. शीर्षक एवं संक्षिप्त सूचना (केवल मुख्य सूचना)" : "3. Title & Notice"}
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                        {isHi ? "मुख्य शीर्षक (Event / Live Title):" : "Title:"}
+                      </label>
+                      <input
+                        type="text"
+                        value={settings.eventTitle || ""}
+                        onChange={(e) => setSettings({ ...settings, eventTitle: e.target.value })}
+                        placeholder="वेबसाइट लाइव — 2 नवंबर 2026"
+                        className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-semibold focus:border-[#102F6B] outline-hidden"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                        {isHi ? "उल्टी गिनती विवरण लेबल:" : "Countdown Label:"}
+                      </label>
+                      <input
+                        type="text"
+                        value={settings.eventCountdownLabel || ""}
+                        onChange={(e) => setSettings({ ...settings, eventCountdownLabel: e.target.value })}
+                        placeholder="वेबसाइट लाइव होने में शेष समय"
+                        className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                      {isHi ? "संक्षिप्त सूचना / संदेश विवरण (Description Notice):" : "Notice Text:"}
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={settings.eventDescription || ""}
+                      onChange={(e) => setSettings({ ...settings, eventDescription: e.target.value })}
+                      placeholder="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) का समाज डिजिटल पोर्टल 2 नवंबर 2026 को आधिकारिक रूप से लाइव होगा।"
+                      className="w-full px-3 py-2 border border-[#D5CEC4] bg-white rounded text-xs leading-relaxed focus:border-[#102F6B] outline-hidden"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-end pt-2 border-t border-[#E2DDD5]">
+                    <button
+                      type="button"
+                      onClick={handleSaveSettings}
+                      disabled={submitting}
+                      className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-5 py-2 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                    >
+                      <span>💾</span>
+                      <span>{submitting ? (isHi ? "सुरक्षित कर रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें (Save Changes)" : "Save Settings")}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+{/* ========================================================================= */}
           {activeTab === "gallery" && (
             <div className="space-y-4">
               <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">

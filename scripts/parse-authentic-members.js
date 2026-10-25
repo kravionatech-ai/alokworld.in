@@ -10,61 +10,61 @@ function findMatchingPhoto(name, designation = '') {
   const norm = name.trim();
   
   if (norm.includes('बद्री विशाल') || norm.includes('Badri Vishal')) {
-    return '/asset/photo/photo/Dr Badri Vishal R Singh.jpg';
+    return '/asset/photo/Dr Badri Vishal R Singh.jpg';
   }
   if (norm.includes('ओमकार सिंह') || norm.includes('Omkar')) {
-    return '/asset/photo/photo/Dr Omkar_Singh.jpg';
+    return '/asset/photo/Dr Omkar_Singh.jpg';
   }
   if (norm.includes('हर्ष राजपूत') || norm.includes('Harsh')) {
-    return '/asset/photo/photo/Er. Harsh Rajput.jpg';
+    return '/asset/photo/Er. Harsh Rajput.jpg';
   }
   if (norm.includes('घन श्याम') || norm.includes('घनश्याम') || norm.includes('Ghanshyam')) {
-    return '/asset/photo/photo/Ghanshyam Singh.jpeg';
+    return '/asset/photo/Ghanshyam Singh.jpeg';
   }
   if (norm.includes('हाकिम सिंह') || norm.includes('Hakim')) {
-    return '/asset/photo/photo/hakim singh.jpg';
+    return '/asset/photo/hakim singh.jpg';
   }
   if (norm.includes('हरी राम') || norm.includes('Hari Ram')) {
-    return '/asset/photo/photo/hari ram singh.jpg';
+    return '/asset/photo/hari ram singh.jpg';
   }
   if (norm.includes('काशीराम') || norm.includes('Kashiram')) {
-    return '/asset/photo/photo/kashiramJi.jpg';
+    return '/asset/photo/kashiramJi.jpg';
   }
   if (norm.includes('लखन सिंह') || norm.includes('लखन राजपूत') || (norm.includes('लखन') && !norm.includes('लखनऊ'))) {
-    return '/asset/photo/photo/lakhan rajput bhopal.jpg';
+    return '/asset/photo/lakhan rajput bhopal.jpg';
   }
   if (norm.includes('राकेश राजपूत') || norm.includes('राकेश लोधी')) {
-    return '/asset/photo/photo/rakesh lodhi.jpeg';
+    return '/asset/photo/rakesh lodhi.jpeg';
   }
   if (norm.includes('साहेब सिंह') || norm.includes('Saheb')) {
-    return '/asset/photo/photo/Saheb_Saral.jpg';
+    return '/asset/photo/Saheb_Saral.jpg';
   }
   if (norm.includes('संगीता कुमारी') || norm.includes('संगीता सिंह')) {
-    return '/asset/photo/photo/sangeeta singh.jpeg';
+    return '/asset/photo/sangeeta singh.jpeg';
   }
   if (norm.includes('संतोष कुमार') || norm.includes('संतोष लोधा')) {
-    return '/asset/photo/photo/santosh rajasthan.jpeg';
+    return '/asset/photo/santosh rajasthan.jpeg';
   }
   if (norm.includes('रामसेवक राजपूत') || norm.includes('राम सेवक राजपूत') || norm.includes('सेवा राम') || norm.includes('Seva Ram')) {
-    return '/asset/photo/photo/Seva Ram RAJPUT.jpg';
+    return '/asset/photo/Seva Ram RAJPUT.jpg';
   }
   if (norm.includes('विजय राजपूत') || (norm.includes('विजय') && designation.includes('उ०प्र०'))) {
-    return '/asset/photo/photo/vijay rajput aligar.jpeg';
+    return '/asset/photo/vijay rajput aligar.jpeg';
   }
   if (norm.includes('विनोद कुमार राजपूत') || norm.includes('विनोद राजपूत')) {
-    return '/asset/photo/photo/Vinod Kumar Rajput.jpg';
+    return '/asset/photo/Vinod Kumar Rajput.jpg';
   }
 
   // State representatives in Telangana/South
   if (designation.includes('तेलंगाना') || designation.includes('दक्षिण') || designation.includes('आंध्र')) {
-    if (norm.includes('दिनेश')) return '/asset/photo/photo/dinesh_tel.png';
-    if (norm.includes('रमेश')) return '/asset/photo/photo/ramesh_tel.png';
-    if (norm.includes('रणवीर') || norm.includes('रणधीर')) return '/asset/photo/photo/ranvir_tel.png';
-    if (norm.includes('शैल')) return '/asset/photo/photo/shail_tel.png';
-    if (norm.includes('शंकर')) return '/asset/photo/photo/shanker.png';
-    if (norm.includes('टी. आर. बी.') || norm.includes('TRB') || norm.includes('टीआरबी')) return '/asset/photo/photo/trbSingh_tel.png';
-    if (norm.includes('नंद')) return '/asset/photo/photo/nand_k_tel.png';
-    if (norm.includes('जश')) return '/asset/photo/photo/jash_tel.png';
+    if (norm.includes('दिनेश')) return '/asset/photo/dinesh_tel.png';
+    if (norm.includes('रमेश')) return '/asset/photo/ramesh_tel.png';
+    if (norm.includes('रणवीर') || norm.includes('रणधीर')) return '/asset/photo/ranvir_tel.png';
+    if (norm.includes('शैल')) return '/asset/photo/shail_tel.png';
+    if (norm.includes('शंकर')) return '/asset/photo/shanker.png';
+    if (norm.includes('टी. आर. बी.') || norm.includes('TRB') || norm.includes('टीआरबी')) return '/asset/photo/trbSingh_tel.png';
+    if (norm.includes('नंद')) return '/asset/photo/nand_k_tel.png';
+    if (norm.includes('जश')) return '/asset/photo/jash_tel.png';
   }
 
   return '';
@@ -300,7 +300,7 @@ const verifiedLeaders = [
     city: 'लखनऊ',
     state: 'उत्तर प्रदेश',
     phone: '+91 94150 22334',
-    avatar: '/asset/photo/photo/Dr Badri Vishal R Singh.jpg',
+    avatar: '/asset/photo/Dr Badri Vishal R Singh.jpg',
     tags: ['राष्ट्रीय संरक्षक', 'आलोक संघ', 'उत्तर प्रदेश', 'चिकित्सा']
   },
   {
@@ -311,7 +311,7 @@ const verifiedLeaders = [
     city: 'भोपाल',
     state: 'मध्य प्रदेश',
     phone: '+91 94250 11223',
-    avatar: '/asset/photo/photo/Er. Harsh Rajput.jpg',
+    avatar: '/asset/photo/Er. Harsh Rajput.jpg',
     tags: ['राष्ट्रीय प्रवक्ता', 'आलोक संघ', 'मध्य प्रदेश']
   },
   {
@@ -322,7 +322,7 @@ const verifiedLeaders = [
     city: 'भोपाल',
     state: 'मध्य प्रदेश',
     phone: '+91 98261 44556',
-    avatar: '/asset/photo/photo/lakhan rajput bhopal.jpg',
+    avatar: '/asset/photo/lakhan rajput bhopal.jpg',
     tags: ['विधिक सलाहकार', 'आलोक संघ', 'मध्य प्रदेश', 'विधि']
   },
   {
@@ -333,7 +333,7 @@ const verifiedLeaders = [
     city: 'ग्वालियर / मध्य प्रदेश',
     state: 'मध्य प्रदेश',
     phone: '+91 94251 22334',
-    avatar: '/asset/photo/photo/hakim singh.jpg',
+    avatar: '/asset/photo/hakim singh.jpg',
     tags: ['मार्गदर्शक', 'आलोक संघ', 'मध्य प्रदेश']
   },
   {
@@ -344,7 +344,7 @@ const verifiedLeaders = [
     city: 'लखनऊ',
     state: 'उत्तर प्रदेश',
     phone: '+91 94151 33445',
-    avatar: '/asset/photo/photo/hari ram singh.jpg',
+    avatar: '/asset/photo/hari ram singh.jpg',
     tags: ['परामर्शदात्री समिति', 'आलोक संघ', 'उत्तर प्रदेश']
   },
   {
@@ -355,7 +355,7 @@ const verifiedLeaders = [
     city: 'हैदराबाद',
     state: 'तेलंगाना',
     phone: '+91 98490 55667',
-    avatar: '/asset/photo/photo/trbSingh_tel.png',
+    avatar: '/asset/photo/trbSingh_tel.png',
     tags: ['दक्षिण भारत', 'तेलंगाना', 'आलोक संघ']
   },
   {
@@ -366,7 +366,7 @@ const verifiedLeaders = [
     city: 'हैदराबाद',
     state: 'तेलंगाना',
     phone: '+91 94400 33445',
-    avatar: '/asset/photo/photo/dinesh_tel.png',
+    avatar: '/asset/photo/dinesh_tel.png',
     tags: ['दक्षिण भारत', 'तेलंगाना', 'आलोक संघ']
   },
   {
@@ -377,7 +377,7 @@ const verifiedLeaders = [
     city: 'वारंगल',
     state: 'तेलंगाना',
     phone: '+91 98660 77889',
-    avatar: '/asset/photo/photo/ramesh_tel.png',
+    avatar: '/asset/photo/ramesh_tel.png',
     tags: ['दक्षिण भारत', 'तेलंगाना', 'आलोक संघ']
   },
   {
@@ -388,7 +388,7 @@ const verifiedLeaders = [
     city: 'हैदराबाद',
     state: 'तेलंगाना',
     phone: '+91 99890 12345',
-    avatar: '/asset/photo/photo/shanker.png',
+    avatar: '/asset/photo/shanker.png',
     tags: ['दक्षिण भारत', 'तेलंगाना', 'आलोक संघ']
   },
   {
@@ -399,7 +399,7 @@ const verifiedLeaders = [
     city: 'आगरा',
     state: 'उत्तर प्रदेश',
     phone: '+91 94123 45678',
-    avatar: '/asset/photo/photo/Saheb_Saral.jpg',
+    avatar: '/asset/photo/Saheb_Saral.jpg',
     tags: ['साहित्यकार', 'समाज चिंतक', 'उत्तर प्रदेश']
   }
 ];
