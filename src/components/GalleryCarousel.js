@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-export default function GalleryCarousel({ items = [] }) {
+export default function GalleryCarousel({ items = [], onVideoClick }) {
   const [mounted, setMounted] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
@@ -128,22 +128,37 @@ export default function GalleryCarousel({ items = [] }) {
                 {items.map((img, idx) => (
                   <SwiperSlide key={img._id || idx} className="h-auto">
                     <div
-                      onClick={() => setLightboxIndex(idx)}
+                      onClick={() => {
+                        if (img.mediaType === "video" && onVideoClick) {
+                          onVideoClick(img);
+                        } else {
+                          setLightboxIndex(idx);
+                        }
+                      }}
                       className="bg-[#FFFCF5] rounded-lg border border-[#F0E5D5] overflow-hidden shadow-xs hover:shadow-md hover:border-[#102F6B] transition-all cursor-pointer group flex flex-col h-full"
                     >
                       <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                         <img
-                          src={img.imageUrl}
+                          src={img.imageUrl || (img.mediaType === "video" ? `https://img.youtube.com/vi/${img.videoId}/hqdefault.jpg` : "/asset/topofwebsite/web_sit_front1.png")}
                           alt={img.title || "समाज कार्यक्रम छायाचित्र"}
                           loading="lazy"
                           className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs"
                         />
-                        <div className="absolute top-2 left-2 bg-[#102F6B]/90 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
-                          {img.category || "समाज"}
+                        <div className={`absolute top-2 left-2 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs ${
+                          img.mediaType === "video" ? "bg-red-600" : "bg-[#102F6B]/90"
+                        }`}>
+                          {img.mediaType === "video" ? "🎥 वीडियो" : img.category || "समाज"}
                         </div>
                         {img.eventDate && (
                           <div className="absolute top-2 right-2 bg-white/90 text-[#102F6B] text-[10px] font-bold px-2 py-0.5 rounded shadow-xs border border-[#F0E5D5]">
                             {img.eventDate}
+                          </div>
+                        )}
+                        {img.mediaType === "video" && (
+                          <div className="absolute inset-0 bg-black/25 flex items-center justify-center">
+                            <span className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center text-xl shadow-lg group-hover:scale-110 transition-transform">
+                              ▶
+                            </span>
                           </div>
                         )}
                       </div>
@@ -157,7 +172,7 @@ export default function GalleryCarousel({ items = [] }) {
                           </p>
                         </div>
                         <span className="text-[10px] font-bold text-[#F26A21] mt-2 block group-hover:translate-x-0.5 transition-transform">
-                          विस्तृत देखें 🔍
+                          {img.mediaType === "video" ? "वीडियो चलाएं ▶" : "विस्तृत देखें 🔍"}
                         </span>
                       </div>
                     </div>

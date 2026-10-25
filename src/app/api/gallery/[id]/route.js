@@ -4,6 +4,7 @@ import GalleryItem from "@/models/GalleryItem";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 import { deleteImage } from "@/lib/cloudinary";
+import { extractYouTubeId, getYouTubeThumbnail } from "@/lib/youtube";
 
 export async function GET(req, { params }) {
   try {
@@ -46,11 +47,21 @@ export async function PUT(req, { params }) {
 
     if (body.title !== undefined) item.title = body.title.trim();
     if (body.category !== undefined) item.category = body.category.trim();
-    if (body.imageUrl !== undefined) item.imageUrl = body.imageUrl.trim();
+    if (body.mediaType !== undefined) item.mediaType = body.mediaType === "video" ? "video" : "image";
+    if (body.videoUrl !== undefined) {
+      item.videoUrl = body.videoUrl.trim();
+      item.videoId = extractYouTubeId(item.videoUrl);
+      if (!body.imageUrl && item.videoId) {
+        item.imageUrl = getYouTubeThumbnail(item.videoId);
+      }
+    }
+    if (body.imageUrl !== undefined && body.imageUrl.trim()) item.imageUrl = body.imageUrl.trim();
     if (body.publicId !== undefined) item.publicId = body.publicId.trim();
     if (body.eventDate !== undefined) item.eventDate = body.eventDate.trim();
     if (body.description !== undefined) item.description = sanitizeContent(body.description);
     if (body.isPublished !== undefined) item.isPublished = Boolean(body.isPublished);
+    if (body.isFeatured !== undefined) item.isFeatured = Boolean(body.isFeatured);
+    if (body.order !== undefined) item.order = Number(body.order) || 0;
 
     await item.save();
 

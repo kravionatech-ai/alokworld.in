@@ -12,6 +12,7 @@ import Sidebar from "@/components/Sidebar";
 import HeroCarousel from "@/components/HeroCarousel";
 import AnnouncementSlider from "@/components/AnnouncementSlider";
 import FeaturedMembersCarousel from "@/components/FeaturedMembersCarousel";
+import HomepageVideoSection from "@/components/HomepageVideoSection";
 import {
   FadeIn,
   StaggerContainer,
@@ -151,6 +152,9 @@ export default function HomePage() {
             subtitle="समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।"
           />
         )}
+
+        {/* Community Videos & Live Broadcast Section */}
+        <HomepageVideoSection />
 
         {/* Traditional 3-Column Samaj Directory Layout: Left Sidebar + Central Table + Right Sidebar */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

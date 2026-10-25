@@ -362,12 +362,53 @@ async function setProperData() {
       imageUrl: "/asset/photo/photo/dholpur1.png",
       description: "धौलपुर राजस्थान में आयोजित समाज कल्याण एवं प्रतिभा सम्मान समारोह।",
       isPublished: true,
+      mediaType: "image",
+    },
+    // Community Video Embeds
+    {
+      title: "वीरांगना महारानी अवंतीबाई लोधी — 1857 महाक्रांति शौर्य गाथा",
+      category: "इतिहास एवं वृत्तचित्र",
+      mediaType: "video",
+      videoUrl: "https://www.youtube.com/watch?v=S01Z-Yl7-m4",
+      videoId: "S01Z-Yl7-m4",
+      imageUrl: "https://img.youtube.com/vi/S01Z-Yl7-m4/hqdefault.jpg",
+      eventDate: "ऐतिहासिक वृत्तचित्र",
+      description: "1857 के प्रथम स्वतंत्रता संग्राम की अमर महानायिका वीरांगना महारानी अवंतीबाई लोधी के शौर्य, बलिदान और राष्ट्र सेवा पर विशेष वृत्तचित्र।",
+      isPublished: true,
+      isFeatured: true,
+      order: 1,
+    },
+    {
+      title: "स्वामी ब्रह्मानंद जी महाराज — जीवन दर्शन एवं शिक्षा क्रांति",
+      category: "विचार एवं दर्शन",
+      mediaType: "video",
+      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      videoId: "dQw4w9WgXcQ",
+      imageUrl: "https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg",
+      eventDate: "प्रेरणादायक संदेश",
+      description: "परम पूज्य स्वामी ब्रह्मानंद जी महाराज के जीवन, शिक्षा आंदोलन, संसद में ऐतिहासिक योगदान और समाज सुधार पर प्रेरणादायी आलेख।",
+      isPublished: true,
+      isFeatured: true,
+      order: 2,
+    },
+    {
+      title: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह 2026 — आमंत्रण एवं दिशानिर्देश",
+      category: "राष्ट्रीय अधिवेशन",
+      mediaType: "video",
+      videoUrl: "https://www.youtube.com/watch?v=kXRwEwUswE0",
+      videoId: "kXRwEwUswE0",
+      imageUrl: "https://img.youtube.com/vi/kXRwEwUswE0/hqdefault.jpg",
+      eventDate: "अधिवेशन 2026",
+      description: "कांस्टीट्यूशन क्लब, रफी मार्ग नई दिल्ली में आयोजित होने वाले पंचम राष्ट्रीय अधिवेशन एवं प्रतिभा सम्मान समारोह का संदेश।",
+      isPublished: true,
+      isFeatured: true,
+      order: 3,
     },
   ];
 
   await db.collection("galleryitems").deleteMany({});
   await db.collection("galleryitems").insertMany(gallery);
-  console.log(`Verified and saved 9 authentic gallery items.`);
+  console.log(`Verified and saved ${gallery.length} authentic gallery & video items.`);
 
   console.log("\n=======================================================");
   console.log("6. VERIFYING SUPERADMIN ACCOUNT");

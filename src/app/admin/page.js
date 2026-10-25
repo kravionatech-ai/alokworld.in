@@ -214,12 +214,16 @@ export default function AdminDashboard() {
   const [galleryForm, setGalleryForm] = useState({
     title: "",
     category: "National Convention",
+    mediaType: "image",
+    videoUrl: "",
     eventDate: "",
     imageUrl: "",
     publicId: "",
     description: "",
     isPublished: true,
+    isFeatured: false,
   });
+  const [adminGalleryFilter, setAdminGalleryFilter] = useState("all");
 
   // 4. Website Settings State
   const [settings, setSettings] = useState({
@@ -893,14 +897,17 @@ export default function AdminDashboard() {
       setGalleryModalOpen(false);
       setEditingGalleryId(null);
       setGalleryForm({
-        title: "",
-        category: "National Convention",
-        eventDate: "",
-        imageUrl: "",
-        publicId: "",
-        description: "",
-        isPublished: true,
-      });
+      title: "",
+      category: "National Convention",
+      mediaType: "image",
+      videoUrl: "",
+      eventDate: "",
+      imageUrl: "",
+      publicId: "",
+      description: "",
+      isPublished: true,
+      isFeatured: false,
+    });
     } catch (err) {
       showBanner(err.message, true);
     } finally {
@@ -2659,141 +2666,354 @@ export default function AdminDashboard() {
           {/* VIEW: PHOTO GALLERY */}
           {/* ========================================================================= */}
           {activeTab === "gallery" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
+            <div className="space-y-4">
+              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Photo Gallery</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B]">
+                    {isHi ? "छायाचित्र एवं वीडियो दीर्घा प्रबंधन" : "Photo & Video Gallery Management"}
+                  </h1>
                   <p className="text-xs text-[#55657E]">
-                    Upload and organize photographs of community conventions, cultural gatherings, and historic events.
+                    {isHi
+                      ? "सामुदायिक आयोजनों, सम्मेलनों की तस्वीरें और यूट्यूब वीडियो जोड़ें, संपादित करें व प्रदर्शित करें।"
+                      : "Upload photos and embed YouTube videos of community conventions, cultural gatherings, and historic events."}
                   </p>
                 </div>
-                <button
-                  onClick={() => {
-                    setEditingGalleryId(null);
-                    setGalleryForm({
-                      title: "",
-                      category: "National Convention",
-                      eventDate: "",
-                      imageUrl: "",
-                      publicId: "",
-                      description: "",
-                      isPublished: true,
-                    });
-                    setGalleryModalOpen(true);
-                  }}
-                  className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer shadow-xs"
-                >
-                  + Add Photo
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingGalleryId(null);
+                      setGalleryForm({
+                        title: "",
+                        category: "National Convention",
+                        mediaType: "image",
+                        videoUrl: "",
+                        eventDate: "",
+                        imageUrl: "",
+                        publicId: "",
+                        description: "",
+                        isPublished: true,
+                        isFeatured: false,
+                      });
+                      setGalleryModalOpen(true);
+                    }}
+                    className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-semibold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5"
+                  >
+                    <span>+ {isHi ? "मीडिया जोड़ें (फोटो / वीडियो)" : "Add Media (Photo / Video)"}</span>
+                  </button>
+                </div>
               </div>
 
+              {/* Filter Tabs Toolbar */}
+              <div className="flex items-center justify-between gap-2 bg-white p-2 border border-[#E2DDD5] rounded-xs text-xs">
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setAdminGalleryFilter("all")}
+                    className={`px-2.5 py-1 rounded-xs font-medium transition-colors cursor-pointer ${
+                      adminGalleryFilter === "all"
+                        ? "bg-[#102F6B] text-white font-bold"
+                        : "text-[#55657E] hover:bg-[#FAF8F3]"
+                    }`}
+                  >
+                    {isHi ? "सभी मीडिया" : "All Media"} ({galleryItems.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAdminGalleryFilter("image")}
+                    className={`px-2.5 py-1 rounded-xs font-medium transition-colors cursor-pointer ${
+                      adminGalleryFilter === "image"
+                        ? "bg-[#102F6B] text-white font-bold"
+                        : "text-[#55657E] hover:bg-[#FAF8F3]"
+                    }`}
+                  >
+                    📷 {isHi ? "तस्वीरें" : "Photos"} ({galleryItems.filter((i) => i.mediaType !== "video").length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAdminGalleryFilter("video")}
+                    className={`px-2.5 py-1 rounded-xs font-medium transition-colors cursor-pointer ${
+                      adminGalleryFilter === "video"
+                        ? "bg-red-700 text-white font-bold"
+                        : "text-red-700 hover:bg-red-50"
+                    }`}
+                  >
+                    🎥 {isHi ? "यूट्यूब वीडियो" : "YouTube Videos"} ({galleryItems.filter((i) => i.mediaType === "video").length})
+                  </button>
+                </div>
+
+                <span className="text-[11px] text-[#8896AB] hidden sm:inline">
+                  {isHi ? "डेटाबेस में सुरक्षित" : "Stored in MongoDB"}
+                </span>
+              </div>
+
+              {/* Gallery Items Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs">
-                {galleryItems.map((it) => (
-                  <div key={it._id} className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden flex flex-col justify-between">
-                    <div>
-                      <div className="h-36 bg-[#FAF8F3] border-b border-[#E2DDD5] overflow-hidden">
-                        <img src={it.imageUrl} alt="" className="w-full h-full object-cover" />
+                {galleryItems
+                  .filter((it) => {
+                    if (adminGalleryFilter === "image") return it.mediaType !== "video";
+                    if (adminGalleryFilter === "video") return it.mediaType === "video";
+                    return true;
+                  })
+                  .map((it) => {
+                    const isVid = it.mediaType === "video";
+                    return (
+                      <div
+                        key={it._id}
+                        className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden flex flex-col justify-between hover:border-[#102F6B] transition-colors shadow-xs"
+                      >
+                        <div>
+                          <div className="h-36 bg-[#FAF8F3] border-b border-[#E2DDD5] overflow-hidden relative">
+                            <img
+                              src={it.imageUrl || (isVid ? `https://img.youtube.com/vi/${it.videoId}/hqdefault.jpg` : "/asset/topofwebsite/web_sit_front1.png")}
+                              alt=""
+                              className="w-full h-full object-cover"
+                            />
+                            <span
+                              className={`absolute top-1.5 left-1.5 text-white text-[9.5px] font-bold px-1.5 py-0.5 rounded shadow-xs ${
+                                isVid ? "bg-red-600" : "bg-[#102F6B]"
+                              }`}
+                            >
+                              {isVid ? "🎥 VIDEO" : "📷 PHOTO"}
+                            </span>
+                            {it.isFeatured && (
+                              <span className="absolute top-1.5 right-1.5 bg-amber-400 text-[#091D42] text-[9.5px] font-bold px-1.5 py-0.5 rounded shadow-xs">
+                                ⭐ HOME
+                              </span>
+                            )}
+                          </div>
+                          <div className="p-2.5">
+                            <div className="font-semibold text-[#102F6B] truncate" title={it.title}>
+                              {it.title}
+                            </div>
+                            <div className="text-[11px] text-[#55657E] mt-0.5 flex items-center justify-between">
+                              <span>{it.category}</span>
+                              <span className="text-[10px] text-[#8896AB]">{it.eventDate || "Archive"}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="px-2.5 py-2 border-t border-[#EFECE6] flex items-center justify-between text-[11px] bg-[#FAF8F3]">
+                          {isVid && it.videoUrl ? (
+                            <a
+                              href={it.videoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-red-700 hover:underline font-semibold"
+                            >
+                              Watch ▶
+                            </a>
+                          ) : (
+                            <span className="text-[#8896AB]">Verified</span>
+                          )}
+                          <div className="space-x-1.5">
+                            <button
+                              onClick={() => {
+                                setEditingGalleryId(it._id);
+                                setGalleryForm({
+                                  title: it.title || "",
+                                  category: it.category || "National Convention",
+                                  mediaType: it.mediaType || "image",
+                                  videoUrl: it.videoUrl || "",
+                                  imageUrl: it.imageUrl || "",
+                                  publicId: it.publicId || "",
+                                  eventDate: it.eventDate || "",
+                                  description: it.description || "",
+                                  isPublished: it.isPublished !== undefined ? it.isPublished : true,
+                                  isFeatured: Boolean(it.isFeatured),
+                                });
+                                setGalleryModalOpen(true);
+                              }}
+                              className="text-[#102F6B] hover:underline font-medium cursor-pointer"
+                            >
+                              Edit
+                            </button>
+                            <span className="text-[#D5CEC4]">·</span>
+                            <button
+                              onClick={() => handleDeleteGalleryItem(it)}
+                              className="text-red-700 hover:underline font-medium cursor-pointer"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <div className="p-2.5">
-                        <div className="font-semibold text-[#102F6B] truncate">{it.title}</div>
-                        <div className="text-[11px] text-[#55657E] mt-0.5">{it.category}</div>
-                      </div>
-                    </div>
-                    <div className="px-2.5 py-2 border-t border-[#EFECE6] flex items-center justify-between text-[11px] bg-[#FAF8F3]">
-                      <span className="text-[#8896AB]">{it.eventDate || "Archive"}</span>
-                      <div className="space-x-1.5">
-                        <button
-                          onClick={() => {
-                            setEditingGalleryId(it._id);
-                            setGalleryForm(it);
-                            setGalleryModalOpen(true);
-                          }}
-                          className="text-[#102F6B] hover:underline"
-                        >
-                          Edit
-                        </button>
-                        <span className="text-[#D5CEC4]">·</span>
-                        <button
-                          onClick={() => handleDeleteGalleryItem(it)}
-                          className="text-red-700 hover:underline"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                    );
+                  })}
               </div>
 
-              {/* Gallery Modal */}
+              {/* Add / Edit Media Modal */}
               {galleryModalOpen && (
-                <div className="fixed inset-0 bg-[#0D1B2A]/40 z-50 flex items-center justify-center p-4">
-                  <div className="bg-white max-w-md w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3 text-xs">
+                <div className="fixed inset-0 bg-[#0D1B2A]/50 z-50 flex items-center justify-center p-4">
+                  <div className="bg-white max-w-lg w-full border border-[#D5CEC4] p-5 rounded-xs space-y-3.5 text-xs shadow-xl">
                     <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2 font-bold text-[#102F6B]">
-                      <span>{editingGalleryId ? "Edit Photo" : "Add Photo to Gallery"}</span>
-                      <button onClick={() => setGalleryModalOpen(false)} className="text-slate-500 font-bold">✕</button>
+                      <span>
+                        {editingGalleryId
+                          ? isHi ? "मीडिया संपादन करें" : "Edit Media Item"
+                          : isHi ? "नया मीडिया जोड़ें (फोटो या यूट्यूब वीडियो)" : "Add New Media (Photo or Video)"}
+                      </span>
+                      <button onClick={() => setGalleryModalOpen(false)} className="text-slate-500 hover:text-black font-bold">
+                        ✕
+                      </button>
                     </div>
 
                     <form onSubmit={handleSaveGalleryItem} className="space-y-3">
+                      {/* Media Type Toggle */}
                       <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Photo Title *</label>
+                        <label className="block font-medium text-[#1E293B] mb-1">
+                          {isHi ? "मीडिया प्रकार चुनें (Media Type)" : "Media Type *"}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setGalleryForm({ ...galleryForm, mediaType: "image" })}
+                            className={`py-1.5 px-3 rounded-xs border text-xs font-semibold cursor-pointer transition-colors ${
+                              galleryForm.mediaType !== "video"
+                                ? "bg-[#102F6B] text-white border-[#102F6B]"
+                                : "bg-white text-[#55657E] border-[#D5CEC4] hover:bg-[#FAF8F3]"
+                            }`}
+                          >
+                            📷 {isHi ? "तस्वीर / छायाचित्र (Photo)" : "Photo Image"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setGalleryForm({ ...galleryForm, mediaType: "video" })}
+                            className={`py-1.5 px-3 rounded-xs border text-xs font-semibold cursor-pointer transition-colors ${
+                              galleryForm.mediaType === "video"
+                                ? "bg-red-600 text-white border-red-600"
+                                : "bg-white text-red-700 border-red-200 hover:bg-red-50"
+                            }`}
+                          >
+                            🎥 {isHi ? "यूट्यूब वीडियो (YouTube Video)" : "YouTube Video"}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* YouTube Video URL Field (Only if video) */}
+                      {galleryForm.mediaType === "video" && (
+                        <div className="p-3 bg-red-50/60 border border-red-200 rounded-xs space-y-2">
+                          <label className="block font-bold text-red-900">
+                            YouTube Video URL / Link *
+                          </label>
+                          <input
+                            type="url"
+                            required
+                            value={galleryForm.videoUrl || ""}
+                            onChange={(e) => setGalleryForm({ ...galleryForm, videoUrl: e.target.value })}
+                            placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
+                            className="w-full px-2.5 py-1.5 border border-red-300 bg-white rounded-xs focus:border-red-600 outline-hidden font-mono text-xs"
+                          />
+                          <p className="text-[10.5px] text-red-700">
+                            वीडियो लिंक डालते ही यूट्यूब का थंबनेल और वीडियो स्वतः लोड हो जाएगा।
+                          </p>
+
+                          <label className="flex items-center gap-1.5 pt-1 cursor-pointer font-medium text-[#1E293B]">
+                            <input
+                              type="checkbox"
+                              checked={Boolean(galleryForm.isFeatured)}
+                              onChange={(e) => setGalleryForm({ ...galleryForm, isFeatured: e.target.checked })}
+                              className="w-3.5 h-3.5"
+                            />
+                            <span>{isHi ? "मुखपृष्ठ पर मुख्य वीडियो के रूप में दिखाएं (Feature on Homepage)" : "Feature on Homepage Video Section"}</span>
+                          </label>
+                        </div>
+                      )}
+
+                      <div>
+                        <label className="block font-medium text-[#1E293B] mb-1">
+                          {isHi ? "शीर्षक (Title) *" : "Title *"}
+                        </label>
                         <input
                           type="text"
                           required
                           value={galleryForm.title}
                           onChange={(e) => setGalleryForm({ ...galleryForm, title: e.target.value })}
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                          placeholder={galleryForm.mediaType === "video" ? "वीडियो का शीर्षक..." : "तस्वीर का शीर्षक..."}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-medium"
                         />
                       </div>
-                      <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Category</label>
-                        <select
-                          value={galleryForm.category}
-                          onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                        >
-                          <option value="National Convention">National Convention</option>
-                          <option value="Community Gathering">Community Gathering</option>
-                          <option value="Youth Meet">Youth Meet</option>
-                          <option value="Historical Heritage">Historical Heritage</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block font-medium text-[#1E293B] mb-1">Image URL / Upload File</label>
-                        <input
-                          type="url"
-                          required
-                          value={galleryForm.imageUrl}
-                          onChange={(e) => setGalleryForm({ ...galleryForm, imageUrl: e.target.value })}
-                          placeholder="https://..."
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden mb-1.5"
-                        />
-                        <label className="px-2 py-0.5 bg-white border border-[#D5CEC4] text-[11px] font-medium cursor-pointer rounded-xs inline-block">
-                          {uploadingImage ? "Uploading..." : "Upload Photo"}
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="block font-medium text-[#1E293B] mb-1">
+                            {isHi ? "श्रेणी (Category)" : "Category"}
+                          </label>
                           <input
-                            type="file"
-                            accept="image/*"
-                            disabled={uploadingImage}
-                            onChange={(e) => handleImageUpload(e, "gallery")}
-                            className="hidden"
+                            type="text"
+                            value={galleryForm.category}
+                            onChange={(e) => setGalleryForm({ ...galleryForm, category: e.target.value })}
+                            placeholder="National Convention, Heritage..."
+                            className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
                           />
+                        </div>
+                        <div>
+                          <label className="block font-medium text-[#1E293B] mb-1">
+                            {isHi ? "दिनांक / वर्ष" : "Event Date / Year"}
+                          </label>
+                          <input
+                            type="text"
+                            value={galleryForm.eventDate}
+                            onChange={(e) => setGalleryForm({ ...galleryForm, eventDate: e.target.value })}
+                            placeholder="2026, 15 नवम्बर..."
+                            className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Image / Thumbnail URL */}
+                      <div>
+                        <label className="block font-medium text-[#1E293B] mb-1">
+                          {galleryForm.mediaType === "video"
+                            ? isHi ? "कस्टम थंबनेल URL (वैकल्पिक)" : "Custom Thumbnail URL (Optional)"
+                            : isHi ? "फोटो URL या फाइल अपलोड करें *" : "Image URL or Upload *"}
                         </label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            required={galleryForm.mediaType !== "video"}
+                            value={galleryForm.imageUrl}
+                            onChange={(e) => setGalleryForm({ ...galleryForm, imageUrl: e.target.value })}
+                            placeholder={galleryForm.mediaType === "video" ? "Auto-derived from YouTube if empty" : "https://res.cloudinary.com/... or /asset/..."}
+                            className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
+                          />
+                          <label className="px-2.5 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-[11px] font-medium cursor-pointer rounded-xs shrink-0">
+                            {uploadingImage ? "Uploading..." : "Upload File"}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              disabled={uploadingImage}
+                              onChange={(e) => handleImageUpload(e, "gallery")}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block font-medium text-[#1E293B] mb-1">
+                          {isHi ? "संक्षिप्त विवरण (Description)" : "Description"}
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={galleryForm.description || ""}
+                          onChange={(e) => setGalleryForm({ ...galleryForm, description: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
                       </div>
 
                       <div className="flex justify-end gap-2 pt-2 border-t border-[#E2DDD5]">
                         <button
                           type="button"
                           onClick={() => setGalleryModalOpen(false)}
-                          className="px-3 py-1 border border-[#D5CEC4] rounded-xs text-[#55657E]"
+                          className="px-3 py-1.5 border border-[#D5CEC4] rounded-xs text-[#55657E] hover:bg-slate-50 cursor-pointer"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
                           disabled={submitting}
-                          className="bg-[#102F6B] text-white px-3 py-1 rounded-xs font-medium cursor-pointer"
+                          className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-4 py-1.5 rounded-xs font-semibold cursor-pointer shadow-xs"
                         >
-                          {submitting ? "Saving..." : "Save Photo"}
+                          {submitting ? "Saving..." : "Save Media Item"}
                         </button>
                       </div>
                     </form>
@@ -2804,6 +3024,7 @@ export default function AdminDashboard() {
           )}
 
           {/* ========================================================================= */}
+                    {/* ========================================================================= */}
           {/* VIEW: TECHNICAL SEO */}
           {/* ========================================================================= */}
           {activeTab === "seo_settings" && (
