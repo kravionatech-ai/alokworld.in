@@ -1,0 +1,1734 @@
+{
+  "generatedAt": "2026-10-25T09:44:23.853Z",
+  "organization": {
+    "organizationName": "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)",
+    "jurisdiction": "संपूर्ण भारत (All India)",
+    "headquarters": {
+      "national": "नई दिल्ली (New Delhi)",
+      "state": "संबंधित राज्य की राजधानी (State Capitals)",
+      "district": "जिला मुख्यालय (District Headquarters)"
+    },
+    "membershipTiers": [
+      {
+        "type": "संस्थापक सदस्य (Founder Member)",
+        "fee": "₹ 31,000/-"
+      },
+      {
+        "type": "आजीवन सदस्य (Life Member)",
+        "fee": "₹ 1,100/-"
+      },
+      {
+        "type": "वार्षिक सदस्य (Annual Member)",
+        "fee": "₹ 100/-"
+      }
+    ],
+    "governingStructure": {
+      "tenureYears": 2,
+      "maxConsecutiveTerms": 2,
+      "annualConventionMonth": "अप्रैल (April)",
+      "centralExecutiveOfficers": {
+        "nationalPresident": 1,
+        "seniorVicePresident": 1,
+        "vicePresidents": 11,
+        "generalSecretaries": 11,
+        "organizationSecretaries": 11,
+        "hqSecretary": 1,
+        "treasurer": 1,
+        "executiveMembers": 20,
+        "mediaInCharge": 1,
+        "auditor": 1,
+        "legalAdvisor": 1
+      }
+    },
+    "coreObjectives": [
+      "लोधी समाज के केंद्र/राज्य सरकार, उपक्रमों एवं अर्ध-सरकारी संस्थानों में कार्यरत एवं सेवानिवृत्त अधिकारियों-कर्मचारियों को संगठित करना।",
+      "अधिकारियों-कर्मचारियों के संवैधानिक एवं मौलिक अधिकारों की रक्षा करना तथा शोषण रोकना।",
+      "समाज का समग्र बौद्धिक, नैतिक, सामाजिक, शैक्षणिक एवं आर्थिक उत्थान करना।",
+      "कुरीतियों (दहेज, मृत्युभोज, बाल विवाह, फिजूलखर्ची) का उन्मूलन एवं जन-जागरण।",
+      "प्रतिभाशाली छात्र-छात्राओं को सिविल सेवा एवं प्रतियोगी परीक्षाओं हेतु मार्गदर्शन एवं दिल्ली व राज्यों में छात्रावासों की स्थापना।",
+      "महिलाओं की निर्णय-निर्माण में सहभागिता सुनिश्चित करना एवं बालिकाओं की उच्च शिक्षा को बढ़ावा देना।"
+    ]
+  },
+  "summary": {
+    "nationalExecutiveCount": 27,
+    "allIndiaDesignationsCount": 67,
+    "telanganaDelegatesCount": 7,
+    "historicalPersonalitiesCount": 4,
+    "posters2026Count": 5,
+    "galleryImagesCount": 6,
+    "websiteUiAssetsCount": 3,
+    "totalIndexedPhotos": 30
+  },
+  "nationalExecutive": [
+    {
+      "order": 1,
+      "nameHindi": "सर्वश्री वीरवल सिंह",
+      "designation": "अध्यक्ष परामर्शदात्री समिति",
+      "phone": "9454412070",
+      "state": "उ०प्र०",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 3
+      }
+    },
+    {
+      "order": 2,
+      "nameHindi": "सर्वश्री राजेन्द्र सिंह",
+      "designation": "राष्ट्रीय संरक्षक",
+      "phone": "9868229968",
+      "state": "उ०प्र०",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 4
+      }
+    },
+    {
+      "order": 3,
+      "nameHindi": "सर्वश्री विश्वनाथ सिंह",
+      "designation": "राष्ट्रीय संयोजक",
+      "phone": "9369970069",
+      "state": "दिल्ली",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 5
+      }
+    },
+    {
+      "order": 4,
+      "nameHindi": "सर्वश्री अतिवल सिंह",
+      "designation": "राष्ट्रीय अध्यक्ष",
+      "phone": "9999900079",
+      "state": "उ०प्र०",
+      "avatar": "/asset/photo/Atibal Singh rajput.jpeg",
+      "photoFile": "Atibal Singh rajput.jpeg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 6
+      }
+    },
+    {
+      "order": 5,
+      "nameHindi": "सर्वश्री सुरेश शिवसिंह लोधी",
+      "designation": "राष्ट्रीय वरिष्ठ उपाध्यक्ष",
+      "phone": "9610069199",
+      "state": "राजस्थान",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 7
+      }
+    },
+    {
+      "order": 6,
+      "nameHindi": "सर्वश्री विनोद कुमार राजपूत",
+      "designation": "राष्ट्रीय उपाध्यक्ष (उ०प्र०)",
+      "phone": "8630564509, 9457032258",
+      "state": "उ०प्र०",
+      "avatar": "/asset/photo/Vinod Kumar Rajput.jpg",
+      "photoFile": "Vinod Kumar Rajput.jpg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 8
+      }
+    },
+    {
+      "order": 7,
+      "nameHindi": "सर्वश्री सोबरन सिंह",
+      "designation": "राष्ट्रीय उपाध्यक्ष (दिल्ली)",
+      "phone": "9999847288",
+      "state": "दिल्ली",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 9
+      }
+    },
+    {
+      "order": 8,
+      "nameHindi": "सर्वश्री संतोष कुमार",
+      "designation": "राष्ट्रीय उपाध्यक्ष (राजस्थान)",
+      "phone": "9314233249",
+      "state": "राजस्थान",
+      "avatar": "/asset/photo/santosh rajasthan.jpeg",
+      "photoFile": "santosh rajasthan.jpeg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 10
+      }
+    },
+    {
+      "order": 9,
+      "nameHindi": "सर्वश्री अशोक कुमार वर्मा",
+      "designation": "राष्ट्रीय उपाध्यक्ष (हरियाणा/पंजाब)",
+      "phone": "9810566795",
+      "state": "अखिल भारतीय",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 11
+      }
+    },
+    {
+      "order": 10,
+      "nameHindi": "श्रीमती डा० रचना सिंह ठाकुर",
+      "designation": "राष्ट्रीय उपाध्यक्ष (मध्य प्रदेश)",
+      "phone": "8602653009",
+      "state": "मध्य प्रदेश",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 12
+      }
+    },
+    {
+      "order": 11,
+      "nameHindi": "सर्वश्री अरविन्द सिंह",
+      "designation": "राष्ट्रीय उपाध्यक्ष (शेष भारत)",
+      "phone": "9319943210",
+      "state": "उ०प्र०",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 13
+      }
+    },
+    {
+      "order": 12,
+      "nameHindi": "सर्वश्री डा० ओमकार सिंह नरवरिया",
+      "designation": "राष्ट्रीय कोषाध्यक्ष",
+      "phone": "9873483657",
+      "state": "दिल्ली",
+      "avatar": "/asset/photo/Dr Omkar_Singh.jpg",
+      "photoFile": "Dr Omkar_Singh.jpg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 14
+      }
+    },
+    {
+      "order": 13,
+      "nameHindi": "सर्वश्री विजय राजपूत",
+      "designation": "राष्ट्रीय महासचिव (उ०प्र०)",
+      "phone": "9917470459",
+      "state": "उ०प्र०",
+      "avatar": "/asset/photo/vijay rajput aligar.jpeg",
+      "photoFile": "vijay rajput aligar.jpeg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 15
+      }
+    },
+    {
+      "order": 14,
+      "nameHindi": "सर्वश्री अभिषेक राजपूत",
+      "designation": "राष्ट्रीय महासचिव (दिल्ली)",
+      "phone": "9999219164",
+      "state": "दिल्ली",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 16
+      }
+    },
+    {
+      "order": 15,
+      "nameHindi": "सर्वश्री किशोरी लाल वर्मा",
+      "designation": "राष्ट्रीय महासचिव (शेष भारत)",
+      "phone": "9414574108",
+      "state": "अखिल भारतीय",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 17
+      }
+    },
+    {
+      "order": 16,
+      "nameHindi": "सर्वश्री महेश चन्द्र लोधी",
+      "designation": "राष्ट्रीय महासचिव (राजस्थान)",
+      "phone": "9414583112",
+      "state": "राजस्थान",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 18
+      }
+    },
+    {
+      "order": 17,
+      "nameHindi": "श्रीमती मीना प्रतिहार",
+      "designation": "राष्ट्रीय महासचिव महिला (राजस्थान)",
+      "phone": "9414574107",
+      "state": "राजस्थान",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 19
+      }
+    },
+    {
+      "order": 18,
+      "nameHindi": "सर्वश्री काशीराम वर्मा",
+      "designation": "राष्ट्रीय महासचिव मुख्यालय",
+      "phone": "9818110683",
+      "state": "दिल्ली",
+      "avatar": "/asset/photo/kashiramJi.jpg",
+      "photoFile": "kashiramJi.jpg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 20
+      }
+    },
+    {
+      "order": 19,
+      "nameHindi": "सर्वश्री मक्खन लाल लोधा",
+      "designation": "राष्ट्रीय संगठन सचिव",
+      "phone": "9887937819",
+      "state": "राजस्थान",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 21
+      }
+    },
+    {
+      "order": 20,
+      "nameHindi": "सर्वश्री अरविन्द सिंह राजपूत",
+      "designation": "राष्ट्रीय संगठन सचिव",
+      "phone": "9675639631",
+      "state": "उ०प्र०",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 22
+      }
+    },
+    {
+      "order": 21,
+      "nameHindi": "श्रीमती संगीता कुमारी",
+      "designation": "राष्ट्रीय संगठन सचिव (शेष भारत)",
+      "phone": "9873210106",
+      "state": "उ०प्र०",
+      "avatar": "/asset/photo/sangeeta singh.jpeg",
+      "photoFile": "sangeeta singh.jpeg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 23
+      }
+    },
+    {
+      "order": 22,
+      "nameHindi": "सर्वश्री किशनलाल लोधी",
+      "designation": "राष्ट्रीय संगठन सचिव (दिल्ली)",
+      "phone": "9899182330",
+      "state": "दिल्ली",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 24
+      }
+    },
+    {
+      "order": 23,
+      "nameHindi": "सर्वश्री धर्मेन्द्र सिंह",
+      "designation": "राष्ट्रीय मीडिया प्रभारी",
+      "phone": "9456805229",
+      "state": "अखिल भारतीय",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 25
+      }
+    },
+    {
+      "order": 24,
+      "nameHindi": "सर्वश्री रामसेवक राजपूत",
+      "designation": "राष्ट्रीय मीडिया सलाहकार",
+      "phone": "9411042597",
+      "state": "उ०प्र०",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 26
+      }
+    },
+    {
+      "order": 25,
+      "nameHindi": "सर्वश्री सौरभ कुमार",
+      "designation": "राष्ट्रीय कार्यकारिणी सदस्य",
+      "phone": "9352130289",
+      "state": "अखिल भारतीय",
+      "avatar": "",
+      "photoFile": null,
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 27
+      }
+    },
+    {
+      "order": 26,
+      "nameHindi": "सर्वश्री घन श्याम राजपूत",
+      "designation": "राष्ट्रीय कार्यकारिणी सदस्य",
+      "phone": "8650281137",
+      "state": "अखिल भारतीय",
+      "avatar": "/asset/photo/Ghanshyam Singh.jpeg",
+      "photoFile": "Ghanshyam Singh.jpeg",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 28
+      }
+    },
+    {
+      "order": 27,
+      "nameHindi": "सर्वश्री कृपाशंकर वर्मा",
+      "designation": "राष्ट्रीय कार्यकारिणी सदस्य",
+      "phone": "8533902455",
+      "state": "अखिल भारतीय",
+      "avatar": "/asset/photo/shanker.png",
+      "photoFile": "shanker.png",
+      "committee": "राष्ट्रीय कार्यकारिणी (National Executive Council)",
+      "source": {
+        "file": "Alok_India_National_Executive.xlsx",
+        "sheet": "National Executive",
+        "row": 29
+      }
+    }
+  ],
+  "allIndiaCommittees": [
+    {
+      "section": "A",
+      "committeeCategory": "आलोक के राष्ट्रीय संरक्षक पद",
+      "serialNumber": "1",
+      "fullText": "1- डॉ. बद्री विशाल सिंह , सेवानिवृत्त महानिदेशक, चिकित्सा एवं स्वास्थ्य, उत्तर प्रदेश, लखनऊ।\r\nप्रभारी महानिदेशक आयुष्मान योजना, उत्तर प्रदेश",
+      "personOrTitle": "1- डॉ. बद्री विशाल सिंह , सेवानिवृत्त महानिदेशक, चिकित्सा एवं स्वास्थ्य, उत्तर प्रदेश, लखनऊ।\r\nप्रभारी महानिदेशक आयुष्मान योजना, उत्तर प्रदेश",
+      "roleOrDepartment": "आलोक के राष्ट्रीय संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/Dr Badri Vishal R Singh.jpg",
+      "photoFile": "Dr Badri Vishal R Singh.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 6
+      }
+    },
+    {
+      "section": "A",
+      "committeeCategory": "आलोक के राष्ट्रीय संरक्षक पद",
+      "serialNumber": "2",
+      "fullText": "2-श्रीमती किरन पढेऱिया, सेवानिवृत्त प्रशासनिक अधिकारी भेल भोपाल, मध्य प्रदेश",
+      "personOrTitle": "श्रीमती किरन पढेऱिया, सेवानिवृत्त प्रशासनिक अधिकारी भेल भोपाल, मध्य प्रदेश",
+      "roleOrDepartment": "आलोक के राष्ट्रीय संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 7
+      }
+    },
+    {
+      "section": "A",
+      "committeeCategory": "आलोक के राष्ट्रीय संरक्षक पद",
+      "serialNumber": "3",
+      "fullText": "3-श्री ओम प्रकाश वर्मा, सेवानिवृत्त मुख्य अभियंता डेसू, नई दिल्ली",
+      "personOrTitle": "श्री ओम प्रकाश वर्मा, सेवानिवृत्त मुख्य अभियंता डेसू, नई दिल्ली",
+      "roleOrDepartment": "आलोक के राष्ट्रीय संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 8
+      }
+    },
+    {
+      "section": "A",
+      "committeeCategory": "आलोक के राष्ट्रीय संरक्षक पद",
+      "serialNumber": "4",
+      "fullText": "4-श्री गजराज सिंह, सेवानिवृत्त उप-प्रबंधक, सरस डेरी जयपुर, राजस्थान",
+      "personOrTitle": "श्री गजराज सिंह, सेवानिवृत्त उप-प्रबंधक, सरस डेरी जयपुर, राजस्थान",
+      "roleOrDepartment": "आलोक के राष्ट्रीय संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 9
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "1",
+      "fullText": "श्री राम सेवक राजपूत, सहायक अभियंता लोक निमार्ण विभाग, लखनऊ, उत्तर प्रदेश",
+      "personOrTitle": "श्री राम सेवक राजपूत, सहायक अभियंता लोक निमार्ण विभाग, लखनऊ, उत्तर प्रदेश",
+      "roleOrDepartment": "आलोक के राष्ट्रीय संयोजक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 11
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "2",
+      "fullText": "उत्तर प्रदेश : डॉ. राजेश वर्मा, स्वास्थ्य विभाग बदायूं उप्र",
+      "personOrTitle": "डॉ. राजेश वर्मा, स्वास्थ्य विभाग बदायूं उप्र",
+      "roleOrDepartment": "उत्तर प्रदेश",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 12
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "3",
+      "fullText": "मध्य प्रदेश : इं. सतेंद्र सिंह  मध्य-रेलवे, विदिशा मप्र",
+      "personOrTitle": "इं. सतेंद्र सिंह  मध्य-रेलवे, विदिशा मप्र",
+      "roleOrDepartment": "मध्य प्रदेश",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 13
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "4",
+      "fullText": "राजस्थान :इं. केशव सिंह वर्मा पंचायती राज विभाग राजस्थान",
+      "personOrTitle": "इं. केशव सिंह वर्मा पंचायती राज विभाग राजस्थान",
+      "roleOrDepartment": "राजस्थान",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 14
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "5",
+      "fullText": "दिल्ली : श्री गजेश चंद्र अधीक्षण अभियंता(सेनि.) एन टी पी सी भारत सरकार",
+      "personOrTitle": "श्री गजेश चंद्र अधीक्षण अभियंता(सेनि.) एन टी पी सी भारत सरकार",
+      "roleOrDepartment": "दिल्ली",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 15
+      }
+    },
+    {
+      "section": "B",
+      "committeeCategory": "आलोक के राष्ट्रीय संयोजक पद",
+      "serialNumber": "6",
+      "fullText": "उत्तराखंड :डॉ. एच आर सिंह वरिष्ठ वैज्ञानिक उत्तराखण्ड सरकार",
+      "personOrTitle": "डॉ. एच आर सिंह वरिष्ठ वैज्ञानिक उत्तराखण्ड सरकार",
+      "roleOrDepartment": "उत्तराखंड",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 16
+      }
+    },
+    {
+      "section": "C",
+      "committeeCategory": "केंद्रीय अनुशासन समिति -",
+      "serialNumber": "(I)",
+      "fullText": "(I) डॉ. बद्री विशाल सिंह , राष्ट्रीय संरक्षक. - अध्यक्ष",
+      "personOrTitle": "डॉ. बद्री विशाल सिंह , राष्ट्रीय संरक्षक. - अध्यक्ष",
+      "roleOrDepartment": "केंद्रीय अनुशासन समिति -",
+      "phone": "",
+      "avatar": "/asset/photo/Dr Badri Vishal R Singh.jpg",
+      "photoFile": "Dr Badri Vishal R Singh.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 18
+      }
+    },
+    {
+      "section": "C",
+      "committeeCategory": "केंद्रीय अनुशासन समिति -",
+      "serialNumber": "(II)",
+      "fullText": "(II) श्री बीरबल सिंह - रा.प. स. प्रतिनिधि - सदस्य",
+      "personOrTitle": "श्री बीरबल सिंह - रा.प. स. प्रतिनिधि - सदस्य",
+      "roleOrDepartment": "केंद्रीय अनुशासन समिति -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 19
+      }
+    },
+    {
+      "section": "C",
+      "committeeCategory": "केंद्रीय अनुशासन समिति -",
+      "serialNumber": "(III)",
+      "fullText": "(III) डॉ. यशपाल सिंह, राष्ट्रीय मार्गदर्शक - सदस्य",
+      "personOrTitle": "डॉ. यशपाल सिंह, राष्ट्रीय मार्गदर्शक - सदस्य",
+      "roleOrDepartment": "केंद्रीय अनुशासन समिति -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 20
+      }
+    },
+    {
+      "section": "C",
+      "committeeCategory": "केंद्रीय अनुशासन समिति -",
+      "serialNumber": "(IV)",
+      "fullText": "(IV) श्री रामसेवक राजपूत , राष्ट्रीय संयोजक - सदस्य",
+      "personOrTitle": "श्री रामसेवक राजपूत , राष्ट्रीय संयोजक - सदस्य",
+      "roleOrDepartment": "केंद्रीय अनुशासन समिति -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 21
+      }
+    },
+    {
+      "section": "C",
+      "committeeCategory": "केंद्रीय अनुशासन समिति -",
+      "serialNumber": "(V)",
+      "fullText": "(V) श्री सुरेशचन्द्र लोधी राष्ट्रीय वरिष्ठ उपाध्यक्ष - सदस्य सचिव",
+      "personOrTitle": "श्री सुरेशचन्द्र लोधी राष्ट्रीय वरिष्ठ उपाध्यक्ष - सदस्य सचिव",
+      "roleOrDepartment": "केंद्रीय अनुशासन समिति -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 22
+      }
+    },
+    {
+      "section": "D",
+      "committeeCategory": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "serialNumber": "(I)",
+      "fullText": "(I) इं. हेमंत प्रताप सिंह (रा.प.स.) -अध्यक्ष",
+      "personOrTitle": "इं. हेमंत प्रताप सिंह (रा.प.स.) -अध्यक्ष",
+      "roleOrDepartment": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 24
+      }
+    },
+    {
+      "section": "D",
+      "committeeCategory": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "serialNumber": "(II)",
+      "fullText": "(II) श्री अतिबल सिंह राजपूत, राष्ट्रीय अध्यक्ष - सदस्य",
+      "personOrTitle": "श्री अतिबल सिंह राजपूत, राष्ट्रीय अध्यक्ष - सदस्य",
+      "roleOrDepartment": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "phone": "",
+      "avatar": "/asset/photo/Atibal Singh rajput.jpeg",
+      "photoFile": "Atibal Singh rajput.jpeg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 25
+      }
+    },
+    {
+      "section": "D",
+      "committeeCategory": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "serialNumber": "(III)",
+      "fullText": "(III) डॉ. ओमकार सिंह, अध्यक्ष दिल्ली प्रदेश - सदस्य",
+      "personOrTitle": "डॉ. ओमकार सिंह, अध्यक्ष दिल्ली प्रदेश - सदस्य",
+      "roleOrDepartment": "केंद्रीय वित्तीय प्रबंधन समिति-",
+      "phone": "",
+      "avatar": "/asset/photo/Dr Omkar_Singh.jpg",
+      "photoFile": "Dr Omkar_Singh.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 26
+      }
+    },
+    {
+      "section": "E",
+      "committeeCategory": "आलोक के राष्ट्रीय मार्गदर्शक पद",
+      "serialNumber": "1",
+      "fullText": "1- राष्ट्रीय मार्गदर्शक(समाजिक)- श्री विश्वनाथ सिंह, सेवानिवृत्त उप जि़लाधिकारी राजस्व विभाग लखनऊ उत्तर प्रदेश",
+      "personOrTitle": "राष्ट्रीय मार्गदर्शक(समाजिक)- श्री विश्वनाथ सिंह, सेवानिवृत्त उप जि़लाधिकारी राजस्व विभाग लखनऊ उत्तर प्रदेश",
+      "roleOrDepartment": "आलोक के राष्ट्रीय मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 28
+      }
+    },
+    {
+      "section": "E",
+      "committeeCategory": "आलोक के राष्ट्रीय मार्गदर्शक पद",
+      "serialNumber": "2",
+      "fullText": "2-राष्ट्रीय मार्गदर्शक(शैक्षणिक)- डॉ. यशपाल सिंह, एमपी एसोसियेट प्रोफ़ेसर, महाविद्यालय मुरैना मध्य प्रदेश",
+      "personOrTitle": "राष्ट्रीय मार्गदर्शक(शैक्षणिक)- डॉ. यशपाल सिंह, एमपी एसोसियेट प्रोफ़ेसर, महाविद्यालय मुरैना मध्य प्रदेश",
+      "roleOrDepartment": "आलोक के राष्ट्रीय मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 29
+      }
+    },
+    {
+      "section": "F",
+      "committeeCategory": "आलोक राष्ट्रीय प्रवक्ता राष्ट्रीय मीडिया प्रभारी एवं राष्ट्रीय विधि सलाहकार पद",
+      "serialNumber": "1",
+      "fullText": "1-राष्ट्रीय प्रवक्ता: इं० राघवेंद्र सिंह वर्मा ( अधिशासी अभियन्ता लोक निर्माण विभाग) लखनऊ उत्तर प्रदेश",
+      "personOrTitle": "इं० राघवेंद्र सिंह वर्मा ( अधिशासी अभियन्ता लोक निर्माण विभाग) लखनऊ उत्तर प्रदेश",
+      "roleOrDepartment": "राष्ट्रीय प्रवक्ता",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 31
+      }
+    },
+    {
+      "section": "F",
+      "committeeCategory": "आलोक राष्ट्रीय प्रवक्ता राष्ट्रीय मीडिया प्रभारी एवं राष्ट्रीय विधि सलाहकार पद",
+      "serialNumber": "2",
+      "fullText": "2-राष्ट्रीय मीडिया प्रभारी: श्री विजय सिंह राजपूत (सेवानिवृत्त प्रशासनिक अधिकारी नगरपालिका) कासगंज उत्तर प्रदेश",
+      "personOrTitle": "श्री विजय सिंह राजपूत (सेवानिवृत्त प्रशासनिक अधिकारी नगरपालिका) कासगंज उत्तर प्रदेश",
+      "roleOrDepartment": "राष्ट्रीय मीडिया प्रभारी",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 32
+      }
+    },
+    {
+      "section": "F",
+      "committeeCategory": "आलोक राष्ट्रीय प्रवक्ता राष्ट्रीय मीडिया प्रभारी एवं राष्ट्रीय विधि सलाहकार पद",
+      "serialNumber": "3",
+      "fullText": "3-राष्ट्रीय विधि सलाहकार: एड० रूप किशोर राजपूत (वरिष्ठ अधिवक्ता तीस हजारी न्यायालय) दिल्ली",
+      "personOrTitle": "एड० रूप किशोर राजपूत (वरिष्ठ अधिवक्ता तीस हजारी न्यायालय) दिल्ली",
+      "roleOrDepartment": "राष्ट्रीय विधि सलाहकार",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 33
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "(I)",
+      "fullText": "(I) उत्तर प्रदेश संरक्षक",
+      "personOrTitle": "उत्तर प्रदेश संरक्षक",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 35
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "1",
+      "fullText": "1-श्री यशपाल सिंह सेवानिवृत्त भारतीय रेलवेलखनऊ",
+      "personOrTitle": "श्री यशपाल सिंह सेवानिवृत्त भारतीय रेलवेलखनऊ",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 36
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "2",
+      "fullText": "2-श्री बाबूलाल लोधी सेतुनिगम लखनऊ",
+      "personOrTitle": "श्री बाबूलाल लोधी सेतुनिगम लखनऊ",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 37
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "3",
+      "fullText": "3-इं.राजेंद्र सिंह सेवानिवृत्त अधशिासी अभियंता मैनपुरी",
+      "personOrTitle": "इं.राजेंद्र सिंह सेवानिवृत्त अधशिासी अभियंता मैनपुरी",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 38
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "4",
+      "fullText": "4- डॉ. वाई एन सिंह तकनीकी उच्च शिक्षा लखनऊ",
+      "personOrTitle": "डॉ. वाई एन सिंह तकनीकी उच्च शिक्षा लखनऊ",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 39
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "5",
+      "fullText": "5 -डॉ. अशोकपाल सिंह सेनि अधशिासी अभियंता",
+      "personOrTitle": "डॉ. अशोकपाल सिंह सेनि अधशिासी अभियंता",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 40
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "6",
+      "fullText": "6-श्री अमर सिंह राजपूत शिक्षा विभाग",
+      "personOrTitle": "श्री अमर सिंह राजपूत शिक्षा विभाग",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 41
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "7",
+      "fullText": "7- श्री ठाकुर दास अधशिासी अभियंता लखनऊ",
+      "personOrTitle": "श्री ठाकुर दास अधशिासी अभियंता लखनऊ",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 42
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "8",
+      "fullText": "8- प्रो० श्री के ०के ० वर्मा उच्च शिक्षा फर्रुखाबाद",
+      "personOrTitle": "प्रो० श्री के ०के ० वर्मा उच्च शिक्षा फर्रुखाबाद",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 43
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "9",
+      "fullText": "9- इं.नारायण सिंह सेवानिवृत्त अधशिासी अभियंता",
+      "personOrTitle": "इं.नारायण सिंह सेवानिवृत्त अधशिासी अभियंता",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 44
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "10",
+      "fullText": "10-श्री केशव सिंह राजपूत सेनि. कृषि विभाग औरैया",
+      "personOrTitle": "श्री केशव सिंह राजपूत सेनि. कृषि विभाग औरैया",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 45
+      }
+    },
+    {
+      "section": "G",
+      "committeeCategory": "आलोक प्रदेश संरक्षक पद",
+      "serialNumber": "11",
+      "fullText": "11- श्री जगदीश कुमार लोधी सेवानिवृत्त लखनऊ",
+      "personOrTitle": "श्री जगदीश कुमार लोधी सेवानिवृत्त लखनऊ",
+      "roleOrDepartment": "आलोक प्रदेश संरक्षक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 46
+      }
+    },
+    {
+      "section": "H",
+      "committeeCategory": "(II)राजस्थान प्रदेश संरक्षक",
+      "serialNumber": "1",
+      "fullText": "1-श्री एल पी वर्मा विद्युत विभाग",
+      "personOrTitle": "श्री एल पी वर्मा विद्युत विभाग",
+      "roleOrDepartment": "(II)राजस्थान प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 48
+      }
+    },
+    {
+      "section": "H",
+      "committeeCategory": "(II)राजस्थान प्रदेश संरक्षक",
+      "serialNumber": "2",
+      "fullText": "2-श्री रविंद्र सिंह व्याख्याता स्कूल शिक्षा व्यावर",
+      "personOrTitle": "श्री रविंद्र सिंह व्याख्याता स्कूल शिक्षा व्यावर",
+      "roleOrDepartment": "(II)राजस्थान प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 49
+      }
+    },
+    {
+      "section": "H",
+      "committeeCategory": "(II)राजस्थान प्रदेश संरक्षक",
+      "serialNumber": "3",
+      "fullText": "3-श्री जगमोहन सिंह राजपूत वाइस प्रिंसपिल धौलपुर",
+      "personOrTitle": "श्री जगमोहन सिंह राजपूत वाइस प्रिंसपिल धौलपुर",
+      "roleOrDepartment": "(II)राजस्थान प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "/asset/photo/dholpur1.png",
+      "photoFile": "dholpur1.png",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 50
+      }
+    },
+    {
+      "section": "I",
+      "committeeCategory": "(III) मध्य प्रदेश प्रदेश संरक्षक",
+      "serialNumber": "1",
+      "fullText": "1-डॉ. महावीर सिंह सेवानिवृत्त स्वास्थ्य विभाग शिवपुरी",
+      "personOrTitle": "डॉ. महावीर सिंह सेवानिवृत्त स्वास्थ्य विभाग शिवपुरी",
+      "roleOrDepartment": "(III) मध्य प्रदेश प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 52
+      }
+    },
+    {
+      "section": "I",
+      "committeeCategory": "(III) मध्य प्रदेश प्रदेश संरक्षक",
+      "serialNumber": "2",
+      "fullText": "2-इं. डी एस पटेल सेवानिवृत्त जबलपुर",
+      "personOrTitle": "इं. डी एस पटेल सेवानिवृत्त जबलपुर",
+      "roleOrDepartment": "(III) मध्य प्रदेश प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 53
+      }
+    },
+    {
+      "section": "J",
+      "committeeCategory": "(IV) दिल्ली प्रदेश संरक्षक",
+      "serialNumber": "1",
+      "fullText": "श्री मुरारी लाल सेवानिवृत्त,शिक्षक शिक्षा विभाग दिल्ली",
+      "personOrTitle": "श्री मुरारी लाल सेवानिवृत्त,शिक्षक शिक्षा विभाग दिल्ली",
+      "roleOrDepartment": "(IV) दिल्ली प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 55
+      }
+    },
+    {
+      "section": "K",
+      "committeeCategory": "(V) उत्तराखंड प्रदेश संरक्षक",
+      "serialNumber": "1",
+      "fullText": "श्री रूप कशिोर शिक्षक सेवानिवृत्त टनकपुर",
+      "personOrTitle": "श्री रूप कशिोर शिक्षक सेवानिवृत्त टनकपुर",
+      "roleOrDepartment": "(V) उत्तराखंड प्रदेश संरक्षक",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 57
+      }
+    },
+    {
+      "section": "L",
+      "committeeCategory": "आलोक के प्रदेश मार्गदर्शक पद",
+      "serialNumber": "1",
+      "fullText": "1-श्रीमती सुजाता सिंह संयुक्त आयुक्त जी एस टी विभाग लखनऊ उप्र",
+      "personOrTitle": "श्रीमती सुजाता सिंह संयुक्त आयुक्त जी एस टी विभाग लखनऊ उप्र",
+      "roleOrDepartment": "आलोक के प्रदेश मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 59
+      }
+    },
+    {
+      "section": "L",
+      "committeeCategory": "आलोक के प्रदेश मार्गदर्शक पद",
+      "serialNumber": "2",
+      "fullText": "2--श्री बलराम सिंह, उप निरीक्षक पुलिस विभाग जयपुर राजस्थान",
+      "personOrTitle": "-श्री बलराम सिंह, उप निरीक्षक पुलिस विभाग जयपुर राजस्थान",
+      "roleOrDepartment": "आलोक के प्रदेश मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 60
+      }
+    },
+    {
+      "section": "L",
+      "committeeCategory": "आलोक के प्रदेश मार्गदर्शक पद",
+      "serialNumber": "3",
+      "fullText": "3- रविन्द्र पी. सिंह , जल संसाधन मंत्रालय भारत सरकार दिल्ली",
+      "personOrTitle": "रविन्द्र पी. सिंह , जल संसाधन मंत्रालय भारत सरकार दिल्ली",
+      "roleOrDepartment": "आलोक के प्रदेश मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 61
+      }
+    },
+    {
+      "section": "L",
+      "committeeCategory": "आलोक के प्रदेश मार्गदर्शक पद",
+      "serialNumber": "4",
+      "fullText": "4- इं. प्रभात कुमार राजपूत, अतिरिक्त महाप्रबंधक भेल भोपाल मप्र",
+      "personOrTitle": "इं. प्रभात कुमार राजपूत, अतिरिक्त महाप्रबंधक भेल भोपाल मप्र",
+      "roleOrDepartment": "आलोक के प्रदेश मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 62
+      }
+    },
+    {
+      "section": "L",
+      "committeeCategory": "आलोक के प्रदेश मार्गदर्शक पद",
+      "serialNumber": "5",
+      "fullText": "5- श्री शिवचरन, शिक्षा विभाग वागेश्वर उत्तराखंड",
+      "personOrTitle": "श्री शिवचरन, शिक्षा विभाग वागेश्वर उत्तराखंड",
+      "roleOrDepartment": "आलोक के प्रदेश मार्गदर्शक पद",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 63
+      }
+    },
+    {
+      "section": "M",
+      "committeeCategory": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "serialNumber": "1",
+      "fullText": "1-डॉ.सुरेश सिंह वर्मा , जिला स्वास्थ्य अधिकारी (सेनि.)स्वास्थ्य विभाग अजमेर राजस्थान",
+      "personOrTitle": "डॉ.सुरेश सिंह वर्मा , जिला स्वास्थ्य अधिकारी (सेनि.)स्वास्थ्य विभाग अजमेर राजस्थान",
+      "roleOrDepartment": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 65
+      }
+    },
+    {
+      "section": "M",
+      "committeeCategory": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "serialNumber": "2",
+      "fullText": "2- श्री दलवीर सिंह सी०ओ० ( सेनि.) उप्र पुलिस गृह विभाग लखनऊ",
+      "personOrTitle": "श्री दलवीर सिंह सी०ओ० ( सेनि.) उप्र पुलिस गृह विभाग लखनऊ",
+      "roleOrDepartment": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "phone": "",
+      "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+      "photoFile": "lakhan rajput bhopal.jpg",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 66
+      }
+    },
+    {
+      "section": "M",
+      "committeeCategory": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "serialNumber": "3",
+      "fullText": "3-श्री जी पी वर्मा (सेवानिवृत्त) छिंदवाड़ा मध्य प्रदेश",
+      "personOrTitle": "श्री जी पी वर्मा (सेवानिवृत्त) छिंदवाड़ा मध्य प्रदेश",
+      "roleOrDepartment": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 67
+      }
+    },
+    {
+      "section": "M",
+      "committeeCategory": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "serialNumber": "4",
+      "fullText": "4- एस पी सिंह सेवानिवृत्त दिल्ली जल बोर्ड, दिल्ली",
+      "personOrTitle": "एस पी सिंह सेवानिवृत्त दिल्ली जल बोर्ड, दिल्ली",
+      "roleOrDepartment": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 68
+      }
+    },
+    {
+      "section": "M",
+      "committeeCategory": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "serialNumber": "आलोक प्रदेश प्रवक्ता, प्रदेश मीडिया प्रभारी ,प्रदेश विधि सलाहकार एवं प्रदेश लेखापरीक्षक के पद",
+      "fullText": "आलोक प्रदेश प्रवक्ता, प्रदेश मीडिया प्रभारी ,प्रदेश विधि सलाहकार एवं प्रदेश लेखापरीक्षक के पद",
+      "personOrTitle": "आलोक प्रदेश प्रवक्ता, प्रदेश मीडिया प्रभारी ,प्रदेश विधि सलाहकार एवं प्रदेश लेखापरीक्षक के पद",
+      "roleOrDepartment": "प्रदेश मार्गदर्शक पद (समाजिक)-",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 69
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "1",
+      "fullText": "1-श्री दीपक सिंह , अवर अभियंता विद्युत विभाग राजसमंद राजस्थान",
+      "personOrTitle": "श्री दीपक सिंह , अवर अभियंता विद्युत विभाग राजसमंद राजस्थान",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 71
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "2",
+      "fullText": "2-श्री धर्मेन्द्र सिंह राजपूत मो. 9456805229, सहायक अभयिन्ता | विद्युत विभाग उप्र",
+      "personOrTitle": "श्री धर्मेन्द्र सिंह राजपूत मो. 9456805229, सहायक अभयिन्ता | विद्युत विभाग उप्र",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "9456805229",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 72
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "3",
+      "fullText": "3-श्री राम प्रकाश मो. 9540590621, शिक्षक, दिल्ली सरकार",
+      "personOrTitle": "श्री राम प्रकाश मो. 9540590621, शिक्षक, दिल्ली सरकार",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "9540590621",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 73
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "4",
+      "fullText": "4-श्री प्रदीप कुमार बिंडैया , अधशिासी अभियंता नगर निगम भोपाल-मध्य प्रदेश",
+      "personOrTitle": "श्री प्रदीप कुमार बिंडैया , अधशिासी अभियंता नगर निगम भोपाल-मध्य प्रदेश",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 74
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "2",
+      "fullText": "2-प्रदेश मीडिया प्रभारी पद -",
+      "personOrTitle": "प्रदेश मीडिया प्रभारी पद -",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 75
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "1",
+      "fullText": "1-श्री हरनाम सिंह प्रधानाध्यापक , शिक्षा विभाग| गाजियाबाद -उत्तरप्रदेश",
+      "personOrTitle": "श्री हरनाम सिंह प्रधानाध्यापक , शिक्षा विभाग| गाजियाबाद -उत्तरप्रदेश",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 76
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "2",
+      "fullText": "2-श्री मनोज कुमार सिंह , ए पी डबल्यूआई रेलवेडींग -राजस्थान प्रदेश",
+      "personOrTitle": "श्री मनोज कुमार सिंह , ए पी डबल्यूआई रेलवेडींग -राजस्थान प्रदेश",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 77
+      }
+    },
+    {
+      "section": "N",
+      "committeeCategory": "1-प्रदेश प्रवक्ता पद -",
+      "serialNumber": "3",
+      "fullText": "3-श्री नरेन्द्र पाल सिंह वरिष्ठ सहायक , लोक निर्माण विभाग - दिल्ली प्रदेश",
+      "personOrTitle": "श्री नरेन्द्र पाल सिंह वरिष्ठ सहायक , लोक निर्माण विभाग - दिल्ली प्रदेश",
+      "roleOrDepartment": "1-प्रदेश प्रवक्ता पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 78
+      }
+    },
+    {
+      "section": "O",
+      "committeeCategory": "3-प्रदेश विधि सलाहकार पद -",
+      "serialNumber": "1",
+      "fullText": "1-श्री कमल सिंह एडवोकेट, जनपद न्यायालय धौलपुर राजस्थान",
+      "personOrTitle": "श्री कमल सिंह एडवोकेट, जनपद न्यायालय धौलपुर राजस्थान",
+      "roleOrDepartment": "3-प्रदेश विधि सलाहकार पद -",
+      "phone": "",
+      "avatar": "/asset/photo/dholpur1.png",
+      "photoFile": "dholpur1.png",
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 80
+      }
+    },
+    {
+      "section": "O",
+      "committeeCategory": "3-प्रदेश विधि सलाहकार पद -",
+      "serialNumber": "2",
+      "fullText": "2-श्री अनूप सिंह जी (एडवोकेट) , सेवानिवृत्त MTNL मो. 9868132281 दिल्ली",
+      "personOrTitle": "श्री अनूप सिंह जी (एडवोकेट) , सेवानिवृत्त MTNL मो. 9868132281 दिल्ली",
+      "roleOrDepartment": "3-प्रदेश विधि सलाहकार पद -",
+      "phone": "9868132281",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 81
+      }
+    },
+    {
+      "section": "O",
+      "committeeCategory": "3-प्रदेश विधि सलाहकार पद -",
+      "serialNumber": "3",
+      "fullText": "3-श्री राजेन्द्र सिंह एडवोकेट , जिला न्यायालय एटा उप्र 7017701613",
+      "personOrTitle": "श्री राजेन्द्र सिंह एडवोकेट , जिला न्यायालय एटा उप्र 7017701613",
+      "roleOrDepartment": "3-प्रदेश विधि सलाहकार पद -",
+      "phone": "7017701613",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 82
+      }
+    },
+    {
+      "section": "O",
+      "committeeCategory": "3-प्रदेश विधि सलाहकार पद -",
+      "serialNumber": "4",
+      "fullText": "4-श्री विजय कुमार पढेरयिा एडवोकेट , जिला न्यायलय भोपाल",
+      "personOrTitle": "श्री विजय कुमार पढेरयिा एडवोकेट , जिला न्यायलय भोपाल",
+      "roleOrDepartment": "3-प्रदेश विधि सलाहकार पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 83
+      }
+    },
+    {
+      "section": "P",
+      "committeeCategory": "4- प्रदेश लेखा परीक्षक पद -",
+      "serialNumber": "1",
+      "fullText": "1-श्री राजेंद्र सिंह जी (CAG) भारत सरकार दिल्ली, मो. 8750703143",
+      "personOrTitle": "श्री राजेंद्र सिंह जी (CAG) भारत सरकार दिल्ली, मो. 8750703143",
+      "roleOrDepartment": "4- प्रदेश लेखा परीक्षक पद -",
+      "phone": "8750703143",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 85
+      }
+    },
+    {
+      "section": "P",
+      "committeeCategory": "4- प्रदेश लेखा परीक्षक पद -",
+      "serialNumber": "2",
+      "fullText": "2-श्री कीर्ति वर्मा, सहायक लेखाकार विद्युतअजमेर राजस्थान",
+      "personOrTitle": "श्री कीर्ति वर्मा, सहायक लेखाकार विद्युतअजमेर राजस्थान",
+      "roleOrDepartment": "4- प्रदेश लेखा परीक्षक पद -",
+      "phone": "",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 86
+      }
+    },
+    {
+      "section": "P",
+      "committeeCategory": "4- प्रदेश लेखा परीक्षक पद -",
+      "serialNumber": "3",
+      "fullText": "3- श्री शशिकांत राजपूत उप्र 6393774146",
+      "personOrTitle": "श्री शशिकांत राजपूत उप्र 6393774146",
+      "roleOrDepartment": "4- प्रदेश लेखा परीक्षक पद -",
+      "phone": "6393774146",
+      "avatar": "",
+      "photoFile": null,
+      "source": {
+        "file": "ALL INDIA_Alok_Designation_List_Hindi_.xlsx",
+        "sheet": "Data",
+        "row": 87
+      }
+    }
+  ],
+  "telanganaDelegates": [
+    {
+      "name": "श्री दिनेश लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "dinesh_tel.png",
+      "avatar": "/asset/photo/dinesh_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री जश लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "jash_tel.png",
+      "avatar": "/asset/photo/jash_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री नंद किशोर लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "nand_k_tel.png",
+      "avatar": "/asset/photo/nand_k_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री रमेश लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "ramesh_tel.png",
+      "avatar": "/asset/photo/ramesh_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री रणवीर लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "ranvir_tel.png",
+      "avatar": "/asset/photo/ranvir_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री शैल लोधी",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "shail_tel.png",
+      "avatar": "/asset/photo/shail_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    },
+    {
+      "name": "श्री टी.आर.बी. सिंह",
+      "role": "राज्य प्रतिनिधि / पदाधिकारी",
+      "state": "तेलंगाना",
+      "photo": "trbSingh_tel.png",
+      "avatar": "/asset/photo/trbSingh_tel.png",
+      "source": "Verified Telangana State Photographic Roster"
+    }
+  ],
+  "personalities": [
+    {
+      "id": "rani-avantibai",
+      "nameHindi": "वीरांगना रानी अवंतीबाई लोधी",
+      "title": "प्रथम महिला स्वतंत्रता सेनानी एवं रामगढ़ की वीरांगना",
+      "historicalRole": "1857 के प्रथम स्वतंत्रता संग्राम की अमर शहीद वीरांगना जिन्होंने मातृभूमि की रक्षा हेतु अंग्रेजों से अदम्य साहस के साथ युद्ध किया।",
+      "imagePath": "/asset/personalities/rani_avanti_bai.png",
+      "fileName": "rani_avanti_bai.png"
+    },
+    {
+      "id": "raja-hridayshah",
+      "nameHindi": "अमर शहीद राजा हृदयशाह लोधी",
+      "title": "हीरापुर रियासत के प्रतापी राजा एवं स्वतंत्रता सेनानी",
+      "historicalRole": "1842 के ऐतिहासिक बुंदेला विद्रोह के प्रमुख महानायक जिन्होंने अंग्रेजों के विरुद्ध क्रांति का बिगुल फूंका।",
+      "imagePath": "/asset/personalities/raja_hridayshah.png",
+      "fileName": "raja_hridayshah.png"
+    },
+    {
+      "id": "shaheed-gulab-singh",
+      "nameHindi": "अमर शहीद गुलाब सिंह लोधी",
+      "title": "लखनऊ रेजिडेंसी पर तिरंगा फहराने वाले अमर क्रांतिकारी",
+      "historicalRole": "झंडा सत्याग्रह के दौरान लखनऊ रेजिडेंसी पर ब्रिटिश हुकूमत की बंदूकों के सामने अदम्य साहस दिखाते हुए तिरंगा लहराया और वीरगति को प्राप्त हुए।",
+      "imagePath": "/asset/personalities/shaheed_gulab_singh.png",
+      "fileName": "shaheed_gulab_singh.png"
+    },
+    {
+      "id": "swami-brahmanand",
+      "nameHindi": "युगद्रष्टा स्वामी ब्रह्मानंद जी",
+      "title": "प्रथम संन्यासी सांसद, महान शिक्षाविद एवं समाज सुधारक",
+      "historicalRole": "लोकसभा के प्रथम संन्यासी सांसद, जिन्होंने उत्तर भारत में पिछड़े वर्ग एवं समाज के लिए शिक्षण संस्थानों की स्थापना कर शिक्षा की अलख जगाई।",
+      "imagePath": "/asset/personalities/swami_brahmanand.png",
+      "fileName": "swami_brahmanand.png"
+    }
+  ],
+  "posters2026": [
+    {
+      "id": "poster-1",
+      "name": "पोस्टर 1",
+      "path": "/asset/alokadhivationposter2026/poster1.jpeg",
+      "file": "poster1.jpeg"
+    },
+    {
+      "id": "poster-2",
+      "name": "पोस्टर 2",
+      "path": "/asset/alokadhivationposter2026/poster2.jpeg",
+      "file": "poster2.jpeg"
+    },
+    {
+      "id": "poster-3",
+      "name": "पोस्टर 3",
+      "path": "/asset/alokadhivationposter2026/poster3.jpeg",
+      "file": "poster3.jpeg"
+    },
+    {
+      "id": "poster-4",
+      "name": "पोस्टर 4",
+      "path": "/asset/alokadhivationposter2026/poster4.jpeg",
+      "file": "poster4.jpeg"
+    },
+    {
+      "id": "poster-5",
+      "name": "पोस्टर 5",
+      "path": "/asset/alokadhivationposter2026/poster5.jpeg",
+      "file": "poster5.jpeg"
+    }
+  ],
+  "galleryImages": [
+    {
+      "id": "gallery-01",
+      "caption": "संगठन बैठक एवं विचार गोष्ठी",
+      "path": "/asset/gallery/01.jpeg",
+      "file": "01.jpeg"
+    },
+    {
+      "id": "gallery-02",
+      "caption": "राष्ट्रीय अधिवेशन प्रतिनिधि सत्र",
+      "path": "/asset/gallery/02.jpeg",
+      "file": "02.jpeg"
+    },
+    {
+      "id": "gallery-03",
+      "caption": "सामाजिक प्रतिभा सम्मान समारोह",
+      "path": "/asset/gallery/03.jpeg",
+      "file": "03.jpeg"
+    },
+    {
+      "id": "gallery-04",
+      "caption": "राज्य कार्यकारिणी संवाद बैठक",
+      "path": "/asset/gallery/04.jpeg",
+      "file": "04.jpeg"
+    },
+    {
+      "id": "gallery-05",
+      "caption": "केंद्रीय पदाधिकारियों का अभिनंदन",
+      "path": "/asset/gallery/05.jpeg",
+      "file": "05.jpeg"
+    },
+    {
+      "id": "gallery-07",
+      "caption": "अखिल भारतीय प्रतिनिधि सम्मेलन",
+      "path": "/asset/gallery/07.jpeg",
+      "file": "07.jpeg"
+    }
+  ],
+  "websiteUiAssets": [
+    {
+      "id": "header-banner",
+      "name": "हेरिटेज बैनर स्ट्रिप",
+      "path": "/asset/topofwebsite/heritage_banner_strip.jpg",
+      "file": "heritage_banner_strip.jpg",
+      "dimensions": "1080x162"
+    },
+    {
+      "id": "hero-mockup-1",
+      "name": "वेबसाइट फ्रंट मुख्य बैनर",
+      "path": "/asset/topofwebsite/web_sit_front.png",
+      "file": "web_sit_front.png",
+      "dimensions": "1366x768"
+    },
+    {
+      "id": "hero-mockup-2",
+      "name": "वेबसाइट फ्रंट द्वितीयक बैनर",
+      "path": "/asset/topofwebsite/web_sit_front1.png",
+      "file": "web_sit_front1.png",
+      "dimensions": "1337x483"
+    }
+  ],
+  "archiveFiles": [
+    "alokadhivationposter2026.zip",
+    "listofmemberswithdesignation.zip",
+    "photo.zip",
+    "topofwebsite.zip"
+  ]
+}

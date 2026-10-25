@@ -180,7 +180,7 @@ export default function InquiryChatModal({
                 <span>•</span>
                 <span>
                   {localInquiry.createdAt
-                    ? new Date(localInquiry.createdAt).toLocaleString(isHi ? "hi-IN" : "en-US")
+                    ? new Date(localInquiry.createdAt).toLocaleString("en-IN")
                     : "Recent"}
                 </span>
               </div>
@@ -260,7 +260,7 @@ export default function InquiryChatModal({
                       {isHi ? "केंद्रीय सचिवालय उत्तर" : "Secretariat Official Reply"}
                     </span>
                     <span>
-                      {reply.sentAt ? new Date(reply.sentAt).toLocaleString(isHi ? "hi-IN" : "en-US") : ""}
+                      {reply.sentAt ? new Date(reply.sentAt).toLocaleString("en-IN") : ""}
                     </span>
                   </div>
                   {reply.subject && (

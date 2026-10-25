@@ -3387,7 +3387,7 @@ export default function AdminDashboard() {
                               <div key={idx} className="bg-white p-2 border border-[#E2DDD5] rounded-xs text-[11px] space-y-1">
                                 <div className="flex items-center justify-between text-[#64748B]">
                                   <span>By: {rep.adminEmail}</span>
-                                  <span>{rep.sentAt ? new Date(rep.sentAt).toLocaleString("hi-IN") : ""}</span>
+                                  <span>{rep.sentAt ? new Date(rep.sentAt).toLocaleString("en-IN") : ""}</span>
                                 </div>
                                 <div className="font-medium text-[#102F6B]">{rep.subject}</div>
                                 <p className="text-[#55657E] whitespace-pre-wrap">{rep.message}</p>
@@ -3432,7 +3432,7 @@ export default function AdminDashboard() {
                             .map((em) => (
                               <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
                                 <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
-                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("hi-IN") : ""}
+                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("en-IN") : ""}
                                 </td>
                                 <td className="py-2 px-3 font-medium text-[#1E293B] max-w-[180px] truncate">
                                   {em.from}
@@ -3570,7 +3570,7 @@ export default function AdminDashboard() {
                             .map((em) => (
                               <tr key={em._id || em.id} className="hover:bg-[#FFFCF5]">
                                 <td className="py-2 px-3 text-[#64748B] text-[11px] whitespace-nowrap">
-                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("hi-IN") : ""}
+                                  {em.createdAt ? new Date(em.createdAt).toLocaleString("en-IN") : ""}
                                 </td>
                                 <td className="py-2 px-3 font-mono text-[11px] text-[#1E293B] max-w-[160px] truncate">
                                   {Array.isArray(em.to) ? em.to.join(", ") : em.to}

@@ -55,7 +55,7 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">१. सत्यापित समाज डायरेक्टरी</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">1. सत्यापित समाज डायरेक्टरी</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
                           प्रत्येक नगर और राज्य में निवासरत स्वजातीय बंधुओं को आपस में जोड़ना, व्यावसायिक संबंध सुदृढ़ करना और आवश्यकता के समय एक-दूसरे का संबल बनना।
                         </p>
@@ -65,7 +65,7 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">२. युवा एवं कैरियर मार्गदर्शन</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">2. युवा एवं कैरियर मार्गदर्शन</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
                           प्रतियोगी परीक्षाओं (UPSC, State PSC), चिकित्सा, इंजीनियरिंग, तकनीकी, विधि और उद्योग जगत के अनुभवी मार्गदर्शकों से युवाओं को जोड़ना।
                         </p>
@@ -75,7 +75,7 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">३. गरिमामय वैवाहिक समन्वय</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">3. गरिमामय वैवाहिक समन्वय</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
                           उच्च शिक्षित समाज के युवक-युवतियों एवं संभ्रांत परिवारों के लिए एक विश्वसनीय, पारदर्शी एवं पारिवारिक समन्वय मंच उपलब्ध कराना।
                         </p>
@@ -85,7 +85,7 @@ export default function AboutPage() {
                   <StaggerItem>
                     <SubtleHoverCard>
                       <div className="p-4 rounded-lg bg-[#FFFCF5] border border-[#F0E5D5] h-full hover:border-[#102F6B] transition-colors">
-                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">४. सांस्कृतिक विरासत का संरक्षण</h3>
+                        <h3 className="font-bold text-[#102F6B] text-xs sm:text-sm mb-1">4. सांस्कृतिक विरासत का संरक्षण</h3>
                         <p className="text-xs text-[#64748B] leading-relaxed">
                           समाज के गौरवशाली इतिहास, अमर वीर बलिदानियों के आदर्शों का स्मरण और नई पीढ़ी में स्वाभिमान व संस्कारों का संचार करना।
                         </p>
