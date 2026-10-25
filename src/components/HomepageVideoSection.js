@@ -9,6 +9,7 @@ import { getYouTubeEmbedUrl } from "@/lib/youtube";
 export default function HomepageVideoSection({ initialVideos = [] }) {
   const [videos, setVideos] = useState(initialVideos);
   const [activeVideo, setActiveVideo] = useState(null);
+  const [autoPlayOnSelect, setAutoPlayOnSelect] = useState(false);
   const [modalVideo, setModalVideo] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -71,10 +72,12 @@ export default function HomepageVideoSection({ initialVideos = [] }) {
             <div className="relative w-full pb-[56.25%] bg-black">
               {currentVideo?.videoId ? (
                 <iframe
-                  src={getYouTubeEmbedUrl(currentVideo.videoId, { autoplay: false })}
+                  key={currentVideo.videoId}
+                  src={getYouTubeEmbedUrl(currentVideo.videoId, { autoplay: autoPlayOnSelect })}
                   title={currentVideo.title}
                   className="absolute inset-0 w-full h-full border-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 />
               ) : (
@@ -134,7 +137,10 @@ export default function HomepageVideoSection({ initialVideos = [] }) {
                 return (
                   <div
                     key={vid._id || idx}
-                    onClick={() => setActiveVideo(vid)}
+                    onClick={() => {
+                      setActiveVideo(vid);
+                      setAutoPlayOnSelect(true);
+                    }}
                     className={`p-3 flex items-start gap-2.5 transition-colors cursor-pointer group ${
                       isSelected
                         ? "bg-[#FFF0E2] border-l-3 border-[#F26A21]"

@@ -27,7 +27,7 @@ export function getYouTubeEmbedUrl(videoId, options = {}) {
   const id = extractYouTubeId(videoId) || videoId;
   if (!id) return "";
   const autoplay = options.autoplay ? 1 : 0;
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=${autoplay}&rel=0&modestbranding=1`;
+  return `https://www.youtube.com/embed/${id}?autoplay=${autoplay}&rel=0`;
 }
 
 export function getYouTubeThumbnail(videoId, quality = "hqdefault") {

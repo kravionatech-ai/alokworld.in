@@ -70,6 +70,7 @@ export default function VideoModal({ isOpen, onClose, video }) {
                   title={video.title || "Community Video"}
                   className="absolute inset-0 w-full h-full border-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 />
               ) : (
