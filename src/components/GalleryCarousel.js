@@ -139,7 +139,7 @@ export default function GalleryCarousel({ items = [], onVideoClick }) {
                     >
                       <div className="h-60 sm:h-72 overflow-hidden relative bg-[#FFFCF5] p-2 flex items-center justify-center border-b border-[#F0E5D5]">
                         <img
-                          src={img.imageUrl || (img.mediaType === "video" ? `https://img.youtube.com/vi/${img.videoId}/hqdefault.jpg` : "/asset/topofwebsite/web_sit_front1.png")}
+                          src={img.imageUrl || (img.mediaType === "video" ? `https://img.youtube.com/vi/${img.videoId}/hqdefault.jpg` : "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924154/alokworld/banners/web_sit_front1.png")}
                           alt={img.title || "समाज कार्यक्रम छायाचित्र"}
                           loading="lazy"
                           className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300 drop-shadow-xs"

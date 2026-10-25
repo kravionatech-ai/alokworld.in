@@ -24,7 +24,9 @@ export default function EventPopupModal({ isOpen, onClose, eventSettings }) {
   const eventDescription =
     eventSettings?.eventDescription ||
     "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।";
-  const eventImage = eventSettings?.eventImage || "/asset/alokadhivationposter2026/poster1.jpeg";
+  const eventImage =
+    eventSettings?.eventImage ||
+    "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg";
   const ctaText = eventSettings?.eventCtaText || "अधिवेशन विवरण एवं पंजीकरण →";
   const ctaLink = eventSettings?.eventCtaLink || "/mahasabha";
 

@@ -86,7 +86,7 @@ export default function HomepageVideoSection({ initialVideos = [] }) {
                   className="absolute inset-0 flex items-center justify-center cursor-pointer group"
                 >
                   <img
-                    src={currentVideo?.imageUrl || "/asset/alokadhivationposter2026/poster1.jpeg"}
+                    src={currentVideo?.imageUrl || "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg"}
                     alt={currentVideo?.title}
                     className="w-full h-full object-cover"
                   />

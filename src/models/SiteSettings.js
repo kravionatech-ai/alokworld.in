@@ -31,7 +31,7 @@ const SiteSettingsSchema = new mongoose.Schema(
       type: String,
       default: "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
     },
-    eventImage: { type: String, default: "/asset/alokadhivationposter2026/poster1.jpeg" },
+    eventImage: { type: String, default: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg" },
     eventCtaText: { type: String, default: "अधिवेशन विवरण एवं पंजीकरण →" },
     eventCtaLink: { type: String, default: "/mahasabha" },
 
@@ -72,7 +72,7 @@ const SiteSettingsSchema = new mongoose.Schema(
     seoDescription: { type: String, default: "अखिल भारतीय लोधी, लोधा, लोध समाज की आधिकारिक डिजिटल डायरेक्टरी - देश भर के सत्यापित समाज बंधुओं, वरिष्ठ मार्गदर्शकों एवं प्रबुद्ध अधिकारियों से जुड़ें।" },
     seoKeywords: { type: String, default: "समाज डायरेक्टरी, लोधी समाज, लोधा महासभा, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी, लोध समाज डायरेक्टरी" },
     siteUrl: { type: String, default: "https://alokworld.in" },
-    ogImage: { type: String, default: "/asset/topofwebsite/web_sit_front.png" },
+    ogImage: { type: String, default: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924154/alokworld/banners/web_sit_front.png" },
     organizationName: { type: String, default: "अखिल भारतीय लोधी, लोधा, लोध समाज महासभा" },
     googleVerificationId: { type: String, default: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg" },
     twitterHandle: { type: String, default: "@alokworldin" },

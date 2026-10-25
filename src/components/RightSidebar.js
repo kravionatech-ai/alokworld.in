@@ -8,7 +8,7 @@ const verifiedOfficeBearers = [
     role: "राष्ट्रीय अध्यक्ष",
     location: "उत्तर प्रदेश",
     phone: "+91 99999 00079",
-    avatar: "/asset/photo/Atibal Singh rajput.jpeg",
+    avatar: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924119/alokworld/leadership/Atibal_Singh_rajput.jpg",
   },
   {
     name: "सर्वश्री वीरवल सिंह",
@@ -22,21 +22,21 @@ const verifiedOfficeBearers = [
     role: "राष्ट्रीय कोषाध्यक्ष",
     location: "नई दिल्ली",
     phone: "+91 98734 83657",
-    avatar: "/asset/photo/Dr Omkar_Singh.jpg",
+    avatar: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924096/alokworld/leadership/Dr_Omkar_Singh.jpg",
   },
   {
     name: "डॉ. बद्री विशाल सिंह",
     role: "राष्ट्रीय संरक्षक (से०नि० महानिदेशक)",
     location: "लखनऊ, उत्तर प्रदेश",
     phone: "",
-    avatar: "/asset/photo/Dr Badri Vishal R Singh.jpg",
+    avatar: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924123/alokworld/leadership/Dr_Badri_Vishal_R_Singh.jpg",
   },
   {
     name: "इंजीनियर हर्ष राजपूत",
     role: "राष्ट्रीय प्रवक्ता",
     location: "भोपाल, मध्य प्रदेश",
     phone: "",
-    avatar: "/asset/photo/Er. Harsh Rajput.jpg",
+    avatar: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924125/alokworld/leadership/Er._Harsh_Rajput.jpg",
   },
 ];
 

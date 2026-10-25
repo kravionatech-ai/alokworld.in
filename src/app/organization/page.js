@@ -133,13 +133,13 @@ export default function OrganizationPage() {
   ];
 
   const telanganaTeam = [
-    { name: "श्री दिनेश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/dinesh_tel.png" },
-    { name: "श्री जश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/jash_tel.png" },
-    { name: "श्री नंद किशोर लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/nand_k_tel.png" },
-    { name: "श्री रमेश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/ramesh_tel.png" },
-    { name: "श्री रणवीर लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/ranvir_tel.png" },
-    { name: "श्री शैल लोधी", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/shail_tel.png" },
-    { name: "श्री टी.आर.बी. सिंह", role: "प्रांतीय प्रतिनिधि", photo: "/asset/photo/trbSingh_tel.png" },
+    { name: "श्री दिनेश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924122/alokworld/leadership/dinesh_tel.png" },
+    { name: "श्री जश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924129/alokworld/leadership/jash_tel.png" },
+    { name: "श्री नंद किशोर लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924132/alokworld/leadership/nand_k_tel.png" },
+    { name: "श्री रमेश लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924136/alokworld/leadership/ramesh_tel.png" },
+    { name: "श्री रणवीर लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924137/alokworld/leadership/ranvir_tel.png" },
+    { name: "श्री शैल लोधी", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924140/alokworld/leadership/shail_tel.png" },
+    { name: "श्री टी.आर.बी. सिंह", role: "प्रांतीय प्रतिनिधि", photo: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924142/alokworld/leadership/trbSingh_tel.png" },
   ];
 
   return (
@@ -422,7 +422,7 @@ export default function OrganizationPage() {
                 </div>
                 <div className="rounded-lg overflow-hidden border border-[#E9E2D8] bg-[#FFFCF5] p-2 flex items-center justify-center">
                   <img
-                    src="/asset/listofmemberswithdesignation/alok up.jpeg"
+                    src="https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924162/alokworld/documents/alok_up.jpg"
                     alt="अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ उत्तर प्रदेश कार्यकारिणी आधिकारिक विवरण"
                     className="w-full h-auto max-h-[600px] object-contain rounded drop-shadow-xs"
                     loading="lazy"

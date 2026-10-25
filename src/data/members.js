@@ -203,7 +203,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 99999 00079",
     "email": "",
-    "avatar": "/asset/photo/Atibal Singh rajput.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924119/alokworld/leadership/Atibal_Singh_rajput.jpg",
     "biography": "<p><strong>श्री अतिवल सिंह</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय अध्यक्ष</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari atival sinh",
@@ -334,7 +334,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 86305 64509",
     "email": "",
-    "avatar": "/asset/photo/Vinod Kumar Rajput.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924143/alokworld/leadership/Vinod_Kumar_Rajput.jpg",
     "biography": "<p><strong>श्री विनोद कुमार राजपूत</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय उपाध्यक्ष (उ०प्र०)</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari vinod kumar rajaput",
@@ -456,7 +456,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 93142 33249",
     "email": "",
-    "avatar": "/asset/photo/santosh rajasthan.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924139/alokworld/leadership/santosh_rajasthan.jpg",
     "biography": "<p><strong>श्री संतोष कुमार</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय उपाध्यक्ष (राजस्थान)</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari sntosh kumar",
@@ -702,7 +702,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 98734 83657",
     "email": "",
-    "avatar": "/asset/photo/Dr Omkar_Singh.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924096/alokworld/leadership/Dr_Omkar_Singh.jpg",
     "biography": "<p><strong>श्री डा० ओमकार सिंह नरवरिया</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय कोषाध्यक्ष</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari da omakar sinh naravariya",
@@ -767,7 +767,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 99174 70459",
     "email": "",
-    "avatar": "/asset/photo/vijay rajput aligar.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924143/alokworld/leadership/vijay_rajput_aligar.jpg",
     "biography": "<p><strong>श्री विजय राजपूत</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय महासचिव (उ०प्र०)</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari vijay rajaput",
@@ -1062,7 +1062,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 98181 10683",
     "email": "",
-    "avatar": "/asset/photo/kashiramJi.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924131/alokworld/leadership/kashiramJi.jpg",
     "biography": "<p><strong>श्री काशीराम वर्मा</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय महासचिव मुख्यालय</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari kashiram varama",
@@ -1241,7 +1241,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 98732 10106",
     "email": "",
-    "avatar": "/asset/photo/sangeeta singh.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924138/alokworld/leadership/sangeeta_singh.jpg",
     "biography": "<p><strong>श्रीमती संगीता कुमारी</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय संगठन सचिव (शेष भारत)</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "sharimati sngita kumari",
@@ -1414,7 +1414,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 94110 42597",
     "email": "",
-    "avatar": "/asset/photo/Seva Ram RAJPUT.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924140/alokworld/leadership/Seva_Ram_RAJPUT.jpg",
     "biography": "<p><strong>श्री रामसेवक राजपूत</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय मीडिया सलाहकार</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari ramasevak rajaput",
@@ -1534,7 +1534,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 86502 81137",
     "email": "",
-    "avatar": "/asset/photo/Ghanshyam Singh.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924126/alokworld/leadership/Ghanshyam_Singh.jpg",
     "biography": "<p><strong>श्री घन श्याम राजपूत</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय कार्यकारिणी सदस्य</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari ghan shayam rajaput",
@@ -1588,7 +1588,7 @@ export const membersData = [
     "pincode": "",
     "phone": "+91 85339 02455",
     "email": "",
-    "avatar": "/asset/photo/shanker.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924141/alokworld/leadership/shanker.png",
     "biography": "<p><strong>श्री कृपाशंकर वर्मा</strong> राष्ट्रीय कार्यकारिणी में <strong>राष्ट्रीय कार्यकारिणी सदस्य</strong> के रूप में समाज सेवा में समर्पित हैं।</p>",
     "tags": [
       "shari kripashnkar varama",
@@ -1642,7 +1642,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/Dr Badri Vishal R Singh.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924123/alokworld/leadership/Dr_Badri_Vishal_R_Singh.jpg",
     "biography": "<p><strong>डॉ. बद्री विशाल सिंह</strong> (राष्ट्रीय संरक्षक) — सेवानिवृत्त महानिदेशक, चिकित्सा एवं स्वास्थ्य उ०प्र०, प्रभारी महानिदेशक आयुष्मान योजना, उ०प्र०।</p>",
     "tags": [
       "da badari vishal sinh",
@@ -3817,7 +3817,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/dholpur1.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924121/alokworld/leadership/dholpur1.png",
     "biography": "<p><strong>श्री कमल सिंह</strong> (प्रदेश विधि सलाहकार (राजस्थान)) — वरिष्ठ अधिवक्ता, जनपद न्यायालय धौलपुर, राजस्थान।</p>",
     "tags": [
       "shari kamal sinh",
@@ -4163,7 +4163,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/Er. Harsh Rajput.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924125/alokworld/leadership/Er._Harsh_Rajput.jpg",
     "biography": "<p><strong>इं. हर्ष राजपूत</strong> (राष्ट्रीय कार्यकारिणी सदस्य एवं वरिष्ठ अभियंता) — वरिष्ठ अभियंता, अखिल भारतीय समाज संगठन।</p>",
     "tags": [
       "in harash rajaput",
@@ -4212,7 +4212,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/lakhan rajput bhopal.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924131/alokworld/leadership/lakhan_rajput_bhopal.jpg",
     "biography": "<p><strong>श्री लखन राजपूत</strong> (प्रदेश कार्यकारिणी पदाधिकारी (म०प्र०)) — वरिष्ठ समाज सेवी, मध्य प्रदेश संगठन।</p>",
     "tags": [
       "shari lakhan rajaput",
@@ -4261,7 +4261,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/rakesh lodhi.jpeg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924135/alokworld/leadership/rakesh_lodhi.jpg",
     "biography": "<p><strong>श्री राकेश लोधी</strong> (प्रदेश कार्यकारिणी पदाधिकारी) — समाज सेवी, समाज संगठन।</p>",
     "tags": [
       "shari rakesh lodhi",
@@ -4305,7 +4305,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/Saheb_Saral.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924138/alokworld/leadership/Saheb_Saral.jpg",
     "biography": "<p><strong>श्री साहेब सिंह \"सरल\"</strong> (वरिष्ठ साहित्यकार एवं समाज चिंतक) — साहित्यकार एवं चिंतक, आगरा, उत्तर प्रदेश।</p>",
     "tags": [
       "shari saheb sinh sarala",
@@ -4354,7 +4354,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/hakim singh.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924127/alokworld/leadership/hakim_singh.jpg",
     "biography": "<p><strong>श्री हाकिम सिंह</strong> (वरिष्ठ मार्गदर्शक एवं अधिकारी) — वरिष्ठ अधिकारी, ग्वालियर, मध्य प्रदेश।</p>",
     "tags": [
       "shari hakim sinh",
@@ -4405,7 +4405,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/hari ram singh.jpg",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924128/alokworld/leadership/hari_ram_singh.jpg",
     "biography": "<p><strong>श्री हरी राम सिंह</strong> (वरिष्ठ प्रशासनिक अधिकारी (से०नि०)) — प्रशासनिक अधिकारी (से०नि०), लखनऊ, उत्तर प्रदेश।</p>",
     "tags": [
       "shari hari ram sinh",
@@ -4457,7 +4457,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/trbSingh_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924142/alokworld/leadership/trbSingh_tel.png",
     "biography": "<p><strong>श्री टी. आर. बी. सिंह</strong> (प्रदेश प्रतिनिधि (तेलंगाना / दक्षिण भारत)) — वरिष्ठ समाज प्रमुख, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari ti ar bi sinh",
@@ -4503,7 +4503,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/dinesh_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924122/alokworld/leadership/dinesh_tel.png",
     "biography": "<p><strong>श्री दिनेश लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari dinesh lodhi",
@@ -4546,7 +4546,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/ramesh_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924136/alokworld/leadership/ramesh_tel.png",
     "biography": "<p><strong>श्री रमेश वर्मा</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari ramesh varama",
@@ -4589,7 +4589,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/shanker.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924141/alokworld/leadership/shanker.png",
     "biography": "<p><strong>श्री शंकर लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari shnkar lodhi",
@@ -4632,7 +4632,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/ranvir_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924137/alokworld/leadership/ranvir_tel.png",
     "biography": "<p><strong>श्री रणवीर सिंह लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari ranavir sinh lodhi",
@@ -4679,7 +4679,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/shail_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924140/alokworld/leadership/shail_tel.png",
     "biography": "<p><strong>श्री शैलेंद्र सिंह लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari shailendar sinh lodhi",
@@ -4726,7 +4726,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/nand_k_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924132/alokworld/leadership/nand_k_tel.png",
     "biography": "<p><strong>श्री नंद किशोर लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari nnd kishor lodhi",
@@ -4770,7 +4770,7 @@ export const membersData = [
     "pincode": "",
     "phone": "",
     "email": "",
-    "avatar": "/asset/photo/jash_tel.png",
+    "avatar": "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924129/alokworld/leadership/jash_tel.png",
     "biography": "<p><strong>श्री जशवंत सिंह लोधी</strong> (प्रदेश पदाधिकारी (तेलंगाना)) — समाज सेवी, तेलंगाना राज्य इकाई।</p>",
     "tags": [
       "shari jashavnt sinh lodhi",

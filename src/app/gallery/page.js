@@ -267,7 +267,7 @@ function GalleryContent() {
                         {/* Media Thumbnail Container */}
                         <div className="h-60 sm:h-64 overflow-hidden bg-[#FFFCF5] relative p-1.5 flex items-center justify-center border-b border-[#F0E5D5]">
                           <img
-                            src={item.imageUrl || (isVideo ? `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg` : "/asset/topofwebsite/web_sit_front1.png")}
+                            src={item.imageUrl || (isVideo ? `https://img.youtube.com/vi/${item.videoId}/hqdefault.jpg` : "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924154/alokworld/banners/web_sit_front1.png")}
                             alt={item.title || "Samaj Media Gallery"}
                             loading="lazy"
                             decoding="async"

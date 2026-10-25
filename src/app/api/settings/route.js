@@ -14,7 +14,7 @@ const defaultSettings = {
   heroSubtitle: "देश भर के समाज बंधुओं, वरिष्ठ मार्गदर्शकों, चिकित्सकों, अभियंताओं, प्रशासनिक अधिकारियों, अधिवक्ताओं एवं युवाओं को जोड़ने वाला डिजिटल मंच।",
   heroCtaText: "सदस्य डायरेक्टरी देखें →",
   heroCtaLink: "/directory",
-  heroImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+  heroImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
 
   // Event & Live Countdown Management (2 Nov Live Target)
   eventEnabled: true,
@@ -28,7 +28,7 @@ const defaultSettings = {
   eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
   eventDescription:
     "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-  eventImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+  eventImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
   eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
   eventCtaLink: "/mahasabha",
 
@@ -48,7 +48,7 @@ const defaultSettings = {
   seoDescription: "अखिल भारतीय लोधी, लोधा, लोध समाज की आधिकारिक डिजिटल डायरेक्टरी - देश भर के सत्यापित समाज बंधुओं, वरिष्ठ मार्गदर्शकों एवं प्रबुद्ध अधिकारियों से जुड़ें।",
   seoKeywords: "समाज डायरेक्टरी, लोधी समाज, लोधा महासभा, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी, लोध समाज डायरेक्टरी",
   siteUrl: "https://alokworld.in",
-  ogImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+  ogImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
   organizationName: "अखिल भारतीय लोधी, लोधा, लोध समाज महासभा",
   googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
   twitterHandle: "@alokworldin",

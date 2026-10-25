@@ -251,7 +251,7 @@ export default function AdminDashboard() {
     eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
     eventDescription:
       "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-    eventImage: "/asset/alokadhivationposter2026/poster1.jpeg",
+    eventImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
     eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
     eventCtaLink: "/mahasabha",
     sidebarNoticeTitle: "",
@@ -3077,7 +3077,7 @@ export default function AdminDashboard() {
                         <div>
                           <div className="h-36 bg-[#FAF8F3] border-b border-[#E2DDD5] overflow-hidden relative">
                             <img
-                              src={it.imageUrl || (isVid ? `https://img.youtube.com/vi/${it.videoId}/hqdefault.jpg` : "/asset/topofwebsite/web_sit_front1.png")}
+                              src={it.imageUrl || (isVid ? `https://img.youtube.com/vi/${it.videoId}/hqdefault.jpg` : "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924154/alokworld/banners/web_sit_front1.png")}
                               alt=""
                               className="w-full h-full object-cover"
                             />

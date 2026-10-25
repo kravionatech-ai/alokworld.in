@@ -40,3 +40,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Media & Heavy Asset Archives (Hosted on Cloudinary CDN - Never push to GitHub)
+public/asset/archives/
+public/asset/photo/
+public/asset/gallery/
+public/asset/alokadhivationposter2026/
+public/asset/topofwebsite/
+public/asset/personalities/
+public/asset/listofmemberswithdesignation/
+public/asset/*.zip
+public/asset/*.pdf
+public/asset/*.jpeg
+public/asset/*.jpg
+public/asset/*.png
+

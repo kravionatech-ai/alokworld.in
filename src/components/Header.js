@@ -206,7 +206,7 @@ export default function Header({ siteName, settings: propSettings }) {
               title="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
             >
               <img
-                src="/asset/topofwebsite/heritage_banner_strip.jpg"
+                src="https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/banners/heritage_banner_strip.jpg"
                 alt="अखिल भारतीय समाज महापुरुष एवं राष्ट्रीय प्रतीक — लोधेश्वर भगवान, वीरांगना अवंतीबाई, स्वामी ब्रह्मानंद, स्वामी केशवानंद, राजा हिरदेशाह एवं शहीद गुलाब सिंह"
                 width={1080}
                 height={162}
