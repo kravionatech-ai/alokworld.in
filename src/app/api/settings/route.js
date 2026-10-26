@@ -16,55 +16,21 @@ const defaultSettings = {
   heroCtaLink: "/directory",
   heroImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
 
-  // Event & Live Countdown Management (2 Nov Live Target)
-  eventEnabled: true,
-  eventTopBarEnabled: true,
-  eventPopupEnabled: true,
-  eventTitle: "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026",
-  eventSubtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का ऐतिहासिक राष्ट्रीय सम्मेलन",
-  eventBadge: "विशेष आगामी कार्यक्रम",
-  eventDate: "2026-11-02T10:00:00",
-  eventLocation: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
-  eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
-  eventDescription:
-    "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-  eventImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-  eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
-  eventCtaLink: "/mahasabha",
-  eventsList: [
-    {
-      id: "event-2nov-live",
-      title: "वेबसाइट लाइव — 2 नवंबर 2026",
-      subtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक) का आधिकारिक राष्ट्रीय डिजिटल पोर्टल लोकार्पण",
-      badge: "वेबसाइट लाइव उल्टी गिनती",
-      date: "2026-11-02T10:00:00",
-      location: "नई दिल्ली (केंद्रीय सचिवालय)",
-      description: "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-      image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-      countdownLabel: "वेबसाइट लाइव होने में शेष समय",
-      ctaText: "मुख्य पृष्ठ पर जाएं →",
-      ctaLink: "/",
-      isFeatured: true,
-      status: "upcoming",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: "event-national-convention",
-      title: "आलोक राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह 2026",
-      subtitle: "समस्त राज्यों के लोधी-लोधा अधिकारी-कर्मचारी बंधुओं का वृहद समागम",
-      badge: "राष्ट्रीय अधिवेशन",
-      date: "2026-11-02T11:00:00",
-      location: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
-      description: "राष्ट्रीय कार्यसमिति बैठक, सामाजिक सुधार परिचर्चा, मेधावी छात्र सम्मान एवं सांस्कृतिक सम्मेलन। समस्त प्रांतीय अध्यक्ष, सचिव एवं पदाधिकारी सहभागिता करेंगे।",
-      image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924151/alokworld/posters/poster2.jpg",
-      countdownLabel: "महासम्मेलन शुभारंभ उल्टी गिनती",
-      ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
-      ctaLink: "/mahasabha",
-      isFeatured: false,
-      status: "upcoming",
-      createdAt: new Date().toISOString(),
-    },
-  ],
+  // Event & Live Countdown Management (Disabled & Empty by default until user creates/activates one)
+  eventEnabled: false,
+  eventTopBarEnabled: false,
+  eventPopupEnabled: false,
+  eventTitle: "",
+  eventSubtitle: "",
+  eventBadge: "",
+  eventDate: "",
+  eventLocation: "",
+  eventCountdownLabel: "",
+  eventDescription: "",
+  eventImage: "",
+  eventCtaText: "",
+  eventCtaLink: "",
+  eventsList: [],
 
   sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
   sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
@@ -104,9 +70,7 @@ export async function GET() {
       if (!settings) {
         settings = await SiteSettings.create(defaultSettings);
       }
-      const eventsList = (settings.eventsList && settings.eventsList.length > 0)
-        ? settings.eventsList
-        : defaultSettings.eventsList;
+      const eventsList = Array.isArray(settings.eventsList) ? settings.eventsList : [];
       return NextResponse.json({ settings: { ...defaultSettings, ...settings, eventsList } });
     }
     return NextResponse.json({ settings: defaultSettings });

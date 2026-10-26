@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <title>alokworld.in — Full Site Mindmap & System Architecture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700;800;900&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 9mm 12mm 9mm 12mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Noto Sans Devanagari', 'Inter', -apple-system, sans-serif;
+      background-color: #FFFCF5;
+      color: #263449;
+      font-size: 11px;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      page-break-after: always;
+      position: relative;
+      min-height: 190mm;
+      padding-bottom: 8mm;
+    }
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Header Banner */
+    .header-banner {
+      background: linear-gradient(135deg, #091D42 0%, #102F6B 60%, #163A70 100%);
+      color: #FFFFFF;
+      padding: 13px 20px;
+      border-radius: 8px;
+      border-bottom: 3.5px solid #F26A21;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(16, 47, 107, 0.15);
+    }
+    .header-left h1 {
+      font-size: 18.5px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      color: #FFFFFF;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-left p {
+      font-size: 11px;
+      color: #CBD5E1;
+      font-weight: 500;
+    }
+    .header-badge {
+      background-color: #F26A21;
+      color: #FFFFFF;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      box-shadow: 0 2px 6px rgba(242, 106, 33, 0.4);
+      text-align: right;
+    }
+    .header-badge span {
+      display: block;
+      font-size: 8.5px;
+      color: #FFE5D4;
+      font-weight: 600;
+    }
+
+    /* Grid & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .grid-4 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border: 1px solid #E2DDD5;
+      border-radius: 7px;
+      padding: 11px 13px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    .card-primary {
+      border-left: 4px solid #102F6B;
+    }
+    .card-saffron {
+      border-left: 4px solid #F26A21;
+    }
+    .card-emerald {
+      border-left: 4px solid #059669;
+    }
+    .card-purple {
+      border-left: 4px solid #7C3AED;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #F0E5D5;
+      padding-bottom: 5px;
+      margin-bottom: 7px;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #102F6B;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-badge {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background-color: #FAF8F3;
+      color: #55657E;
+      border: 1px solid #E2DDD5;
+      font-family: monospace;
+    }
+
+    /* Mindmap Visual Hierarchy Tree */
+    .mindmap-root {
+      background: #102F6B;
+      color: white;
+      padding: 9px 16px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 12px;
+      border-bottom: 3px solid #F26A21;
+    }
+    .mindmap-branches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      position: relative;
+    }
+    .branch-card {
+      background: #FFFFFF;
+      border: 1px solid #E2DDD5;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .branch-head {
+      padding: 7px 10px;
+      font-weight: 800;
+      font-size: 10.5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .branch-head.saffron {
+      background: #FFF0E2;
+      color: #C04907;
+      border-bottom: 2px solid #F26A21;
+    }
+    .branch-head.navy {
+      background: #EEF4FF;
+      color: #102F6B;
+      border-bottom: 2px solid #102F6B;
+    }
+    .branch-head.emerald {
+      background: #ECFDF5;
+      color: #065F46;
+      border-bottom: 2px solid #059669;
+    }
+    .branch-head.purple {
+      background: #F5F3FF;
+      color: #5B21B6;
+      border-bottom: 2px solid #7C3AED;
+    }
+
+    .node-list {
+      list-style: none;
+      padding: 7px 9px;
+    }
+    .node-list li {
+      padding: 3.5px 0;
+      border-bottom: 1px dashed #F0E5D5;
+      font-size: 9.5px;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .node-list li:last-child {
+      border-bottom: none;
+    }
+    .node-bullet {
+      color: #F26A21;
+      font-weight: bold;
+      font-size: 9px;
+      line-height: 1.4;
+    }
+    .node-title {
+      font-weight: 700;
+      color: #102F6B;
+    }
+    .node-desc {
+      color: #64748B;
+      font-size: 9px;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      background: #FFFFFF;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #E2DDD5;
+    }
+    th {
+      background-color: #102F6B;
+      color: #FFFFFF;
+      text-align: left;
+      padding: 5.5px 9px;
+      font-weight: 700;
+      font-size: 9.5px;
+    }
+    td {
+      padding: 4.5px 9px;
+      border-bottom: 1px solid #F0E5D5;
+      color: #263449;
+    }
+    tr:nth-child(even) td {
+      background-color: #FAF8F3;
+    }
+    .tag {
+      display: inline-block;
+      padding: 1.5px 5px;
+      border-radius: 3px;
+      font-size: 8.5px;
+      font-weight: 700;
+      font-family: monospace;
+    }
+    .tag-blue { background: #EEF4FF; color: #102F6B; border: 1px solid #BFDBFE; }
+    .tag-saffron { background: #FFF0E2; color: #C04907; border: 1px solid #FED7AA; }
+    .tag-green { background: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .tag-purple { background: #F5F3FF; color: #6D28D9; border: 1px solid #DDD6FE; }
+
+    /* Palette bar */
+    .palette-strip {
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 8px;
+      border: 1px solid #E2DDD5;
+    }
+    .swatch {
+      flex: 1;
+      padding: 5px 8px;
+      color: white;
+      font-size: 8px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Footer stamp */
+    .footer-stamp {
+      position: absolute;
+      bottom: 1.5mm;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5px;
+      color: #8C99A8;
+      border-top: 1px solid #E9E2D8;
+      padding-top: 2.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 1: EXECUTIVE OVERVIEW & COMPLETE HIGH-LEVEL MINDMAP                    -->
+  <!-- ========================================================================= -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="header-left">
+        <h1><span>🏛️</span> alokworld.in — आधिकारिक डिजिटल महा-मानचित्र (Full Site Mindmap)</h1>
+        <p>अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी (आलोक) संघ • राष्ट्रीय सामुदायिक पोर्टल एवं प्रशासनिक निर्देशिका</p>
+      </div>
+      <div class="header-badge">
+        <span>आर्किटेक्चर संस्करण</span>
+        Next.js 16 • Turbopack • MongoDB
+      </div>
+    </div>
+
+    <div class="mindmap-root">
+      🌐 ALOKWORLD.IN — संपूर्ण पोर्टल सिस्टम ट्री (System Hierarchy Tree)
+    </div>
+
+    <div class="mindmap-branches">
+      <!-- Branch 1: Public Portal -->
+      <div class="branch-card">
+        <div class="branch-head navy">
+          <span>👥</span> 1. सार्वजनिक नागरिक मंच (Public)
+        </div>
+        <ul class="node-list">
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">होम (/):</span>
+              <span class="node-desc">हीरो स्लाइडर, लाइव उल्टी गिनती टिकर, स्पॉटलाइट, वीडियो</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">डायरेक्टरी (/directory):</span>
+              <span class="node-desc">4,800+ सदस्य, पद/राज्य/शहर फ़िल्टर, प्रोफाइल पेज</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">इतिहास (/history):</span>
+              <span class="node-desc">प्राचीन गौरव, 1857 संग्राम, सामाजिक त्याग व धरोहर</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">विभूतियां (/personalities):</span>
+              <span class="node-desc">रानी अवंतीबाई, शहीद गुलाब सिंह, स्वामी ब्रह्मानंद जी</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">महासभा (/mahasabha):</span>
+              <span class="node-desc">2026 राष्ट्रीय संकल्प, दहेज मुक्ति, छात्रावास निर्माण</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">संगठन (/organization):</span>
+              <span class="node-desc">संरक्षक मंडल, 27 राष्ट्रीय पदाधिकारी, प्रांतीय विंग्स</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">दीर्घा (/gallery):</span>
+              <span class="node-desc">राष्ट्रीय अधिवेशन तस्वीरें, यूट्यूब वीडियो मोडल</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">सचिवालय संपर्क (/contact):</span>
+              <span class="node-desc">पूछताछ प्रपत्र, स्वचालित Resend ईमेल पुष्टिकरण</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Branch 2: Admin Control Center -->
+      <div class="branch-card">
+        <div class="branch-head saffron">
+          <span>🔐</span> 2. प्रशासनिक नियंत्रण (Admin /admin)
+        </div>
+        <ul class="node-list">
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">स्वच्छ पाथ रूटिंग:</span>
+              <span class="node-desc">/admin/overview, /admin/events, /admin/messages</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">कार्यक्रम व उल्टी गिनती:</span>
+              <span class="node-desc">➕ नया इवेंट मोडल, पोस्टर अपलोड, 2 Nov प्रीसेट</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">ईमेल केंद्र (Messages):</span>
+              <span class="node-desc">📥 इनबॉक्स (amar47kumar47...), 📤 आउटबॉक्स, 💬 चैट</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">सदस्य प्रबंधन:</span>
+              <span class="node-desc">डायरेक्टरी संपादन, नया सदस्य पंजीकरण, एक्सेल एक्सपोर्ट</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">CMS संपादक (/pages):</span>
+              <span class="node-desc">TipTap Rich Text (About/History/Mahasabha/Org)</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">गैलरी व मीडिया:</span>
+              <span class="node-desc">Cloudinary इमेज अपलोड, यूट्यूब वीडियो प्रबंधन</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">सुरक्षा व प्रमाणीकरण:</span>
+              <span class="node-desc">JWT HttpOnly, bcrypt पासवर्ड हैश, Audit Logging</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">मेंटेनेंस व एसईओ:</span>
+              <span class="node-desc">लॉकडाउन मोड, OpenGraph, sitemap.xml, robots.txt</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Branch 3: Backend & Database -->
+      <div class="branch-card">
+        <div class="branch-head emerald">
+          <span>⚙️</span> 3. बैकएंड व डेटाबेस (APIs & DB)
+        </div>
+        <ul class="node-list">
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">MongoDB मॉडल्स:</span>
+              <span class="node-desc">SiteSettings, Member, Contact, EmailLog, PageContent</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">REST API रूट्स (18+):</span>
+              <span class="node-desc">/api/events, /api/members, /api/settings, /api/gallery</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">ईमेल पाइपलाइन APIs:</span>
+              <span class="node-desc">/api/admin/emails (compose, notify, reply, retry)</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">ऑडिट व अनुपालन:</span>
+              <span class="node-desc">/api/audit-logs (प्रत्येक प्रशासनिक क्रिया का रिकॉर्ड)</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">अपलोड गेटवे:</span>
+              <span class="node-desc">/api/upload (MIME सत्यापन, 10MB आकार सीमा)</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">वेबहूक हैंडलर्स:</span>
+              <span class="node-desc">/api/webhooks/resend (डिलीवरी टेलीमेट्री व बाउंस)</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Branch 4: Cloud Infrastructure -->
+      <div class="branch-card">
+        <div class="branch-head purple">
+          <span>☁️</span> 4. क्लाउड व इन्फ्रास्ट्रक्चर (Cloud)
+        </div>
+        <ul class="node-list">
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">Next.js 16 App Router:</span>
+              <span class="node-desc">Turbopack इंजन, Partial Prerendering, 52 स्टैटिक रूट्स</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">Cloudinary CDN:</span>
+              <span class="node-desc">alokworld_posters, alokworld_members, alokworld_hero</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">Resend Email Delivery:</span>
+              <span class="node-desc">DKIM/SPF सत्यापित, द्वि-स्तरीय स्वचालित ईमेल अधिसूचना</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">सुरक्षा हेडर नीति:</span>
+              <span class="node-desc">HSTS, X-Frame-Options, XSS Protection, CSP</span>
+            </div>
+          </li>
+          <li>
+            <span class="node-bullet">▪</span>
+            <div>
+              <span class="node-title">वेबसाइट लक्ष्य तिथि:</span>
+              <span class="node-desc">2 नवंबर 2026 — राष्ट्रव्यापी औपचारिक लोकार्पण</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Design Palette Strip -->
+    <div style="margin-top: 12px;">
+      <div style="font-weight: 800; font-size: 10px; color: #102F6B; margin-bottom: 3px;">🎨 आधिकारिक ब्रांड पहचान व रंग संयोजन (Core Brand Color System)</div>
+      <div class="palette-strip">
+        <div class="swatch" style="background:#102F6B;">Primary Navy #102F6B</div>
+        <div class="swatch" style="background:#091D42;">Midnight #091D42</div>
+        <div class="swatch" style="background:#F26A21;">Kesariya #F26A21</div>
+        <div class="swatch" style="background:#FFFCF5; color:#263449;">Canvas #FFFCF5</div>
+        <div class="swatch" style="background:#059669;">Success #059669</div>
+        <div class="swatch" style="background:#263449;">Text Dark #263449</div>
+      </div>
+    </div>
+
+    <div class="footer-stamp">
+      <span>alokworld.in • केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली</span>
+      <span>पृष्ठ 1 / 3 — सिस्टम महा-मानचित्र (Master Mindmap)</span>
+      <span>मुद्रण दिनांक: 26 अक्टूबर 2026</span>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 2: PUBLIC CITIZEN PORTAL DETAILED BLUEPRINT                           -->
+  <!-- ========================================================================= -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="header-left">
+        <h1><span>🌐</span> सार्वजनिक नागरिक मंच — विस्तृत पृष्ठ निर्देशिका (Public Portal Map)</h1>
+        <p>देशभर के समाज बंधुओं, अधिकारियों, कर्मचारियों एवं प्रबुद्धजनों हेतु एकीकृत डिजिटल सेवाएं</p>
+      </div>
+      <div class="header-badge">
+        <span>पब्लिक रूट्स</span>
+        9 प्रमुख पृष्ठ एवं मॉडल्स
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Public Section 1 -->
+      <div class="card card-primary space-y-2">
+        <div class="card-header">
+          <span class="card-title"><span>🏠</span> 1. मुख्य होम पृष्ठ (Landing Home - /)</span>
+          <span class="card-badge tag-blue">/</span>
+        </div>
+        <table style="margin-bottom: 4px;">
+          <tr><th>घटक (Component)</th><th>कार्यप्रणाली एवं विवरण</th></tr>
+          <tr><td><b>शीर्ष उल्टी गिनती पट्टी</b></td><td>2 नवंबर 2026 तक की लाइव टिकर उल्टी गिनती (TopEventCountdownBar)</td></tr>
+          <tr><td><b>आगंतुक पॉपअप मोडल</b></td><td>प्रथम दैनिक आगंतुकों को पोस्टर व औपचारिक आमंत्रण (EventPopupModal)</td></tr>
+          <tr><td><b>डायनामिक सूचना स्लाइडर</b></td><td>महत्वपूर्ण राष्ट्रीय अपडेट्स व महाधिवेशन अलर्ट्स (AnnouncementSlider)</td></tr>
+          <tr><td><b>हीरो स्लाइडर व पोस्टर्स</b></td><td>Cloudinary होस्टेड आधिकारिक पोस्टर्स एवं डायरेक्टरी CTA</td></tr>
+          <tr><td><b>त्वरित 6 स्तंभ ग्रिड</b></td><td>डायरेक्टरी, इतिहास, विभूतियां, महासभा, संगठन व गैलरी का सीधा लिंक</td></tr>
+          <tr><td><b>स्पॉटलाइट सदस्य</b></td><td>वरिष्ठ चिकित्सकों, प्रशासनिक अधिकारियों व मार्गदर्शकों के 12 कार्ड्स</td></tr>
+          <tr><td><b>होमपेज वीडियो शोकेस</b></td><td>यूट्यूब राष्ट्रीय महाधिवेशन उद्बोधन एवं सांस्कृतिक वीडियो</td></tr>
+        </table>
+      </div>
+
+      <!-- Public Section 2 -->
+      <div class="card card-saffron space-y-2">
+        <div class="card-header">
+          <span class="card-title"><span>👥</span> 2. राष्ट्रीय सदस्य डायरेक्टरी (/directory)</span>
+          <span class="card-badge tag-saffron">/directory & /member/[id]</span>
+        </div>
+        <table>
+          <tr><th>सुविधा (Feature)</th><th>विवरण व तकनीकी क्षमता</th></tr>
+          <tr><td><b>4,800+ प्रामाणिक सदस्य</b></td><td>अखिल भारतीय स्तर पर सत्यापित अधिकारियों व कर्मचारियों का संग्रह</td></tr>
+          <tr><td><b>बहुस्तरीय लाइव सर्च</b></td><td>नाम, पदनाम, कार्यक्षेत्र, शहर व राज्य द्वारा तत्काल खोज</td></tr>
+          <tr><td><b>विशिष्ट संवर्ग फ़िल्टर</b></td><td>प्रशासनिक (IAS/IPS), चिकित्सा, अभियांत्रिकी, शिक्षा, विधिक, व्यापार</td></tr>
+          <tr><td><b>दोहरा प्रदर्शन व्यू</b></td><td>आधुनिक कार्ड व्यू (Card Grid) एवं त्वरित तालिका व्यू (Table View)</td></tr>
+          <tr><td><b>व्यक्तिगत प्रोफाइल पेज</b></td><td>/member/[id] पर पूर्ण बायोडाटा, सेवा संवर्ग व सम्पर्क साधन</td></tr>
+          <tr><td><b>डेटा गोपनीयता नीति</b></td><td>अनाधिकृत स्क्रैपिंग से सुरक्षित, प्रामाणिक समुदाय पहचान</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top: 10px;">
+      <!-- Public Section 3: History & Personalities -->
+      <div class="card card-emerald">
+        <div class="card-header">
+          <span class="card-title"><span>📜</span> 3. इतिहास व विभूतियां</span>
+          <span class="card-badge tag-green">/history & /personalities</span>
+        </div>
+        <ul class="node-list">
+          <li><span class="node-bullet">▪</span><b>गौरवशाली इतिहास:</b> वैदिक काल, मध्यकालीन वीरता व 1857 स्वतंत्रता संग्राम का आलेख।</li>
+          <li><span class="node-bullet">▪</span><b>वीरांगना रानी अवंतीबाई:</b> रामगढ़ रियासत की अमर क्रांतिगाथा व शौर्य।</li>
+          <li><span class="node-bullet">▪</span><b>अमर शहीद गुलाब सिंह:</b> लखनऊ रेजीडेंसी पर तिरंगा फहराने वाले अमर बलिदानी।</li>
+          <li><span class="node-bullet">▪</span><b>स्वामी ब्रह्मानंद जी:</b> स्वतंत्रता सेनानी, सांसद एवं महान शिक्षाविद्।</li>
+          <li><span class="node-bullet">▪</span><b>राजा हृदयशाह लोधी:</b> 1842 बुंदेला विद्रोह के प्रमुख जननायक।</li>
+        </ul>
+      </div>
+
+      <!-- Public Section 4: Mahasabha & Organization -->
+      <div class="card card-purple">
+        <div class="card-header">
+          <span class="card-title"><span>⚖️</span> 4. महासभा व संगठन</span>
+          <span class="card-badge tag-purple">/mahasabha & /organization</span>
+        </div>
+        <ul class="node-list">
+          <li><span class="node-bullet">▪</span><b>राष्ट्रीय संकल्प 2026:</b> समाज डायरेक्टरी, मेधावी छात्र सम्मान मिशन।</li>
+          <li><span class="node-bullet">▪</span><b>सामाजिक सुधार:</b> दहेज प्रथा, मृत्युभोज व फिजूलखर्ची निवारण अभियान।</li>
+          <li><span class="node-bullet">▪</span><b>UPSC छात्र छात्रावास:</b> दिल्ली व राज्यों में प्रतियोगी छात्रों हेतु सुविधा।</li>
+          <li><span class="node-bullet">▪</span><b>केंद्रीय संरक्षक मंडल:</b> डॉ. बद्री विशाल सिंह (से०नि० महानिदेशक)।</li>
+          <li><span class="node-bullet">▪</span><b>केंद्रीय परिषद:</b> सर्वश्री अतिवल सिंह (राष्ट्रीय अध्यक्ष) सहित 27 पदाधिकारी।</li>
+        </ul>
+      </div>
+
+      <!-- Public Section 5: Gallery & Contact -->
+      <div class="card card-primary">
+        <div class="card-header">
+          <span class="card-title"><span>📸</span> 5. दीर्घा व सचिवालय संपर्क</span>
+          <span class="card-badge tag-blue">/gallery & /contact</span>
+        </div>
+        <ul class="node-list">
+          <li><span class="node-bullet">▪</span><b>छायाचित्र दीर्घा:</b> राष्ट्रीय अधिवेशनों व सम्मान समारोहों की तस्वीरें।</li>
+          <li><span class="node-bullet">▪</span><b>वीडियो दीर्घा:</b> यूट्यूब वीडियो एम्बेड प्लेयर व फुलस्क्रीन मोडल।</li>
+          <li><span class="node-bullet">▪</span><b>संपर्क प्रपत्र (/contact):</b> नाम, फोन, ईमेल, विषय व विस्तृत संदेश।</li>
+          <li><span class="node-bullet">▪</span><b>डेटाबेस सिंक:</b> 'contacts' व 'emaillogs' में एक साथ सहेजा जाना।</li>
+          <li><span class="node-bullet">▪</span><b>स्वचालित पावती:</b> प्रेषक को ईमेल पर तत्काल पुष्टि पत्र प्रेषित होना।</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-stamp">
+      <span>alokworld.in • केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली</span>
+      <span>पृष्ठ 2 / 3 — नागरिक मंच विवरण (Public Portal Map)</span>
+      <span>मुद्रण दिनांक: 26 अक्टूबर 2026</span>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- PAGE 3: CENTRAL ADMIN PANEL & BACKEND ARCHITECTURE                         -->
+  <!-- ========================================================================= -->
+  <div class="page">
+    <div class="header-banner">
+      <div class="header-left">
+        <h1><span>🔐</span> केंद्रीय प्रशासनिक नियंत्रण कक्ष (Central Admin Panel Architecture)</h1>
+        <p>क्लीन पाथ रूटिंग, ईमेल संचार हब, इवेंट क्रिएटर, पोस्टर अपलोड एवं सीएमएस संपादक</p>
+      </div>
+      <div class="header-badge">
+        <span>एडमिन रूट्स</span>
+        12 स्वच्छ पाथ्स (/admin/*)
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- Admin Matrix Table -->
+      <div class="card card-saffron">
+        <div class="card-header">
+          <span class="card-title"><span>🧭</span> 12 स्वच्छ प्रशासनिक रूट्स मैट्रिक्स (Clean Path Matrix)</span>
+          <span class="card-badge tag-saffron">/admin/[tab]</span>
+        </div>
+        <table>
+          <tr><th>एडमिन पाथ (Route)</th><th>प्रशासनिक कार्यक्षेत्र एवं नवीन सुविधाएं</th></tr>
+          <tr><td><b>/admin/overview</b></td><td>डैशबोर्ड सांख्यिकी, कुल सदस्य (4,800+), नए संदेश, ईमेल टेलीमेट्री</td></tr>
+          <tr><td><b>/admin/events</b></td><td><b>➕ नया इवेंट जोड़ें मोडल</b>, पोस्टर अपलोड, 2 Nov प्रीसेट, लाइव सक्रियण</td></tr>
+          <tr><td><b>/admin/messages</b></td><td><b>📥 इनबॉक्स (amar47kumar47...), 📤 आउटबॉक्स, ✍️ कंपोज़र, 💬 चैट मोडल</b></td></tr>
+          <tr><td><b>/admin/members</b></td><td>सदस्य डायरेक्टरी खोज, संपादन, स्थिति नियंत्रण, एक्सेल एक्सपोर्ट</td></tr>
+          <tr><td><b>/admin/add-member</b></td><td>नया समाज सदस्य पंजीकरण, Cloudinary फोटो अपलोड, संवर्ग आवंटन</td></tr>
+          <tr><td><b>/admin/pages</b></td><td>TipTap CMS: About, History, Mahasabha व Organization संपादन</td></tr>
+          <tr><td><b>/admin/gallery</b></td><td>फोटो अपलोड (Cloudinary), यूट्यूब वीडियो एम्बेड, टैगिंग व डिलीट</td></tr>
+          <tr><td><b>/admin/hero</b></td><td>मुख्य बैनर स्लाइडर, शीर्षक, उपशीर्षक व स्क्रोलिंग समाचार पट्टी</td></tr>
+          <tr><td><b>/admin/settings</b></td><td>सचिवालय फोन, पता, हेल्पलाइन, समाज व्यापार प्रचार विज्ञापन</td></tr>
+          <tr><td><b>/admin/maintenance</b></td><td>इमरजेंसी मेंटेनेंस स्विच, आगंतुक लॉकडाउन, संदेश कस्टमाइज़र</td></tr>
+          <tr><td><b>/admin/seo</b></td><td>Open Graph चित्र, Twitter Card, Google Verification, sitemap.xml</td></tr>
+          <tr><td><b>/admin/health</b></td><td>Node.js रनटाइम, Turbopack स्थिति, MongoDB कनेक्शन, मेमोरी मॉनिटर</td></tr>
+        </table>
+      </div>
+
+      <!-- Backend & Security Architecture -->
+      <div class="card card-primary space-y-2">
+        <div class="card-header">
+          <span class="card-title"><span>🛡️</span> सुरक्षा, डेटाबेस व ईमेल आर्किटेक्चर (Tech Stack)</span>
+          <span class="card-badge tag-blue">Edge + MongoDB + Resend</span>
+        </div>
+
+        <table style="margin-bottom: 6px;">
+          <tr><th>घटक (Component)</th><th>सुरक्षा विनिर्देश एवं कार्यान्वयन</th></tr>
+          <tr><td><b>सुरक्षा प्रमाणीकरण</b></td><td>Next.js Edge Middleware (middleware.js), HttpOnly JWT कुकी (admin_token), bcrypt हैश</td></tr>
+          <tr><td><b>ऑडिट लॉगिंग</b></td><td>प्रत्येक एडमिन क्रिया, संशोधन व विलोपन AuditLog में टाइमस्टैम्प व IP सहित दर्ज</td></tr>
+          <tr><td><b>ईमेल सिस्टम</b></td><td>Resend Transactional API द्वारा द्वि-स्तरीय डिलीवरी (व्यवस्थापक + नागरिक पुष्टि)</td></tr>
+          <tr><td><b>क्लाउडिनरी CDN</b></td><td>सुरक्षित बफर अपलोड गेटवे (/api/upload) फ़ोल्डर्स: alokworld_posters, members आदि</td></tr>
+        </table>
+
+        <!-- Workflow Diagram Box -->
+        <div style="background:#FAF8F3; border:1px solid #E2DDD5; border-radius:5px; padding:7px 9px;">
+          <div style="font-weight:800; color:#102F6B; font-size:9.5px; margin-bottom:4px;">
+            ⚡ दो-तरफा संचार एवं इनबॉक्स सिंक फ्लो (Email & Inquiry Pipeline):
+          </div>
+          <div style="font-size:9px; color:#55657E; line-height:1.45;">
+            1. नागरिक <b>/contact</b> पर फॉर्म सबमिट करता है ➔ <br/>
+            2. डेटा <b>contacts</b> व <b>emaillogs</b> में सुरक्षित होता है ➔ <br/>
+            3. Resend द्वारा एडमिन को ईमेल + प्रेषक को स्वचालित पावती जाती है ➔ <br/>
+            4. एडमिन पैनल <b>/admin/messages</b> इनबॉक्स में संदेश (उदा० <i>amar47kumar47@gmail.com</i>) तुरंत दिखाई देता है ➔ <br/>
+            5. एडमिन '💬 चैट व उत्तर' दबाकर सीधे ईमेल पर उत्तर भेज सकता है।
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Models Matrix -->
+    <div style="margin-top: 10px;">
+      <div style="font-weight: 800; font-size: 10px; color: #102F6B; margin-bottom: 3px;">🗄️ प्राथमिक MongoDB Mongoose स्कीमा मॉडल्स (Data Schema Matrix)</div>
+      <div class="grid-4">
+        <div class="card" style="padding: 7px;">
+          <div style="font-weight:800; color:#102F6B;">1. SiteSettings</div>
+          <div style="font-size:8.5px; color:#64748B;">siteName, eventsList, heroTitle, maintenanceMode, contactEmail, seoTitle</div>
+        </div>
+        <div class="card" style="padding: 7px;">
+          <div style="font-weight:800; color:#F26A21;">2. Member</div>
+          <div style="font-size:8.5px; color:#64748B;">name, designation, department, state, city, phone, email, avatar, isFeatured</div>
+        </div>
+        <div class="card" style="padding: 7px;">
+          <div style="font-weight:800; color:#059669;">3. Contact & EmailLog</div>
+          <div style="font-size:8.5px; color:#64748B;">name, email, subject, message, isRead, replies, providerMessageId, status</div>
+        </div>
+        <div class="card" style="padding: 7px;">
+          <div style="font-weight:800; color:#7C3AED;">4. Gallery & CMS</div>
+          <div style="font-size:8.5px; color:#64748B;">title, imageUrl, videoId, mediaType, slug, content (TipTap HTML), auditHistory</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-stamp">
+      <span>alokworld.in • केंद्रीय राष्ट्रीय सचिवालय, नई दिल्ली</span>
+      <span>पृष्ठ 3 / 3 — प्रशासनिक नियंत्रण एवं आर्किटेक्चर (Admin & Tech Architecture)</span>
+      <span>मुद्रण दिनांक: 26 अक्टूबर 2026</span>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -348,21 +348,21 @@ function AdminDashboardInner() {
     heroCtaText: "Explore Member Directory →",
     heroCtaLink: "/directory",
     heroImage: "",
-    // Event & Live Countdown State (2 Nov Target)
-    eventEnabled: true,
-    eventTopBarEnabled: true,
-    eventPopupEnabled: true,
-    eventTitle: "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026",
-    eventSubtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ का ऐतिहासिक राष्ट्रीय सम्मेलन",
-    eventBadge: "विशेष आगामी कार्यक्रम",
-    eventDate: "2026-11-02T10:00:00",
-    eventLocation: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
-    eventCountdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
-    eventDescription:
-      "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-    eventImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-    eventCtaText: "अधिवेशन विवरण एवं पंजीकरण →",
-    eventCtaLink: "/mahasabha",
+    // Event & Live Countdown State (Empty & Inactive by default until user creates one)
+    eventEnabled: false,
+    eventTopBarEnabled: false,
+    eventPopupEnabled: false,
+    eventTitle: "",
+    eventSubtitle: "",
+    eventBadge: "",
+    eventDate: "",
+    eventLocation: "",
+    eventCountdownLabel: "",
+    eventDescription: "",
+    eventImage: "",
+    eventCtaText: "",
+    eventCtaLink: "",
+    eventsList: [],
     sidebarNoticeTitle: "",
     sidebarNoticeContent: "",
     sidebarNoticeEnabled: true,
@@ -1395,34 +1395,38 @@ function AdminDashboardInner() {
       id: null,
       title: "",
       subtitle: "",
-      badge: "विशेष आगामी कार्यक्रम",
-      date: "2026-11-02T10:00:00",
-      location: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
+      badge: "",
+      date: new Date().toISOString().slice(0, 16),
+      location: "",
       description: "",
-      image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-      countdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
-      ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
-      ctaLink: "/mahasabha",
-      isFeatured: false,
+      image: "",
+      countdownLabel: "",
+      ctaText: "",
+      ctaLink: "",
+      isFeatured: true,
       status: "upcoming",
     });
   };
 
   const handleOpenEditEvent = (evt) => {
+    if (!evt || !evt.id || evt.id === "active") {
+      handleOpenAddEvent();
+      return;
+    }
     setEventModal({
       isOpen: true,
       isEdit: true,
       id: evt.id,
       title: evt.title || "",
       subtitle: evt.subtitle || "",
-      badge: evt.badge || "विशेष आगामी कार्यक्रम",
-      date: evt.date ? evt.date.slice(0, 16) : "2026-11-02T10:00",
+      badge: evt.badge || "",
+      date: evt.date ? evt.date.slice(0, 16) : "",
       location: evt.location || "",
       description: evt.description || "",
       image: evt.image || "",
-      countdownLabel: evt.countdownLabel || "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
-      ctaText: evt.ctaText || "विवरण देखें →",
-      ctaLink: evt.ctaLink || "/",
+      countdownLabel: evt.countdownLabel || "",
+      ctaText: evt.ctaText || "",
+      ctaLink: evt.ctaLink || "",
       isFeatured: Boolean(evt.isFeatured),
       status: evt.status || "upcoming",
     });
@@ -3136,54 +3140,78 @@ function AdminDashboardInner() {
               </div>
 
               {/* Real-time Live Countdown Header Preview Box */}
-              <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white p-4 rounded-lg border border-[#F26A21]/50 shadow-md space-y-3">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
-                      {isHi ? "लाइव प्रीव्यू (यह वेबसाइट के शीर्ष हेडर में दिखेगा)" : "Live Header Preview"}
-                    </span>
-                  </div>
-                  <span className="text-xs text-slate-300 font-mono">
-                    लक्ष्य: {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" }) : "2 नवंबर 2026"}
-                  </span>
-                </div>
-
-                <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-1">
-                  <div className="flex items-center gap-2 text-center md:text-left flex-wrap">
-                    <span className="bg-[#F26A21] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shadow-xs">
-                      {settings.eventBadge || "वेबसाइट लाइव उल्टी गिनती"}
-                    </span>
-                    <span className="text-sm font-bold text-white">
-                      {settings.eventTitle || "वेबसाइट लाइव — 2 नवंबर 2026"}
+              {settings.eventEnabled && settings.eventTitle && eventsList.length > 0 ? (
+                <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white p-4 rounded-lg border border-[#F26A21]/50 shadow-md space-y-3">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
+                        {isHi ? "लाइव प्रीव्यू (यह वेबसाइट के शीर्ष हेडर में दिखेगा)" : "Live Header Preview"}
+                      </span>
+                    </div>
+                    <span className="text-xs text-slate-300 font-mono">
+                      लक्ष्य: {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" }) : "—"}
                     </span>
                   </div>
 
-                  {/* Countdown Ticker Box */}
-                  <div className="flex items-center gap-1.5 font-mono bg-black/40 px-3 py-1.5 rounded border border-white/10 text-white">
-                    <div className="flex flex-col items-center">
-                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                        {Math.max(0, Math.floor((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) / (1000 * 60 * 60 * 24)))}
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-1">
+                    <div className="flex items-center gap-2 text-center md:text-left flex-wrap">
+                      <span className="bg-[#F26A21] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shadow-xs">
+                        {settings.eventBadge || "कार्यक्रम"}
                       </span>
-                      <span className="text-[9px] text-[#CBD5E1]">दिन</span>
+                      <span className="text-sm font-bold text-white">
+                        {settings.eventTitle}
+                      </span>
                     </div>
-                    <span className="text-[#F26A21] font-bold pb-2">:</span>
-                    <div className="flex flex-col items-center">
-                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                        {Math.max(0, Math.floor(((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}
-                      </span>
-                      <span className="text-[9px] text-[#CBD5E1]">घंटे</span>
-                    </div>
-                    <span className="text-[#F26A21] font-bold pb-2">:</span>
-                    <div className="flex flex-col items-center">
-                      <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                        {Math.max(0, Math.floor(((new Date(settings.eventDate || "2026-11-02T10:00:00").getTime() - Date.now()) % (1000 * 60)) / (1000 * 60)))}
-                      </span>
-                      <span className="text-[9px] text-[#CBD5E1]">मिनट</span>
+
+                    {/* Countdown Ticker Box */}
+                    <div className="flex items-center gap-1.5 font-mono bg-black/40 px-3 py-1.5 rounded border border-white/10 text-white">
+                      <div className="flex flex-col items-center">
+                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                          {Math.max(0, Math.floor((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))}
+                        </span>
+                        <span className="text-[9px] text-[#CBD5E1]">दिन</span>
+                      </div>
+                      <span className="text-[#F26A21] font-bold pb-2">:</span>
+                      <div className="flex flex-col items-center">
+                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                          {Math.max(0, Math.floor(((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}
+                        </span>
+                        <span className="text-[9px] text-[#CBD5E1]">घंटे</span>
+                      </div>
+                      <span className="text-[#F26A21] font-bold pb-2">:</span>
+                      <div className="flex flex-col items-center">
+                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
+                          {Math.max(0, Math.floor(((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) % (1000 * 60)) / (1000 * 60)))}
+                        </span>
+                        <span className="text-[9px] text-[#CBD5E1]">मिनट</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="bg-[#FAF8F3] border border-[#E2DDD5] p-5 rounded-lg text-center space-y-2 text-xs">
+                  <div className="text-xl">⏳</div>
+                  <div className="font-bold text-sm text-[#102F6B]">
+                    {isHi ? "वर्तमान में कोई लाइव कार्यक्रम सक्रिय नहीं है" : "No live event active currently"}
+                  </div>
+                  <p className="text-[11.5px] text-[#64748B] max-w-lg mx-auto">
+                    {isHi
+                      ? "कार्यक्रम सूची डिफ़ॉल्ट रूप से रिक्त है। आप नीचे दिए गए '+ नया कार्यक्रम जोड़ें' बटन से अपने अनुसार कार्यक्रम बना सकते हैं और आवश्यकतानुसार उसे मुख्य/लाइव सेट कर सकते हैं।"
+                      : "Events are empty by default. You can create custom events using '+ Add New Event'."}
+                  </p>
+                  <div className="pt-1">
+                    <button
+                      type="button"
+                      onClick={handleOpenAddEvent}
+                      className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white font-bold rounded-xs cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                    >
+                      <span>➕</span>
+                      <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add New Event"}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* SECTION: DISPLAY CONTROLS & ACTIVE EVENT SUMMARY */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3238,70 +3266,85 @@ function AdminDashboardInner() {
                     <h3 className="font-bold text-sm text-[#102F6B]">
                       {isHi ? "2. वर्तमान मुख्य / लाइव कार्यक्रम" : "2. Active Featured Event"}
                     </h3>
-                    <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200">
-                      🌟 {isHi ? "हेडर व पॉपअप पर सक्रिय" : "Live on Top Bar & Popup"}
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                      settings.eventEnabled && settings.eventTitle && eventsList.length > 0
+                        ? "bg-emerald-100 text-emerald-800 border-emerald-200"
+                        : "bg-slate-100 text-slate-600 border-slate-200"
+                    }`}>
+                      {settings.eventEnabled && settings.eventTitle && eventsList.length > 0
+                        ? (isHi ? "🌟 हेडर व पॉपअप पर सक्रिय" : "Live on Top Bar & Popup")
+                        : (isHi ? "कोई कार्यक्रम सक्रिय नहीं" : "No Event Active")}
                     </span>
                   </div>
 
-                  <div className="flex items-start gap-3 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
-                    {/* Active Poster Thumbnail */}
-                    <div className="w-16 h-20 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
-                      {settings.eventImage ? (
-                        <img
-                          src={settings.eventImage}
-                          alt={settings.eventTitle}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
-                          पोस्टर
-                        </div>
-                      )}
-                    </div>
+                  {settings.eventEnabled && settings.eventTitle && eventsList.length > 0 ? (
+                    <div className="flex items-start gap-3 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
+                      {/* Active Poster Thumbnail */}
+                      <div className="w-16 h-20 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
+                        {settings.eventImage ? (
+                          <img
+                            src={settings.eventImage}
+                            alt={settings.eventTitle}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                            पोस्टर
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="bg-[#102F6B] text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
-                          {settings.eventBadge || "कार्यक्रम"}
-                        </span>
-                        <span className="text-[11px] text-[#64748B] font-mono">
-                          📅 {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN") : "2 Nov 2026"}
-                        </span>
-                      </div>
-                      <div className="font-bold text-xs text-[#102F6B] truncate">
-                        {settings.eventTitle || "वेबसाइट लाइव — 2 नवंबर 2026"}
-                      </div>
-                      <div className="text-[11px] text-[#55657E] truncate">
-                        📍 {settings.eventLocation || "नई दिल्ली"}
-                      </div>
-                      <div className="pt-1 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const activeEvt = eventsList.find((e) => e.isFeatured) || {
-                              id: "active",
-                              title: settings.eventTitle,
-                              subtitle: settings.eventSubtitle,
-                              badge: settings.eventBadge,
-                              date: settings.eventDate,
-                              location: settings.eventLocation,
-                              description: settings.eventDescription,
-                              image: settings.eventImage,
-                              countdownLabel: settings.eventCountdownLabel,
-                              ctaText: settings.eventCtaText,
-                              ctaLink: settings.eventCtaLink,
-                              isFeatured: true,
-                            };
-                            handleOpenEditEvent(activeEvt);
-                          }}
-                          className="text-[11px] font-bold text-[#F26A21] hover:underline flex items-center gap-1 cursor-pointer"
-                        >
-                          <span>✏️</span>
-                          <span>{isHi ? "विवरण व फोटो संपादित करें" : "Edit Details & Poster"}</span>
-                        </button>
+                      <div className="flex-1 min-w-0 space-y-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="bg-[#102F6B] text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
+                            {settings.eventBadge || "कार्यक्रम"}
+                          </span>
+                          <span className="text-[11px] text-[#64748B] font-mono">
+                            📅 {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN") : "—"}
+                          </span>
+                        </div>
+                        <div className="font-bold text-xs text-[#102F6B] truncate">
+                          {settings.eventTitle}
+                        </div>
+                        <div className="text-[11px] text-[#55657E] truncate">
+                          📍 {settings.eventLocation || "—"}
+                        </div>
+                        <div className="pt-1 flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const activeEvt = eventsList.find((e) => e.isFeatured) || eventsList[0];
+                              if (activeEvt) {
+                                handleOpenEditEvent(activeEvt);
+                              } else {
+                                handleOpenAddEvent();
+                              }
+                            }}
+                            className="text-[11px] font-bold text-[#F26A21] hover:underline flex items-center gap-1 cursor-pointer"
+                          >
+                            <span>✏️</span>
+                            <span>{isHi ? "विवरण व फोटो संपादित करें" : "Edit Details & Poster"}</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <div className="p-4 bg-[#FAF8F3] border border-dashed border-[#D5CEC4] rounded-xs text-center space-y-2 text-xs text-[#64748B]">
+                      <p>
+                        {isHi
+                          ? "वर्तमान में कोई कार्यक्रम सक्रिय नहीं है। आप नीचे से नया कार्यक्रम जोड़ सकते हैं।"
+                          : "No event is active currently. Add an event below."}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleOpenAddEvent}
+                        className="px-3 py-1 bg-[#102F6B] text-white text-xs font-bold rounded-xs cursor-pointer inline-flex items-center gap-1"
+                      >
+                        <span>➕</span>
+                        <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add Event"}</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -4,60 +4,24 @@ import SiteSettings from "@/models/SiteSettings";
 import { verifyAdminToken } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 
-const DEFAULT_EVENTS = [
-  {
-    id: "event-2nov-live",
-    title: "वेबसाइट लाइव — 2 नवंबर 2026",
-    subtitle: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक) का आधिकारिक राष्ट्रीय डिजिटल पोर्टल लोकार्पण",
-    badge: "वेबसाइट लाइव उल्टी गिनती",
-    date: "2026-11-02T10:00:00",
-    location: "नई दिल्ली (केंद्रीय सचिवालय)",
-    description: "2 नवम्बर 2026 को समाज के गौरवशाली राष्ट्रीय महासम्मेलन, प्रतिभावान छात्र-छात्रा सम्मान एवं आलोक डिजिटल पोर्टल का भव्य राष्ट्रव्यापी लोकार्पण। देशभर के गणमान्य बंधु सादर आमंत्रित हैं।",
-    image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-    countdownLabel: "वेबसाइट लाइव होने में शेष समय",
-    ctaText: "मुख्य पृष्ठ पर जाएं →",
-    ctaLink: "/",
-    isFeatured: true,
-    status: "upcoming",
-    createdAt: new Date(),
-  },
-  {
-    id: "event-national-convention",
-    title: "आलोक राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह 2026",
-    subtitle: "समस्त राज्यों के लोधी-लोधा अधिकारी-कर्मचारी बंधुओं का वृहद समागम",
-    badge: "राष्ट्रीय अधिवेशन",
-    date: "2026-11-02T11:00:00",
-    location: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
-    description: "राष्ट्रीय कार्यसमिति बैठक, सामाजिक सुधार परिचर्चा, मेधावी छात्र सम्मान एवं सांस्कृतिक सम्मेलन। समस्त प्रांतीय अध्यक्ष, सचिव एवं पदाधिकारी सहभागिता करेंगे।",
-    image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924151/alokworld/posters/poster2.jpg",
-    countdownLabel: "महासम्मेलन शुभारंभ उल्टी गिनती",
-    ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
-    ctaLink: "/mahasabha",
-    isFeatured: false,
-    status: "upcoming",
-    createdAt: new Date(),
-  },
-];
-
 export async function GET() {
   try {
     await connectDB();
     let settings = await SiteSettings.findOne().lean();
     if (!settings) {
-      settings = await SiteSettings.create({ eventsList: DEFAULT_EVENTS });
+      settings = await SiteSettings.create({ eventsList: [] });
     }
-    const events = (settings.eventsList && settings.eventsList.length > 0)
-      ? settings.eventsList
-      : DEFAULT_EVENTS;
+    const events = Array.isArray(settings.eventsList) ? settings.eventsList : [];
+    const featuredEvent = events.find((e) => e.isFeatured) || null;
 
     return NextResponse.json({
       success: true,
       events,
-      featuredEvent: events.find((e) => e.isFeatured) || events[0] || null,
+      featuredEvent,
     });
   } catch (err) {
     console.error("GET /api/events error:", err);
-    return NextResponse.json({ error: "Failed to load events", events: DEFAULT_EVENTS }, { status: 500 });
+    return NextResponse.json({ error: "Failed to load events", events: [] }, { status: 500 });
   }
 }
 
@@ -80,10 +44,10 @@ export async function POST(req) {
       settings = await SiteSettings.create({});
     }
 
-    let currentList = Array.isArray(settings.eventsList) ? [...settings.eventsList] : [...DEFAULT_EVENTS];
+    let currentList = Array.isArray(settings.eventsList) ? [...settings.eventsList] : [];
 
     const newId = body.id || `evt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const isFeatured = Boolean(body.isFeatured);
+    const isFeatured = body.isFeatured !== undefined ? Boolean(body.isFeatured) : currentList.length === 0;
 
     if (isFeatured) {
       currentList = currentList.map((e) => ({ ...e, isFeatured: false }));
@@ -93,14 +57,14 @@ export async function POST(req) {
       id: newId,
       title: body.title.trim(),
       subtitle: (body.subtitle || "").trim(),
-      badge: (body.badge || "विशेष आगामी कार्यक्रम").trim(),
-      date: body.date || "2026-11-02T10:00:00",
-      location: (body.location || "नई दिल्ली").trim(),
+      badge: (body.badge || "").trim(),
+      date: body.date || "",
+      location: (body.location || "").trim(),
       description: (body.description || "").trim(),
       image: (body.image || "").trim(),
-      countdownLabel: (body.countdownLabel || "वेबसाइट लाइव एवं उल्टी गिनती").trim(),
-      ctaText: (body.ctaText || "विवरण देखें →").trim(),
-      ctaLink: (body.ctaLink || "/").trim(),
+      countdownLabel: (body.countdownLabel || "").trim(),
+      ctaText: (body.ctaText || "").trim(),
+      ctaLink: (body.ctaLink || "").trim(),
       isFeatured,
       status: body.status || "upcoming",
       createdAt: new Date(),
@@ -117,11 +81,13 @@ export async function POST(req) {
       settings.eventDate = newEvent.date;
       settings.eventLocation = newEvent.location;
       settings.eventDescription = newEvent.description;
-      settings.eventImage = newEvent.image || settings.eventImage;
+      settings.eventImage = newEvent.image;
       settings.eventCountdownLabel = newEvent.countdownLabel;
       settings.eventCtaText = newEvent.ctaText;
       settings.eventCtaLink = newEvent.ctaLink;
       settings.eventEnabled = true;
+      settings.eventTopBarEnabled = true;
+      settings.eventPopupEnabled = true;
     }
 
     await settings.save();
@@ -267,8 +233,21 @@ export async function DELETE(req) {
     }
 
     const filtered = originalList.filter((e) => e.id !== eventId);
-    // If the deleted event was featured, make the first one featured if available
-    if (target.isFeatured && filtered.length > 0) {
+    if (filtered.length === 0) {
+      settings.eventEnabled = false;
+      settings.eventTopBarEnabled = false;
+      settings.eventPopupEnabled = false;
+      settings.eventTitle = "";
+      settings.eventSubtitle = "";
+      settings.eventBadge = "";
+      settings.eventDate = "";
+      settings.eventLocation = "";
+      settings.eventDescription = "";
+      settings.eventImage = "";
+      settings.eventCountdownLabel = "";
+      settings.eventCtaText = "";
+      settings.eventCtaLink = "";
+    } else if (target.isFeatured) {
       filtered[0].isFeatured = true;
       settings.eventTitle = filtered[0].title;
       settings.eventSubtitle = filtered[0].subtitle;

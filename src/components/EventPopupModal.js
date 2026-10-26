@@ -105,6 +105,10 @@ export default function EventPopupModal({ isOpen, onClose, eventSettings }) {
     formattedDateDisplay = "2 नवम्बर 2026";
   }
 
+  if (!eventSettings || eventSettings.eventEnabled !== true || eventSettings.eventPopupEnabled !== true || !eventSettings.eventTitle) {
+    return null;
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (

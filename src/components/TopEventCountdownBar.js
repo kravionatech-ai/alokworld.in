@@ -57,7 +57,7 @@ export default function TopEventCountdownBar({ eventSettings, onOpenModal }) {
     return () => clearInterval(timer);
   }, [eventDate]);
 
-  if (!eventSettings || eventSettings.eventEnabled === false || eventSettings.eventTopBarEnabled === false) {
+  if (!eventSettings || eventSettings.eventEnabled !== true || eventSettings.eventTopBarEnabled !== true || !eventSettings.eventTitle) {
     return null;
   }
 
