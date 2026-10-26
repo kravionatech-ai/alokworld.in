@@ -69,6 +69,7 @@ export function StaggerContainer({
   staggerDelay = 0.05,
   initialDelay = 0.02,
   as = "div",
+  animate = "show",
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
@@ -77,6 +78,7 @@ export function StaggerContainer({
   return (
     <Component
       initial={shouldReduceMotion ? false : "hidden"}
+      animate={animate}
       whileInView="show"
       viewport={{ once: true, amount: 0 }}
       variants={{
@@ -106,6 +108,7 @@ export function StaggerItem({
   distance = 14,
   duration = 0.45,
   as = "div",
+  animate = "show",
   ...props
 }) {
   const shouldReduceMotion = useReducedMotion();
@@ -127,6 +130,7 @@ export function StaggerItem({
           },
         },
       }}
+      animate={animate}
       className={className}
       {...props}
     >
