@@ -111,8 +111,19 @@ export async function connectDB() {
     }
   }
 
-  const primaryUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/alokworld";
-  const fallbackUri = process.env.MONGODB_FALLBACK_URI || "mongodb://127.0.0.1:27017/alokworld";
+  let primaryUri = process.env.MONGODB_URI;
+  if (
+    process.env.NODE_ENV === "production" &&
+    (!primaryUri || primaryUri.includes("127.0.0.1") || primaryUri.includes("localhost"))
+  ) {
+    primaryUri = process.env.MONGODB_ATLAS_URI || primaryUri;
+  }
+  primaryUri = primaryUri || process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/alokworld";
+
+  const fallbackUri =
+    process.env.MONGODB_FALLBACK_URI && !process.env.MONGODB_FALLBACK_URI.includes("127.0.0.1")
+      ? process.env.MONGODB_FALLBACK_URI
+      : process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/alokworld";
 
   const opts = {
     bufferCommands: false,
