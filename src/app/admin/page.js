@@ -3,8 +3,9 @@
 import { useEffect, useState, useMemo, useRef, Suspense } from "react";
 import InquiryChatModal from "@/components/admin/InquiryChatModal";
 import ComposeEmailModal from "@/components/admin/ComposeEmailModal";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
+import { tabToPath, pathToTab } from "@/lib/adminNavigation";
 import dynamic from "next/dynamic";
 import { getSearchTokens } from "@/lib/transliteration";
 
@@ -183,30 +184,32 @@ function normalizeTab(input) {
 
 function AdminDashboardInner() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [currentUser, setCurrentUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
 
-  // Layout & Navigation State
-  // Layout & Navigation State with Full Bidirectional Route Synchronization
+  // Layout & Navigation State with True Path-Based Routing (/admin/pages, /admin/gallery, etc.)
   const [activeTab, _setActiveTab] = useState(() => {
     if (typeof window !== "undefined") {
+      const pathTab = pathToTab(window.location.pathname);
+      if (pathTab && pathTab !== "members") return pathTab;
+
       const sp = new URLSearchParams(window.location.search);
       const tabParam = sp.get("tab") || window.location.hash.replace("#", "");
-      if (tabParam) return normalizeTab(tabParam);
+      if (tabParam) return pathToTab(tabParam);
     }
-    return "members";
+    return pathToTab(pathname);
   });
 
   const setActiveTab = (tabId) => {
-    const normalized = normalizeTab(tabId);
+    const normalized = pathToTab(tabId);
     _setActiveTab(normalized);
     if (typeof window !== "undefined") {
       try {
-        const currentUrl = new URL(window.location.href);
-        if (currentUrl.searchParams.get("tab") !== normalized) {
-          currentUrl.searchParams.set("tab", normalized);
-          window.history.pushState({ tab: normalized }, "", currentUrl.toString());
+        const targetPath = tabToPath(normalized);
+        if (window.location.pathname !== targetPath) {
+          window.history.pushState({ tab: normalized }, "", targetPath);
         }
       } catch (err) {
         console.error("URL state sync error:", err);
@@ -214,21 +217,30 @@ function AdminDashboardInner() {
     }
   };
 
-  // Synchronize when searchParams changes (e.g. direct URL navigation or browser history)
+  // Synchronize when pathname changes (e.g. browser navigation or Link click)
   useEffect(() => {
-    const tabParam = searchParams?.get("tab");
-    if (tabParam) {
-      const normalized = normalizeTab(tabParam);
+    if (pathname) {
+      const tabFromPath = pathToTab(pathname);
+      _setActiveTab(tabFromPath);
+    }
+  }, [pathname]);
+
+  // Upgrade legacy query parameter (?tab=pages -> /admin/pages)
+  useEffect(() => {
+    const queryTab = searchParams?.get("tab");
+    if (queryTab && typeof window !== "undefined") {
+      const normalized = pathToTab(queryTab);
       _setActiveTab(normalized);
+      const targetPath = tabToPath(normalized);
+      window.history.replaceState({ tab: normalized }, "", targetPath);
     }
   }, [searchParams]);
 
   // Synchronize with browser Back / Forward buttons (popstate)
   useEffect(() => {
     const handlePopState = () => {
-      const sp = new URLSearchParams(window.location.search);
-      const tabParam = sp.get("tab") || window.location.hash.replace("#", "");
-      _setActiveTab(normalizeTab(tabParam));
+      const tabFromPath = pathToTab(window.location.pathname);
+      _setActiveTab(tabFromPath);
     };
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
@@ -1519,7 +1531,7 @@ function AdminDashboardInner() {
                   return (
                     <Link
                       key={item.id}
-                      href={`/admin?tab=${item.id}`}
+                      href={tabToPath(item.id)}
                       onClick={(e) => {
                         e.preventDefault();
                         if (item.onClick) {
