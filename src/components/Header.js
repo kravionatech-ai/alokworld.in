@@ -202,10 +202,10 @@ export default function Header({ siteName, settings: propSettings }) {
             <Link
               href="/"
               className="block w-full focus:outline-hidden"
-              title="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
+              title={settings?.headerTitle || "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"}
             >
               <img
-                src="https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/banners/heritage_banner_strip.jpg"
+                src={settings?.headerBannerImage || "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/banners/heritage_banner_strip.jpg"}
                 alt="अखिल भारतीय समाज महापुरुष एवं राष्ट्रीय प्रतीक — लोधेश्वर भगवान, वीरांगना अवंतीबाई, स्वामी ब्रह्मानंद, स्वामी केशवानंद, राजा हिरदेशाह एवं शहीद गुलाब सिंह"
                 width={1080}
                 height={162}
@@ -232,10 +232,10 @@ export default function Header({ siteName, settings: propSettings }) {
               className="inline-block focus:outline-hidden focus:ring-1 focus:ring-[#F26A21] rounded-xs"
             >
               <h1 className="text-base sm:text-lg md:text-xl lg:text-[22px] font-bold text-white tracking-wide leading-tight">
-                अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ
+                {settings?.headerTitle || "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"}
               </h1>
               <p className="text-[11px] sm:text-xs md:text-sm text-[#CBD5E1] font-medium tracking-wide mt-0.5 sm:mt-1">
-                अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in
+                {settings?.headerSubtitle || "अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in"}
               </p>
             </Link>
           </div>

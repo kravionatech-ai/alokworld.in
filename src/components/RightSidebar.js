@@ -41,6 +41,10 @@ const verifiedOfficeBearers = [
 ];
 
 export default function RightSidebar({ settings }) {
+  const officeBearers = Array.isArray(settings?.featuredOfficeBearers) && settings.featuredOfficeBearers.length > 0
+    ? settings.featuredOfficeBearers.filter((ob) => ob.enabled !== false)
+    : verifiedOfficeBearers;
+
   return (
     <aside className="space-y-4">
       {/* 1. Verified National Office Bearers Spotlight */}
@@ -50,7 +54,7 @@ export default function RightSidebar({ settings }) {
           <span className="text-[10px] bg-[#FFF0E2] text-[#F26A21] px-1.5 py-0.5 rounded font-mono">आलोक</span>
         </div>
         <div className="divide-y divide-[#E9E2D8]">
-          {verifiedOfficeBearers.map((ob, idx) => (
+          {officeBearers.map((ob, idx) => (
             <div key={idx} className="p-3 flex items-start gap-3 hover:bg-[#FFFCF5] transition-colors">
               {ob.avatar ? (
                 <img

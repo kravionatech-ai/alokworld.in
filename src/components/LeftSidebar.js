@@ -23,7 +23,7 @@ const stateChapters = [
   { name: "हरियाणा एवं पंजाब", code: "HR", members: "प्रांतीय इकाई" },
 ];
 
-export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
+export default function LeftSidebar({ adTitle, adBannerText, adLink, settings }) {
   return (
     <aside className="space-y-4">
       {/* 1. Quick Navigation Links */}
@@ -68,26 +68,28 @@ export default function LeftSidebar({ adTitle, adBannerText, adLink }) {
         </div>
       </div>
 
-      {/* 3. National Convention 2026 Notice Box */}
-      <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
-        <div className="bg-[#091D42] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
-          राष्ट्रीय अधिवेशन 2026
+      {/* 3. National Convention / Custom Sidebar Notice Box */}
+      {settings?.leftNoticeEnabled !== false && (
+        <div className="border border-[#E9E2D8] rounded-lg overflow-hidden shadow-xs bg-white">
+          <div className="bg-[#091D42] text-white text-xs font-bold px-3.5 py-2.5 border-b-2 border-[#F26A21]">
+            {settings?.leftNoticeTitle || "राष्ट्रीय अधिवेशन 2026"}
+          </div>
+          <div className="p-3.5 text-center text-xs space-y-2">
+            <p className="font-bold text-[#102F6B] text-xs leading-snug">
+              {settings?.leftNoticeOrg || "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)"}
+            </p>
+            <p className="text-[11px] text-[#64748B] leading-relaxed">
+              {settings?.leftNoticeText || "राष्ट्रीय महाधिवेशन 2026 में समाज के समस्त अधिकारी, कर्मचारी एवं प्रबुद्धजन सादर आमंत्रित हैं।"}
+            </p>
+            <Link
+              href={settings?.leftNoticeLink || "/gallery"}
+              className="inline-block text-[11px] font-bold text-[#F26A21] hover:underline pt-1"
+            >
+              {settings?.leftNoticeLinkText || "आधिकारिक पोस्टर देखें →"}
+            </Link>
+          </div>
         </div>
-        <div className="p-3.5 text-center text-xs space-y-2">
-          <p className="font-bold text-[#102F6B] text-xs leading-snug">
-            अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)
-          </p>
-          <p className="text-[11px] text-[#64748B] leading-relaxed">
-            राष्ट्रीय महाधिवेशन 2026 में समाज के समस्त अधिकारी, कर्मचारी एवं प्रबुद्धजन सादर आमंत्रित हैं।
-          </p>
-          <Link
-            href="/gallery"
-            className="inline-block text-[11px] font-bold text-[#F26A21] hover:underline pt-1"
-          >
-            आधिकारिक पोस्टर देखें →
-          </Link>
-        </div>
-      </div>
+      )}
     </aside>
   );
 }

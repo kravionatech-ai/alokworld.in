@@ -56,7 +56,7 @@ export default function HomePage() {
       .finally(() => setLoading(false));
   }, [searchQuery, selectedLocation]);
 
-  const quickPillars = [
+  const defaultQuickPillars = [
     { title: "समाज डायरेक्टरी", desc: "सत्यापित सदस्य विवरण, वरिष्ठजन, डॉक्टर, इंजीनियर व अधिवक्ता।", href: "/directory", icon: "👥" },
     { title: "समाज इतिहास", desc: "गौरवशाली विरासत, स्वतंत्रता संग्राम व ऐतिहासिक जड़ें।", href: "/history", icon: "📜" },
     { title: "विभूतियां", desc: "वीर स्वतंत्रता सेनानी, समाज सुधारक एवं महापुरुष।", href: "/personalities", icon: "🎖️" },
@@ -65,12 +65,18 @@ export default function HomePage() {
     { title: "छायाचित्र दीर्घा", desc: "राष्ट्रीय अधिवेशन व प्रतिभा सम्मान समारोह के क्षण।", href: "/gallery", icon: "📸" },
   ];
 
+  const quickPillars = Array.isArray(settings?.quickPillars) && settings.quickPillars.length > 0
+    ? settings.quickPillars.filter((p) => p.enabled !== false)
+    : defaultQuickPillars;
+
   const locations = [
     "भोपाल", "जयपुर", "बेंगलुरु", "लखनऊ", "इंदौर", "दिल्ली एनसीआर", "मुंबई", "जबलपुर", "ग्वालियर", "धौलपुर"
   ];
 
   // Dynamic announcement list for AnnouncementSlider
-  const announcementsList = settings?.announcement
+  const announcementsList = Array.isArray(settings?.announcementsList) && settings.announcementsList.length > 0
+    ? settings.announcementsList.filter((a) => a.enabled !== false)
+    : settings?.announcement
     ? [
         {
           id: "ann-settings",
@@ -165,6 +171,7 @@ export default function HomePage() {
                 adTitle={settings?.adTitle}
                 adBannerText={settings?.adBannerText}
                 adLink={settings?.adLink}
+                settings={settings}
               />
             </FadeIn>
           </div>

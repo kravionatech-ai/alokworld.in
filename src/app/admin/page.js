@@ -460,6 +460,53 @@ function AdminDashboardInner() {
   const [uploadingEventImage, setUploadingEventImage] = useState(false);
   const [savingEvent, setSavingEvent] = useState(false);
 
+  // Homepage Widgets & Multi-Slide Carousel State
+  const [heroWidgetSubTab, setHeroWidgetSubTab] = useState("hero_slides");
+
+  // Hero Slide Modal State
+  const [slideModal, setSlideModal] = useState({
+    isOpen: false,
+    isEdit: false,
+    id: null,
+    badge: "",
+    title: "",
+    subtitle: "",
+    ctaText: "विवरण देखें →",
+    ctaLink: "/directory",
+    secondaryCtaText: "",
+    secondaryCtaLink: "",
+    image: "",
+    enabled: true,
+  });
+  const [uploadingSlideImage, setUploadingSlideImage] = useState(false);
+
+  // Announcement Modal State
+  const [announcementModal, setAnnouncementModal] = useState({
+    isOpen: false,
+    isEdit: false,
+    id: null,
+    tag: "सूचना",
+    text: "",
+    link: "/directory",
+    linkText: "विवरण देखें →",
+    enabled: true,
+  });
+
+  // Leadership Office Bearer Modal State
+  const [bearerModal, setBearerModal] = useState({
+    isOpen: false,
+    isEdit: false,
+    id: null,
+    name: "",
+    role: "",
+    location: "",
+    phone: "",
+    avatar: "",
+    enabled: true,
+  });
+  const [uploadingBearerAvatar, setUploadingBearerAvatar] = useState(false);
+  const [uploadingHeaderStrip, setUploadingHeaderStrip] = useState(false);
+
   // Seamlessly merge inbound EmailLogs and Contact inquiries so no inquiry is ever missed
   const allInboundMessages = useMemo(() => {
     const list = [...emailsList.filter((e) => e.direction === "inbound")];
@@ -1558,7 +1605,288 @@ function AdminDashboardInner() {
   };
 
   // ==========================================
-  // EDITORIAL NAVIGATION STRUCTURE (5 ORGANIZED GROUPS - BILINGUAL)
+  // HERO SLIDES HANDLERS
+  // ==========================================
+  const handleOpenAddSlide = () => {
+    setSlideModal({
+      isOpen: true,
+      isEdit: false,
+      id: "slide-" + Date.now(),
+      badge: isHi ? "विशेष कार्यक्रम / सूचना" : "Special Program",
+      title: "",
+      subtitle: "",
+      ctaText: isHi ? "विवरण देखें →" : "View Details →",
+      ctaLink: "/directory",
+      secondaryCtaText: "",
+      secondaryCtaLink: "",
+      image: "",
+      enabled: true,
+    });
+  };
+
+  const handleOpenEditSlide = (slide) => {
+    setSlideModal({
+      isOpen: true,
+      isEdit: true,
+      id: slide.id || "slide-" + Date.now(),
+      badge: slide.badge || "",
+      title: slide.title || "",
+      subtitle: slide.subtitle || "",
+      ctaText: slide.ctaText || "",
+      ctaLink: slide.ctaLink || "",
+      secondaryCtaText: slide.secondaryCtaText || "",
+      secondaryCtaLink: slide.secondaryCtaLink || "",
+      image: slide.image || "",
+      enabled: slide.enabled !== false,
+    });
+  };
+
+  const handleSlideImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingSlideImage(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "alokworld_hero");
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setSlideModal((prev) => ({ ...prev, image: data.url }));
+      showBanner(isHi ? "स्लाइड पोस्टर सफलतापूर्वक अपलोड हुआ!" : "Slide poster uploaded successfully!");
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setUploadingSlideImage(false);
+    }
+  };
+
+  const handleSaveSlide = (e) => {
+    if (e) e.preventDefault();
+    if (!slideModal.title.trim()) {
+      showBanner(isHi ? "कृपया स्लाइड का शीर्षक दर्ज करें" : "Please enter slide title", true);
+      return;
+    }
+    const currentSlides = Array.isArray(settings.heroSlides) ? [...settings.heroSlides] : [];
+    const cleanSlide = {
+      id: slideModal.id,
+      badge: slideModal.badge,
+      title: slideModal.title,
+      subtitle: slideModal.subtitle,
+      ctaText: slideModal.ctaText,
+      ctaLink: slideModal.ctaLink,
+      secondaryCtaText: slideModal.secondaryCtaText,
+      secondaryCtaLink: slideModal.secondaryCtaLink,
+      image: slideModal.image,
+      enabled: slideModal.enabled,
+    };
+    let updated;
+    if (slideModal.isEdit) {
+      updated = currentSlides.map((s) => (s.id === slideModal.id ? cleanSlide : s));
+    } else {
+      updated = [...currentSlides, cleanSlide];
+    }
+    setSettings((prev) => ({ ...prev, heroSlides: updated }));
+    setSlideModal((prev) => ({ ...prev, isOpen: false }));
+    showBanner(isHi ? "स्लाइड सुरक्षित की गई! ऊपर 'सेटिंग्स सहेजें' बटन दबाएं।" : "Slide updated! Click 'Save Settings' above.");
+  };
+
+  const handleDeleteSlide = (id) => {
+    const updated = (settings.heroSlides || []).filter((s) => s.id !== id);
+    setSettings((prev) => ({ ...prev, heroSlides: updated }));
+    showBanner(isHi ? "स्लाइड हटा दी गई।" : "Slide deleted.");
+  };
+
+  const handleToggleSlide = (id) => {
+    const updated = (settings.heroSlides || []).map((s) => (s.id === id ? { ...s, enabled: !s.enabled } : s));
+    setSettings((prev) => ({ ...prev, heroSlides: updated }));
+  };
+
+  const handleMoveSlide = (index, direction) => {
+    const list = [...(settings.heroSlides || [])];
+    const targetIdx = direction === "up" ? index - 1 : index + 1;
+    if (targetIdx < 0 || targetIdx >= list.length) return;
+    const temp = list[index];
+    list[index] = list[targetIdx];
+    list[targetIdx] = temp;
+    setSettings((prev) => ({ ...prev, heroSlides: list }));
+  };
+
+  // ==========================================
+  // ANNOUNCEMENTS HANDLERS
+  // ==========================================
+  const handleOpenAddAnnouncement = () => {
+    setAnnouncementModal({
+      isOpen: true,
+      isEdit: false,
+      id: "ann-" + Date.now(),
+      tag: isHi ? "सूचना" : "Notice",
+      text: "",
+      link: "/directory",
+      linkText: isHi ? "विवरण देखें →" : "View Details →",
+      enabled: true,
+    });
+  };
+
+  const handleOpenEditAnnouncement = (ann) => {
+    setAnnouncementModal({
+      isOpen: true,
+      isEdit: true,
+      id: ann.id || "ann-" + Date.now(),
+      tag: ann.tag || "सूचना",
+      text: ann.text || "",
+      link: ann.link || "/directory",
+      linkText: ann.linkText || "विवरण देखें →",
+      enabled: ann.enabled !== false,
+    });
+  };
+
+  const handleSaveAnnouncement = (e) => {
+    if (e) e.preventDefault();
+    if (!announcementModal.text.trim()) {
+      showBanner(isHi ? "कृपया सूचना संदेश दर्ज करें" : "Please enter announcement text", true);
+      return;
+    }
+    const currentList = Array.isArray(settings.announcementsList) ? [...settings.announcementsList] : [];
+    const cleanAnn = {
+      id: announcementModal.id,
+      tag: announcementModal.tag,
+      text: announcementModal.text,
+      link: announcementModal.link,
+      linkText: announcementModal.linkText,
+      enabled: announcementModal.enabled,
+    };
+    let updated;
+    if (announcementModal.isEdit) {
+      updated = currentList.map((a) => (a.id === announcementModal.id ? cleanAnn : a));
+    } else {
+      updated = [...currentList, cleanAnn];
+    }
+    setSettings((prev) => ({ ...prev, announcementsList: updated }));
+    setAnnouncementModal((prev) => ({ ...prev, isOpen: false }));
+    showBanner(isHi ? "सूचना अद्यतन हुई! सेटिंग्स सहेजें।" : "Announcement updated! Please save settings.");
+  };
+
+  const handleDeleteAnnouncement = (id) => {
+    const updated = (settings.announcementsList || []).filter((a) => a.id !== id);
+    setSettings((prev) => ({ ...prev, announcementsList: updated }));
+    showBanner(isHi ? "सूचना हटा दी गई।" : "Announcement deleted.");
+  };
+
+  const handleToggleAnnouncement = (id) => {
+    const updated = (settings.announcementsList || []).map((a) => (a.id === id ? { ...a, enabled: !a.enabled } : a));
+    setSettings((prev) => ({ ...prev, announcementsList: updated }));
+  };
+
+  // ==========================================
+  // NATIONAL LEADERSHIP / BEARERS HANDLERS
+  // ==========================================
+  const handleOpenAddBearer = () => {
+    setBearerModal({
+      isOpen: true,
+      isEdit: false,
+      id: "ob-" + Date.now(),
+      name: "",
+      role: "",
+      location: "",
+      phone: "",
+      avatar: "",
+      enabled: true,
+    });
+  };
+
+  const handleOpenEditBearer = (bearer) => {
+    setBearerModal({
+      isOpen: true,
+      isEdit: true,
+      id: bearer.id || "ob-" + Date.now(),
+      name: bearer.name || "",
+      role: bearer.role || "",
+      location: bearer.location || "",
+      phone: bearer.phone || "",
+      avatar: bearer.avatar || "",
+      enabled: bearer.enabled !== false,
+    });
+  };
+
+  const handleBearerAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingBearerAvatar(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "alokworld_members");
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setBearerModal((prev) => ({ ...prev, avatar: data.url }));
+      showBanner(isHi ? "अधिकारी फोटो सफलतापूर्वक अपलोड हुई!" : "Officer photo uploaded successfully!");
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setUploadingBearerAvatar(false);
+    }
+  };
+
+  const handleSaveBearer = (e) => {
+    if (e) e.preventDefault();
+    if (!bearerModal.name.trim()) {
+      showBanner(isHi ? "कृपया पदाधिकारी का नाम दर्ज करें" : "Please enter office bearer name", true);
+      return;
+    }
+    const currentBearers = Array.isArray(settings.featuredOfficeBearers) ? [...settings.featuredOfficeBearers] : [];
+    const cleanBearer = {
+      id: bearerModal.id,
+      name: bearerModal.name,
+      role: bearerModal.role,
+      location: bearerModal.location,
+      phone: bearerModal.phone,
+      avatar: bearerModal.avatar,
+      enabled: bearerModal.enabled,
+    };
+    let updated;
+    if (bearerModal.isEdit) {
+      updated = currentBearers.map((b) => (b.id === bearerModal.id ? cleanBearer : b));
+    } else {
+      updated = [...currentBearers, cleanBearer];
+    }
+    setSettings((prev) => ({ ...prev, featuredOfficeBearers: updated }));
+    setBearerModal((prev) => ({ ...prev, isOpen: false }));
+    showBanner(isHi ? "पदाधिकारी विवरण सुरक्षित हुआ! सेटिंग्स सहेजें।" : "Office bearer updated! Please save settings.");
+  };
+
+  const handleDeleteBearer = (id) => {
+    const updated = (settings.featuredOfficeBearers || []).filter((b) => b.id !== id);
+    setSettings((prev) => ({ ...prev, featuredOfficeBearers: updated }));
+    showBanner(isHi ? "पदाधिकारी हटा दिए गए।" : "Office bearer removed.");
+  };
+
+  const handleToggleBearer = (id) => {
+    const updated = (settings.featuredOfficeBearers || []).map((b) => (b.id === id ? { ...b, enabled: !b.enabled } : b));
+    setSettings((prev) => ({ ...prev, featuredOfficeBearers: updated }));
+  };
+
+  // Header Banner Strip Upload
+  const handleHeaderStripUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingHeaderStrip(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "alokworld_banners");
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setSettings((prev) => ({ ...prev, headerBannerImage: data.url }));
+      showBanner(isHi ? "हेडर हेरिटेज बैनर सफलतापूर्वक अपलोड हुआ! सेटिंग्स सहेजें।" : "Header banner uploaded! Please save settings.");
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setUploadingHeaderStrip(false);
+    }
+  };
   // ==========================================
   const isHi = adminLang === "hi";
   const navigationSections = [
@@ -2817,254 +3145,869 @@ function AdminDashboardInner() {
           )}
 
           {/* ========================================================================= */}
-          {/* VIEW: HERO & WIDGETS */}
+          {/* VIEW: HOMEPAGE WIDGETS & COMPLETE LAYOUT CUSTOMIZER                       */}
           {/* ========================================================================= */}
           {activeTab === "hero_widgets" && (
-            <div className="space-y-3">
-              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between">
+            <div className="space-y-4">
+              {/* Top Toolbar */}
+              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-lg font-bold text-[#102F6B]">Homepage Hero Banner & Announcements</h1>
+                  <h1 className="text-lg font-bold text-[#102F6B] flex items-center gap-2">
+                    <span>{isHi ? "होमपेज विजेट्स एवं संपूर्ण घटक प्रबंधन" : "Homepage Widgets & Layout Customizer"}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
+                      {isHi ? "लाइव होमपेज" : "Live Homepage"}
+                    </span>
+                  </h1>
                   <p className="text-xs text-[#55657E]">
-                    Configure promotional headline, call-to-action button, and marquee announcement bar.
+                    {isHi
+                      ? "मुख्य कैरोसेल स्लाइड्स (पोस्टर व विवरण), शीर्ष सूचना टिकर, हेडर हेरिटेज बैनर, 6 मुख्य अनुभाग, राष्ट्रीय पदाधिकारी एवं साइडबार नियंत्रित करें।"
+                      : "Manage hero carousel slides (posters & details), top announcement ticker, header banner, 6 quick pillars, leadership spotlight, and sidebars."}
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={handleSaveSettings}
                   disabled={submitting}
-                  className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer"
+                  className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-4 py-2 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 shrink-0"
                 >
-                  {submitting ? "Saving..." : "Save Settings"}
+                  <span>💾</span>
+                  <span>{submitting ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सहेजें" : "Save Settings")}</span>
                 </button>
               </div>
 
-              <div className="bg-white border border-[#E2DDD5] p-5 rounded-xs space-y-5 text-xs">
-                {/* Hero Section */}
-                <div className="space-y-3">
-                  <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider border-b border-[#E2DDD5] pb-1">
-                    Homepage Main Hero Banner
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Sub-tab Navigation Bar */}
+              <div className="flex flex-wrap items-center gap-1.5 border-b border-[#E2DDD5] pb-2 text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("hero_slides")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "hero_slides"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>🎠</span>
+                  <span>{isHi ? "मुख्य कैरोसेल स्लाइड्स" : "Hero Carousel Slides"}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${heroWidgetSubTab === "hero_slides" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"}`}>
+                    {(settings.heroSlides || []).length}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("announcements")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "announcements"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>📢</span>
+                  <span>{isHi ? "सूचना टिकर पट्टी" : "Notice Tickers"}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${heroWidgetSubTab === "announcements" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"}`}>
+                    {(settings.announcementsList || []).length}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("header_identity")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "header_identity"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>🏛️</span>
+                  <span>{isHi ? "हेडर एवं लोगो स्ट्रिप" : "Header & Heritage Strip"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("quick_pillars")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "quick_pillars"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>📌</span>
+                  <span>{isHi ? "6 मुख्य अनुभाग (Pillars)" : "6 Quick Pillars"}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("leadership")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "leadership"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>🎖️</span>
+                  <span>{isHi ? "राष्ट्रीय पदाधिकारी (दायां साइडबार)" : "Leadership Spotlight"}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${heroWidgetSubTab === "leadership" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"}`}>
+                    {(settings.featuredOfficeBearers || []).length}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("sidebar_widgets")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "sidebar_widgets"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>📑</span>
+                  <span>{isHi ? "साइडबार विजेट्स व विज्ञापन" : "Sidebar Widgets & Ads"}</span>
+                </button>
+              </div>
+
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 1: HERO CAROUSEL SLIDES MANAGEMENT                   */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "hero_slides" && (
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Hero Pill / Badge</label>
-                      <input
-                        type="text"
-                        value={settings.heroBadge}
-                        onChange={(e) => setSettings({ ...settings, heroBadge: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
+                      <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                        {isHi ? "मुख्य कैरोसेल स्लाइड्स सूची" : "Homepage Carousel Slides List"}
+                      </h2>
+                      <p className="text-[11px] text-[#55657E]">
+                        {isHi
+                          ? "ये स्लाइड्स होमपेज के शीर्ष बैनर में स्वचालित रूप से घूमती हैं। आप किसी भी स्लाइड का पोस्टर, तारीख, शीर्षक और लिंक बदल सकते हैं।"
+                          : "These slides rotate automatically on the homepage hero banner. You can edit posters, dates, titles, and links."}
+                      </p>
                     </div>
-                    <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Main Headline</label>
-                      <input
-                        type="text"
-                        value={settings.heroTitle}
-                        onChange={(e) => setSettings({ ...settings, heroTitle: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
-                      />
-                    </div>
-                    <div className="col-span-full">
-                      <label className="block font-medium text-[#1E293B] mb-1">Sub-headline</label>
-                      <textarea
-                        rows={2}
-                        value={settings.heroSubtitle}
-                        onChange={(e) => setSettings({ ...settings, heroSubtitle: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Primary CTA Button Label</label>
-                      <input
-                        type="text"
-                        value={settings.heroCtaText}
-                        onChange={(e) => setSettings({ ...settings, heroCtaText: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Primary CTA Destination URL</label>
-                      <input
-                        type="text"
-                        value={settings.heroCtaLink}
-                        onChange={(e) => setSettings({ ...settings, heroCtaLink: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                    <div className="col-span-full">
-                      <label className="block font-medium text-[#1E293B] mb-1">
-                        Optional Hero Banner Image (Cloudinary URL)
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="text"
-                          placeholder="https://res.cloudinary.com/..."
-                          value={settings.heroImage || ""}
-                          onChange={(e) => setSettings({ ...settings, heroImage: e.target.value })}
-                          className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
-                        />
-                        <label className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-xs font-medium rounded-xs cursor-pointer shrink-0">
-                          <span>{uploadingImage ? "Uploading..." : "Upload File"}</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            disabled={uploadingImage}
-                            onChange={(e) => handleImageUpload(e, "heroImage")}
-                            className="hidden"
-                          />
-                        </label>
-                        {settings.heroImage && (
-                          <button
-                            type="button"
-                            onClick={() => setSettings({ ...settings, heroImage: "" })}
-                            className="px-2 py-1.5 text-xs text-red-700 hover:bg-red-50 border border-red-200 rounded-xs cursor-pointer"
-                          >
-                            Remove
-                          </button>
-                        )}
-                      </div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={handleOpenAddSlide}
+                      className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#D9531E] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1 shrink-0"
+                    >
+                      <span>+</span>
+                      <span>{isHi ? "नई स्लाइड जोड़ें" : "Add New Slide"}</span>
+                    </button>
                   </div>
+
+                  {(!settings.heroSlides || settings.heroSlides.length === 0) ? (
+                    <div className="bg-white border border-[#E2DDD5] p-8 text-center rounded-xs space-y-3">
+                      <p className="text-xs text-[#55657E]">
+                        {isHi ? "वर्तमान में कोई कस्टम स्लाइड मौजूद नहीं है।" : "No custom slides currently configured."}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleOpenAddSlide}
+                        className="px-4 py-2 bg-[#102F6B] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs"
+                      >
+                        {isHi ? "+ पहली स्लाइड जोड़ें" : "+ Add First Slide"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                      {settings.heroSlides.map((slide, idx) => (
+                        <div
+                          key={slide.id || idx}
+                          className={`bg-white rounded-xs border p-3.5 flex flex-col justify-between space-y-3 transition-all ${
+                            slide.enabled !== false
+                              ? "border-[#E2DDD5] shadow-xs"
+                              : "border-slate-200 bg-slate-50/70 opacity-75"
+                          }`}
+                        >
+                          <div className="flex gap-3 items-start">
+                            {/* Slide Thumbnail */}
+                            <div className="w-24 h-28 bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs shrink-0 overflow-hidden flex items-center justify-center p-1">
+                              {slide.image ? (
+                                <img
+                                  src={slide.image}
+                                  alt={slide.title}
+                                  className="w-full h-full object-contain rounded drop-shadow-xs"
+                                />
+                              ) : (
+                                <span className="text-[10px] text-[#8896AB] text-center">
+                                  {isHi ? "कोई फोटो नहीं" : "No image"}
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Slide Info */}
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5]">
+                                  {slide.badge || (isHi ? "स्लाइड" : "Slide")}
+                                </span>
+                                <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                                  slide.enabled !== false ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-600"
+                                }`}>
+                                  {slide.enabled !== false ? (isHi ? "सक्रिय" : "Active") : (isHi ? "छिपा हुआ" : "Hidden")}
+                                </span>
+                                <span className="text-[10px] text-[#8896AB] font-mono">#{idx + 1}</span>
+                              </div>
+
+                              <h3 className="font-bold text-xs text-[#102F6B] leading-snug line-clamp-2">
+                                {slide.title}
+                              </h3>
+
+                              <p className="text-[11px] text-[#55657E] line-clamp-2 leading-relaxed">
+                                {slide.subtitle || (isHi ? "कोई विवरण नहीं" : "No subtitle provided")}
+                              </p>
+
+                              <div className="pt-1 flex flex-wrap gap-1.5 text-[10px]">
+                                {slide.ctaText && (
+                                  <span className="px-2 py-0.5 bg-[#F26A21] text-white rounded font-medium">
+                                    {slide.ctaText}
+                                  </span>
+                                )}
+                                {slide.secondaryCtaText && (
+                                  <span className="px-2 py-0.5 bg-[#102F6B] text-white rounded font-medium">
+                                    {slide.secondaryCtaText}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Slide Actions */}
+                          <div className="pt-2 border-t border-[#E2DDD5] flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1">
+                              <button
+                                type="button"
+                                disabled={idx === 0}
+                                onClick={() => handleMoveSlide(idx, "up")}
+                                title={isHi ? "ऊपर ले जाएं" : "Move Up"}
+                                className="px-1.5 py-1 bg-white border border-[#D5CEC4] rounded-xs text-[10px] font-bold hover:bg-[#FAF8F3] disabled:opacity-30 cursor-pointer"
+                              >
+                                ↑
+                              </button>
+                              <button
+                                type="button"
+                                disabled={idx === settings.heroSlides.length - 1}
+                                onClick={() => handleMoveSlide(idx, "down")}
+                                title={isHi ? "नीचे ले जाएं" : "Move Down"}
+                                className="px-1.5 py-1 bg-white border border-[#D5CEC4] rounded-xs text-[10px] font-bold hover:bg-[#FAF8F3] disabled:opacity-30 cursor-pointer"
+                              >
+                                ↓
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleToggleSlide(slide.id)}
+                                className="px-2 py-1 text-[11px] text-[#55657E] hover:text-[#102F6B] hover:bg-[#FAF8F3] border border-[#D5CEC4] rounded-xs cursor-pointer"
+                              >
+                                {slide.enabled !== false ? (isHi ? "छिपाएं" : "Hide") : (isHi ? "सक्रिय करें" : "Activate")}
+                              </button>
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditSlide(slide)}
+                                className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-[11px] font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1"
+                              >
+                                <span>✏️</span>
+                                <span>{isHi ? "संपादित करें" : "Edit"}</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteSlide(slide.id)}
+                                className="px-2 py-1 text-red-600 hover:bg-red-50 border border-red-200 text-[11px] rounded-xs cursor-pointer"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
+              )}
 
-                {/* Live Interactive Preview Canvas */}
-                <div className="space-y-2 pt-3 border-t border-[#E2DDD5]">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Live Portal Preview (Desktop View)
-                    </h3>
-                    <span className="text-[10px] text-[#55657E]">
-                      Real-time interactive preview of hero banner and notice ticker
-                    </span>
-                  </div>
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 2: ANNOUNCEMENT TICKERS MANAGEMENT                   */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "announcements" && (
+                <div className="space-y-4">
+                  <div className="bg-white p-4 rounded-xs border border-[#E2DDD5] space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
+                      <div>
+                        <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                          {isHi ? "शीर्ष समाज संदेश व सूचनाएं टिकर पट्टी" : "Top Announcement Strip Settings"}
+                        </h2>
+                        <p className="text-[11px] text-[#55657E]">
+                          {isHi ? "होमपेज के शीर्ष पर घूमने वाली घोषणाएं और महत्वपूर्ण लिंक।" : "Rotating notices appearing above the main content on homepage."}
+                        </p>
+                      </div>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#102F6B] bg-[#FAF8F3] px-2.5 py-1 rounded border border-[#E2DDD5]">
+                        <input
+                          type="checkbox"
+                          checked={settings.announcementEnabled}
+                          onChange={(e) => setSettings({ ...settings, announcementEnabled: e.target.checked })}
+                          className="cursor-pointer"
+                        />
+                        <span>{isHi ? "टिकर पट्टी सक्रिय" : "Ticker Enabled"}</span>
+                      </label>
+                    </div>
 
-                  <div className="border border-[#D5CEC4] rounded-xs bg-[#FFFCF5] p-3 sm:p-4 space-y-3">
-                    {/* Top Announcement Strip Simulation */}
-                    {settings.announcementEnabled ? (
-                      <div className="bg-[#091D42] text-white px-3 py-1.5 text-xs rounded-xs flex items-center gap-2 border-l-4 border-[#F26A21]">
-                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 bg-[#F26A21] text-white rounded-xs shrink-0">
-                          Notice
-                        </span>
-                        <span className="text-xs truncate">{settings.announcement || "No announcement text configured"}</span>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-xs font-bold text-[#102F6B]">
+                        {isHi ? "सक्रिय सूचनाओं की सूची:" : "Configured Notice List:"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleOpenAddAnnouncement}
+                        className="px-3 py-1 bg-[#F26A21] hover:bg-[#D9531E] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1"
+                      >
+                        <span>+</span>
+                        <span>{isHi ? "नई घोषणा जोड़ें" : "Add Notice"}</span>
+                      </button>
+                    </div>
+
+                    {(!settings.announcementsList || settings.announcementsList.length === 0) ? (
+                      <div className="p-4 bg-[#FAF8F3] border border-dashed border-[#D5CEC4] text-center text-xs text-[#55657E]">
+                        {isHi ? "कोई घोषणा मौजूद नहीं है।" : "No notices added yet."}
                       </div>
                     ) : (
-                      <div className="text-[11px] text-[#8896AB] italic px-2">
-                        [Announcement strip is currently disabled]
+                      <div className="space-y-2">
+                        {settings.announcementsList.map((ann, idx) => (
+                          <div
+                            key={ann.id || idx}
+                            className={`p-3 rounded-xs border flex items-center justify-between gap-3 text-xs transition-colors ${
+                              ann.enabled !== false ? "bg-white border-[#E2DDD5]" : "bg-slate-50 border-slate-200 opacity-70"
+                            }`}
+                          >
+                            <div className="flex items-start gap-2.5 flex-1 min-w-0">
+                              <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-[#FFF0E2] text-[#F26A21] border border-[#F0E5D5] shrink-0 mt-0.5">
+                                {ann.tag || (isHi ? "सूचना" : "Notice")}
+                              </span>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-[#1E293B] leading-snug">{ann.text}</p>
+                                {ann.link && (
+                                  <p className="text-[10px] text-[#F26A21] font-mono mt-0.5">
+                                    {ann.linkText || "लिंक"}: {ann.link}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0">
+                              <button
+                                type="button"
+                                onClick={() => handleToggleAnnouncement(ann.id)}
+                                className="px-2 py-1 text-[11px] text-[#55657E] hover:bg-[#FAF8F3] border border-[#D5CEC4] rounded-xs cursor-pointer"
+                              >
+                                {ann.enabled !== false ? (isHi ? "छिपाएं" : "Hide") : (isHi ? "दिखाएं" : "Show")}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditAnnouncement(ann)}
+                                className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-[11px] font-bold rounded-xs cursor-pointer shadow-xs"
+                              >
+                                {isHi ? "संपादित करें" : "Edit"}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteAnnouncement(ann.id)}
+                                className="px-2 py-1 text-red-600 hover:bg-red-50 border border-red-200 text-[11px] rounded-xs cursor-pointer"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
 
-                    {/* Hero Banner Card Simulation */}
-                    <div className="bg-white rounded-xs p-4 sm:p-6 border border-[#F0E5D5] shadow-xs flex flex-col md:flex-row items-start justify-between gap-4">
-                      <div className="flex-1 max-w-2xl space-y-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold tracking-wider text-[#F26A21] uppercase bg-[#FFF0E2] px-2 py-0.5 rounded border border-[#F0E5D5]">
-                            {settings.heroBadge || "Official Community Portal"}
-                          </span>
-                          <span className="text-xs text-[#55657E]">• alokworld.in</span>
-                        </div>
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 3: HEADER & HERITAGE BANNER STRIP                    */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "header_identity" && (
+                <div className="bg-white p-5 rounded-xs border border-[#E2DDD5] space-y-4 text-xs">
+                  <div>
+                    <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide border-b border-[#E2DDD5] pb-1">
+                      {isHi ? "शीर्ष हेडर बैनर एवं संस्था शीर्षक" : "Top Header Banner Strip & Identity"}
+                    </h2>
+                    <p className="text-[11px] text-[#55657E] mt-1">
+                      {isHi
+                        ? "यह हेडर बैनर स्ट्रिप वेबसाइट के सबसे ऊपर महापुरुषों और राष्ट्रीय प्रतीकों के साथ दिखाई देती है।"
+                        : "This header banner strip displays at the very top of all website pages with historic symbols."}
+                    </p>
+                  </div>
 
-                        <h2 className="text-lg sm:text-xl font-black text-[#102F6B] leading-snug">
-                          {settings.heroTitle || "Akhil Bhartiya Samaj Directory & Central Portal"}
-                        </h2>
-
-                        <p className="text-xs text-[#64748B] leading-relaxed">
-                          {settings.heroSubtitle || "A comprehensive digital network connecting community members across India."}
-                        </p>
-
-                        <div className="pt-2 flex flex-wrap gap-2">
-                          <span className="inline-block px-3 py-1.5 bg-[#F26A21] text-white font-semibold text-xs rounded-xs shadow-xs">
-                            {settings.heroCtaText || "Explore Member Directory →"}
-                          </span>
-                          <span className="inline-block px-3 py-1.5 bg-[#102F6B] text-white font-medium text-xs rounded-xs">
-                            Register / Contact
-                          </span>
-                        </div>
+                  {/* Header Banner Strip Preview */}
+                  <div className="space-y-2">
+                    <label className="block font-bold text-[#1E293B]">
+                      {isHi ? "हेडर हेरिटेज स्ट्रिप बैनर (Header Banner Strip)" : "Header Heritage Banner Strip"}
+                    </label>
+                    <div className="p-3 bg-[#091D42] rounded-xs border border-[#E2DDD5] flex flex-col items-center justify-center">
+                      <div className="max-w-[650px] w-full bg-black/20 p-1 rounded">
+                        <img
+                          src={settings.headerBannerImage || "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/banners/heritage_banner_strip.jpg"}
+                          alt="Header Heritage Banner"
+                          className="w-full h-auto object-contain rounded"
+                        />
                       </div>
-
-                      {settings.heroImage && (
-                        <div className="w-full md:w-56 shrink-0 rounded-xs overflow-hidden border border-[#E2DDD5]">
-                          <img src={settings.heroImage} alt="Hero Banner" className="w-full h-32 object-cover" />
-                        </div>
-                      )}
+                      <span className="text-[10px] text-white/60 mt-1 font-mono">
+                        {isHi ? "अनुशंसित आकार: 1080 x 162 px (PNG / JPG / WEBP)" : "Recommended dimension: 1080 x 162 px"}
+                      </span>
                     </div>
 
-                    {/* Community Sidebar Notice Simulation */}
-                    {settings.sidebarNoticeEnabled && (
-                      <div className="bg-white p-3 border border-[#E2DDD5] rounded-xs space-y-1 max-w-md">
-                        <div className="text-[11px] font-bold text-[#102F6B] flex items-center gap-1.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#D9531E]"></span>
-                          <span>{settings.sidebarNoticeTitle || "Community Announcements"}</span>
-                        </div>
-                        <p className="text-xs text-[#55657E] leading-relaxed">
-                          {settings.sidebarNoticeContent || "Notice content text..."}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Top Announcement Strip */}
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
-                    <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Top Marquee Announcement Ticker Bar
-                    </h2>
-                    <label className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-[#1E293B]">
-                      <input
-                        type="checkbox"
-                        checked={settings.announcementEnabled}
-                        onChange={(e) => setSettings({ ...settings, announcementEnabled: e.target.checked })}
-                      />
-                      <span>Enabled</span>
-                    </label>
-                  </div>
-                  <div>
-                    <label className="block font-medium text-[#1E293B] mb-1">Announcement Bar Message</label>
-                    <textarea
-                      rows={2}
-                      value={settings.announcement}
-                      onChange={(e) => setSettings({ ...settings, announcement: e.target.value })}
-                      className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
-                    />
-                  </div>
-                </div>
-
-                {/* Sidebar Community Notice */}
-                <div className="space-y-3 pt-2">
-                  <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
-                    <h2 className="text-xs uppercase font-bold text-[#102F6B] tracking-wider">
-                      Sidebar Community Notice
-                    </h2>
-                    <label className="flex items-center gap-1.5 cursor-pointer text-xs font-medium text-[#1E293B]">
-                      <input
-                        type="checkbox"
-                        checked={settings.sidebarNoticeEnabled}
-                        onChange={(e) => setSettings({ ...settings, sidebarNoticeEnabled: e.target.checked })}
-                      />
-                      <span>Enabled</span>
-                    </label>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Notice Title</label>
+                    <div className="flex items-center gap-2 pt-1">
                       <input
                         type="text"
-                        value={settings.sidebarNoticeTitle}
-                        onChange={(e) => setSettings({ ...settings, sidebarNoticeTitle: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        placeholder="https://res.cloudinary.com/..."
+                        value={settings.headerBannerImage || ""}
+                        onChange={(e) => setSettings({ ...settings, headerBannerImage: e.target.value })}
+                        className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
+                      />
+                      <label className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#F2EDE4] border border-[#D5CEC4] text-[#102F6B] text-xs font-bold rounded-xs cursor-pointer shrink-0 shadow-xs flex items-center gap-1">
+                        <span>📤</span>
+                        <span>{uploadingHeaderStrip ? (isHi ? "अपलोड हो रहा है..." : "Uploading...") : (isHi ? "नया बैनर अपलोड करें" : "Upload New Banner")}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          disabled={uploadingHeaderStrip}
+                          onChange={handleHeaderStripUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Header Titles */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-[#E2DDD5]">
+                    <div>
+                      <label className="block font-bold text-[#1E293B] mb-1">
+                        {isHi ? "हेडर मुख्य संस्था शीर्षक (Main Title)" : "Header Main Organization Title"}
+                      </label>
+                      <input
+                        type="text"
+                        value={settings.headerTitle || ""}
+                        onChange={(e) => setSettings({ ...settings, headerTitle: e.target.value })}
+                        placeholder="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ"
+                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-bold"
                       />
                     </div>
+
                     <div>
-                      <label className="block font-medium text-[#1E293B] mb-1">Notice Description</label>
-                      <textarea
-                        rows={2}
-                        value={settings.sidebarNoticeContent}
-                        onChange={(e) => setSettings({ ...settings, sidebarNoticeContent: e.target.value })}
-                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                      <label className="block font-bold text-[#1E293B] mb-1">
+                        {isHi ? "हेडर उप-शीर्षक / टैगलाइन (Subtitle / Tagline)" : "Header Subtitle / Tagline"}
+                      </label>
+                      <input
+                        type="text"
+                        value={settings.headerSubtitle || ""}
+                        onChange={(e) => setSettings({ ...settings, headerSubtitle: e.target.value })}
+                        placeholder="अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in"
+                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-medium"
                       />
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 4: QUICK PORTAL PILLARS (6 CARDS)                    */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "quick_pillars" && (
+                <div className="bg-white p-5 rounded-xs border border-[#E2DDD5] space-y-4 text-xs">
+                  <div>
+                    <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide border-b border-[#E2DDD5] pb-1">
+                      {isHi ? "6 मुख्य पोर्टल अनुभाग (Quick Pillars Grid)" : "6 Quick Portal Pillars"}
+                    </h2>
+                    <p className="text-[11px] text-[#55657E] mt-1">
+                      {isHi
+                        ? "होमपेज मुख्य कैरोसेल के ठीक नीचे दिखने वाले 6 नेविगेशन कार्ड। आप इनके शीर्षक, विवरण और लिंक बदल सकते हैं।"
+                        : "6 navigation feature cards displayed directly below the hero carousel on the homepage."}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {(settings.quickPillars || []).map((pillar, idx) => (
+                      <div
+                        key={pillar.id || idx}
+                        className="bg-[#FAF8F3] p-3.5 rounded-xs border border-[#E2DDD5] space-y-2.5"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              value={pillar.icon || "👥"}
+                              onChange={(e) => {
+                                const updated = [...(settings.quickPillars || [])];
+                                updated[idx] = { ...updated[idx], icon: e.target.value };
+                                setSettings({ ...settings, quickPillars: updated });
+                              }}
+                              className="w-10 text-center py-1 border border-[#D5CEC4] bg-white rounded text-base"
+                              title="Emoji / Icon"
+                            />
+                            <span className="font-bold text-xs text-[#102F6B]">
+                              {isHi ? `कार्ड #${idx + 1}` : `Card #${idx + 1}`}
+                            </span>
+                          </div>
+
+                          <label className="flex items-center gap-1 cursor-pointer text-[11px] text-[#55657E]">
+                            <input
+                              type="checkbox"
+                              checked={pillar.enabled !== false}
+                              onChange={(e) => {
+                                const updated = [...(settings.quickPillars || [])];
+                                updated[idx] = { ...updated[idx], enabled: e.target.checked };
+                                setSettings({ ...settings, quickPillars: updated });
+                              }}
+                            />
+                            <span>{isHi ? "सक्रिय" : "Active"}</span>
+                          </label>
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#1E293B] mb-0.5">
+                            {isHi ? "शीर्षक (Title)" : "Title"}
+                          </label>
+                          <input
+                            type="text"
+                            value={pillar.title}
+                            onChange={(e) => {
+                              const updated = [...(settings.quickPillars || [])];
+                              updated[idx] = { ...updated[idx], title: e.target.value };
+                              setSettings({ ...settings, quickPillars: updated });
+                            }}
+                            className="w-full px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#1E293B] mb-0.5">
+                            {isHi ? "संक्षिप्त विवरण (Description)" : "Description"}
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={pillar.desc}
+                            onChange={(e) => {
+                              const updated = [...(settings.quickPillars || [])];
+                              updated[idx] = { ...updated[idx], desc: e.target.value };
+                              setSettings({ ...settings, quickPillars: updated });
+                            }}
+                            className="w-full px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden text-[11px]"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#1E293B] mb-0.5">
+                            {isHi ? "गंतव्य लिंक (Destination Link)" : "Link URL"}
+                          </label>
+                          <input
+                            type="text"
+                            value={pillar.href}
+                            onChange={(e) => {
+                              const updated = [...(settings.quickPillars || [])];
+                              updated[idx] = { ...updated[idx], href: e.target.value };
+                              setSettings({ ...settings, quickPillars: updated });
+                            }}
+                            className="w-full px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-[11px]"
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 5: NATIONAL LEADERSHIP SPOTLIGHT (RIGHT SIDEBAR)     */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "leadership" && (
+                <div className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
+                    <div>
+                      <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                        {isHi ? "दायां साइडबार: राष्ट्रीय पदाधिकारी सूची" : "Right Sidebar: Leadership Spotlight"}
+                      </h2>
+                      <p className="text-[11px] text-[#55657E]">
+                        {isHi
+                          ? "होमपेज के दाएं साइडबार में दिखने वाले पदाधिकारी। आप किसी का भी फोन नंबर, पद, स्थान या फोटो संपादित कर सकते हैं या हटा सकते हैं।"
+                          : "National office bearers displayed on the right sidebar. Phone numbers, roles, photos, and visibility can be managed here."}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleOpenAddBearer}
+                      className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#D9531E] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1 shrink-0"
+                    >
+                      <span>+</span>
+                      <span>{isHi ? "नया पदाधिकारी जोड़ें" : "Add Officer"}</span>
+                    </button>
+                  </div>
+
+                  {(!settings.featuredOfficeBearers || settings.featuredOfficeBearers.length === 0) ? (
+                    <div className="bg-white border border-[#E2DDD5] p-8 text-center rounded-xs space-y-3">
+                      <p className="text-xs text-[#55657E]">
+                        {isHi ? "वर्तमान में कोई पदाधिकारी सूची नहीं है।" : "No office bearers currently in the list."}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleOpenAddBearer}
+                        className="px-4 py-2 bg-[#102F6B] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs"
+                      >
+                        {isHi ? "+ पहला पदाधिकारी जोड़ें" : "+ Add First Officer"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {settings.featuredOfficeBearers.map((bearer, idx) => (
+                        <div
+                          key={bearer.id || idx}
+                          className={`bg-white rounded-xs border p-3 flex items-start justify-between gap-3 text-xs transition-all ${
+                            bearer.enabled !== false ? "border-[#E2DDD5] shadow-xs" : "border-slate-200 bg-slate-50 opacity-70"
+                          }`}
+                        >
+                          <div className="flex items-start gap-3 flex-1 min-w-0">
+                            {bearer.avatar ? (
+                              <img
+                                src={bearer.avatar}
+                                alt={bearer.name}
+                                className="w-12 h-12 rounded-full object-cover border border-[#E9E2D8] shrink-0"
+                              />
+                            ) : (
+                              <div className="w-12 h-12 rounded-full bg-[#102F6B] text-white font-bold flex items-center justify-center shrink-0 border border-[#F26A21]">
+                                {bearer.name?.charAt(0) || "अ"}
+                              </div>
+                            )}
+
+                            <div className="flex-1 min-w-0 space-y-0.5">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <h4 className="font-bold text-[#102F6B] truncate">{bearer.name}</h4>
+                                <span className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
+                                  bearer.enabled !== false ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-600"
+                                }`}>
+                                  {bearer.enabled !== false ? (isHi ? "सक्रिय" : "Active") : (isHi ? "छिपा हुआ" : "Hidden")}
+                                </span>
+                              </div>
+                              <p className="text-[#F26A21] font-semibold text-[11px] leading-tight">{bearer.role}</p>
+                              <p className="text-[10px] text-[#64748B]">{bearer.location}</p>
+                              {bearer.phone ? (
+                                <p className="text-[11px] font-mono text-[#102F6B] font-semibold">{bearer.phone}</p>
+                              ) : (
+                                <p className="text-[10px] text-[#8896AB] italic">{isHi ? "फोन नंबर गुप्त / उपलब्ध नहीं" : "Phone hidden"}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap-1 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEditBearer(bearer)}
+                              className="px-2 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-[11px] font-bold rounded-xs cursor-pointer shadow-xs"
+                            >
+                              {isHi ? "संपादित करें" : "Edit"}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleBearer(bearer.id)}
+                              className="px-2 py-1 text-[10px] text-[#55657E] hover:bg-[#FAF8F3] border border-[#D5CEC4] rounded-xs cursor-pointer"
+                            >
+                              {bearer.enabled !== false ? (isHi ? "छिपाएं" : "Hide") : (isHi ? "सक्रिय" : "Show")}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteBearer(bearer.id)}
+                              className="px-2 py-1 text-red-600 hover:bg-red-50 border border-red-200 text-[10px] rounded-xs cursor-pointer"
+                            >
+                              ✕ {isHi ? "हटाएं" : "Del"}
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 6: SIDEBAR WIDGETS & COMMERCIAL ADS                  */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "sidebar_widgets" && (
+                <div className="bg-white p-5 rounded-xs border border-[#E2DDD5] space-y-5 text-xs">
+                  {/* Left Sidebar Convention Notice Box */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
+                      <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                        {isHi ? "बायां साइडबार: राष्ट्रीय अधिवेशन / प्रचार बॉक्स" : "Left Sidebar: Convention Promo Box"}
+                      </h2>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#102F6B]">
+                        <input
+                          type="checkbox"
+                          checked={settings.leftNoticeEnabled !== false}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeEnabled: e.target.checked })}
+                        />
+                        <span>{isHi ? "बॉक्स सक्रिय रखें" : "Box Enabled"}</span>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "बॉक्स हेडर शीर्षक" : "Box Header Title"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.leftNoticeTitle || ""}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeTitle: e.target.value })}
+                          placeholder="राष्ट्रीय अधिवेशन 2026"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "संस्था / उप-शीर्षक" : "Organization Subtitle"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.leftNoticeOrg || ""}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeOrg: e.target.value })}
+                          placeholder="अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                      <div className="col-span-full">
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "सूचना संदेश विवरण" : "Notice Message Description"}
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={settings.leftNoticeText || ""}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeText: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "बटन का नाम" : "CTA Button Label"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.leftNoticeLinkText || ""}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeLinkText: e.target.value })}
+                          placeholder="आधिकारिक पोस्टर देखें →"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "बटन का लिंक URL" : "CTA Button Link URL"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.leftNoticeLink || ""}
+                          onChange={(e) => setSettings({ ...settings, leftNoticeLink: e.target.value })}
+                          placeholder="/gallery"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Commercial Ad Banner */}
+                  <div className="space-y-3 pt-3 border-t border-[#E2DDD5]">
+                    <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
+                      <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                        {isHi ? "व्यापार एवं उद्योग संवर्धन विज्ञापन (Ad Banner)" : "Commercial & Samaj Ad Banner"}
+                      </h2>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#102F6B]">
+                        <input
+                          type="checkbox"
+                          checked={settings.adEnabled}
+                          onChange={(e) => setSettings({ ...settings, adEnabled: e.target.checked })}
+                        />
+                        <span>{isHi ? "विज्ञापन सक्रिय" : "Ad Enabled"}</span>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "विज्ञापन शीर्षक" : "Ad Headline"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.adTitle || ""}
+                          onChange={(e) => setSettings({ ...settings, adTitle: e.target.value })}
+                          placeholder="समाज व्यापार एवं उद्योग संवर्धन"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "विज्ञापन गंतव्य लिंक" : "Ad Target URL"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.adLink || ""}
+                          onChange={(e) => setSettings({ ...settings, adLink: e.target.value })}
+                          placeholder="/contact"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                        />
+                      </div>
+                      <div className="col-span-full">
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "विज्ञापन संदेश" : "Ad Content Text"}
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={settings.adBannerText || ""}
+                          onChange={(e) => setSettings({ ...settings, adBannerText: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sidebar Community Notice */}
+                  <div className="space-y-3 pt-3 border-t border-[#E2DDD5]">
+                    <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-1">
+                      <h2 className="text-xs font-bold text-[#102F6B] uppercase tracking-wide">
+                        {isHi ? "केंद्रीय सचिवालय सहायता केंद्र सूचना" : "Secretariat Help Center Notice"}
+                      </h2>
+                      <label className="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-[#102F6B]">
+                        <input
+                          type="checkbox"
+                          checked={settings.sidebarNoticeEnabled}
+                          onChange={(e) => setSettings({ ...settings, sidebarNoticeEnabled: e.target.checked })}
+                        />
+                        <span>{isHi ? "सहायता सूचना सक्रिय" : "Notice Enabled"}</span>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "सूचना शीर्षक" : "Notice Title"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.sidebarNoticeTitle || ""}
+                          onChange={(e) => setSettings({ ...settings, sidebarNoticeTitle: e.target.value })}
+                          placeholder="केंद्रीय सचिवालय सहायता केंद्र"
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#1E293B] mb-1">
+                          {isHi ? "सूचना संदेश" : "Notice Description"}
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={settings.sidebarNoticeContent || ""}
+                          onChange={(e) => setSettings({ ...settings, sidebarNoticeContent: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -5441,6 +6384,465 @@ function AdminDashboardInner() {
                 >
                   <span>💾</span>
                   <span>{savingEvent ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (eventModal.isEdit ? (isHi ? "परिवर्तन सुरक्षित करें" : "Save Changes") : (isHi ? "कार्यक्रम जोड़ें" : "Add Event"))}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL 1: HERO SLIDE ADD / EDIT MODAL                                      */}
+      {/* ========================================================================= */}
+      {slideModal.isOpen && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/60 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white max-w-2xl w-full border border-[#D5CEC4] rounded-xs shadow-2xl p-5 sm:p-6 space-y-4 my-8 text-xs max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-3">
+              <div>
+                <h3 className="text-sm sm:text-base font-bold text-[#102F6B]">
+                  {slideModal.isEdit
+                    ? (isHi ? "कैरोसेल स्लाइड विवरण संपादित करें" : "Edit Carousel Slide")
+                    : (isHi ? "नई कैरोसेल स्लाइड जोड़ें" : "Add New Carousel Slide")}
+                </h3>
+                <p className="text-[11px] text-[#55657E]">
+                  {isHi ? "पोस्टर, मुख्य शीर्षक, तारीख, स्थान और बटन लिंक सेट करें।" : "Configure slide poster image, headline, details, and buttons."}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSlideModal((prev) => ({ ...prev, isOpen: false }))}
+                className="text-[#55657E] hover:text-[#0D1B2A] text-lg font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveSlide} className="space-y-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "स्लाइड टैग / बैज (Badge)" : "Slide Tag / Badge"}
+                  </label>
+                  <input
+                    type="text"
+                    value={slideModal.badge}
+                    onChange={(e) => setSlideModal({ ...slideModal, badge: e.target.value })}
+                    placeholder="उदा: राष्ट्रीय अधिवेशन 2026"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "मुख्य शीर्षक (Headline) *" : "Main Headline *"}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={slideModal.title}
+                    onChange={(e) => setSlideModal({ ...slideModal, title: e.target.value })}
+                    placeholder="उदा: आलोक राष्ट्रीय प्रतिभा सम्मान समारोह-2026"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-bold"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#102F6B] mb-1">
+                  {isHi ? "स्लाइड विवरण / तारीख / स्थान (Details & Subtitle)" : "Slide Subtitle / Event Description"}
+                </label>
+                <textarea
+                  rows={3}
+                  value={slideModal.subtitle}
+                  onChange={(e) => setSlideModal({ ...slideModal, subtitle: e.target.value })}
+                  placeholder="उदा: 15 नवम्बर 2026 (रविवार), समय: प्रातः 10:00 से सायं 4:00 बजे | स्थान: कांस्टीट्यूशन क्लब, नई दिल्ली..."
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden text-xs"
+                />
+              </div>
+
+              {/* Poster Image */}
+              <div className="space-y-2 p-3 bg-[#FAF8F3] rounded-xs border border-[#E2DDD5]">
+                <label className="block font-bold text-[#102F6B]">
+                  {isHi ? "स्लाइड पोस्टर / इमेज (Slide Poster Image)" : "Slide Poster Image"}
+                </label>
+
+                {slideModal.image && (
+                  <div className="w-32 h-36 bg-white border border-[#D5CEC4] rounded-xs p-1 flex items-center justify-center overflow-hidden">
+                    <img
+                      src={slideModal.image}
+                      alt="Slide preview"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="https://res.cloudinary.com/..."
+                    value={slideModal.image}
+                    onChange={(e) => setSlideModal({ ...slideModal, image: e.target.value })}
+                    className="flex-1 px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono text-xs"
+                  />
+                  <label className="px-3 py-1.5 bg-white hover:bg-[#FAF8F3] border border-[#D5CEC4] text-[#102F6B] font-bold rounded-xs cursor-pointer shrink-0 shadow-xs flex items-center gap-1">
+                    <span>📤</span>
+                    <span>{uploadingSlideImage ? (isHi ? "अपलोड हो रहा है..." : "Uploading...") : (isHi ? "पोस्टर फाइल अपलोड" : "Upload File")}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingSlideImage}
+                      onChange={handleSlideImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  {slideModal.image && (
+                    <button
+                      type="button"
+                      onClick={() => setSlideModal({ ...slideModal, image: "" })}
+                      className="px-2 py-1.5 text-xs text-red-600 hover:bg-red-50 border border-red-200 rounded-xs cursor-pointer"
+                    >
+                      {isHi ? "हटाएं" : "Clear"}
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Buttons Configuration */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "प्राथमिक बटन नाम (Primary CTA Text)" : "Primary Button Label"}
+                  </label>
+                  <input
+                    type="text"
+                    value={slideModal.ctaText}
+                    onChange={(e) => setSlideModal({ ...slideModal, ctaText: e.target.value })}
+                    placeholder="उदा: अधिवेशन विवरण देखें →"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "प्राथमिक बटन लिंक (Primary CTA URL)" : "Primary Button URL Link"}
+                  </label>
+                  <input
+                    type="text"
+                    value={slideModal.ctaLink}
+                    onChange={(e) => setSlideModal({ ...slideModal, ctaLink: e.target.value })}
+                    placeholder="उदा: /mahasabha"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "द्वितीयक बटन नाम (Secondary CTA Text)" : "Secondary Button Label (Optional)"}
+                  </label>
+                  <input
+                    type="text"
+                    value={slideModal.secondaryCtaText}
+                    onChange={(e) => setSlideModal({ ...slideModal, secondaryCtaText: e.target.value })}
+                    placeholder="उदा: आधिकारिक पोस्टर देखें"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "द्वितीयक बटन लिंक (Secondary CTA URL)" : "Secondary Button URL Link"}
+                  </label>
+                  <input
+                    type="text"
+                    value={slideModal.secondaryCtaLink}
+                    onChange={(e) => setSlideModal({ ...slideModal, secondaryCtaLink: e.target.value })}
+                    placeholder="उदा: /gallery"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                  />
+                </div>
+              </div>
+
+              {/* Status Toggle */}
+              <label className="flex items-center gap-2 p-2.5 bg-[#FFF0E2]/40 rounded border border-[#F0E5D5] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={slideModal.enabled !== false}
+                  onChange={(e) => setSlideModal({ ...slideModal, enabled: e.target.checked })}
+                  className="cursor-pointer"
+                />
+                <span className="font-bold text-xs text-[#102F6B]">
+                  {isHi ? "इस स्लाइड को होमपेज कैरोसेल में सक्रिय रखें" : "Keep this slide active on homepage carousel"}
+                </span>
+              </label>
+
+              {/* Modal Footer */}
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#E2DDD5]">
+                <button
+                  type="button"
+                  onClick={() => setSlideModal((prev) => ({ ...prev, isOpen: false }))}
+                  className="px-4 py-2 border border-[#D5CEC4] bg-white hover:bg-[#FAF8F3] text-[#55657E] rounded-xs font-semibold cursor-pointer"
+                >
+                  {isHi ? "रद्द करें" : "Cancel"}
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs font-bold cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <span>💾</span>
+                  <span>{isHi ? "स्लाइड सुरक्षित करें" : "Save Slide"}</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL 2: ANNOUNCEMENT TICKER ADD / EDIT MODAL                              */}
+      {/* ========================================================================= */}
+      {announcementModal.isOpen && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/60 z-50 flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white max-w-lg w-full border border-[#D5CEC4] rounded-xs shadow-2xl p-5 space-y-4 text-xs">
+            <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
+              <h3 className="font-bold text-sm text-[#102F6B]">
+                {announcementModal.isEdit
+                  ? (isHi ? "सूचना संदेश संपादित करें" : "Edit Notice")
+                  : (isHi ? "नई घोषणा जोड़ें" : "Add Announcement Notice")}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setAnnouncementModal((prev) => ({ ...prev, isOpen: false }))}
+                className="text-[#55657E] hover:text-[#0D1B2A] text-lg font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveAnnouncement} className="space-y-3">
+              <div>
+                <label className="block font-bold text-[#102F6B] mb-1">
+                  {isHi ? "टैग / श्रेणी (Tag)" : "Tag / Category"}
+                </label>
+                <input
+                  type="text"
+                  value={announcementModal.tag}
+                  onChange={(e) => setAnnouncementModal({ ...announcementModal, tag: e.target.value })}
+                  placeholder="उदा: सूचना, अधिवेशन, विरासत"
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#102F6B] mb-1">
+                  {isHi ? "सूचना संदेश (Notice Message) *" : "Notice Message *"}
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  value={announcementModal.text}
+                  onChange={(e) => setAnnouncementModal({ ...announcementModal, text: e.target.value })}
+                  placeholder="उदा: राष्ट्रीय अधिवेशन 2026 की पूर्व तैयारी एवं सदस्यता अभियान में सादर आमंत्रित हैं।"
+                  className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "लिंक का नाम (Link Label)" : "Link Label"}
+                  </label>
+                  <input
+                    type="text"
+                    value={announcementModal.linkText}
+                    onChange={(e) => setAnnouncementModal({ ...announcementModal, linkText: e.target.value })}
+                    placeholder="डायरेक्टरी देखें →"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "गंतव्य URL (Destination URL)" : "Link URL"}
+                  </label>
+                  <input
+                    type="text"
+                    value={announcementModal.link}
+                    onChange={(e) => setAnnouncementModal({ ...announcementModal, link: e.target.value })}
+                    placeholder="/directory"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                  />
+                </div>
+              </div>
+
+              <label className="flex items-center gap-2 p-2 bg-[#FAF8F3] rounded border border-[#E2DDD5] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={announcementModal.enabled !== false}
+                  onChange={(e) => setAnnouncementModal({ ...announcementModal, enabled: e.target.checked })}
+                />
+                <span className="font-semibold text-[#102F6B]">
+                  {isHi ? "टिकर में प्रदर्शित करें" : "Display in Notice Ticker"}
+                </span>
+              </label>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E2DDD5]">
+                <button
+                  type="button"
+                  onClick={() => setAnnouncementModal((prev) => ({ ...prev, isOpen: false }))}
+                  className="px-3 py-1.5 border border-[#D5CEC4] bg-white text-[#55657E] rounded-xs font-semibold cursor-pointer"
+                >
+                  {isHi ? "रद्द करें" : "Cancel"}
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs font-bold cursor-pointer shadow-xs"
+                >
+                  {isHi ? "सूचना सुरक्षित करें" : "Save Notice"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* MODAL 3: LEADERSHIP OFFICE BEARER ADD / EDIT MODAL                         */}
+      {/* ========================================================================= */}
+      {bearerModal.isOpen && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/60 z-50 flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-white max-w-lg w-full border border-[#D5CEC4] rounded-xs shadow-2xl p-5 space-y-4 text-xs my-8">
+            <div className="flex items-center justify-between border-b border-[#E2DDD5] pb-2">
+              <h3 className="font-bold text-sm text-[#102F6B]">
+                {bearerModal.isEdit
+                  ? (isHi ? "पदाधिकारी विवरण संपादित करें" : "Edit Office Bearer")
+                  : (isHi ? "नया पदाधिकारी जोड़ें" : "Add Office Bearer")}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setBearerModal((prev) => ({ ...prev, isOpen: false }))}
+                className="text-[#55657E] hover:text-[#0D1B2A] text-lg font-bold p-1 cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveBearer} className="space-y-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "पूरा नाम (Full Name) *" : "Full Name *"}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={bearerModal.name}
+                    onChange={(e) => setBearerModal({ ...bearerModal, name: e.target.value })}
+                    placeholder="उदा: सर्वश्री अतिवल सिंह"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "पद / दायित्व (Role / Designation)" : "Role / Designation"}
+                  </label>
+                  <input
+                    type="text"
+                    value={bearerModal.role}
+                    onChange={(e) => setBearerModal({ ...bearerModal, role: e.target.value })}
+                    placeholder="उदा: राष्ट्रीय अध्यक्ष"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-semibold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "स्थान / राज्य (Location / State)" : "Location / State"}
+                  </label>
+                  <input
+                    type="text"
+                    value={bearerModal.location}
+                    onChange={(e) => setBearerModal({ ...bearerModal, location: e.target.value })}
+                    placeholder="उदा: लखनऊ, उत्तर प्रदेश"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#102F6B] mb-1">
+                    {isHi ? "दूरभाष / फोन (Phone - वैकल्पिक)" : "Phone Number (Optional)"}
+                  </label>
+                  <input
+                    type="text"
+                    value={bearerModal.phone}
+                    onChange={(e) => setBearerModal({ ...bearerModal, phone: e.target.value })}
+                    placeholder="+91 XXXXX XXXXX (रिक्त छोड़ सकते हैं)"
+                    className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
+                  />
+                  <span className="text-[10px] text-[#8896AB]">
+                    {isHi ? "यदि गुप्त रखना हो तो खाली छोड़ें।" : "Leave blank if private."}
+                  </span>
+                </div>
+              </div>
+
+              {/* Photo / Avatar */}
+              <div className="space-y-1.5 p-2.5 bg-[#FAF8F3] rounded border border-[#E2DDD5]">
+                <label className="block font-bold text-[#102F6B]">
+                  {isHi ? "फोटो / अवतार (Photo / Avatar)" : "Avatar Photo"}
+                </label>
+
+                {bearerModal.avatar && (
+                  <div className="w-14 h-14 rounded-full overflow-hidden border border-[#E9E2D8] mb-1">
+                    <img src={bearerModal.avatar} alt="Bearer preview" className="w-full h-full object-cover" />
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="https://res.cloudinary.com/..."
+                    value={bearerModal.avatar}
+                    onChange={(e) => setBearerModal({ ...bearerModal, avatar: e.target.value })}
+                    className="flex-1 px-2 py-1 border border-[#D5CEC4] bg-white rounded-xs text-xs font-mono"
+                  />
+                  <label className="px-2.5 py-1 bg-white border border-[#D5CEC4] text-[#102F6B] font-bold rounded-xs cursor-pointer text-xs shrink-0 flex items-center gap-1">
+                    <span>📤</span>
+                    <span>{uploadingBearerAvatar ? "..." : (isHi ? "अपलोड" : "Upload")}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploadingBearerAvatar}
+                      onChange={handleBearerAvatarUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <label className="flex items-center gap-2 p-2 bg-white rounded border border-[#E2DDD5] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={bearerModal.enabled !== false}
+                  onChange={(e) => setBearerModal({ ...bearerModal, enabled: e.target.checked })}
+                />
+                <span className="font-semibold text-[#102F6B]">
+                  {isHi ? "दाएं साइडबार में प्रदर्शित करें" : "Display on right sidebar"}
+                </span>
+              </label>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E2DDD5]">
+                <button
+                  type="button"
+                  onClick={() => setBearerModal((prev) => ({ ...prev, isOpen: false }))}
+                  className="px-3 py-1.5 border border-[#D5CEC4] bg-white text-[#55657E] rounded-xs font-semibold cursor-pointer"
+                >
+                  {isHi ? "रद्द करें" : "Cancel"}
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 bg-[#102F6B] hover:bg-[#091D42] text-white rounded-xs font-bold cursor-pointer shadow-xs"
+                >
+                  {isHi ? "पदाधिकारी सुरक्षित करें" : "Save Officer"}
                 </button>
               </div>
             </form>

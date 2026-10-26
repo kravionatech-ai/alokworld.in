@@ -20,7 +20,7 @@ export default function HeroCarousel({ settings }) {
   }, []);
 
   // 1-to-1 exact matching of slide content to real project posters and banners
-  const slides = [
+  const defaultSlides = [
     {
       id: "hero-main",
       badge: settings?.heroBadge || "आधिकारिक समुदाय पोर्टल",
@@ -35,6 +35,7 @@ export default function HeroCarousel({ settings }) {
       image: settings?.heroImage || "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924154/alokworld/banners/web_sit_front1.png",
       imageAlt: "अखिल भारतीय लोधी अधिकारी कर्मचारी संघ — स्वामी ब्रह्मानंद जी महाराज, आलोक प्रतीक एवं वीरांगना रानी अवंती बाई लोधी",
       objectFit: "contain",
+      enabled: true,
     },
     {
       id: "hero-adhiveshan-2026",
@@ -49,6 +50,7 @@ export default function HeroCarousel({ settings }) {
       image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
       imageAlt: "आलोक राष्ट्रीय प्रतिभा सम्मान समारोह 2026 — कांस्टीट्यूशन क्लब नई दिल्ली मुख्य आमंत्रण पोस्टर",
       objectFit: "contain",
+      enabled: true,
     },
     {
       id: "hero-education-merit",
@@ -63,6 +65,7 @@ export default function HeroCarousel({ settings }) {
       image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924151/alokworld/posters/poster4.jpg",
       imageAlt: "स्वामी ब्रह्मानंद पुरस्कार — आईआईटी, एमबीबीएस, आईआईएम, आईआईएफटी प्रतिभावान छात्र-छात्रा सम्मान पोस्टर",
       objectFit: "contain",
+      enabled: true,
     },
     {
       id: "hero-public-service",
@@ -77,6 +80,7 @@ export default function HeroCarousel({ settings }) {
       image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924150/alokworld/posters/poster3.jpg",
       imageAlt: "अमर शहीद महारानी अवंतीबाई लोधी पुरस्कार — सरकारी व अर्ध-सरकारी अधिकारी/कर्मचारी सदस्य सम्मान पोस्टर",
       objectFit: "contain",
+      enabled: true,
     },
     {
       id: "hero-organization-expand",
@@ -91,6 +95,7 @@ export default function HeroCarousel({ settings }) {
       image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/posters/poster5.jpg",
       imageAlt: "राजा हिरदे शाह पुरस्कार — आलोक संगठन सशक्तीकरण एवं सदस्यता सम्मान पोस्टर",
       objectFit: "contain",
+      enabled: true,
     },
     {
       id: "hero-ratna-award",
@@ -105,8 +110,14 @@ export default function HeroCarousel({ settings }) {
       image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924150/alokworld/posters/poster2.jpg",
       imageAlt: "आलोक रत्न पुरस्कार — समाज सेवा एवं समग्र विकास विशिष्ट सम्मान पोस्टर",
       objectFit: "contain",
+      enabled: true,
     },
   ];
+
+  // Dynamic slides from admin settings or fall back to defaults
+  const slides = Array.isArray(settings?.heroSlides) && settings.heroSlides.length > 0
+    ? settings.heroSlides.filter((s) => s.enabled !== false)
+    : defaultSlides;
 
   // Static SSR preview to prevent hydration mismatch and enable SEO indexing before Swiper mounts
   if (!mounted) {

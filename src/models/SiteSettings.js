@@ -8,14 +8,87 @@ const SiteSettingsSchema = new mongoose.Schema(
     // Top Announcement Strip
     announcement: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी पोर्टल पर आपका हार्दिक स्वागत है। संगठित समाज, सशक्त राष्ट्र।" },
     announcementEnabled: { type: Boolean, default: true },
+    announcementsList: [
+      {
+        id: { type: String },
+        tag: { type: String, default: "सूचना" },
+        text: { type: String, required: true },
+        link: { type: String, default: "/directory" },
+        linkText: { type: String, default: "विवरण देखें →" },
+        enabled: { type: Boolean, default: true },
+      },
+    ],
 
-    // Hero Banner Customization
+    // Header Heritage Banner & Organization Title
+    headerBannerImage: {
+      type: String,
+      default: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924152/alokworld/banners/heritage_banner_strip.jpg",
+    },
+    headerTitle: {
+      type: String,
+      default: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ",
+    },
+    headerSubtitle: {
+      type: String,
+      default: "अखिल भारतीय लोधी समाज निर्देशिका — alokworld.in",
+    },
+
+    // Hero Banner Customization (Legacy single-slide fallback)
     heroBadge: { type: String, default: "आधिकारिक समुदाय पोर्टल" },
     heroTitle: { type: String, default: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल" },
     heroSubtitle: { type: String, default: "देश भर के समाज बंधुओं, वरिष्ठ मार्गदर्शकों, चिकित्सकों, अभियंताओं, प्रशासनिक अधिकारियों, अधिवक्ताओं एवं युवाओं को जोड़ने वाला डिजिटल मंच।" },
     heroCtaText: { type: String, default: "सदस्य डायरेक्टरी देखें →" },
     heroCtaLink: { type: String, default: "/directory" },
     heroImage: { type: String, default: "" },
+
+    // Homepage Hero Multi-Slide Carousel Management
+    heroSlides: [
+      {
+        id: { type: String },
+        badge: { type: String, default: "" },
+        title: { type: String, required: true },
+        subtitle: { type: String, default: "" },
+        ctaText: { type: String, default: "" },
+        ctaLink: { type: String, default: "" },
+        secondaryCtaText: { type: String, default: "" },
+        secondaryCtaLink: { type: String, default: "" },
+        image: { type: String, default: "" },
+        enabled: { type: Boolean, default: true },
+      },
+    ],
+
+    // Quick Portal Pillars (6 cards under Hero)
+    quickPillars: [
+      {
+        id: { type: String },
+        title: { type: String, required: true },
+        desc: { type: String, default: "" },
+        href: { type: String, default: "/" },
+        icon: { type: String, default: "👥" },
+        enabled: { type: Boolean, default: true },
+      },
+    ],
+
+    // Left Sidebar Convention Notice Box
+    leftNoticeTitle: { type: String, default: "राष्ट्रीय अधिवेशन 2026" },
+    leftNoticeOrg: { type: String, default: "अखिल भारतीय लोधी-लोधा अधिकारी-कर्मचारी संघ (आलोक)" },
+    leftNoticeText: { type: String, default: "राष्ट्रीय महाधिवेशन 2026 में समाज के समस्त अधिकारी, कर्मचारी एवं प्रबुद्धजन सादर आमंत्रित हैं।" },
+    leftNoticeLink: { type: String, default: "/gallery" },
+    leftNoticeLinkText: { type: String, default: "आधिकारिक पोस्टर देखें →" },
+    leftNoticeEnabled: { type: Boolean, default: true },
+
+    // Right Sidebar National Leadership Spotlight
+    featuredOfficeBearers: [
+      {
+        id: { type: String },
+        name: { type: String, required: true },
+        role: { type: String, default: "" },
+        location: { type: String, default: "" },
+        phone: { type: String, default: "" },
+        avatar: { type: String, default: "" },
+        enabled: { type: Boolean, default: true },
+      },
+    ],
 
     // Event & Live Countdown Management (By default empty & disabled until user adds/activates an event)
     eventEnabled: { type: Boolean, default: false },
