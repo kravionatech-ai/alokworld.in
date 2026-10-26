@@ -49,6 +49,14 @@ const nextConfig = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/admin/:tab((?!login).+)",
+        destination: "/admin?tab=:tab",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

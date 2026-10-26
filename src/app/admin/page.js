@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, Suspense } from "react";
 import InquiryChatModal from "@/components/admin/InquiryChatModal";
 import ComposeEmailModal from "@/components/admin/ComposeEmailModal";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { getSearchTokens } from "@/lib/transliteration";
@@ -129,13 +129,110 @@ function Icon({ name, className = "w-4 h-4 shrink-0" }) {
   }
 }
 
-export default function AdminDashboard() {
+const VALID_TABS = [
+  "overview",
+  "system_health",
+  "pages",
+  "hero_widgets",
+  "events",
+  "gallery",
+  "members",
+  "add_member",
+  "messages",
+  "site_settings",
+  "maintenance",
+  "seo_settings",
+];
+
+const TAB_ALIASES = {
+  dashboard: "overview",
+  analytics: "overview",
+  health: "system_health",
+  server: "system_health",
+  cms: "pages",
+  page: "pages",
+  hero: "hero_widgets",
+  widgets: "hero_widgets",
+  announcements: "hero_widgets",
+  event: "events",
+  countdown: "events",
+  photos: "gallery",
+  photo: "gallery",
+  directory: "members",
+  member: "members",
+  new_member: "add_member",
+  new: "add_member",
+  emails: "messages",
+  email: "messages",
+  contact: "messages",
+  contacts: "messages",
+  inbox: "messages",
+  inquiries: "messages",
+  settings: "site_settings",
+  site: "site_settings",
+  seo: "seo_settings",
+};
+
+function normalizeTab(input) {
+  if (!input) return "members";
+  const clean = String(input).toLowerCase().trim().replace(/^[#?]/, "").replace(/^tab=/, "");
+  if (VALID_TABS.includes(clean)) return clean;
+  if (TAB_ALIASES[clean]) return TAB_ALIASES[clean];
+  return "members";
+}
+
+function AdminDashboardInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentUser, setCurrentUser] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
 
   // Layout & Navigation State
-  const [activeTab, setActiveTab] = useState("members");
+  // Layout & Navigation State with Full Bidirectional Route Synchronization
+  const [activeTab, _setActiveTab] = useState(() => {
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search);
+      const tabParam = sp.get("tab") || window.location.hash.replace("#", "");
+      if (tabParam) return normalizeTab(tabParam);
+    }
+    return "members";
+  });
+
+  const setActiveTab = (tabId) => {
+    const normalized = normalizeTab(tabId);
+    _setActiveTab(normalized);
+    if (typeof window !== "undefined") {
+      try {
+        const currentUrl = new URL(window.location.href);
+        if (currentUrl.searchParams.get("tab") !== normalized) {
+          currentUrl.searchParams.set("tab", normalized);
+          window.history.pushState({ tab: normalized }, "", currentUrl.toString());
+        }
+      } catch (err) {
+        console.error("URL state sync error:", err);
+      }
+    }
+  };
+
+  // Synchronize when searchParams changes (e.g. direct URL navigation or browser history)
+  useEffect(() => {
+    const tabParam = searchParams?.get("tab");
+    if (tabParam) {
+      const normalized = normalizeTab(tabParam);
+      _setActiveTab(normalized);
+    }
+  }, [searchParams]);
+
+  // Synchronize with browser Back / Forward buttons (popstate)
+  useEffect(() => {
+    const handlePopState = () => {
+      const sp = new URLSearchParams(window.location.search);
+      const tabParam = sp.get("tab") || window.location.hash.replace("#", "");
+      _setActiveTab(normalizeTab(tabParam));
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [adminLang, setAdminLang] = useState("en"); // "en" | "hi" (bilingual admin toggle)
 
@@ -1420,9 +1517,11 @@ export default function AdminDashboard() {
                 {sec.items.map((item) => {
                   const isSelected = activeTab === item.id;
                   return (
-                    <button
+                    <Link
                       key={item.id}
-                      onClick={() => {
+                      href={`/admin?tab=${item.id}`}
+                      onClick={(e) => {
+                        e.preventDefault();
                         if (item.onClick) {
                           item.onClick();
                         } else {
@@ -1455,7 +1554,7 @@ export default function AdminDashboard() {
                           <span className="w-1.5 h-1.5 rounded-full bg-[#D9531E]" title="Active"></span>
                         )}
                       </div>
-                    </button>
+                    </Link>
                   );
                 })}
               </div>
@@ -4410,5 +4509,21 @@ export default function AdminDashboard() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F8F6F0] flex items-center justify-center p-4">
+          <div className="bg-white border border-[#E2DDD5] p-6 text-center text-xs font-mono text-[#55657E]">
+            Loading Admin Control Center...
+          </div>
+        </div>
+      }
+    >
+      <AdminDashboardInner />
+    </Suspense>
   );
 }
