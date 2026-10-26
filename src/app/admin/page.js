@@ -438,6 +438,46 @@ function AdminDashboardInner() {
   const [selectedEmailDetail, setSelectedEmailDetail] = useState(null);
   const [dashboardStats, setDashboardStats] = useState(null);
 
+  // Seamlessly merge inbound EmailLogs and Contact inquiries so no inquiry is ever missed
+  const allInboundMessages = useMemo(() => {
+    const list = [...emailsList.filter((e) => e.direction === "inbound")];
+    const existingContactIds = new Set(
+      list
+        .map((e) => String(e.contactInquiryId || e.metadata?.contactId || ""))
+        .filter(Boolean)
+    );
+
+    for (const msg of messages) {
+      const msgId = String(msg._id || msg.id);
+      if (!existingContactIds.has(msgId)) {
+        list.push({
+          _id: msg._id || msg.id,
+          id: msg._id || msg.id,
+          direction: "inbound",
+          emailType: "inbound_email",
+          from: `${msg.name} <${msg.email}>`,
+          to: ["admin@alokworld.in"],
+          replyTo: msg.email,
+          subject: msg.subject || "वेबसाइट संपर्क संदेश",
+          textBody: msg.message || "",
+          htmlBody: msg.message || "",
+          status: "received",
+          isRead: msg.isRead || false,
+          contactInquiryId: msg._id,
+          createdAt: msg.createdAt,
+          metadata: {
+            contactId: msg._id,
+            senderName: msg.name,
+            senderEmail: msg.email,
+            senderPhone: msg.phone || "",
+          },
+        });
+      }
+    }
+
+    return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  }, [emailsList, messages]);
+
   // Confirmation Modal for Destructive Operations
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -3776,9 +3816,9 @@ function AdminDashboardInner() {
                   <span className={`text-[10.5px] px-1.5 py-0.2 rounded-full font-mono ${
                     messagesSubTab === "received" ? "bg-white/20 text-white" : "bg-slate-200 text-slate-700"
                   }`}>
-                    {emailsList.filter((e) => e.direction === "inbound").length}
+                    {allInboundMessages.length}
                   </span>
-                  {emailStats.unreadInbound > 0 && (
+                  {allInboundMessages.some((e) => !e.isRead) && (
                     <span className="w-2 h-2 rounded-full bg-[#F26A21]"></span>
                   )}
                 </button>
@@ -3818,7 +3858,7 @@ function AdminDashboardInner() {
                           receivedFilter === "all" ? "bg-[#102F6B] text-white" : "bg-[#FAF8F3] text-[#55657E] border border-[#E2DDD5]"
                         }`}
                       >
-                        {isHi ? "सभी (All)" : "All"} ({emailsList.filter((e) => e.direction === "inbound").length})
+                        {isHi ? "सभी (All)" : "All"} ({allInboundMessages.length})
                       </button>
                       <button
                         type="button"
@@ -3828,7 +3868,7 @@ function AdminDashboardInner() {
                         }`}
                       >
                         <span>{isHi ? "अपठित (Unread)" : "Unread"}</span>
-                        <span className="font-mono">({emailsList.filter((e) => e.direction === "inbound" && !e.isRead).length})</span>
+                        <span className="font-mono">({allInboundMessages.filter((e) => !e.isRead).length})</span>
                       </button>
                       <button
                         type="button"
@@ -3837,7 +3877,7 @@ function AdminDashboardInner() {
                           receivedFilter === "read" ? "bg-[#102F6B] text-white" : "bg-[#FAF8F3] text-[#55657E] border border-[#E2DDD5]"
                         }`}
                       >
-                        {isHi ? "पठित (Read)" : "Read"} ({emailsList.filter((e) => e.direction === "inbound" && e.isRead).length})
+                        {isHi ? "पठित (Read)" : "Read"} ({allInboundMessages.filter((e) => e.isRead).length})
                       </button>
                     </div>
 
@@ -3863,8 +3903,7 @@ function AdminDashboardInner() {
 
                   {/* Inbound Email Cards List */}
                   {(() => {
-                    const inboundList = emailsList
-                      .filter((e) => e.direction === "inbound")
+                    const inboundList = allInboundMessages
                       .filter((e) => {
                         if (receivedFilter === "unread") return !e.isRead;
                         if (receivedFilter === "read") return e.isRead;
@@ -3876,7 +3915,9 @@ function AdminDashboardInner() {
                         return (
                           (e.subject && e.subject.toLowerCase().includes(s)) ||
                           (e.from && e.from.toLowerCase().includes(s)) ||
-                          (e.textBody && e.textBody.toLowerCase().includes(s))
+                          (e.textBody && e.textBody.toLowerCase().includes(s)) ||
+                          (e.metadata?.senderName && e.metadata.senderName.toLowerCase().includes(s)) ||
+                          (e.metadata?.senderEmail && e.metadata.senderEmail.toLowerCase().includes(s))
                         );
                       });
 

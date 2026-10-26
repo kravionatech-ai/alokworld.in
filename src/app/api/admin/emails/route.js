@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import EmailLog from "@/models/EmailLog";
+import Contact from "@/models/Contact";
 import { verifyAdminToken } from "@/lib/auth";
 
 export async function GET(req) {
@@ -113,6 +114,7 @@ export async function PATCH(req) {
       const filter = { isRead: false };
       if (direction && direction !== "all") filter.direction = direction;
       await EmailLog.updateMany(filter, { $set: { isRead: true } });
+      await Contact.updateMany({ isRead: false }, { $set: { isRead: true } });
       return NextResponse.json({ success: true, message: "Marked all as read" });
     }
 
@@ -125,6 +127,11 @@ export async function PATCH(req) {
       { $set: { isRead: Boolean(isRead) } },
       { new: true }
     );
+    if (!updated) {
+      await Contact.findByIdAndUpdate(logId, { $set: { isRead: Boolean(isRead) } });
+    } else if (updated.contactInquiryId) {
+      await Contact.findByIdAndUpdate(updated.contactInquiryId, { $set: { isRead: Boolean(isRead) } });
+    }
 
     return NextResponse.json({ success: true, log: updated });
   } catch (err) {
@@ -148,7 +155,12 @@ export async function DELETE(req) {
     }
 
     await connectDB();
-    await EmailLog.findByIdAndDelete(logId);
+    const deleted = await EmailLog.findByIdAndDelete(logId);
+    if (!deleted) {
+      await Contact.findByIdAndDelete(logId);
+    } else if (deleted.contactInquiryId) {
+      await Contact.findByIdAndDelete(deleted.contactInquiryId);
+    }
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("DELETE /api/admin/emails error:", err.message);
