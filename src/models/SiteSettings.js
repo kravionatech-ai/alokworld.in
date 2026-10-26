@@ -35,6 +35,26 @@ const SiteSettingsSchema = new mongoose.Schema(
     eventCtaText: { type: String, default: "अधिवेशन विवरण एवं पंजीकरण →" },
     eventCtaLink: { type: String, default: "/mahasabha" },
 
+    // Community Events Directory & Management
+    eventsList: [
+      {
+        id: { type: String },
+        title: { type: String, required: true },
+        subtitle: { type: String, default: "" },
+        badge: { type: String, default: "विशेष आगामी कार्यक्रम" },
+        date: { type: String, default: "2026-11-02T10:00:00" },
+        location: { type: String, default: "नई दिल्ली" },
+        description: { type: String, default: "" },
+        image: { type: String, default: "" },
+        countdownLabel: { type: String, default: "वेबसाइट लाइव एवं उल्टी गिनती" },
+        ctaText: { type: String, default: "विवरण देखें →" },
+        ctaLink: { type: String, default: "/" },
+        isFeatured: { type: Boolean, default: false },
+        status: { type: String, default: "upcoming" },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+
     // Sidebar Widgets Configuration
     sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं महत्वपूर्ण सूचनाएं" },
     sidebarNoticeContent: { type: String, default: "समस्त समाज बंधुओं से अनुरोध है कि डायरेक्टरी में अपना एवं अपने परिवार का प्रामाणिक विवरण अद्यतन रखें।" },

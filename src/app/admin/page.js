@@ -438,6 +438,28 @@ function AdminDashboardInner() {
   const [selectedEmailDetail, setSelectedEmailDetail] = useState(null);
   const [dashboardStats, setDashboardStats] = useState(null);
 
+  // Events & Community Program Management State
+  const [eventsList, setEventsList] = useState([]);
+  const [eventModal, setEventModal] = useState({
+    isOpen: false,
+    isEdit: false,
+    id: null,
+    title: "",
+    subtitle: "",
+    badge: "विशेष आगामी कार्यक्रम",
+    date: "2026-11-02T10:00:00",
+    location: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
+    description: "",
+    image: "",
+    countdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
+    ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
+    ctaLink: "/mahasabha",
+    isFeatured: false,
+    status: "upcoming",
+  });
+  const [uploadingEventImage, setUploadingEventImage] = useState(false);
+  const [savingEvent, setSavingEvent] = useState(false);
+
   // Seamlessly merge inbound EmailLogs and Contact inquiries so no inquiry is ever missed
   const allInboundMessages = useMemo(() => {
     const list = [...emailsList.filter((e) => e.direction === "inbound")];
@@ -528,7 +550,17 @@ function AdminDashboardInner() {
             ...s,
             keyRegions: Array.isArray(s.keyRegions) ? s.keyRegions.join(", ") : s.keyRegions || "",
           });
+          if (Array.isArray(s.eventsList) && s.eventsList.length > 0) {
+            setEventsList(s.eventsList);
+          }
         }
+      })
+      .catch(console.error);
+
+    fetch("/api/events")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.events) setEventsList(d.events);
       })
       .catch(console.error);
 
@@ -1351,6 +1383,174 @@ function AdminDashboardInner() {
     } catch (err) {
       showBanner(err.message, true);
     }
+  };
+
+  // ==========================================
+  // EVENT MANAGEMENT HANDLERS (ADD / EDIT / UPLOAD)
+  // ==========================================
+  const handleOpenAddEvent = () => {
+    setEventModal({
+      isOpen: true,
+      isEdit: false,
+      id: null,
+      title: "",
+      subtitle: "",
+      badge: "विशेष आगामी कार्यक्रम",
+      date: "2026-11-02T10:00:00",
+      location: "कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली",
+      description: "",
+      image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
+      countdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
+      ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
+      ctaLink: "/mahasabha",
+      isFeatured: false,
+      status: "upcoming",
+    });
+  };
+
+  const handleOpenEditEvent = (evt) => {
+    setEventModal({
+      isOpen: true,
+      isEdit: true,
+      id: evt.id,
+      title: evt.title || "",
+      subtitle: evt.subtitle || "",
+      badge: evt.badge || "विशेष आगामी कार्यक्रम",
+      date: evt.date ? evt.date.slice(0, 16) : "2026-11-02T10:00",
+      location: evt.location || "",
+      description: evt.description || "",
+      image: evt.image || "",
+      countdownLabel: evt.countdownLabel || "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
+      ctaText: evt.ctaText || "विवरण देखें →",
+      ctaLink: evt.ctaLink || "/",
+      isFeatured: Boolean(evt.isFeatured),
+      status: evt.status || "upcoming",
+    });
+  };
+
+  const handleEventImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingEventImage(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "alokworld_posters");
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+
+      setEventModal((prev) => ({ ...prev, image: data.url }));
+      showBanner(isHi ? "पोस्टर चित्र सफलतापूर्वक अपलोड हुआ!" : "Poster image uploaded successfully!");
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setUploadingEventImage(false);
+    }
+  };
+
+  const handleSaveEvent = async (e) => {
+    if (e) e.preventDefault();
+    if (!eventModal.title.trim()) {
+      showBanner(isHi ? "कृपया कार्यक्रम का शीर्षक दर्ज करें" : "Please enter event title", true);
+      return;
+    }
+    setSavingEvent(true);
+    try {
+      const method = eventModal.isEdit ? "PUT" : "POST";
+      const res = await fetch("/api/events", {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(eventModal),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save event");
+
+      if (data.events) {
+        setEventsList(data.events);
+      }
+      if (eventModal.isFeatured) {
+        setSettings((prev) => ({
+          ...prev,
+          eventTitle: eventModal.title,
+          eventSubtitle: eventModal.subtitle,
+          eventBadge: eventModal.badge,
+          eventDate: eventModal.date,
+          eventLocation: eventModal.location,
+          eventDescription: eventModal.description,
+          eventImage: eventModal.image || prev.eventImage,
+          eventCountdownLabel: eventModal.countdownLabel,
+          eventCtaText: eventModal.ctaText,
+          eventCtaLink: eventModal.ctaLink,
+          eventEnabled: true,
+        }));
+      }
+
+      showBanner(data.message || (isHi ? "कार्यक्रम सफलतापूर्वक सहेजा गया!" : "Event saved successfully!"));
+      setEventModal((prev) => ({ ...prev, isOpen: false }));
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setSavingEvent(false);
+    }
+  };
+
+  const handleSetFeaturedEvent = async (evt) => {
+    try {
+      const res = await fetch("/api/events", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: evt.id, isFeatured: true }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to set featured event");
+
+      if (data.events) setEventsList(data.events);
+      setSettings((prev) => ({
+        ...prev,
+        eventTitle: evt.title,
+        eventSubtitle: evt.subtitle,
+        eventBadge: evt.badge,
+        eventDate: evt.date,
+        eventLocation: evt.location,
+        eventDescription: evt.description,
+        eventImage: evt.image || prev.eventImage,
+        eventCountdownLabel: evt.countdownLabel,
+        eventCtaText: evt.ctaText,
+        eventCtaLink: evt.ctaLink,
+        eventEnabled: true,
+      }));
+      showBanner(isHi ? `"${evt.title}" को मुख्य उल्टी गिनती व पॉपअप कार्यक्रम बनाया गया!` : `"${evt.title}" set as featured countdown event!`);
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleDeleteEvent = (eventId, eventTitle) => {
+    requestConfirmation({
+      title: isHi ? "कार्यक्रम हटाएं" : "Delete Event",
+      message: isHi
+        ? `क्या आप वास्तव में "${eventTitle || 'यह कार्यक्रम'}" को हटाना चाहते हैं?`
+        : `Are you sure you want to delete "${eventTitle || 'this event'}"?`,
+      targetName: eventTitle,
+      confirmText: isHi ? "हटाएं" : "Delete",
+      onConfirm: async () => {
+        try {
+          const res = await fetch(`/api/events?id=${eventId}`, { method: "DELETE" });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to delete event");
+          if (data.events) setEventsList(data.events);
+          showBanner(isHi ? "कार्यक्रम सफलतापूर्वक हटा दिया गया।" : "Event deleted successfully.");
+        } catch (err) {
+          showBanner(err.message, true);
+        }
+      },
+    });
   };
 
   // ==========================================
@@ -2865,28 +3065,37 @@ function AdminDashboardInner() {
           )}
 
           {/* ========================================================================= */}
-          {/* VIEW: PHOTO GALLERY */}
-                    {/* ========================================================================= */}
-          {/* VIEW: EVENTS & LIVE COUNTDOWN (2 NOV WEBSITE LIVE)                       */}
+          {/* VIEW: EVENTS & LIVE COUNTDOWN (COMMUNITY PROGRAMS & MANAGEMENT)          */}
           {/* ========================================================================= */}
           {activeTab === "events" && (
-            <div className="space-y-4">
+            <div className="space-y-5">
+              {/* Header Toolbar */}
               <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B] flex items-center gap-2">
-                    <span>{isHi ? "वेबसाइट लाइव एवं उल्टी गिनती (2 नवंबर 2026)" : "Events & Live Countdown (2 Nov 2026)"}</span>
+                    <span>{isHi ? "कार्यक्रम प्रबंधन एवं लाइव उल्टी गिनती" : "Events & Live Countdown Management"}</span>
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${settings.eventEnabled ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"}`}>
                       {settings.eventEnabled ? (isHi ? "सक्रिय (Live)" : "Active") : (isHi ? "निष्क्रिय" : "Disabled")}
                     </span>
                   </h1>
                   <p className="text-xs text-[#55657E]">
                     {isHi
-                      ? "2 नवंबर 2026 को वेबसाइट लाइव करने हेतु शीर्ष उल्टी गिनती पट्टी एवं पॉपअप का सरल प्रबंधन।"
-                      : "Manage the sticky header countdown ticker and visitor announcement targeting 2 November 2026."}
+                      ? "आगामी कार्यक्रमों, सम्मेलनों को जोड़ें, पोस्टर और विवरण संपादित करें एवं शीर्ष उल्टी गिनती पट्टी नियंत्रित करें।"
+                      : "Add upcoming events, manage poster images & details, and control the top sticky countdown banner."}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
+                  {/* + Add New Event Button */}
+                  <button
+                    type="button"
+                    onClick={handleOpenAddEvent}
+                    className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5"
+                  >
+                    <span className="text-sm">➕</span>
+                    <span>{isHi ? "नया कार्यक्रम जोड़ें (+ Add Event)" : "+ Add New Event"}</span>
+                  </button>
+
                   {/* 1-Click 2 Nov Preset */}
                   <button
                     type="button"
@@ -2900,7 +3109,7 @@ function AdminDashboardInner() {
                         eventBadge: "वेबसाइट लाइव उल्टी गिनती",
                         eventDate: "2026-11-02T10:00:00",
                         eventCountdownLabel: "वेबसाइट लाइव होने में शेष समय",
-                        eventLocation: "नई दिल्ली",
+                        eventLocation: "नई दिल्ली (केंद्रीय सचिवालय)",
                         eventDescription: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) का आधिकारिक डिजिटल समाज पोर्टल 2 नवंबर 2026 को लाइव होगा।",
                         eventCtaText: "मुख्य पृष्ठ पर जाएं →",
                         eventCtaLink: "/",
@@ -2910,7 +3119,7 @@ function AdminDashboardInner() {
                     className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] border border-[#D5CEC4] text-xs font-bold rounded-xs cursor-pointer shadow-2xs flex items-center gap-1.5 transition-colors"
                   >
                     <span>✨</span>
-                    <span>{isHi ? "2 नवंबर 2026 प्रीसेट लागू करें" : "Apply 2 Nov Preset"}</span>
+                    <span>{isHi ? "2 नवंबर 2026 प्रीसेट" : "Apply 2 Nov Preset"}</span>
                   </button>
 
                   {/* Save Button */}
@@ -2926,17 +3135,17 @@ function AdminDashboardInner() {
                 </div>
               </div>
 
-              {/* Real-time Live Countdown Preview Box */}
+              {/* Real-time Live Countdown Header Preview Box */}
               <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white p-4 rounded-lg border border-[#F26A21]/50 shadow-md space-y-3">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
                     <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
-                      {isHi ? "लाइव प्रीव्यू (यह हेडर में दिखेगा)" : "Live Header Preview"}
+                      {isHi ? "लाइव प्रीव्यू (यह वेबसाइट के शीर्ष हेडर में दिखेगा)" : "Live Header Preview"}
                     </span>
                   </div>
                   <span className="text-xs text-slate-300 font-mono">
-                    लक्ष्य: 2 नवंबर 2026
+                    लक्ष्य: {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" }) : "2 नवंबर 2026"}
                   </span>
                 </div>
 
@@ -2976,7 +3185,7 @@ function AdminDashboardInner() {
                 </div>
               </div>
 
-              {/* Form Settings Grid */}
+              {/* SECTION: DISPLAY CONTROLS & ACTIVE EVENT SUMMARY */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Card 1: Toggle Displays */}
                 <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
@@ -2997,7 +3206,7 @@ function AdminDashboardInner() {
                       </div>
                       <p className="text-[11px] text-[#64748B]">
                         {isHi
-                          ? "वेबसाइट के सबसे ऊपर गहरे नीले रंग में 2 नवंबर 2026 तक की उल्टी गिनती पट्टी प्रदर्शित होगी।"
+                          ? "वेबसाइट के सबसे ऊपर गहरे नीले रंग में उल्टी गिनती पट्टी प्रदर्शित होगी।"
                           : "Displays the prominent countdown bar at the very top of all pages."}
                       </p>
                     </div>
@@ -3016,112 +3225,501 @@ function AdminDashboardInner() {
                       </div>
                       <p className="text-[11px] text-[#64748B]">
                         {isHi
-                          ? "वेबसाइट खुलने पर आगंतुकों को 2 नवंबर लाइव की सूचना और पोस्टर का पॉपअप प्रदर्शित होगा।"
+                          ? "वेबसाइट खुलने पर आगंतुकों को सक्रिय कार्यक्रम का पोस्टर, दिनांक व विवरण पॉपअप प्रदर्शित होगा।"
                           : "Displays an attractive pop-up modal to first-time daily visitors with target date & poster."}
                       </p>
                     </div>
                   </label>
                 </div>
 
-                {/* Card 2: Target Date & Badge */}
+                {/* Card 2: Featured Active Event Quick Card */}
                 <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
-                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
-                    {isHi ? "2. लक्ष्य दिनांक एवं समय" : "2. Target Date & Time"}
-                  </h3>
-
-                  <div>
-                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                      {isHi ? "वेबसाइट लाइव होने की तिथि व समय:" : "Live Target Date & Time:"}
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={settings.eventDate ? settings.eventDate.slice(0, 16) : "2026-11-02T10:00"}
-                      onChange={(e) => setSettings({ ...settings, eventDate: e.target.value })}
-                      className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-[#FAF8F3] rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
-                    />
-                    <div className="mt-1 flex items-center justify-between text-[11px] text-[#64748B]">
-                      <span>डिफ़ॉल्ट: 2 नवंबर 2026, सुबह 10:00 बजे</span>
-                      <button
-                        type="button"
-                        onClick={() => setSettings({ ...settings, eventDate: "2026-11-02T10:00:00" })}
-                        className="text-[#F26A21] hover:underline font-bold cursor-pointer"
-                      >
-                        2 Nov 2026 रीसेट
-                      </button>
-                    </div>
+                  <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
+                    <h3 className="font-bold text-sm text-[#102F6B]">
+                      {isHi ? "2. वर्तमान मुख्य / लाइव कार्यक्रम" : "2. Active Featured Event"}
+                    </h3>
+                    <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200">
+                      🌟 {isHi ? "हेडर व पॉपअप पर सक्रिय" : "Live on Top Bar & Popup"}
+                    </span>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                      {isHi ? "बैज लेबल (Badge Label):" : "Badge Label:"}
-                    </label>
-                    <input
-                      type="text"
-                      value={settings.eventBadge || ""}
-                      onChange={(e) => setSettings({ ...settings, eventBadge: e.target.value })}
-                      placeholder="वेबसाइट लाइव उल्टी गिनती"
-                      className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                    />
+                  <div className="flex items-start gap-3 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
+                    {/* Active Poster Thumbnail */}
+                    <div className="w-16 h-20 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
+                      {settings.eventImage ? (
+                        <img
+                          src={settings.eventImage}
+                          alt={settings.eventTitle}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                          पोस्टर
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="bg-[#102F6B] text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
+                          {settings.eventBadge || "कार्यक्रम"}
+                        </span>
+                        <span className="text-[11px] text-[#64748B] font-mono">
+                          📅 {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN") : "2 Nov 2026"}
+                        </span>
+                      </div>
+                      <div className="font-bold text-xs text-[#102F6B] truncate">
+                        {settings.eventTitle || "वेबसाइट लाइव — 2 नवंबर 2026"}
+                      </div>
+                      <div className="text-[11px] text-[#55657E] truncate">
+                        📍 {settings.eventLocation || "नई दिल्ली"}
+                      </div>
+                      <div className="pt-1 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const activeEvt = eventsList.find((e) => e.isFeatured) || {
+                              id: "active",
+                              title: settings.eventTitle,
+                              subtitle: settings.eventSubtitle,
+                              badge: settings.eventBadge,
+                              date: settings.eventDate,
+                              location: settings.eventLocation,
+                              description: settings.eventDescription,
+                              image: settings.eventImage,
+                              countdownLabel: settings.eventCountdownLabel,
+                              ctaText: settings.eventCtaText,
+                              ctaLink: settings.eventCtaLink,
+                              isFeatured: true,
+                            };
+                            handleOpenEditEvent(activeEvt);
+                          }}
+                          className="text-[11px] font-bold text-[#F26A21] hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>✏️</span>
+                          <span>{isHi ? "विवरण व फोटो संपादित करें" : "Edit Details & Poster"}</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Card 3: Event Title & Description */}
-                <div className="md:col-span-2 bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
-                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
-                    {isHi ? "3. शीर्षक एवं संक्षिप्त सूचना (केवल मुख्य सूचना)" : "3. Title & Notice"}
-                  </h3>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                    <div>
-                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                        {isHi ? "मुख्य शीर्षक (Event / Live Title):" : "Title:"}
-                      </label>
-                      <input
-                        type="text"
-                        value={settings.eventTitle || ""}
-                        onChange={(e) => setSettings({ ...settings, eventTitle: e.target.value })}
-                        placeholder="वेबसाइट लाइव — 2 नवंबर 2026"
-                        className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-semibold focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                        {isHi ? "उल्टी गिनती विवरण लेबल:" : "Countdown Label:"}
-                      </label>
-                      <input
-                        type="text"
-                        value={settings.eventCountdownLabel || ""}
-                        onChange={(e) => setSettings({ ...settings, eventCountdownLabel: e.target.value })}
-                        placeholder="वेबसाइट लाइव होने में शेष समय"
-                        className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                  </div>
-
+              {/* ===================================================================== */}
+              {/* SECTION: ALL EVENTS DIRECTORY & MANAGEMENT GRID                        */}
+              {/* ===================================================================== */}
+              <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F0E5D5] pb-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                      {isHi ? "संक्षिप्त सूचना / संदेश विवरण (Description Notice):" : "Notice Text:"}
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={settings.eventDescription || ""}
-                      onChange={(e) => setSettings({ ...settings, eventDescription: e.target.value })}
-                      placeholder="अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) का समाज डिजिटल पोर्टल 2 नवंबर 2026 को आधिकारिक रूप से लाइव होगा।"
-                      className="w-full px-3 py-2 border border-[#D5CEC4] bg-white rounded text-xs leading-relaxed focus:border-[#102F6B] outline-hidden"
-                    />
+                    <h2 className="font-bold text-sm sm:text-base text-[#102F6B] flex items-center gap-2">
+                      <span>{isHi ? "3. समाज कार्यक्रम एवं महासम्मेलन सूची" : "3. Community Events & Conventions Directory"}</span>
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#FAF8F3] text-[#102F6B] font-mono border border-[#E2DDD5]">
+                        {eventsList.length}
+                      </span>
+                    </h2>
+                    <p className="text-xs text-[#64748B]">
+                      {isHi
+                        ? "वेबसाइट के लिए नवीन कार्यक्रम जोड़ें, किसी भी कार्यक्रम को मुख्य लाइव उल्टी गिनती बनाएं, विवरण या पोस्टर संपादित करें।"
+                        : "Add new events, set any event as the featured live countdown, and manage images and descriptions."}
+                    </p>
                   </div>
 
-                  <div className="flex items-center justify-end pt-2 border-t border-[#E2DDD5]">
+                  <button
+                    type="button"
+                    onClick={handleOpenAddEvent}
+                    className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 self-start sm:self-auto transition-transform hover:-translate-y-0.5"
+                  >
+                    <span>➕</span>
+                    <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add New Event"}</span>
+                  </button>
+                </div>
+
+                {/* Events Cards Listing */}
+                {eventsList.length === 0 ? (
+                  <div className="p-8 text-center text-xs text-[#55657E] bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs space-y-3">
+                    <div className="text-3xl">📅</div>
+                    <div className="font-bold text-sm text-[#102F6B]">
+                      {isHi ? "कोई कार्यक्रम उपलब्ध नहीं है" : "No events created yet"}
+                    </div>
+                    <p className="text-xs text-[#64748B]">
+                      {isHi
+                        ? "पहला कार्यक्रम जोड़ने के लिए '+ नया कार्यक्रम जोड़ें' बटन पर क्लिक करें।"
+                        : "Click '+ Add New Event' to create the first community event."}
+                    </p>
                     <button
                       type="button"
-                      onClick={handleSaveSettings}
-                      disabled={submitting}
-                      className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-5 py-2 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                      onClick={handleOpenAddEvent}
+                      className="px-4 py-2 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs"
                     >
-                      <span>💾</span>
-                      <span>{submitting ? (isHi ? "सुरक्षित कर रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें (Save Changes)" : "Save Settings")}</span>
+                      {isHi ? "+ नया कार्यक्रम जोड़ें" : "+ Add Event"}
                     </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {eventsList.map((evt) => {
+                      const isFeatured = Boolean(evt.isFeatured);
+                      let formattedDate = evt.date;
+                      try {
+                        const d = new Date(evt.date);
+                        if (!isNaN(d.getTime())) {
+                          formattedDate = d.toLocaleString(isHi ? "hi-IN" : "en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          });
+                        }
+                      } catch (e) {}
+
+                      return (
+                        <div
+                          key={evt.id}
+                          className={`p-4 rounded-xs border transition-all text-xs flex flex-col justify-between space-y-3 ${
+                            isFeatured
+                              ? "bg-[#FFFDF9] border-l-4 border-l-[#F26A21] border-[#E2DDD5] shadow-xs"
+                              : "bg-white border-[#E2DDD5] hover:border-[#102F6B]/40 shadow-2xs"
+                          }`}
+                        >
+                          <div className="space-y-2.5">
+                            {/* Card Top Strip: Badges + Featured Tag */}
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="bg-[#102F6B] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                                  {evt.badge || "कार्यक्रम"}
+                                </span>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                                  evt.status === "live"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : evt.status === "completed"
+                                    ? "bg-slate-100 text-slate-700 border-slate-200"
+                                    : "bg-amber-50 text-amber-800 border-amber-200"
+                                }`}>
+                                  {evt.status === "live" ? "🔴 लाइव / जारी" : evt.status === "completed" ? "✓ संपन्न" : "⏳ आगामी"}
+                                </span>
+                              </div>
+
+                              {isFeatured && (
+                                <span className="bg-[#FFF0E2] text-[#F26A21] border border-[#F26A21]/40 px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                                  <span>🌟</span>
+                                  <span>{isHi ? "मुख्य लाइव कार्यक्रम" : "Featured Live"}</span>
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Card Middle: Poster + Details */}
+                            <div className="flex items-start gap-3">
+                              {/* Poster Thumbnail */}
+                              <div className="w-20 h-24 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
+                                {evt.image ? (
+                                  <img
+                                    src={evt.image}
+                                    alt={evt.title}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 p-1 text-center text-[10px]">
+                                    <span>🖼️</span>
+                                    <span>पोस्टर नहीं</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Title, Subtitle, Venue, Date */}
+                              <div className="flex-1 min-w-0 space-y-1">
+                                <h3 className="font-bold text-sm text-[#102F6B] leading-snug line-clamp-2">
+                                  {evt.title}
+                                </h3>
+                                {evt.subtitle && (
+                                  <p className="text-[11px] text-[#55657E] line-clamp-1">
+                                    {evt.subtitle}
+                                  </p>
+                                )}
+                                <div className="text-[11px] text-[#1E293B] flex items-center gap-1 font-mono pt-0.5">
+                                  <span className="text-[#F26A21]">📅</span>
+                                  <span>{formattedDate}</span>
+                                </div>
+                                <div className="text-[11px] text-[#64748B] flex items-center gap-1 truncate">
+                                  <span>📍</span>
+                                  <span className="truncate">{evt.location || "नई दिल्ली"}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Description preview */}
+                            {evt.description && (
+                              <p className="text-[11.5px] text-[#475569] leading-relaxed line-clamp-2 bg-[#FAF8F3] p-2 rounded-xs border border-[#EFECE6]">
+                                {evt.description}
+                              </p>
+                            )}
+
+                            {/* CTA Link Preview */}
+                            {evt.ctaText && (
+                              <div className="text-[11px] text-[#64748B] flex items-center gap-1 truncate">
+                                <span className="font-semibold text-[#102F6B]">बटन:</span>
+                                <span className="text-[#F26A21] truncate font-medium">{evt.ctaText}</span>
+                                <span className="font-mono text-[10px] text-slate-400">({evt.ctaLink || "/"})</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Card Action Toolbar */}
+                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#F0E5D5] flex-wrap">
+                            <div>
+                              {!isFeatured ? (
+                                <button
+                                  type="button"
+                                  onClick={() => handleSetFeaturedEvent(evt)}
+                                  className="px-2.5 py-1 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] hover:text-[#F26A21] border border-[#D5CEC4] rounded-xs text-[11px] font-bold cursor-pointer flex items-center gap-1 transition-colors"
+                                >
+                                  <span>🌟</span>
+                                  <span>{isHi ? "मुख्य लाइव बनाएं" : "Set as Live"}</span>
+                                </button>
+                              ) : (
+                                <span className="text-[10.5px] font-bold text-emerald-700 flex items-center gap-1">
+                                  <span>✓</span>
+                                  <span>{isHi ? "हेडर व पॉपअप में सक्रिय" : "Active on Header"}</span>
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-1.5">
+                              {/* Edit Button */}
+                              <button
+                                type="button"
+                                onClick={() => handleOpenEditEvent(evt)}
+                                className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white rounded-xs text-[11px] font-bold cursor-pointer shadow-2xs flex items-center gap-1 transition-colors"
+                              >
+                                <span>✏️</span>
+                                <span>{isHi ? "संपादित करें" : "Edit"}</span>
+                              </button>
+
+                              {/* Delete Button */}
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteEvent(evt.id, evt.title)}
+                                className="px-2 py-1 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-xs text-[11px] font-medium cursor-pointer transition-colors"
+                              >
+                                {isHi ? "हटाएं" : "Delete"}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* ===================================================================== */}
+              {/* SECTION: QUICK ACTIVE EVENT DETAILS & POSTER CUSTOMIZER               */}
+              {/* ===================================================================== */}
+              <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
+                  <h3 className="font-bold text-sm text-[#102F6B]">
+                    {isHi ? "4. सक्रिय कार्यक्रम त्वरित विवरण एवं पोस्टर कस्टमाइज़र" : "4. Active Event Quick Details & Poster Customizer"}
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleSaveSettings}
+                    disabled={submitting}
+                    className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-3.5 py-1 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1"
+                  >
+                    <span>💾</span>
+                    <span>{submitting ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Changes")}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                  {/* Left Column: Poster Image Upload & Preview */}
+                  <div className="md:col-span-4 space-y-2.5 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
+                    <label className="block text-xs font-bold text-[#102F6B]">
+                      {isHi ? "कार्यक्रम पोस्टर / छायाचित्र (Poster Image):" : "Poster Image:"}
+                    </label>
+
+                    {/* Image Box */}
+                    <div className="w-full h-48 rounded bg-white border border-[#D5CEC4] overflow-hidden flex items-center justify-center relative group">
+                      {settings.eventImage ? (
+                        <img
+                          src={settings.eventImage}
+                          alt="Event Poster"
+                          className="w-full h-full object-contain p-1"
+                        />
+                      ) : (
+                        <div className="text-center text-slate-400 text-xs p-3">
+                          <div>🖼️</div>
+                          <div>कोई पोस्टर अपलोड नहीं है</div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Direct Upload Button */}
+                    <div className="space-y-1.5">
+                      <label className="w-full py-1.5 px-3 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs text-center cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
+                        <span>📤</span>
+                        <span>{uploadingImage ? (isHi ? "अपलोड हो रहा है..." : "Uploading...") : (isHi ? "पोस्टर फाइल अपलोड करें" : "Upload Poster File")}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            setUploadingImage(true);
+                            const formData = new FormData();
+                            formData.append("file", file);
+                            formData.append("folder", "alokworld_posters");
+                            try {
+                              const res = await fetch("/api/upload", { method: "POST", body: formData });
+                              const data = await res.json();
+                              if (!res.ok) throw new Error(data.error || "Upload failed");
+                              setSettings((prev) => ({ ...prev, eventImage: data.url }));
+                              showBanner(isHi ? "पोस्टर सफलतापूर्वक अपलोड हुआ! कृपया सेटिंग्स सुरक्षित करें।" : "Poster uploaded! Click Save to apply.");
+                            } catch (err) {
+                              showBanner(err.message, true);
+                            } finally {
+                              setUploadingImage(false);
+                            }
+                          }}
+                        />
+                      </label>
+
+                      {/* Or direct URL Input */}
+                      <input
+                        type="text"
+                        value={settings.eventImage || ""}
+                        onChange={(e) => setSettings({ ...settings, eventImage: e.target.value })}
+                        placeholder="https://res.cloudinary.com/..."
+                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded text-[11px] font-mono focus:border-[#102F6B] outline-hidden"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Right Column: Title, Date, Venue, CTA, Description */}
+                  <div className="md:col-span-8 space-y-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "मुख्य शीर्षक (Event Title):" : "Title:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.eventTitle || ""}
+                          onChange={(e) => setSettings({ ...settings, eventTitle: e.target.value })}
+                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-semibold focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "उपशीर्षक (Subtitle):" : "Subtitle:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.eventSubtitle || ""}
+                          onChange={(e) => setSettings({ ...settings, eventSubtitle: e.target.value })}
+                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "दिनांक व समय (Date & Time):" : "Date & Time:"}
+                        </label>
+                        <input
+                          type="datetime-local"
+                          value={settings.eventDate ? settings.eventDate.slice(0, 16) : "2026-11-02T10:00"}
+                          onChange={(e) => setSettings({ ...settings, eventDate: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "बैज लेबल (Badge):" : "Badge:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.eventBadge || ""}
+                          onChange={(e) => setSettings({ ...settings, eventBadge: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "स्थान (Venue):" : "Venue:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.eventLocation || ""}
+                          onChange={(e) => setSettings({ ...settings, eventLocation: e.target.value })}
+                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "उल्टी गिनती शीर्षक:" : "Countdown Label:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.eventCountdownLabel || ""}
+                          onChange={(e) => setSettings({ ...settings, eventCountdownLabel: e.target.value })}
+                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                          {isHi ? "कार्रवाई बटन टेक्स्ट व लिंक:" : "Button Text & Link:"}
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            value={settings.eventCtaText || ""}
+                            onChange={(e) => setSettings({ ...settings, eventCtaText: e.target.value })}
+                            placeholder="विवरण देखें →"
+                            className="px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                          />
+                          <input
+                            type="text"
+                            value={settings.eventCtaLink || ""}
+                            onChange={(e) => setSettings({ ...settings, eventCtaLink: e.target.value })}
+                            placeholder="/mahasabha"
+                            className="px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                        {isHi ? "विस्तृत विवरण एवं संदेश (Description Notice):" : "Notice Text:"}
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={settings.eventDescription || ""}
+                        onChange={(e) => setSettings({ ...settings, eventDescription: e.target.value })}
+                        className="w-full px-3 py-2 border border-[#D5CEC4] bg-white rounded text-xs leading-relaxed focus:border-[#102F6B] outline-hidden"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-end pt-2 border-t border-[#E2DDD5]">
+                      <button
+                        type="button"
+                        onClick={handleSaveSettings}
+                        disabled={submitting}
+                        className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-5 py-2 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                      >
+                        <span>💾</span>
+                        <span>{submitting ? (isHi ? "सुरक्षित कर रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Settings")}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -4518,6 +5116,291 @@ function AdminDashboardInner() {
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* EVENT EDITOR MODAL (ADD & EDIT WITH FULL POSTER IMAGE UPLOAD)             */}
+      {/* ========================================================================= */}
+      {eventModal.isOpen && (
+        <div className="fixed inset-0 bg-[#0D1B2A]/60 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+          <div className="bg-white max-w-2xl w-full border border-[#D5CEC4] rounded-lg shadow-2xl overflow-hidden my-auto text-xs space-y-0">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white px-5 py-3.5 flex items-center justify-between border-b-2 border-[#F26A21]">
+              <div className="flex items-center gap-2">
+                <span className="text-base">{eventModal.isEdit ? "✏️" : "➕"}</span>
+                <span className="font-bold text-sm">
+                  {eventModal.isEdit
+                    ? (isHi ? "कार्यक्रम विवरण एवं पोस्टर संपादित करें" : "Edit Event Details & Poster")
+                    : (isHi ? "नया समाज कार्यक्रम जोड़ें" : "Add New Event")}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEventModal((prev) => ({ ...prev, isOpen: false }))}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Body Form */}
+            <form onSubmit={handleSaveEvent} className="p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+              {/* Row 1: Title & Subtitle */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "कार्यक्रम का मुख्य शीर्षक *" : "Event Title *"}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={eventModal.title}
+                    onChange={(e) => setEventModal({ ...eventModal, title: e.target.value })}
+                    placeholder="जैसे: आलोक राष्ट्रीय महासम्मेलन 2026"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-semibold focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "उपशीर्षक / ध्येय वाक्य" : "Event Subtitle"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.subtitle}
+                    onChange={(e) => setEventModal({ ...eventModal, subtitle: e.target.value })}
+                    placeholder="जैसे: अखिल भारतीय लोधी समाज का भव्य सम्मेलन"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Row 2: Date, Time & Location */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "दिनांक व समय (Date & Time) *" : "Date & Time *"}
+                  </label>
+                  <input
+                    type="datetime-local"
+                    required
+                    value={eventModal.date ? eventModal.date.slice(0, 16) : "2026-11-02T10:00"}
+                    onChange={(e) => setEventModal({ ...eventModal, date: e.target.value })}
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "कार्यक्रम स्थल (Venue / Location)" : "Location / Venue"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.location}
+                    onChange={(e) => setEventModal({ ...eventModal, location: e.target.value })}
+                    placeholder="जैसे: कांस्टीट्यूशन क्लब, रफी मार्ग, नई दिल्ली"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Row 3: Poster Image Upload & Preview */}
+              <div className="bg-[#FAF8F3] p-3.5 rounded border border-[#E2DDD5] space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-[#102F6B]">
+                    {isHi ? "कार्यक्रम पोस्टर / छायाचित्र (Event Poster Image):" : "Poster Image:"}
+                  </label>
+                  {eventModal.image && (
+                    <button
+                      type="button"
+                      onClick={() => setEventModal({ ...eventModal, image: "" })}
+                      className="text-[11px] text-red-600 hover:underline cursor-pointer"
+                    >
+                      {isHi ? "तस्वीर हटाएं" : "Remove"}
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-4">
+                  {/* Thumbnail Preview */}
+                  <div className="w-28 h-36 rounded bg-white border border-[#D5CEC4] overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
+                    {eventModal.image ? (
+                      <img
+                        src={eventModal.image}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-center text-slate-400 p-2 text-[11px]">
+                        <span className="text-xl block mb-1">🖼️</span>
+                        <span>पोस्टर नहीं</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex-1 w-full space-y-2.5">
+                    {/* Direct Upload Button */}
+                    <div>
+                      <label className="w-full py-2 px-3 bg-[#102F6B] hover:bg-[#091D42] text-white rounded text-xs font-bold text-center cursor-pointer flex items-center justify-center gap-1.5 shadow-xs transition-colors">
+                        <span>📤</span>
+                        <span>{uploadingEventImage ? (isHi ? "अपलोड हो रहा है..." : "Uploading...") : (isHi ? "कंप्यूटर से पोस्टर अपलोड करें" : "Upload Poster from Device")}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={handleEventImageUpload}
+                        />
+                      </label>
+                      <p className="text-[10.5px] text-[#64748B] mt-1">
+                        {isHi ? "JPG, PNG, WebP समर्थित (क्लाउडिनरी पर सुरक्षित रूप से अपलोड होगा)" : "JPEG, PNG, WebP supported (auto-uploaded to Cloudinary)"}
+                      </p>
+                    </div>
+
+                    {/* Or URL input */}
+                    <div>
+                      <span className="text-[11px] text-[#55657E] font-medium block mb-1">
+                        {isHi ? "या इमेज URL दर्ज करें:" : "Or enter Image URL:"}
+                      </span>
+                      <input
+                        type="text"
+                        value={eventModal.image}
+                        onChange={(e) => setEventModal({ ...eventModal, image: e.target.value })}
+                        placeholder="https://res.cloudinary.com/..."
+                        className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 4: Badge, Countdown Label & Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "बैज लेबल (Badge)" : "Badge Label"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.badge}
+                    onChange={(e) => setEventModal({ ...eventModal, badge: e.target.value })}
+                    placeholder="जैसे: राष्ट्रीय अधिवेशन"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "उल्टी गिनती विवरण" : "Countdown Label"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.countdownLabel}
+                    onChange={(e) => setEventModal({ ...eventModal, countdownLabel: e.target.value })}
+                    placeholder="जैसे: महासम्मेलन उल्टी गिनती"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "कार्यक्रम स्थिति" : "Status"}
+                  </label>
+                  <select
+                    value={eventModal.status}
+                    onChange={(e) => setEventModal({ ...eventModal, status: e.target.value })}
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden cursor-pointer"
+                  >
+                    <option value="upcoming">⏳ आगामी (Upcoming)</option>
+                    <option value="live">🔴 सक्रिय / जारी (Live Now)</option>
+                    <option value="completed">✓ संपन्न (Completed)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Row 5: Detailed Description */}
+              <div>
+                <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                  {isHi ? "विस्तृत विवरण एवं आमंत्रण संदेश *" : "Description & Invitation Notice *"}
+                </label>
+                <textarea
+                  rows={3}
+                  value={eventModal.description}
+                  onChange={(e) => setEventModal({ ...eventModal, description: e.target.value })}
+                  placeholder="कार्यक्रम का विवरण, एजेंडा, मुख्य वक्ता, सहभागिता की प्रक्रिया..."
+                  className="w-full px-3 py-2 border border-[#D5CEC4] bg-white rounded text-xs leading-relaxed focus:border-[#102F6B] outline-hidden"
+                />
+              </div>
+
+              {/* Row 6: CTA Button Text & Link */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "कार्रवाई बटन टेक्स्ट (CTA Button Text)" : "Button Text"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.ctaText}
+                    onChange={(e) => setEventModal({ ...eventModal, ctaText: e.target.value })}
+                    placeholder="जैसे: अधिवेशन विवरण एवं पंजीकरण →"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#102F6B] mb-1">
+                    {isHi ? "बटन का लिंक (CTA URL Link)" : "Button URL Link"}
+                  </label>
+                  <input
+                    type="text"
+                    value={eventModal.ctaLink}
+                    onChange={(e) => setEventModal({ ...eventModal, ctaLink: e.target.value })}
+                    placeholder="जैसे: /mahasabha या /"
+                    className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
+                  />
+                </div>
+              </div>
+
+              {/* Row 7: Set as Featured Toggle */}
+              <label className="flex items-start gap-3 p-3 rounded bg-[#FFF0E2]/50 border border-[#F26A21]/30 cursor-pointer hover:bg-[#FFF0E2] transition-colors">
+                <input
+                  type="checkbox"
+                  checked={Boolean(eventModal.isFeatured)}
+                  onChange={(e) => setEventModal({ ...eventModal, isFeatured: e.target.checked })}
+                  className="mt-0.5 w-4 h-4 text-[#F26A21] rounded border-[#D5CEC4] cursor-pointer"
+                />
+                <div>
+                  <div className="font-bold text-xs text-[#102F6B]">
+                    🌟 {isHi ? "इसे शीर्ष उल्टी गिनती पट्टी एवं आगंतुक पॉपअप पर मुख्य कार्यक्रम बनाएं" : "Set as Featured Live Event (Display on Top Bar & Popup)"}
+                  </div>
+                  <p className="text-[11px] text-[#64748B]">
+                    {isHi
+                      ? "इस विकल्प को चुनने पर पूरी वेबसाइट के शीर्ष हेडर और आगंतुक पॉपअप पर यह कार्यक्रम प्रदर्शित होगा।"
+                      : "When checked, this event will be synchronized to the sticky top countdown bar and visitor popup."}
+                  </p>
+                </div>
+              </label>
+
+              {/* Modal Actions */}
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#E2DDD5]">
+                <button
+                  type="button"
+                  onClick={() => setEventModal((prev) => ({ ...prev, isOpen: false }))}
+                  className="px-4 py-2 border border-[#D5CEC4] bg-white hover:bg-[#FAF8F3] text-[#55657E] rounded-xs font-semibold cursor-pointer"
+                >
+                  {isHi ? "रद्द करें" : "Cancel"}
+                </button>
+                <button
+                  type="submit"
+                  disabled={savingEvent}
+                  className="px-5 py-2 bg-[#102F6B] hover:bg-[#091D42] disabled:opacity-50 text-white rounded-xs font-bold cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <span>💾</span>
+                  <span>{savingEvent ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (eventModal.isEdit ? (isHi ? "परिवर्तन सुरक्षित करें" : "Save Changes") : (isHi ? "कार्यक्रम जोड़ें" : "Add Event"))}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
