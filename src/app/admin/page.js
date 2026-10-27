@@ -506,6 +506,7 @@ function AdminDashboardInner() {
   });
   const [uploadingBearerAvatar, setUploadingBearerAvatar] = useState(false);
   const [uploadingHeaderStrip, setUploadingHeaderStrip] = useState(false);
+  const [generatingSitemap, setGeneratingSitemap] = useState(false);
 
   // Seamlessly merge inbound EmailLogs and Contact inquiries so no inquiry is ever missed
   const allInboundMessages = useMemo(() => {
@@ -1885,6 +1886,20 @@ function AdminDashboardInner() {
       showBanner(err.message, true);
     } finally {
       setUploadingHeaderStrip(false);
+    }
+  };
+
+  const handleRegenerateSitemap = async () => {
+    setGeneratingSitemap(true);
+    try {
+      const res = await fetch("/api/admin/sitemap", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to generate sitemap");
+      showBanner(data.message || (isHi ? "साइटमैप सफलतापूर्वक ऑटो-जेनरेट हो गया!" : "Sitemap auto-generated successfully!"));
+    } catch (err) {
+      showBanner(err.message, true);
+    } finally {
+      setGeneratingSitemap(false);
     }
   };
   // ==========================================
@@ -5883,23 +5898,36 @@ function AdminDashboardInner() {
                 </div>
 
                 {/* 4. Technical SEO Endpoints */}
-                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2">
+                <div className="bg-white border border-[#E2DDD5] p-4 rounded-xs space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-xs text-[#102F6B]">Search Engine Directives (SEO)</span>
                     <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold rounded-xs border border-emerald-200">
-                      ONLINE
+                      AUTO-GENERATED
                     </span>
                   </div>
                   <p className="text-xs text-[#55657E] leading-relaxed">
-                    Dynamic XML sitemap and robots.txt index all published routes and members.
+                    {isHi
+                      ? "Next.js 16 ऑटो-जेनरेटेड XML साइटमैप और robots.txt सभी 94+ समाज सदस्यों, गैलरी, पेजेस को लाइव इंडेक्स करते हैं।"
+                      : "Native Next.js auto-generated XML sitemap & robots.txt automatically index all 94+ members and pages in real-time."}
                   </p>
-                  <div className="text-[11px] pt-2 border-t border-[#EFECE6] flex items-center justify-between">
-                    <a href="/sitemap.xml" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
-                      View sitemap.xml ↗
-                    </a>
-                    <a href="/robots.txt" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
-                      View robots.txt ↗
-                    </a>
+                  <div className="text-[11px] pt-2 border-t border-[#EFECE6] flex flex-wrap items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={handleRegenerateSitemap}
+                      disabled={generatingSitemap}
+                      className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-[10px] font-bold rounded-xs cursor-pointer disabled:opacity-50 flex items-center gap-1 shadow-xs"
+                    >
+                      <span>🔄</span>
+                      <span>{generatingSitemap ? (isHi ? "जेनरेट हो रहा है..." : "Generating...") : (isHi ? "ऑटो-जेनरेट / रिफ्रेश साइटमैप" : "Refresh & Auto-Generate Sitemap")}</span>
+                    </button>
+                    <div className="flex items-center gap-3">
+                      <a href="/sitemap.xml" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-bold underline">
+                        sitemap.xml ↗
+                      </a>
+                      <a href="/robots.txt" target="_blank" className="text-[#102F6B] hover:text-[#D9531E] font-medium underline">
+                        robots.txt ↗
+                      </a>
+                    </div>
                   </div>
                 </div>
 
