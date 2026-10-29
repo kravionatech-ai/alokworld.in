@@ -26,6 +26,15 @@ export default function AdminLoginPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Authentication failed. Please verify your credentials.");
 
+      if (data.token) {
+        try {
+          localStorage.setItem("admin_token", data.token);
+          sessionStorage.setItem("admin_token", data.token);
+        } catch (e) {
+          console.warn("Storage warning:", e);
+        }
+      }
+
       router.push("/admin");
       router.refresh();
     } catch (err) {

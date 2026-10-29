@@ -21,8 +21,7 @@ export async function GET(req) {
     const filter = {};
 
     // Check if requester is admin wanting to see all (including unpublished drafts)
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
 
     if (!admin || !includeAll) {
       filter.isPublished = true;
@@ -52,8 +51,7 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }

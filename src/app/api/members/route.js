@@ -37,8 +37,7 @@ export async function GET(req) {
     // Verify admin token if requesting administrative view
     let isAuthorizedAdmin = false;
     if (isAdminView) {
-      const token = req.cookies.get("admin_token")?.value;
-      if (token && verifyAdminToken(token)) {
+      if (verifyAdminToken(req)) {
         isAuthorizedAdmin = true;
       }
     }
@@ -260,8 +259,7 @@ export async function GET(req) {
 // POST /api/members (Admin creates or approves member with validation & duplicate detection)
 export async function POST(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access. Please log in as an administrator." }, { status: 401 });
     }

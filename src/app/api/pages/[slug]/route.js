@@ -16,8 +16,7 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Database not connected" }, { status: 503 });
     }
 
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
 
     let page = await PageContent.findOne({ slug: cleanSlug }).lean();
 
@@ -54,8 +53,7 @@ export async function PUT(req, { params }) {
     const { slug } = await params;
     const cleanSlug = String(slug || "").toLowerCase().trim();
 
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
@@ -115,8 +113,7 @@ export async function DELETE(req, { params }) {
     const { slug } = await params;
     const cleanSlug = String(slug || "").toLowerCase().trim();
 
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }

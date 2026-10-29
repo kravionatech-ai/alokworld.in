@@ -567,7 +567,28 @@ function AdminDashboardInner() {
   // AUTHENTICATION INITIALIZATION
   // ==========================================
   useEffect(() => {
-    fetch("/api/auth")
+    // Intercept window.fetch so all admin queries & mutations include Authorization header as backup to cookies
+    const originalFetch = window.fetch;
+    window.fetch = async (input, init = {}) => {
+      const token = typeof window !== "undefined"
+        ? (localStorage.getItem("admin_token") || sessionStorage.getItem("admin_token"))
+        : null;
+      if (token) {
+        const headers = new Headers(init.headers || {});
+        if (!headers.has("Authorization") && !headers.has("authorization")) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+        init = { ...init, headers };
+      }
+      return originalFetch(input, init);
+    };
+
+    const token = typeof window !== "undefined"
+      ? (localStorage.getItem("admin_token") || sessionStorage.getItem("admin_token"))
+      : null;
+    const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+
+    originalFetch("/api/auth", { headers: authHeaders })
       .then((res) => {
         if (!res.ok) throw new Error("Unauthorized");
         return res.json();
@@ -583,6 +604,10 @@ function AdminDashboardInner() {
       .catch(() => {
         router.push("/admin/login");
       });
+
+    return () => {
+      window.fetch = originalFetch;
+    };
   }, [router]);
 
   const loadAllData = () => {
@@ -699,7 +724,15 @@ function AdminDashboardInner() {
   }, [authChecked, activeTab, currentUser]);
 
   const handleLogout = async () => {
-    await fetch("/api/auth", { method: "DELETE" });
+    try {
+      await fetch("/api/auth", { method: "DELETE" });
+    } catch {}
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("admin_token");
+        sessionStorage.removeItem("admin_token");
+      } catch {}
+    }
     router.push("/admin/login");
     router.refresh();
   };
@@ -868,8 +901,8 @@ function AdminDashboardInner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isApproved: newStatus }),
       });
-      if (!res.ok) throw new Error("Failed to update member approval status.");
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to update member approval status.");
       setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
       showBanner(`Member "${m.name}" set to ${newStatus ? "Approved" : "Pending"}.`);
     } catch (err) {
@@ -886,8 +919,8 @@ function AdminDashboardInner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPublished: newPub }),
       });
-      if (!res.ok) throw new Error("Failed to update visibility status.");
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to update visibility status.");
       setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
       showBanner(`Member "${m.name}" set to ${newPub ? "Published" : "Draft"}.`);
     } catch (err) {
@@ -904,8 +937,8 @@ function AdminDashboardInner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isFeatured: nextFeatured }),
       });
-      if (!res.ok) throw new Error("Failed to update featured status.");
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to update featured status.");
       setMembers((prev) =>
         prev.map((item) => (item._id === id || item.id === id ? { ...item, isFeatured: nextFeatured } : item))
       );
@@ -940,8 +973,8 @@ function AdminDashboardInner() {
               membershipStatus: nextState ? "archived" : "active",
             }),
           });
-          if (!res.ok) throw new Error("Failed to archive/restore member.");
-          const data = await res.json();
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to archive/restore member.");
           setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
           showBanner(`Member "${m.name}" set to ${nextState ? "Archived" : "Restored"}.`);
         } catch (err) {
@@ -962,7 +995,8 @@ function AdminDashboardInner() {
         try {
           const id = m._id || m.id;
           const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete member.");
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to delete member.");
           setMembers((prev) => prev.filter((item) => item._id !== id && item.id !== id));
           showBanner(`Member "${m.name}" successfully deleted.`);
         } catch (err) {
@@ -1123,7 +1157,8 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/pages/${slug}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete page");
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to delete page");
           setPagesList((prev) => prev.filter((p) => p.slug !== slug));
           showBanner(`Page "${slug}" reset to default.`);
         } catch (err) {
@@ -1192,7 +1227,8 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/gallery/${item._id}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete");
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to delete");
           setGalleryItems((prev) => prev.filter((it) => it._id !== item._id));
           showBanner(`Photo "${item.title}" deleted.`);
         } catch (err) {
@@ -1290,7 +1326,8 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/contact?id=${id}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete inquiry.");
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to delete inquiry.");
           setMessages((prev) => prev.filter((m) => m.id !== id && m._id !== id));
           showBanner("Inquiry message deleted.");
         } catch (err) {
@@ -1393,7 +1430,8 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const res = await fetch(`/api/admin/emails?id=${logId}`, { method: "DELETE" });
-          if (!res.ok) throw new Error("Failed to delete email record");
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || "Failed to delete email record");
           setEmailsList((prev) => prev.filter((e) => (e._id || e.id) !== logId));
           showBanner(isHi ? "ईमेल रिकॉर्ड सफलतापूर्वक हटा दिया गया।" : "Email record deleted successfully.");
           fetch("/api/admin/emails").then((r) => r.json()).then((d) => {

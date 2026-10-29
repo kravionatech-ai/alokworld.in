@@ -223,8 +223,7 @@ export async function POST(req) {
 
 export async function GET(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
@@ -244,8 +243,7 @@ export async function GET(req) {
 
 export async function PATCH(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }
@@ -270,8 +268,7 @@ export async function PATCH(req) {
 
 export async function DELETE(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
     }

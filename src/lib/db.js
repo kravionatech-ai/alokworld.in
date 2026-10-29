@@ -14,11 +14,27 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
+let isSeeded = false;
+
+// Ensure cached connection is cleared if disconnected
+if (typeof mongoose !== "undefined" && mongoose.connection) {
+  mongoose.connection.on("disconnected", () => {
+    cached.conn = null;
+    cached.promise = null;
+  });
+  mongoose.connection.on("error", (err) => {
+    console.warn("[Database] Mongoose connection notice:", err.message);
+    cached.conn = null;
+    cached.promise = null;
+  });
+}
+
 /**
  * Seed verified data into MongoDB if collections are empty.
  * Zero dummy data: only authentic records and verified assets.
  */
 async function seedInitialDataIfEmpty() {
+  if (isSeeded) return;
   try {
     // 1. Seed members if empty
     const memberCount = await Member.countDocuments();
@@ -87,6 +103,8 @@ async function seedInitialDataIfEmpty() {
       });
       console.log(`[Database] Default superadmin account initialized: ${email}`);
     }
+
+    isSeeded = true;
   } catch (err) {
     console.warn("[Database] Initialization check notice:", err.message);
   }
@@ -94,8 +112,7 @@ async function seedInitialDataIfEmpty() {
 
 /**
  * Resilient, cached MongoDB connection helper for Next.js App Router.
- * Automatically tries primary URI (e.g. Atlas or local) and falls back to local MongoDB
- * if the primary URI times out or encounters network whitelist restrictions.
+ * Automatically tries primary URI (Atlas) and falls back if network whitelist or DNS issues arise.
  */
 export async function connectDB() {
   if (cached.conn && mongoose.connection.readyState === 1) {
@@ -111,23 +128,25 @@ export async function connectDB() {
     }
   }
 
-  let primaryUri = process.env.MONGODB_URI;
-  if (
-    process.env.NODE_ENV === "production" &&
-    (!primaryUri || primaryUri.includes("127.0.0.1") || primaryUri.includes("localhost"))
-  ) {
-    primaryUri = process.env.MONGODB_ATLAS_URI || primaryUri;
-  }
-  primaryUri = primaryUri || process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/alokworld";
+  const defaultAtlas = "mongodb+srv://alokworld2018_db_user:BdbDHFnNAyg6yNYX@cluster0.rtasufn.mongodb.net/alokworld";
+  const atlasUri = process.env.MONGODB_ATLAS_URI || defaultAtlas;
 
-  const fallbackUri =
-    process.env.MONGODB_FALLBACK_URI && !process.env.MONGODB_FALLBACK_URI.includes("127.0.0.1")
-      ? process.env.MONGODB_FALLBACK_URI
-      : process.env.MONGODB_ATLAS_URI || "mongodb://127.0.0.1:27017/alokworld";
+  // Prefer Atlas URI; if env has a local URI and we are in production or remote, prioritize Atlas
+  let primaryUri = process.env.MONGODB_URI;
+  if (!primaryUri || (process.env.NODE_ENV === "production" && (primaryUri.includes("127.0.0.1") || primaryUri.includes("localhost")))) {
+    primaryUri = atlasUri;
+  }
+  primaryUri = primaryUri || atlasUri;
+
+  let fallbackUri = process.env.MONGODB_FALLBACK_URI;
+  if (!fallbackUri || fallbackUri === primaryUri) {
+    fallbackUri = primaryUri.includes("mongodb+srv") ? "mongodb://127.0.0.1:27017/alokworld" : atlasUri;
+  }
 
   const opts = {
-    bufferCommands: false,
-    serverSelectionTimeoutMS: 3000,
+    bufferCommands: true,
+    serverSelectionTimeoutMS: 15000,
+    connectTimeoutMS: 15000,
     socketTimeoutMS: 45000,
     maxPoolSize: 10,
   };
@@ -138,11 +157,11 @@ export async function connectDB() {
       await seedInitialDataIfEmpty();
       return conn;
     } catch (primaryError) {
-      console.warn(`[Database] Primary connection failed (${primaryUri.split("@").pop()}): ${primaryError.message}`);
+      console.warn(`[Database] Primary connection failed: ${primaryError.message}`);
 
       // Try fallback if primary was different from fallback
       if (primaryUri !== fallbackUri) {
-        console.log(`[Database] Attempting fallback to: ${fallbackUri}`);
+        console.log(`[Database] Attempting fallback to: ${fallbackUri.split("@").pop()}`);
         try {
           const fallbackConn = await mongoose.connect(fallbackUri, opts);
           console.log("[Database] Connected successfully via fallback URI.");

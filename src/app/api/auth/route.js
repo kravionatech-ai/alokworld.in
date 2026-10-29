@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import Admin from "@/models/Admin";
-import { signAdminToken, verifyAdminToken } from "@/lib/auth";
+import { signAdminToken, verifyAdminToken, getAdminFromRequest } from "@/lib/auth";
 import { checkRateLimit, resetRateLimit } from "@/lib/rate-limit";
 import { recordAudit } from "@/lib/audit";
 import bcrypt from "bcryptjs";
@@ -81,14 +81,17 @@ export async function POST(req) {
         details: `Administrator ${admin.email} (${admin.role}) logged in successfully.`,
       });
 
+      const isHttps = req.headers.get("x-forwarded-proto") === "https" || req.url?.startsWith("https:") || req.nextUrl?.protocol === "https:";
+
       const res = NextResponse.json({
         success: true,
+        token,
         admin: { email: admin.email, name: admin.name, role: admin.role },
       });
 
       res.cookies.set("admin_token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isHttps && process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: 7 * 24 * 60 * 60,
         path: "/",
@@ -108,14 +111,17 @@ export async function POST(req) {
           role: "superadmin",
         };
         const token = signAdminToken(dummyAdmin);
+        const isHttps = req.headers.get("x-forwarded-proto") === "https" || req.url?.startsWith("https:") || req.nextUrl?.protocol === "https:";
+
         const res = NextResponse.json({
           success: true,
+          token,
           admin: { email: dummyAdmin.email, name: dummyAdmin.name, role: dummyAdmin.role },
         });
 
         res.cookies.set("admin_token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: isHttps && process.env.NODE_ENV === "production",
           sameSite: "lax",
           maxAge: 7 * 24 * 60 * 60,
           path: "/",
@@ -137,25 +143,19 @@ export async function POST(req) {
 
 export async function GET(req) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    if (!token) {
+    const admin = getAdminFromRequest(req);
+    if (!admin) {
       return NextResponse.json({ authenticated: false }, { status: 401 });
     }
 
-    const payload = verifyAdminToken(token);
-    if (!payload) {
-      return NextResponse.json({ authenticated: false }, { status: 401 });
-    }
-
-    return NextResponse.json({ authenticated: true, user: payload });
+    return NextResponse.json({ authenticated: true, user: admin });
   } catch (err) {
     return NextResponse.json({ authenticated: false }, { status: 500 });
   }
 }
 
 export async function DELETE(req) {
-  const token = req.cookies.get("admin_token")?.value;
-  const admin = token ? verifyAdminToken(token) : null;
+  const admin = getAdminFromRequest(req);
   if (admin) {
     await recordAudit({
       req,

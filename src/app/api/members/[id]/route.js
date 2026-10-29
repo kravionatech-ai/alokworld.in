@@ -22,8 +22,7 @@ export async function GET(req, { params }) {
     const { id } = await params;
     const conn = await connectDB();
 
-    const token = req.cookies.get("admin_token")?.value;
-    const isAuthorizedAdmin = token ? Boolean(verifyAdminToken(token)) : false;
+    const isAuthorizedAdmin = Boolean(verifyAdminToken(req));
 
     if (conn) {
       let member = null;
@@ -89,8 +88,7 @@ export async function GET(req, { params }) {
 // PUT /api/members/[id] (Admin update with validation, duplicate detection, and slug handling)
 export async function PUT(req, { params }) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access. Please log in as an administrator." }, { status: 401 });
     }
@@ -243,8 +241,7 @@ export async function PUT(req, { params }) {
 // DELETE /api/members/[id] (Admin deletion - restricted to superadmin)
 export async function DELETE(req, { params }) {
   try {
-    const token = req.cookies.get("admin_token")?.value;
-    const admin = token ? verifyAdminToken(token) : null;
+    const admin = verifyAdminToken(req);
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized access. Please log in as an administrator." }, { status: 401 });
     }
