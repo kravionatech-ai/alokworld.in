@@ -461,6 +461,8 @@ function AdminDashboardInner() {
     status: "upcoming",
   });
   const [eventFilterTab, setEventFilterTab] = useState("all");
+  const [eventSearch, setEventSearch] = useState("");
+  const [eventSort, setEventSort] = useState("newest");
   const [uploadingEventImage, setUploadingEventImage] = useState(false);
   const [savingEvent, setSavingEvent] = useState(false);
 
@@ -831,6 +833,88 @@ function AdminDashboardInner() {
     const featured = members.filter((m) => m.isFeatured).length;
     return { total, approved, pending, archived, featured };
   }, [members]);
+
+  const eventStats = useMemo(() => {
+    const list = Array.isArray(eventsList) ? eventsList : [];
+    const now = Date.now();
+    return {
+      total: list.length,
+      featured: list.filter((e) => e.isFeatured && e.isActive !== false).length,
+      active: list.filter((e) => e.isActive !== false).length,
+      upcoming: list.filter((e) => {
+        if (!e.date) return true;
+        const d = new Date(e.date).getTime();
+        return isNaN(d) || d >= now;
+      }).length,
+      past: list.filter((e) => {
+        if (!e.date) return false;
+        const d = new Date(e.date).getTime();
+        return !isNaN(d) && d < now;
+      }).length,
+      inactive: list.filter((e) => e.isActive === false).length,
+    };
+  }, [eventsList]);
+
+  const filteredEventsList = useMemo(() => {
+    let list = Array.isArray(eventsList) ? [...eventsList] : [];
+    const now = Date.now();
+
+    // 1. Status Filter Tab
+    if (eventFilterTab === "featured") {
+      list = list.filter((e) => e.isFeatured);
+    } else if (eventFilterTab === "active") {
+      list = list.filter((e) => e.isActive !== false);
+    } else if (eventFilterTab === "upcoming") {
+      list = list.filter((e) => {
+        if (!e.date) return true;
+        const d = new Date(e.date).getTime();
+        return isNaN(d) || d >= now;
+      });
+    } else if (eventFilterTab === "past") {
+      list = list.filter((e) => {
+        if (!e.date) return false;
+        const d = new Date(e.date).getTime();
+        return !isNaN(d) && d < now;
+      });
+    } else if (eventFilterTab === "inactive") {
+      list = list.filter((e) => e.isActive === false);
+    }
+
+    // 2. Search
+    if (eventSearch.trim()) {
+      const q = eventSearch.toLowerCase().trim();
+      list = list.filter((e) =>
+        (e.title && e.title.toLowerCase().includes(q)) ||
+        (e.subtitle && e.subtitle.toLowerCase().includes(q)) ||
+        (e.badge && e.badge.toLowerCase().includes(q)) ||
+        (e.location && e.location.toLowerCase().includes(q)) ||
+        (e.description && e.description.toLowerCase().includes(q))
+      );
+    }
+
+    // 3. Sorting
+    if (eventSort === "newest") {
+      list.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+    } else if (eventSort === "upcoming_first") {
+      list.sort((a, b) => {
+        const da = new Date(a.date || 0).getTime();
+        const db = new Date(b.date || 0).getTime();
+        const aUpcoming = da >= now;
+        const bUpcoming = db >= now;
+        if (aUpcoming && !bUpcoming) return -1;
+        if (!aUpcoming && bUpcoming) return 1;
+        return da - db;
+      });
+    } else if (eventSort === "past_first") {
+      list.sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
+    } else if (eventSort === "title_asc") {
+      list.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+    } else if (eventSort === "title_desc") {
+      list.sort((a, b) => (b.title || "").localeCompare(a.title || ""));
+    }
+
+    return list;
+  }, [eventsList, eventFilterTab, eventSearch, eventSort]);
 
   const resetMemberForm = () => {
     setEditingMemberId(null);
@@ -4364,38 +4448,34 @@ function AdminDashboardInner() {
           )}
 
           {/* ========================================================================= */}
-          {/* VIEW: EVENTS & LIVE COUNTDOWN (COMMUNITY PROGRAMS & MANAGEMENT)          */}
+          {/* VIEW: EVENTS & CONVENTIONS DIRECTORY TABLE (REDESIGNED)                   */}
           {/* ========================================================================= */}
           {activeTab === "events" && (
-            <div className="space-y-5">
-              {/* Header Toolbar */}
-              <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="space-y-3">
+              {/* Header */}
+              <div className="border-b border-[#E2DDD5] pb-3 flex items-baseline justify-between gap-3 flex-wrap">
                 <div>
                   <h1 className="text-lg font-bold text-[#102F6B] flex items-center gap-2">
-                    <span>{isHi ? "कार्यक्रम प्रबंधन एवं लाइव उल्टी गिनती" : "Events & Live Countdown Management"}</span>
+                    <span>{isHi ? "कार्यक्रम निर्देशिका (Event Directory)" : "Event Directory"}</span>
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${settings.eventEnabled ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"}`}>
-                      {settings.eventEnabled ? (isHi ? "सक्रिय (Live)" : "Active") : (isHi ? "निष्क्रिय" : "Disabled")}
+                      {settings.eventEnabled ? (isHi ? "सक्रिय (Live)" : "Live") : (isHi ? "निष्क्रिय" : "Disabled")}
                     </span>
                   </h1>
                   <p className="text-xs text-[#55657E]">
                     {isHi
-                      ? "आगामी कार्यक्रमों, सम्मेलनों को जोड़ें, पोस्टर और विवरण संपादित करें एवं शीर्ष उल्टी गिनती पट्टी नियंत्रित करें।"
-                      : "Add upcoming events, manage poster images & details, and control the top sticky countdown banner."}
+                      ? "समाज के राष्ट्रीय सम्मेलनों, बैठकों, उल्टी गिनती पट्टी एवं सार्वजनिक दृश्यता का संपूर्ण नियंत्रण।"
+                      : "Verified community events, conventions, countdown ticker, and public visibility."}
                   </p>
                 </div>
-
                 <div className="flex items-center gap-2 flex-wrap">
-                  {/* + Add New Event Button */}
                   <button
                     type="button"
                     onClick={handleOpenAddEvent}
-                    className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-all transform hover:-translate-y-0.5"
+                    className="bg-[#102F6B] hover:bg-[#0D1B2A] text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5"
                   >
-                    <span className="text-sm">➕</span>
-                    <span>{isHi ? "नया कार्यक्रम जोड़ें (+ Add Event)" : "+ Add New Event"}</span>
+                    <span>➕</span>
+                    <span>{isHi ? "+ नया कार्यक्रम जोड़ें" : "+ Add Event"}</span>
                   </button>
-
-                  {/* 1-Click 2 Nov Preset */}
                   <button
                     type="button"
                     onClick={() => {
@@ -4413,20 +4493,18 @@ function AdminDashboardInner() {
                         eventCtaText: "मुख्य पृष्ठ पर जाएं →",
                         eventCtaLink: "/",
                       }));
-                      showBanner(isHi ? "2 नवंबर 2026 'वेबसाइट लाइव' प्रीसेट लागू किया गया! कृपया 'सेटिंग्स सुरक्षित करें' दबाएं।" : "2 Nov 2026 preset applied! Click Save to apply.");
+                      showBanner(isHi ? "2 नवंबर 2026 प्रीसेट लागू किया गया! 'सेटिंग्स सुरक्षित करें' दबाएं।" : "2 Nov preset applied!");
                     }}
-                    className="px-3 py-1.5 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] border border-[#D5CEC4] text-xs font-bold rounded-xs cursor-pointer shadow-2xs flex items-center gap-1.5 transition-colors"
+                    className="px-2.5 py-1.5 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] border border-[#D5CEC4] text-xs font-medium rounded-xs cursor-pointer"
                   >
                     <span>✨</span>
-                    <span>{isHi ? "2 नवंबर 2026 प्रीसेट" : "Apply 2 Nov Preset"}</span>
+                    <span>{isHi ? "2 नवं प्रीसेट" : "2 Nov Preset"}</span>
                   </button>
-
-                  {/* Save Button */}
                   <button
                     type="button"
                     onClick={handleSaveSettings}
                     disabled={submitting}
-                    className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-4 py-1.5 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
+                    className="bg-[#F26A21] hover:bg-[#d85813] disabled:opacity-50 text-white px-3 py-1.5 text-xs font-medium rounded-xs cursor-pointer shadow-xs flex items-center gap-1"
                   >
                     <span>💾</span>
                     <span>{submitting ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Settings")}</span>
@@ -4434,676 +4512,293 @@ function AdminDashboardInner() {
                 </div>
               </div>
 
-              {/* Real-time Live Countdown Header Preview Box */}
-              {settings.eventEnabled && settings.eventTitle && eventsList.length > 0 ? (
-                <div className="bg-gradient-to-r from-[#091D42] via-[#102F6B] to-[#091D42] text-white p-4 rounded-lg border border-[#F26A21]/50 shadow-md space-y-3">
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-                      <span className="text-[10px] uppercase font-bold tracking-wider text-amber-300">
-                        {isHi ? "लाइव प्रीव्यू (यह वेबसाइट के शीर्ष हेडर में दिखेगा)" : "Live Header Preview"}
-                      </span>
-                    </div>
-                    <span className="text-xs text-slate-300 font-mono">
-                      लक्ष्य: {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN", { day: "numeric", month: "long", year: "numeric" }) : "—"}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-3 pt-1">
-                    <div className="flex items-center gap-2 text-center md:text-left flex-wrap">
-                      <span className="bg-[#F26A21] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase shadow-xs">
-                        {settings.eventBadge || "कार्यक्रम"}
-                      </span>
-                      <span className="text-sm font-bold text-white">
-                        {settings.eventTitle}
-                      </span>
-                    </div>
-
-                    {/* Countdown Ticker Box */}
-                    <div className="flex items-center gap-1.5 font-mono bg-black/40 px-3 py-1.5 rounded border border-white/10 text-white">
-                      <div className="flex flex-col items-center">
-                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                          {Math.max(0, Math.floor((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))}
-                        </span>
-                        <span className="text-[9px] text-[#CBD5E1]">दिन</span>
-                      </div>
-                      <span className="text-[#F26A21] font-bold pb-2">:</span>
-                      <div className="flex flex-col items-center">
-                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                          {Math.max(0, Math.floor(((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)))}
-                        </span>
-                        <span className="text-[9px] text-[#CBD5E1]">घंटे</span>
-                      </div>
-                      <span className="text-[#F26A21] font-bold pb-2">:</span>
-                      <div className="flex flex-col items-center">
-                        <span className="bg-[#1C3D7A] text-white font-bold px-2 py-0.5 rounded text-xs">
-                          {Math.max(0, Math.floor(((new Date(settings.eventDate || Date.now()).getTime() - Date.now()) % (1000 * 60)) / (1000 * 60)))}
-                        </span>
-                        <span className="text-[9px] text-[#CBD5E1]">मिनट</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-[#FAF8F3] border border-[#E2DDD5] p-5 rounded-lg text-center space-y-2 text-xs">
-                  <div className="text-xl">⏳</div>
-                  <div className="font-bold text-sm text-[#102F6B]">
-                    {isHi ? "वर्तमान में कोई लाइव कार्यक्रम सक्रिय नहीं है" : "No live event active currently"}
-                  </div>
-                  <p className="text-[11.5px] text-[#64748B] max-w-lg mx-auto">
-                    {isHi
-                      ? "कार्यक्रम सूची डिफ़ॉल्ट रूप से रिक्त है। आप नीचे दिए गए '+ नया कार्यक्रम जोड़ें' बटन से अपने अनुसार कार्यक्रम बना सकते हैं और आवश्यकतानुसार उसे मुख्य/लाइव सेट कर सकते हैं।"
-                      : "Events are empty by default. You can create custom events using '+ Add New Event'."}
-                  </p>
-                  <div className="pt-1">
-                    <button
-                      type="button"
-                      onClick={handleOpenAddEvent}
-                      className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white font-bold rounded-xs cursor-pointer shadow-xs inline-flex items-center gap-1.5"
-                    >
-                      <span>➕</span>
-                      <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add New Event"}</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* SECTION: DISPLAY CONTROLS & ACTIVE EVENT SUMMARY */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Card 1: Toggle Displays */}
-                <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
-                  <h3 className="font-bold text-sm text-[#102F6B] border-b border-[#F0E5D5] pb-2">
-                    {isHi ? "1. सक्रियता एवं प्रदर्शन नियंत्रण" : "1. Display Controls"}
-                  </h3>
-
-                  <label className="flex items-start gap-3 p-2.5 rounded bg-[#FAF8F3] border border-[#E2DDD5] cursor-pointer hover:bg-[#FFF8F0] transition-colors">
+              {/* Compact Unified Display Control Strip */}
+              <div className="bg-[#FAF8F3] border border-[#E2DDD5] p-2.5 rounded-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs">
+                <div className="flex items-center gap-4 flex-wrap">
+                  <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={Boolean(settings.eventTopBarEnabled)}
                       onChange={(e) => setSettings({ ...settings, eventTopBarEnabled: e.target.checked })}
-                      className="mt-0.5 w-4 h-4 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
+                      className="w-3.5 h-3.5 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
                     />
-                    <div>
-                      <div className="font-bold text-xs text-[#102F6B]">
-                        {isHi ? "शीर्ष हेडर लाइव उल्टी गिनती पट्टी दिखाएं" : "Show Sticky Top Countdown Ticker Bar"}
-                      </div>
-                      <p className="text-[11px] text-[#64748B]">
-                        {isHi
-                          ? "वेबसाइट के सबसे ऊपर गहरे नीले रंग में उल्टी गिनती पट्टी प्रदर्शित होगी।"
-                          : "Displays the prominent countdown bar at the very top of all pages."}
-                      </p>
-                    </div>
+                    <span className="font-semibold text-[#102F6B]">
+                      {isHi ? "शीर्ष हेडर लाइव उल्टी गिनती पट्टी" : "Sticky Top Countdown Bar"}
+                    </span>
                   </label>
 
-                  <label className="flex items-start gap-3 p-2.5 rounded bg-[#FAF8F3] border border-[#E2DDD5] cursor-pointer hover:bg-[#FFF8F0] transition-colors">
+                  <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
                       checked={Boolean(settings.eventPopupEnabled)}
                       onChange={(e) => setSettings({ ...settings, eventPopupEnabled: e.target.checked })}
-                      className="mt-0.5 w-4 h-4 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
+                      className="w-3.5 h-3.5 text-[#102F6B] rounded border-[#D5CEC4] cursor-pointer"
                     />
-                    <div>
-                      <div className="font-bold text-xs text-[#102F6B]">
-                        {isHi ? "आगंतुक पॉपअप विंडो दिखाएं (Visitor Popup Modal)" : "Show Visitor Announcement Popup"}
-                      </div>
-                      <p className="text-[11px] text-[#64748B]">
-                        {isHi
-                          ? "वेबसाइट खुलने पर आगंतुकों को सक्रिय कार्यक्रम का पोस्टर, दिनांक व विवरण पॉपअप प्रदर्शित होगा।"
-                          : "Displays an attractive pop-up modal to first-time daily visitors with target date & poster."}
-                      </p>
-                    </div>
+                    <span className="font-semibold text-[#102F6B]">
+                      {isHi ? "आगंतुक पॉपअप विंडो (Popup Modal)" : "Visitor Popup Announcement"}
+                    </span>
                   </label>
                 </div>
 
-                {/* Card 2: Featured Active Event Quick Card */}
-                <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-3.5">
-                  <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
-                    <h3 className="font-bold text-sm text-[#102F6B]">
-                      {isHi ? "2. वर्तमान मुख्य / लाइव कार्यक्रम" : "2. Active Featured Event"}
-                    </h3>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                      settings.eventEnabled && settings.eventTitle && eventsList.length > 0
-                        ? "bg-emerald-100 text-emerald-800 border-emerald-200"
-                        : "bg-slate-100 text-slate-600 border-slate-200"
-                    }`}>
-                      {settings.eventEnabled && settings.eventTitle && eventsList.length > 0
-                        ? (isHi ? "🌟 हेडर व पॉपअप पर सक्रिय" : "Live on Top Bar & Popup")
-                        : (isHi ? "कोई कार्यक्रम सक्रिय नहीं" : "No Event Active")}
+                <div className="flex items-center gap-2 text-[11px] self-end md:self-auto">
+                  {settings.eventEnabled && settings.eventTitle ? (
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-medium">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+                      <span>{isHi ? "लाइव:" : "Live:"} {settings.eventTitle}</span>
                     </span>
-                  </div>
-
-                  {settings.eventEnabled && settings.eventTitle && eventsList.length > 0 ? (
-                    <div className="flex items-start gap-3 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
-                      {/* Active Poster Thumbnail */}
-                      <div className="w-16 h-20 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
-                        {settings.eventImage ? (
-                          <img
-                            src={settings.eventImage}
-                            alt={settings.eventTitle}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
-                            पोस्टर
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="bg-[#102F6B] text-white text-[10px] font-bold px-1.5 py-0.2 rounded">
-                            {settings.eventBadge || "कार्यक्रम"}
-                          </span>
-                          <span className="text-[11px] text-[#64748B] font-mono">
-                            📅 {settings.eventDate ? new Date(settings.eventDate).toLocaleDateString("hi-IN") : "—"}
-                          </span>
-                        </div>
-                        <div className="font-bold text-xs text-[#102F6B] truncate">
-                          {settings.eventTitle}
-                        </div>
-                        <div className="text-[11px] text-[#55657E] truncate">
-                          📍 {settings.eventLocation || "—"}
-                        </div>
-                        <div className="pt-1 flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const activeEvt = eventsList.find((e) => e.isFeatured) || eventsList[0];
-                              if (activeEvt) {
-                                handleOpenEditEvent(activeEvt);
-                              } else {
-                                handleOpenAddEvent();
-                              }
-                            }}
-                            className="text-[11px] font-bold text-[#F26A21] hover:underline flex items-center gap-1 cursor-pointer"
-                          >
-                            <span>✏️</span>
-                            <span>{isHi ? "विवरण व फोटो संपादित करें" : "Edit Details & Poster"}</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
                   ) : (
-                    <div className="p-4 bg-[#FAF8F3] border border-dashed border-[#D5CEC4] rounded-xs text-center space-y-2 text-xs text-[#64748B]">
-                      <p>
-                        {isHi
-                          ? "वर्तमान में कोई कार्यक्रम सक्रिय नहीं है। आप नीचे से नया कार्यक्रम जोड़ सकते हैं।"
-                          : "No event is active currently. Add an event below."}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={handleOpenAddEvent}
-                        className="px-3 py-1 bg-[#102F6B] text-white text-xs font-bold rounded-xs cursor-pointer inline-flex items-center gap-1"
-                      >
-                        <span>➕</span>
-                        <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add Event"}</span>
-                      </button>
-                    </div>
+                    <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 font-medium">
+                      <span>⚪ {isHi ? "कोई कार्यक्रम लाइव नहीं" : "No live countdown"}</span>
+                    </span>
                   )}
                 </div>
               </div>
 
-              {/* ===================================================================== */}
-              {/* SECTION: ALL EVENTS DIRECTORY & MANAGEMENT GRID                        */}
-              {/* ===================================================================== */}
-              <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F0E5D5] pb-3">
-                  <div>
-                    <h2 className="font-bold text-sm sm:text-base text-[#102F6B] flex items-center gap-2">
-                      <span>{isHi ? "3. समाज कार्यक्रम एवं महासम्मेलन सूची" : "3. Community Events & Conventions Directory"}</span>
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-[#FAF8F3] text-[#102F6B] font-mono border border-[#E2DDD5]">
-                        {eventsList.length}
-                      </span>
-                    </h2>
-                    <p className="text-xs text-[#64748B]">
-                      {isHi
-                        ? "वेबसाइट के लिए नवीन कार्यक्रम जोड़ें, किसी भी कार्यक्रम को मुख्य लाइव उल्टी गिनती बनाएं, विवरण या पोस्टर संपादित करें।"
-                        : "Add new events, set any event as the featured live countdown, and manage images and descriptions."}
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleOpenAddEvent}
-                    className="px-3.5 py-1.5 bg-[#F26A21] hover:bg-[#d85813] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 self-start sm:self-auto transition-transform hover:-translate-y-0.5"
-                  >
-                    <span>➕</span>
-                    <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add New Event"}</span>
-                  </button>
-                </div>
-
-                {/* Segmented Filter Toolbar: All, Upcoming, Past */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-[#E2DDD5]">
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    {[
-                      { id: "all", label: isHi ? "सभी कार्यक्रम" : "All Events", count: eventsList.length },
-                      {
-                        id: "upcoming",
-                        label: isHi ? "📅 आगामी / सक्रिय" : "Upcoming / Active",
-                        count: eventsList.filter((e) => !e.date || isNaN(new Date(e.date).getTime()) || new Date(e.date) >= new Date()).length,
-                      },
-                      {
-                        id: "past",
-                        label: isHi ? "🏛️ पूर्व कार्यक्रम" : "Past Events",
-                        count: eventsList.filter((e) => e.date && !isNaN(new Date(e.date).getTime()) && new Date(e.date) < new Date()).length,
-                      },
-                    ].map((tab) => (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setEventFilterTab(tab.id)}
-                        className={`px-3 py-1.5 rounded-xs text-xs font-semibold cursor-pointer transition-colors ${
-                          eventFilterTab === tab.id
-                            ? "bg-[#102F6B] text-white shadow-xs"
-                            : "bg-[#FAF8F3] text-[#55657E] hover:text-[#102F6B] hover:bg-[#FFF0E2] border border-[#D5CEC4]"
-                        }`}
-                      >
-                        {tab.label} ({tab.count})
-                      </button>
-                    ))}
-                  </div>
-
-                  <span className="text-[11px] text-[#64748B]">
-                    {isHi ? "टेबल में सीधे 'सक्रिय' या 'मुख्य' टॉगल करें" : "Toggle active/featured directly from table"}
-                  </span>
-                </div>
-
-                {/* Events Table Format */}
-                {eventsList.length === 0 ? (
-                  <div className="p-8 text-center text-xs text-[#55657E] bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs space-y-3">
-                    <div className="text-3xl">📅</div>
-                    <div className="font-bold text-sm text-[#102F6B]">
-                      {isHi ? "कोई कार्यक्रम उपलब्ध नहीं है" : "No events created yet"}
-                    </div>
-                    <p className="text-xs text-[#64748B]">
-                      {isHi
-                        ? "पहला कार्यक्रम जोड़ने के लिए ऊपर दिए गए '+ नया कार्यक्रम जोड़ें' बटन पर क्लिक करें।"
-                        : "Click '+ Add New Event' to create the first community event."}
-                    </p>
+              {/* Compact Unified Toolbar (Identical to Member Directory) */}
+              <div className="bg-white border border-[#E2DDD5] p-2 rounded-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 text-xs">
+                {/* Segmented Status Tabs */}
+                <div className="flex items-center gap-1 flex-wrap">
+                  {[
+                    { id: "all", label: isHi ? "सभी कार्यक्रम" : "All", count: eventStats.total },
+                    { id: "featured", label: isHi ? "⭐ मुख्य लाइव" : "⭐ Featured", count: eventStats.featured },
+                    { id: "active", label: isHi ? "सक्रिय" : "Active", count: eventStats.active },
+                    { id: "upcoming", label: isHi ? "आगामी" : "Upcoming", count: eventStats.upcoming },
+                    { id: "past", label: isHi ? "पूर्व कार्यक्रम" : "Past", count: eventStats.past },
+                    { id: "inactive", label: isHi ? "निष्क्रिय" : "Inactive", count: eventStats.inactive },
+                  ].map((s) => (
                     <button
+                      key={s.id}
                       type="button"
-                      onClick={handleOpenAddEvent}
-                      className="px-4 py-2 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs inline-flex items-center gap-1.5"
+                      onClick={() => setEventFilterTab(s.id)}
+                      className={`px-2.5 py-1 text-xs font-medium rounded-xs cursor-pointer transition-colors ${
+                        eventFilterTab === s.id
+                          ? "bg-[#102F6B] text-white font-semibold"
+                          : "text-[#55657E] hover:text-[#1E293B] hover:bg-[#F2EDE4]"
+                      }`}
                     >
-                      <span>➕</span>
-                      <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add Event"}</span>
+                      {s.label}
+                      {s.count !== undefined && (
+                        <span className={`ml-1 text-[11px] font-mono ${eventFilterTab === s.id ? "text-slate-300" : "text-[#8896AB]"}`}>
+                          ({s.count})
+                        </span>
+                      )}
                     </button>
+                  ))}
+                </div>
+
+                {/* Sort & Search */}
+                <div className="flex items-center gap-2">
+                  <select
+                    value={eventSort}
+                    onChange={(e) => setEventSort(e.target.value)}
+                    className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
+                  >
+                    <option value="newest">{isHi ? "क्रम: नवीनतम" : "Sort: Newest"}</option>
+                    <option value="upcoming_first">{isHi ? "क्रम: आगामी पहले" : "Sort: Upcoming First"}</option>
+                    <option value="past_first">{isHi ? "क्रम: पूर्व पहले" : "Sort: Past First"}</option>
+                    <option value="title_asc">{isHi ? "क्रम: शीर्षक A-Z" : "Sort: Title A-Z"}</option>
+                  </select>
+
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder={isHi ? "कार्यक्रम का नाम, स्थान, विवरण खोजें..." : "Search event by title, venue, badge..."}
+                      value={eventSearch}
+                      onChange={(e) => setEventSearch(e.target.value)}
+                      className="h-8 pl-7 pr-3 w-56 sm:w-72 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
+                    />
+                    <span className="absolute left-2 top-2 text-[#8896AB] pointer-events-none">
+                      <Icon name="search" className="w-3.5 h-3.5" />
+                    </span>
+                    {eventSearch && (
+                      <button
+                        onClick={() => setEventSearch("")}
+                        className="absolute right-2 top-2 text-[#8896AB] hover:text-[#1E293B]"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
-                ) : (
-                  <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden">
-                    <div className="overflow-x-auto w-full">
-                      <table className="w-full text-left text-xs min-w-[760px]">
-                        <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-bold">
-                          <tr>
-                            <th className="py-2.5 px-3 w-14">पोस्टर</th>
-                            <th className="py-2.5 px-3">कार्यक्रम का नाम व विवरण</th>
-                            <th className="py-2.5 px-3">दिनांक व समय</th>
-                            <th className="py-2.5 px-3">स्थान</th>
-                            <th className="py-2.5 px-3 text-center">सक्रियता (Active)</th>
-                            <th className="py-2.5 px-3 text-center">मुख्य (Featured)</th>
-                            <th className="py-2.5 px-3 text-right">कार्य</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-[#EFECE6]">
-                          {eventsList
-                            .filter((evt) => {
-                              const isPast = evt.date && !isNaN(new Date(evt.date).getTime()) && new Date(evt.date) < new Date();
-                              if (eventFilterTab === "upcoming") return !isPast;
-                              if (eventFilterTab === "past") return isPast;
-                              return true;
-                            })
-                            .map((evt) => {
-                              const isPast = evt.date && !isNaN(new Date(evt.date).getTime()) && new Date(evt.date) < new Date();
-                              let formattedDate = evt.date;
-                              try {
-                                const d = new Date(evt.date);
-                                if (!isNaN(d.getTime())) {
-                                  formattedDate = d.toLocaleString(isHi ? "hi-IN" : "en-IN", {
-                                    day: "numeric",
-                                    month: "short",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  });
-                                }
-                              } catch (e) {}
-
-                              return (
-                                <tr key={evt.id} className="hover:bg-[#FAF8F3] transition-colors">
-                                  {/* Poster Thumbnail */}
-                                  <td className="py-2.5 px-3">
-                                    <div className="w-10 h-12 rounded overflow-hidden bg-slate-100 border border-[#D5CEC4] shrink-0 flex items-center justify-center">
-                                      {evt.image ? (
-                                        <img
-                                          src={evt.image}
-                                          alt=""
-                                          className="w-full h-full object-cover"
-                                        />
-                                      ) : (
-                                        <span className="text-base">📅</span>
-                                      )}
-                                    </div>
-                                  </td>
-
-                                  {/* Title & Badge */}
-                                  <td className="py-2.5 px-3">
-                                    <div className="max-w-[260px]">
-                                      <button
-                                        type="button"
-                                        onClick={() => handleOpenEditEvent(evt)}
-                                        className="font-bold text-[#102F6B] hover:text-[#F26A21] hover:underline text-left block truncate cursor-pointer"
-                                      >
-                                        {evt.title}
-                                      </button>
-                                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                                        <span className="text-[10px] bg-[#102F6B] text-white px-1.5 py-0.2 rounded font-bold">
-                                          {evt.badge || "कार्यक्रम"}
-                                        </span>
-                                        {evt.subtitle && (
-                                          <span className="text-[10.5px] text-[#64748B] truncate max-w-[160px]">
-                                            {evt.subtitle}
-                                          </span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </td>
-
-                                  {/* Date & Time with Status Pill */}
-                                  <td className="py-2.5 px-3">
-                                    <div className="text-[11px] font-mono font-medium text-[#1E293B]">
-                                      {formattedDate || "—"}
-                                    </div>
-                                    <span
-                                      className={`inline-block mt-0.5 text-[9.5px] font-bold px-1.5 py-0.2 rounded ${
-                                        isPast
-                                          ? "bg-slate-100 text-slate-700 border border-slate-200"
-                                          : "bg-emerald-100 text-emerald-800 border border-emerald-200"
-                                      }`}
-                                    >
-                                      {isPast ? (isHi ? "✓ सम्पन्न (Past)" : "Past") : (isHi ? "⏳ आगामी (Upcoming)" : "Upcoming")}
-                                    </span>
-                                  </td>
-
-                                  {/* Location */}
-                                  <td className="py-2.5 px-3 text-[#55657E]">
-                                    <div className="truncate max-w-[140px] flex items-center gap-1">
-                                      <span>📍</span>
-                                      <span className="truncate">{evt.location || "—"}</span>
-                                    </div>
-                                  </td>
-
-                                  {/* Active / Inactive Status Switch */}
-                                  <td className="py-2.5 px-3 text-center">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleToggleEventActive(evt)}
-                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10.5px] font-bold border transition-colors cursor-pointer ${
-                                        evt.isActive !== false
-                                          ? "bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200"
-                                          : "bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200"
-                                      }`}
-                                      title={evt.isActive !== false ? "सक्रिय है (निष्क्रिय करने हेतु क्लिक करें)" : "निष्क्रिय है (सक्रिय करने हेतु क्लिक करें)"}
-                                    >
-                                      <span>{evt.isActive !== false ? "🟢 सक्रिय (Live)" : "⚪ निष्क्रिय"}</span>
-                                    </button>
-                                  </td>
-
-                                  {/* Featured Star Toggle */}
-                                  <td className="py-2.5 px-3 text-center">
-                                    <button
-                                      type="button"
-                                      onClick={() => handleToggleEventFeatured(evt)}
-                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10.5px] font-bold border transition-colors cursor-pointer ${
-                                        evt.isFeatured
-                                          ? "bg-amber-100 text-amber-900 border-amber-400 shadow-2xs hover:bg-amber-200"
-                                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-amber-50 hover:text-amber-800"
-                                      }`}
-                                      title={evt.isFeatured ? "हेडर व पॉपअप पर मुख्य लाइव है (हटाने हेतु क्लिक करें)" : "हेडर व पॉपअप पर मुख्य लाइव बनाएं"}
-                                    >
-                                      <span>{evt.isFeatured ? "⭐ मुख्य लाइव" : "☆ सामान्य"}</span>
-                                    </button>
-                                  </td>
-
-                                  {/* Actions */}
-                                  <td className="py-2.5 px-3 text-right">
-                                    <div className="flex items-center justify-end gap-1.5">
-                                      <button
-                                        type="button"
-                                        onClick={() => handleOpenEditEvent(evt)}
-                                        className="px-2 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white rounded-xs text-[11px] font-bold cursor-pointer shadow-2xs flex items-center gap-1"
-                                      >
-                                        <span>✏️</span>
-                                        <span>{isHi ? "संपादित करें" : "Edit"}</span>
-                                      </button>
-                                      <button
-                                        type="button"
-                                        onClick={() => handleDeleteEvent(evt.id, evt.title)}
-                                        className="px-2 py-1 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-xs text-[11px] font-medium cursor-pointer"
-                                      >
-                                        {isHi ? "हटाएं" : "Delete"}
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                )}
+                </div>
               </div>
 
-              {/* ===================================================================== */}
-              {/* SECTION: QUICK ACTIVE EVENT DETAILS & POSTER CUSTOMIZER               */}
-              {/* ===================================================================== */}
-              <div className="bg-white border border-[#E2DDD5] p-4 sm:p-5 rounded-xs space-y-4">
-                <div className="flex items-center justify-between border-b border-[#F0E5D5] pb-2">
-                  <h3 className="font-bold text-sm text-[#102F6B]">
-                    {isHi ? "4. सक्रिय कार्यक्रम त्वरित विवरण एवं पोस्टर कस्टमाइज़र" : "4. Active Event Quick Details & Poster Customizer"}
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={handleSaveSettings}
-                    disabled={submitting}
-                    className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-3.5 py-1 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1"
-                  >
-                    <span>💾</span>
-                    <span>{submitting ? (isHi ? "सहेज रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Changes")}</span>
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-                  {/* Left Column: Poster Image Upload & Preview */}
-                  <div className="md:col-span-4 space-y-2.5 bg-[#FAF8F3] p-3 rounded-xs border border-[#E2DDD5]">
-                    <label className="block text-xs font-bold text-[#102F6B]">
-                      {isHi ? "कार्यक्रम पोस्टर / छायाचित्र (Poster Image):" : "Poster Image:"}
-                    </label>
-
-                    {/* Image Box */}
-                    <div className="w-full h-48 rounded bg-white border border-[#D5CEC4] overflow-hidden flex items-center justify-center relative group">
-                      {settings.eventImage ? (
-                        <img
-                          src={settings.eventImage}
-                          alt="Event Poster"
-                          className="w-full h-full object-contain p-1"
-                        />
+              {/* Table (Clean Member-Directory Format) */}
+              <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden">
+                <div className="overflow-x-auto w-full">
+                  <table className="w-full text-left text-xs min-w-[760px]">
+                    <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-semibold">
+                      <tr>
+                        <th className="py-2.5 px-3">EVENT / PROGRAM</th>
+                        <th className="py-2.5 px-3">DATE & SCHEDULE</th>
+                        <th className="py-2.5 px-3">LOCATION / VENUE</th>
+                        <th className="py-2.5 px-3 text-center">STATUS</th>
+                        <th className="py-2.5 px-3 text-center">⭐ FEATURED</th>
+                        <th className="py-2.5 px-3 text-right">ACTIONS</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#EFECE6]">
+                      {filteredEventsList.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="py-10 text-center text-[#55657E]">
+                            <div className="space-y-2">
+                              <p className="font-medium">
+                                {isHi ? "कोई कार्यक्रम रिकॉर्ड नहीं मिला।" : "No event records found matching criteria."}
+                              </p>
+                              <button
+                                type="button"
+                                onClick={handleOpenAddEvent}
+                                className="px-3 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-medium rounded-xs cursor-pointer inline-flex items-center gap-1"
+                              >
+                                <span>➕</span>
+                                <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add Event"}</span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
                       ) : (
-                        <div className="text-center text-slate-400 text-xs p-3">
-                          <div>🖼️</div>
-                          <div>कोई पोस्टर अपलोड नहीं है</div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Direct Upload Button */}
-                    <div className="space-y-1.5">
-                      <label className="w-full py-1.5 px-3 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs text-center cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
-                        <span>📤</span>
-                        <span>{uploadingImage ? (isHi ? "अपलोड हो रहा है..." : "Uploading...") : (isHi ? "पोस्टर फाइल अपलोड करें" : "Upload Poster File")}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={async (e) => {
-                            const file = e.target.files?.[0];
-                            if (!file) return;
-                            setUploadingImage(true);
-                            const formData = new FormData();
-                            formData.append("file", file);
-                            formData.append("folder", "alokworld_posters");
-                            try {
-                              const res = await fetch("/api/upload", { method: "POST", body: formData });
-                              const data = await res.json();
-                              if (!res.ok) throw new Error(data.error || "Upload failed");
-                              setSettings((prev) => ({ ...prev, eventImage: data.url }));
-                              showBanner(isHi ? "पोस्टर सफलतापूर्वक अपलोड हुआ! कृपया सेटिंग्स सुरक्षित करें।" : "Poster uploaded! Click Save to apply.");
-                            } catch (err) {
-                              showBanner(err.message, true);
-                            } finally {
-                              setUploadingImage(false);
+                        filteredEventsList.map((evt) => {
+                          const isPast = evt.date && !isNaN(new Date(evt.date).getTime()) && new Date(evt.date) < new Date();
+                          let formattedDate = evt.date;
+                          try {
+                            const d = new Date(evt.date);
+                            if (!isNaN(d.getTime())) {
+                              formattedDate = d.toLocaleString(isHi ? "hi-IN" : "en-IN", {
+                                day: "numeric",
+                                month: "short",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              });
                             }
-                          }}
-                        />
-                      </label>
+                          } catch (e) {}
 
-                      {/* Or direct URL Input */}
-                      <input
-                        type="text"
-                        value={settings.eventImage || ""}
-                        onChange={(e) => setSettings({ ...settings, eventImage: e.target.value })}
-                        placeholder="https://res.cloudinary.com/..."
-                        className="w-full px-2.5 py-1 border border-[#D5CEC4] bg-white rounded text-[11px] font-mono focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-                  </div>
+                          return (
+                            <tr key={evt.id} className="hover:bg-[#FAF8F3] transition-colors">
+                              {/* Event Name & Poster */}
+                              <td className="py-2.5 px-3">
+                                <div className="flex items-center gap-2.5">
+                                  <div className="w-8 h-9 rounded-xs bg-[#F2EDE4] border border-[#E2DDD5] overflow-hidden shrink-0 flex items-center justify-center">
+                                    {evt.image ? (
+                                      <img
+                                        src={evt.image}
+                                        alt=""
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <span className="text-xs">📅</span>
+                                    )}
+                                  </div>
+                                  <div className="min-w-0 max-w-[240px]">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleOpenEditEvent(evt)}
+                                      className="font-semibold text-[#102F6B] hover:text-[#D9531E] hover:underline block truncate text-left cursor-pointer"
+                                    >
+                                      {evt.title}
+                                    </button>
+                                    <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                      <span className="text-[10px] bg-[#102F6B] text-white px-1.5 py-0.2 rounded font-bold">
+                                        {evt.badge || "कार्यक्रम"}
+                                      </span>
+                                      {evt.subtitle && (
+                                        <span className="text-[10px] text-[#8896AB] truncate max-w-[140px]">
+                                          {evt.subtitle}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
 
-                  {/* Right Column: Title, Date, Venue, CTA, Description */}
-                  <div className="md:col-span-8 space-y-3">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "मुख्य शीर्षक (Event Title):" : "Title:"}
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.eventTitle || ""}
-                          onChange={(e) => setSettings({ ...settings, eventTitle: e.target.value })}
-                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-semibold focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
+                              {/* Date & Schedule */}
+                              <td className="py-2.5 px-3">
+                                <div className="text-[11px] font-mono font-medium text-[#1E293B]">
+                                  {formattedDate || "—"}
+                                </div>
+                                <span
+                                  className={`inline-block mt-0.5 text-[9.5px] font-bold px-1.5 py-0.2 rounded ${
+                                    isPast
+                                      ? "bg-slate-100 text-slate-700 border border-slate-200"
+                                      : "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                  }`}
+                                >
+                                  {isPast ? (isHi ? "✓ सम्पन्न (Past)" : "Past") : (isHi ? "⏳ आगामी (Upcoming)" : "Upcoming")}
+                                </span>
+                              </td>
 
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "उपशीर्षक (Subtitle):" : "Subtitle:"}
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.eventSubtitle || ""}
-                          onChange={(e) => setSettings({ ...settings, eventSubtitle: e.target.value })}
-                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
-                    </div>
+                              {/* Location */}
+                              <td className="py-2.5 px-3 text-[#55657E]">
+                                <div className="truncate max-w-[160px] flex items-center gap-1">
+                                  <span>📍</span>
+                                  <span className="truncate">{evt.location || "—"}</span>
+                                </div>
+                              </td>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "दिनांक व समय (Date & Time):" : "Date & Time:"}
-                        </label>
-                        <input
-                          type="datetime-local"
-                          value={settings.eventDate ? settings.eventDate.slice(0, 16) : "2026-11-02T10:00"}
-                          onChange={(e) => setSettings({ ...settings, eventDate: e.target.value })}
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
+                              {/* Active Status (Approval-style Toggle Button) */}
+                              <td className="py-2.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleEventActive(evt)}
+                                  className="inline-flex items-center gap-1.5 cursor-pointer hover:underline"
+                                  title="Click to toggle active status"
+                                >
+                                  <span
+                                    className={`w-1.5 h-1.5 rounded-full ${
+                                      evt.isActive !== false ? "bg-emerald-600" : "bg-slate-400"
+                                    }`}
+                                  />
+                                  <span
+                                    className={`font-medium ${
+                                      evt.isActive !== false ? "text-emerald-800" : "text-slate-600"
+                                    }`}
+                                  >
+                                    {evt.isActive !== false ? "Active" : "Inactive"}
+                                  </span>
+                                </button>
+                              </td>
 
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "बैज लेबल (Badge):" : "Badge:"}
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.eventBadge || ""}
-                          onChange={(e) => setSettings({ ...settings, eventBadge: e.target.value })}
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
+                              {/* Featured Star Toggle */}
+                              <td className="py-2.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleEventFeatured(evt)}
+                                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-semibold transition-colors cursor-pointer ${
+                                    evt.isFeatured
+                                      ? "bg-amber-100 text-amber-900 border border-amber-300 font-bold hover:bg-amber-200"
+                                      : "text-[#55657E] hover:text-[#102F6B] hover:bg-[#F2EDE4]"
+                                  }`}
+                                  title={evt.isFeatured ? "मुख्य लाइव कार्यक्रम है" : "मुख्य लाइव कार्यक्रम बनाएं"}
+                                >
+                                  <span>{evt.isFeatured ? "⭐ मुख्य" : "☆ सामान्य"}</span>
+                                </button>
+                              </td>
 
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "स्थान (Venue):" : "Venue:"}
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.eventLocation || ""}
-                          onChange={(e) => setSettings({ ...settings, eventLocation: e.target.value })}
-                          className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "उल्टी गिनती शीर्षक:" : "Countdown Label:"}
-                        </label>
-                        <input
-                          type="text"
-                          value={settings.eventCountdownLabel || ""}
-                          onChange={(e) => setSettings({ ...settings, eventCountdownLabel: e.target.value })}
-                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                          {isHi ? "कार्रवाई बटन टेक्स्ट व लिंक:" : "Button Text & Link:"}
-                        </label>
-                        <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={settings.eventCtaText || ""}
-                            onChange={(e) => setSettings({ ...settings, eventCtaText: e.target.value })}
-                            placeholder="विवरण देखें →"
-                            className="px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs focus:border-[#102F6B] outline-hidden"
-                          />
-                          <input
-                            type="text"
-                            value={settings.eventCtaLink || ""}
-                            onChange={(e) => setSettings({ ...settings, eventCtaLink: e.target.value })}
-                            placeholder="/aloksangh"
-                            className="px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-[#102F6B] mb-1">
-                        {isHi ? "विस्तृत विवरण एवं संदेश (Description Notice):" : "Notice Text:"}
-                      </label>
-                      <textarea
-                        rows={3}
-                        value={settings.eventDescription || ""}
-                        onChange={(e) => setSettings({ ...settings, eventDescription: e.target.value })}
-                        className="w-full px-3 py-2 border border-[#D5CEC4] bg-white rounded text-xs leading-relaxed focus:border-[#102F6B] outline-hidden"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-end pt-2 border-t border-[#E2DDD5]">
-                      <button
-                        type="button"
-                        onClick={handleSaveSettings}
-                        disabled={submitting}
-                        className="bg-[#102F6B] hover:bg-[#0D1B2A] disabled:opacity-50 text-white px-5 py-2 text-xs font-bold rounded-xs cursor-pointer shadow-xs flex items-center gap-1.5 transition-colors"
-                      >
-                        <span>💾</span>
-                        <span>{submitting ? (isHi ? "सुरक्षित कर रहे हैं..." : "Saving...") : (isHi ? "सेटिंग्स सुरक्षित करें" : "Save Settings")}</span>
-                      </button>
-                    </div>
-                  </div>
+                              {/* Actions (Identical to Member Directory) */}
+                              <td className="py-2.5 px-3 text-right">
+                                <div className="flex items-center justify-end gap-1.5 text-xs">
+                                  <button
+                                    type="button"
+                                    onClick={() => handleOpenEditEvent(evt)}
+                                    className="text-[#102F6B] hover:text-[#D9531E] font-medium hover:underline cursor-pointer"
+                                  >
+                                    Edit
+                                  </button>
+                                  <span className="text-[#D5CEC4]">·</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteEvent(evt.id, evt.title)}
+                                    className="text-red-700 hover:text-red-900 hover:underline cursor-pointer font-medium"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>

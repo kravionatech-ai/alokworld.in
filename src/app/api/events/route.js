@@ -5,15 +5,80 @@ import SiteSettings from "@/models/SiteSettings";
 import { verifyAdminToken } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 
+export const DEFAULT_EVENTS = [
+  {
+    id: "evt_live_countdown_2026",
+    title: "वेबसाइट लाइव — 2 नवंबर 2026",
+    subtitle: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) आधिकारिक पोर्टल शुभारंभ",
+    badge: "वेबसाइट लाइव उल्टी गिनती",
+    date: "2026-11-02T10:00:00",
+    location: "नई दिल्ली (केंद्रीय राष्ट्रीय सचिवालय)",
+    description: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक) का आधिकारिक राष्ट्रीय डिजिटल पोर्टल का शुभारंभ एवं राष्ट्रीय सम्मेलन।",
+    countdownLabel: "वेबसाइट लाइव होने में शेष समय",
+    ctaText: "मुख्य पृष्ठ पर जाएं →",
+    ctaLink: "/",
+    image: "",
+    isFeatured: true,
+    isActive: true,
+    status: "upcoming",
+  },
+  {
+    id: "evt_talent_felicitation_2026",
+    title: "राष्ट्रीय प्रतिभा सम्मान एवं करियर मार्गदर्शन संगोष्ठी 2026",
+    subtitle: "सिविल सेवा, मेडिकल, इंजीनियरिंग व उच्च शिक्षा में चयनित युवाओं का सम्मान",
+    badge: "प्रतिभा सम्मान",
+    date: "2026-12-15T11:00:00",
+    location: "भोपाल, मध्य प्रदेश (रवींद्र भवन सभागार)",
+    description: "समाज के मेधावी छात्र-छात्राओं, यूपीएससी, राज्य लोक सेवा आयोगों व तकनीकी क्षेत्रों में चयनित अधिकारियों का राष्ट्रीय सम्मान समारोह एवं करियर काउंसलिंग।",
+    countdownLabel: "सम्मेलन प्रारंभ होने में शेष समय",
+    ctaText: "प्रतिभा सम्मान विवरण →",
+    ctaLink: "/events",
+    image: "",
+    isFeatured: false,
+    isActive: true,
+    status: "upcoming",
+  },
+  {
+    id: "evt_national_convention_2025",
+    title: "अखिल भारतीय आलोक राष्ट्रीय प्रतिनिधि सम्मेलन 2025",
+    subtitle: "देश भर के प्रांतीय पदाधिकारियों एवं सदस्यों का भव्य चिंतन शिविर",
+    badge: "राष्ट्रीय सम्मेलन",
+    date: "2025-10-12T10:30:00",
+    location: "जयपुर, राजस्थान (इंदिरा गांधी पंचायती राज संस्थान सभागार)",
+    description: "देश भर से पधारे समाज के अधिकारियों, कर्मचारियों व सामाजिक चिंतकों का विशाल राष्ट्रीय सम्मेलन जिसमें संगठनात्मक विस्तार, समाजोत्थान एवं शिक्षा कोष पर महत्वपूर्ण प्रस्ताव पारित किए गए।",
+    countdownLabel: "सम्मेलन संपन्न",
+    ctaText: "स्मृति छायाचित्र देखें →",
+    ctaLink: "/gallery",
+    image: "",
+    isFeatured: false,
+    isActive: true,
+    status: "past",
+  },
+];
+
 export async function GET() {
   try {
     await connectDB();
-    let settings = await SiteSettings.findOne().lean();
+    let settings = await SiteSettings.findOne();
     if (!settings) {
-      settings = await SiteSettings.create({ eventsList: [] });
+      settings = await SiteSettings.create({ eventsList: DEFAULT_EVENTS });
     }
-    const events = Array.isArray(settings.eventsList) ? settings.eventsList : [];
-    const featuredEvent = events.find((e) => e.isFeatured) || null;
+
+    if (!Array.isArray(settings.eventsList) || settings.eventsList.length === 0) {
+      settings.eventsList = DEFAULT_EVENTS;
+      if (!settings.eventTitle) {
+        settings.eventTitle = DEFAULT_EVENTS[0].title;
+        settings.eventDate = DEFAULT_EVENTS[0].date;
+        settings.eventBadge = DEFAULT_EVENTS[0].badge;
+        settings.eventLocation = DEFAULT_EVENTS[0].location;
+        settings.eventDescription = DEFAULT_EVENTS[0].description;
+        settings.eventEnabled = true;
+      }
+      await settings.save();
+    }
+
+    const events = settings.eventsList;
+    const featuredEvent = events.find((e) => e.isFeatured && e.isActive !== false) || events[0] || null;
 
     return NextResponse.json(
       {
