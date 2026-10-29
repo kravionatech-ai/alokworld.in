@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import GalleryItem from "@/models/GalleryItem";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
@@ -120,7 +121,20 @@ export async function POST(req) {
       },
     });
 
-    return NextResponse.json({ success: true, item: created }, { status: 201 });
+    try {
+      revalidatePath("/gallery");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, item: created },
+      {
+        status: 201,
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

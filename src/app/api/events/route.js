@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import SiteSettings from "@/models/SiteSettings";
 import { verifyAdminToken } from "@/lib/auth";
@@ -14,14 +15,27 @@ export async function GET() {
     const events = Array.isArray(settings.eventsList) ? settings.eventsList : [];
     const featuredEvent = events.find((e) => e.isFeatured) || null;
 
-    return NextResponse.json({
-      success: true,
-      events,
-      featuredEvent,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        events,
+        featuredEvent,
+      },
+      {
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
   } catch (err) {
     console.error("GET /api/events error:", err);
-    return NextResponse.json({ error: "Failed to load events", events: [] }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to load events", events: [] },
+      {
+        status: 500,
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   }
 }
 
@@ -101,12 +115,24 @@ export async function POST(req) {
       details: `Created new event: "${newEvent.title}" (${newEvent.date})`,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "कार्यक्रम सफलतापूर्वक जोड़ा गया!",
-      event: newEvent,
-      events: settings.eventsList,
-    });
+    try {
+      revalidatePath("/events");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "कार्यक्रम सफलतापूर्वक जोड़ा गया!",
+        event: newEvent,
+        events: settings.eventsList,
+      },
+      {
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   } catch (err) {
     console.error("POST /api/events error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -215,12 +241,24 @@ export async function PUT(req) {
       details: `Updated event: "${updatedEvent.title}"`,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "कार्यक्रम विवरण सफलतापूर्वक अद्यतन किया गया!",
-      event: updatedEvent,
-      events: settings.eventsList,
-    });
+    try {
+      revalidatePath("/events");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "कार्यक्रम विवरण सफलतापूर्वक अद्यतन किया गया!",
+        event: updatedEvent,
+        events: settings.eventsList,
+      },
+      {
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   } catch (err) {
     console.error("PUT /api/events error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });
@@ -293,11 +331,23 @@ export async function DELETE(req) {
       details: `Deleted event: "${target.title}"`,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "कार्यक्रम सफलतापूर्वक हटा दिया गया।",
-      events: settings.eventsList,
-    });
+    try {
+      revalidatePath("/events");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "कार्यक्रम सफलतापूर्वक हटा दिया गया।",
+        events: settings.eventsList,
+      },
+      {
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   } catch (err) {
     console.error("DELETE /api/events error:", err);
     return NextResponse.json({ error: err.message }, { status: 500 });

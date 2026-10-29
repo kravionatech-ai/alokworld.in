@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import Member from "@/models/Member";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
@@ -391,7 +392,20 @@ export async function POST(req) {
       details: { name: newMember.name, email: newMember.email, city: newMember.city },
     });
 
-    return NextResponse.json({ success: true, member: newMember }, { status: 201 });
+    try {
+      revalidatePath("/directory");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, member: newMember },
+      {
+        status: 201,
+        headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" },
+      }
+    );
   } catch (error) {
     console.error("POST /api/members error:", error);
     return NextResponse.json({ error: "Failed to create member: " + error.message }, { status: 500 });

@@ -148,7 +148,7 @@ export default function Header({ siteName, settings: propSettings }) {
     if (propSettings) {
       setSettings(propSettings);
     } else {
-      fetch("/api/settings")
+      fetch("/api/settings", { cache: "no-store" })
         .then((r) => r.json())
         .then((d) => {
           if (d?.settings) setSettings(d.settings);

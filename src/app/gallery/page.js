@@ -33,7 +33,7 @@ function GalleryContent() {
   }, [searchParams]);
 
   useEffect(() => {
-    fetch("/api/gallery")
+    fetch("/api/gallery", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.items && data.items.length > 0) {

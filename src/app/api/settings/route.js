@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import SiteSettings from "@/models/SiteSettings";
 import { verifyAdminToken } from "@/lib/auth";
@@ -257,7 +258,8 @@ export async function GET() {
     if (conn) {
       let settings = await SiteSettings.findOne().lean();
       if (!settings) {
-        settings = await SiteSettings.create(defaultSettings);
+        const created = await SiteSettings.create(defaultSettings);
+        settings = created.toObject();
       }
       const eventsList = Array.isArray(settings.eventsList) ? settings.eventsList : [];
       const heroSlides = Array.isArray(settings.heroSlides) && settings.heroSlides.length > 0 ? settings.heroSlides : defaultHeroSlides;
@@ -265,22 +267,35 @@ export async function GET() {
       const quickPillars = Array.isArray(settings.quickPillars) && settings.quickPillars.length > 0 ? settings.quickPillars : defaultQuickPillars;
       const featuredOfficeBearers = Array.isArray(settings.featuredOfficeBearers) && settings.featuredOfficeBearers.length > 0 ? settings.featuredOfficeBearers : defaultOfficeBearers;
       
-      return NextResponse.json({
-        settings: {
-          ...defaultSettings,
-          ...settings,
-          eventsList,
-          heroSlides,
-          announcementsList,
-          quickPillars,
-          featuredOfficeBearers,
+      return NextResponse.json(
+        {
+          settings: {
+            ...defaultSettings,
+            ...settings,
+            eventsList,
+            heroSlides,
+            announcementsList,
+            quickPillars,
+            featuredOfficeBearers,
+          },
         },
-      });
+        {
+          headers: {
+            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+          },
+        }
+      );
     }
-    return NextResponse.json({ settings: defaultSettings });
+    return NextResponse.json(
+      { settings: defaultSettings },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   } catch (error) {
     console.error("GET /api/settings error:", error);
-    return NextResponse.json({ settings: defaultSettings });
+    return NextResponse.json(
+      { settings: defaultSettings },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   }
 }
 
@@ -297,26 +312,40 @@ export async function PUT(req) {
       return NextResponse.json({ error: "Database not connected" }, { status: 503 });
     }
 
-    let settings = await SiteSettings.findOne();
-    if (!settings) {
-      settings = await SiteSettings.create({ ...defaultSettings, ...body });
-    } else {
-      Object.assign(settings, body);
-      await settings.save();
-    }
+    // Filter out internal mongoose fields from update payload
+    const { _id, __v, createdAt, updatedAt, ...cleanBody } = body;
+
+    const updatedSettings = await SiteSettings.findOneAndUpdate(
+      {},
+      { $set: cleanBody },
+      { new: true, upsert: true, runValidators: false }
+    ).lean();
 
     await recordAudit({
       req,
       admin,
       action: "update_site_settings",
       targetEntity: "SiteSettings",
-      targetId: settings._id,
-      details: `Updated fields: ${Object.keys(body).join(", ")}`,
+      targetId: updatedSettings._id,
+      details: `Updated fields: ${Object.keys(cleanBody).join(", ")}`,
     });
 
-    return NextResponse.json({ success: true, settings });
+    // Invalidate caches across the site
+    try {
+      revalidatePath("/", "layout");
+      revalidatePath("/");
+      revalidatePath("/events");
+      revalidatePath("/directory");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, settings: updatedSettings },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   } catch (error) {
     console.error("PUT /api/settings error:", error);
-    return NextResponse.json({ error: "Failed to update settings" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to update settings: " + error.message }, { status: 500 });
   }
 }

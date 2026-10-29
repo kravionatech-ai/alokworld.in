@@ -31,7 +31,7 @@ export default function DirectoryPage() {
 
   // Load site settings
   useEffect(() => {
-    fetch("/api/settings")
+    fetch("/api/settings", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.settings) setSettings(data.settings);
@@ -54,7 +54,7 @@ export default function DirectoryPage() {
     params.set("page", page.toString());
     params.set("limit", "12");
 
-    fetch(`/api/members?${params.toString()}`)
+    fetch(`/api/members?${params.toString()}`, { cache: "no-store" })
       .then(async (res) => {
         if (!res.ok) {
           const errData = await res.json().catch(() => ({}));

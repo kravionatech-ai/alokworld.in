@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import PageContent from "@/models/PageContent";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
@@ -102,7 +103,17 @@ export async function PUT(req, { params }) {
       },
     });
 
-    return NextResponse.json({ success: true, page });
+    try {
+      revalidatePath(`/${cleanSlug}`);
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, page },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

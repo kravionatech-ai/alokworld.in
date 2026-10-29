@@ -32,7 +32,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/settings")
+    fetch("/api/settings", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.settings) setSettings(data.settings);
@@ -40,7 +40,7 @@ export default function HomePage() {
       .catch(console.error);
 
     // Fetch specifically featured prominent members for top carousel
-    fetch("/api/members?featured=true&limit=24")
+    fetch("/api/members?featured=true&limit=24", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.members && data.members.length > 0) {
@@ -57,7 +57,7 @@ export default function HomePage() {
     if (selectedLocation && selectedLocation !== "All") params.set("city", selectedLocation);
     params.set("limit", "12"); // Spotlight preview on home
 
-    fetch(`/api/members?${params.toString()}`)
+    fetch(`/api/members?${params.toString()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.members) {

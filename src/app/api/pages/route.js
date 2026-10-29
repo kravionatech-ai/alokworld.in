@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import PageContent from "@/models/PageContent";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";

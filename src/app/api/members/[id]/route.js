@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
 import Member from "@/models/Member";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
@@ -231,7 +232,19 @@ export async function PUT(req, { params }) {
       },
     });
 
-    return NextResponse.json({ success: true, member });
+    try {
+      revalidatePath("/directory");
+      revalidatePath("/", "layout");
+      if (member.slug) revalidatePath(`/members/${member.slug}`);
+      revalidatePath(`/member/${member._id}`);
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, member },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   } catch (error) {
     console.error("PUT member by ID error:", error);
     return NextResponse.json({ error: "Failed to update member: " + error.message }, { status: 500 });
@@ -280,7 +293,17 @@ export async function DELETE(req, { params }) {
       details: { name: deleted.name, email: deleted.email },
     });
 
-    return NextResponse.json({ success: true, message: `Member "${deleted.name}" deleted successfully.` });
+    try {
+      revalidatePath("/directory");
+      revalidatePath("/", "layout");
+    } catch (e) {
+      console.warn("Revalidation notice:", e.message);
+    }
+
+    return NextResponse.json(
+      { success: true, message: `Member "${deleted.name}" deleted successfully.` },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate" } }
+    );
   } catch (error) {
     console.error("DELETE member error:", error);
     return NextResponse.json({ error: "Failed to delete member." }, { status: 500 });

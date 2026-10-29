@@ -611,14 +611,14 @@ function AdminDashboardInner() {
   }, [router]);
 
   const loadAllData = () => {
-    fetch("/api/members?admin=true&limit=150")
+    fetch("/api/members?admin=true&limit=150", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.members) setMembers(d.members);
       })
       .catch(console.error);
 
-    fetch("/api/settings")
+    fetch("/api/settings", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.settings) {
@@ -634,14 +634,14 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/events")
+    fetch("/api/events", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.events) setEventsList(d.events);
       })
       .catch(console.error);
 
-    fetch("/api/pages")
+    fetch("/api/pages", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.pages) {
@@ -655,21 +655,21 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/gallery?all=true")
+    fetch("/api/gallery?all=true", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.items) setGalleryItems(d.items);
       })
       .catch(console.error);
 
-    fetch("/api/contact")
+    fetch("/api/contact", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.messages) setMessages(d.messages);
       })
       .catch(console.error);
 
-    fetch("/api/admin/emails")
+    fetch("/api/admin/emails", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.logs) setEmailsList(d.logs);
@@ -677,7 +677,7 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/admin/stats")
+    fetch("/api/admin/stats", { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d) setDashboardStats(d);
@@ -1260,6 +1260,16 @@ function AdminDashboardInner() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to update settings");
+      if (data.settings) {
+        const s = data.settings;
+        setSettings({
+          ...s,
+          keyRegions: Array.isArray(s.keyRegions) ? s.keyRegions.join(", ") : s.keyRegions || "",
+        });
+        if (Array.isArray(s.eventsList)) {
+          setEventsList(s.eventsList);
+        }
+      }
       showBanner("Settings saved successfully.");
     } catch (err) {
       showBanner(err.message, true);
