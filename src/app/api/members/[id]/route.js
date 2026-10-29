@@ -28,14 +28,20 @@ export async function GET(req, { params }) {
     if (conn) {
       let member = null;
 
-      // 1. Check by 24-character hex MongoDB ID
-      if (id.match(/^[0-9a-fA-F]{24}$/)) {
+      // 1. Check by _id or 24-character hex MongoDB ID
+      member = await Member.findOne({ _id: id }).lean();
+      if (!member && id.match(/^[0-9a-fA-F]{24}$/)) {
         member = await Member.findById(id).lean();
       }
 
       // 2. Check by unique URL slug
       if (!member) {
         member = await Member.findOne({ slug: id.toLowerCase().trim() }).lean();
+      }
+
+      // 3. Check by numeric id
+      if (!member && !isNaN(Number(id))) {
+        member = await Member.findOne({ id: Number(id) }).lean();
       }
 
       if (!member) {
@@ -103,12 +109,15 @@ export async function PUT(req, { params }) {
     }
 
     // Locate the existing member
-    let member = null;
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    let member = await Member.findOne({ _id: id });
+    if (!member && id.match(/^[0-9a-fA-F]{24}$/)) {
       member = await Member.findById(id);
     }
     if (!member) {
       member = await Member.findOne({ slug: id.toLowerCase().trim() });
+    }
+    if (!member && !isNaN(Number(id))) {
+      member = await Member.findOne({ id: Number(id) });
     }
 
     if (!member) {
@@ -272,12 +281,15 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Database not connected." }, { status: 503 });
     }
 
-    let deleted = null;
-    if (id.match(/^[0-9a-fA-F]{24}$/)) {
+    let deleted = await Member.findOneAndDelete({ _id: id });
+    if (!deleted && id.match(/^[0-9a-fA-F]{24}$/)) {
       deleted = await Member.findByIdAndDelete(id);
     }
     if (!deleted) {
       deleted = await Member.findOneAndDelete({ slug: id.toLowerCase().trim() });
+    }
+    if (!deleted && !isNaN(Number(id))) {
+      deleted = await Member.findOneAndDelete({ id: Number(id) });
     }
 
     if (!deleted) {
