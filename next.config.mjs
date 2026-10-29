@@ -16,6 +16,15 @@ const nextConfig = {
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/mahasabha",
+        destination: "/aloksangh",
+        permanent: false,
+      },
+    ];
+  },
   async headers() {
     return [
       {

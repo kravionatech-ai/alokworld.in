@@ -72,8 +72,8 @@ const defaultHeroSlides = [
     subtitle: "शैक्षणिक, आर्थिक, सामाजिक-सांस्कृतिक, राजनैतिक व रोज़गार के क्षेत्र में समाज के समग्र उत्थान और आलोक अभियान को आगे बढ़ाने में उल्लेखनीय योगदान देने वाले समाजसेवियों का सर्वोच्च सम्मान।",
     ctaText: "छायाचित्र दीर्घा देखें →",
     ctaLink: "/gallery",
-    secondaryCtaText: "महासभा संकल्प",
-    secondaryCtaLink: "/mahasabha",
+    secondaryCtaText: "आलोक संघ",
+    secondaryCtaLink: "/aloksangh",
     image: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924150/alokworld/posters/poster2.jpg",
     enabled: true,
   },
@@ -92,8 +92,8 @@ const defaultAnnouncementsList = [
     id: "ann-2",
     tag: "अधिवेशन",
     text: "आगामी 2 नवंबर 2026 राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
-    link: "/mahasabha",
-    linkText: "अधिवेशन विवरण →",
+    link: "/aloksangh",
+    linkText: "आलोक संघ विवरण →",
     enabled: true,
   },
   {
@@ -110,7 +110,7 @@ const defaultQuickPillars = [
   { id: "qp-1", title: "समाज डायरेक्टरी", desc: "सत्यापित सदस्य विवरण, वरिष्ठजन, डॉक्टर, इंजीनियर व अधिवक्ता।", href: "/directory", icon: "👥", enabled: true },
   { id: "qp-2", title: "समाज इतिहास", desc: "गौरवशाली विरासत, स्वतंत्रता संग्राम व ऐतिहासिक जड़ें।", href: "/history", icon: "📜", enabled: true },
   { id: "qp-3", title: "विभूतियां", desc: "वीर स्वतंत्रता सेनानी, समाज सुधारक एवं महापुरुष।", href: "/personalities", icon: "🎖️", enabled: true },
-  { id: "qp-4", title: "महासभा संकल्प", desc: "आलोक राष्ट्रीय महाधिवेशन एवं समाज विकास के प्रस्ताव।", href: "/mahasabha", icon: "⚖️", enabled: true },
+  { id: "qp-4", title: "आलोक संघ", desc: "आलोक राष्ट्रीय महाधिवेशन, संगठन नीति एवं समाज विकास के प्रस्ताव।", href: "/aloksangh", icon: "⚖️", enabled: true },
   { id: "qp-5", title: "संगठन एवं इकाइयां", desc: "राष्ट्रीय कार्यकारिणी, युवा प्रकोष्ठ व प्रांतीय शाखाएं।", href: "/organization", icon: "🏛️", enabled: true },
   { id: "qp-6", title: "छायाचित्र दीर्घा", desc: "राष्ट्रीय अधिवेशन व प्रतिभा सम्मान समारोह के क्षण।", href: "/gallery", icon: "📸", enabled: true },
 ];
@@ -216,6 +216,11 @@ const defaultSettings = {
   eventCtaLink: "",
   eventsList: [],
 
+  // Featured Prominent Members Section Controls (विशिष्ट समाज बंधु एवं पदाधिकारी)
+  featuredMembersTitle: "विशिष्ट समाज बंधु एवं पदाधिकारी",
+  featuredMembersSubtitle: "समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।",
+  featuredMembersEnabled: true,
+
   sidebarNoticeTitle: "समाज संदेश एवं सूचनाएं",
   sidebarNoticeContent: "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी अद्यतन करें।",
   sidebarNoticeEnabled: true,
@@ -230,10 +235,10 @@ const defaultSettings = {
   whatsappNumber: "+91 98734 83657",
   seoTitle: "अखिल भारतीय समाज डायरेक्टरी एवं केंद्रीय सूचना पोर्टल | alokworld.in",
   seoDescription: "अखिल भारतीय लोधी, लोधा, लोध समाज की आधिकारिक डिजिटल डायरेक्टरी - देश भर के सत्यापित समाज बंधुओं, वरिष्ठ मार्गदर्शकों एवं प्रबुद्ध अधिकारियों से जुड़ें।",
-  seoKeywords: "समाज डायरेक्टरी, लोधी समाज, लोधा महासभा, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी, लोध समाज डायरेक्टरी",
+  seoKeywords: "समाज डायरेक्टरी, लोधी समाज, आलोक संघ, alokworld, समाज पोर्टल, अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ, लोध समाज डायरेक्टरी",
   siteUrl: "https://alokworld.in",
   ogImage: "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg",
-  organizationName: "अखिल भारतीय लोधी, लोधा, लोध समाज महासभा",
+  organizationName: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक संघ)",
   googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
   twitterHandle: "@alokworldin",
 

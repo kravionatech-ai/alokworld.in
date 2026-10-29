@@ -120,10 +120,16 @@ const SiteSettingsSchema = new mongoose.Schema(
         ctaText: { type: String, default: "" },
         ctaLink: { type: String, default: "" },
         isFeatured: { type: Boolean, default: false },
+        isActive: { type: Boolean, default: true },
         status: { type: String, default: "upcoming" },
         createdAt: { type: Date, default: Date.now },
       },
     ],
+
+    // Featured Prominent Members Section Controls (विशिष्ट समाज बंधु एवं पदाधिकारी)
+    featuredMembersTitle: { type: String, default: "विशिष्ट समाज बंधु एवं पदाधिकारी" },
+    featuredMembersSubtitle: { type: String, default: "समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।" },
+    featuredMembersEnabled: { type: Boolean, default: true },
 
     // Sidebar Widgets Configuration
     sidebarNoticeTitle: { type: String, default: "समाज संदेश एवं महत्वपूर्ण सूचनाएं" },

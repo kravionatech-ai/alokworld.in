@@ -20,7 +20,8 @@ export default async function sitemap() {
     { path: "/about", changeFrequency: "weekly", priority: 0.8 },
     { path: "/history", changeFrequency: "monthly", priority: 0.8 },
     { path: "/organization", changeFrequency: "monthly", priority: 0.8 },
-    { path: "/mahasabha", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/aloksangh", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/events", changeFrequency: "weekly", priority: 0.8 },
     { path: "/gallery", changeFrequency: "weekly", priority: 0.8 },
     { path: "/personalities", changeFrequency: "monthly", priority: 0.8 },
     { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
@@ -62,7 +63,7 @@ export default async function sitemap() {
       });
 
       // 3. Query custom published CMS pages
-      const coreSlugs = ["home", "about", "history", "organization", "mahasabha"];
+      const coreSlugs = ["home", "about", "history", "organization", "mahasabha", "aloksangh", "events"];
       const customPages = await PageContent.find(
         {
           status: "published",

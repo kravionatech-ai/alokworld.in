@@ -66,6 +66,7 @@ export async function POST(req) {
       ctaText: (body.ctaText || "").trim(),
       ctaLink: (body.ctaLink || "").trim(),
       isFeatured,
+      isActive: body.isActive !== undefined ? Boolean(body.isActive) : true,
       status: body.status || "upcoming",
       createdAt: new Date(),
     };
@@ -143,9 +144,12 @@ export async function PUT(req) {
     }
 
     const isFeatured = body.isFeatured !== undefined ? Boolean(body.isFeatured) : currentList[targetIdx].isFeatured;
+    const isActive = body.isActive !== undefined ? Boolean(body.isActive) : (currentList[targetIdx].isActive !== undefined ? currentList[targetIdx].isActive : true);
 
     if (isFeatured) {
       currentList = currentList.map((e, idx) => ({ ...e, isFeatured: idx === targetIdx }));
+    } else if (body.isFeatured === false && currentList[targetIdx].isFeatured) {
+      currentList[targetIdx].isFeatured = false;
     }
 
     const updatedEvent = {
@@ -161,7 +165,8 @@ export async function PUT(req) {
       ctaText: body.ctaText !== undefined ? body.ctaText.trim() : currentList[targetIdx].ctaText,
       ctaLink: body.ctaLink !== undefined ? body.ctaLink.trim() : currentList[targetIdx].ctaLink,
       status: body.status !== undefined ? body.status : currentList[targetIdx].status,
-      isFeatured,
+      isFeatured: isFeatured && isActive, // Only active event can be featured
+      isActive,
       updatedAt: new Date(),
     };
 
@@ -169,7 +174,7 @@ export async function PUT(req) {
     settings.eventsList = currentList;
 
     // Sync with top-level settings if marked featured
-    if (isFeatured) {
+    if (updatedEvent.isFeatured && updatedEvent.isActive) {
       settings.eventTitle = updatedEvent.title;
       settings.eventSubtitle = updatedEvent.subtitle;
       settings.eventBadge = updatedEvent.badge;
@@ -181,6 +186,24 @@ export async function PUT(req) {
       settings.eventCtaText = updatedEvent.ctaText;
       settings.eventCtaLink = updatedEvent.ctaLink;
       settings.eventEnabled = true;
+    } else if (!isFeatured || !isActive) {
+      // If we unset featured or deactivated the featured event, find if another is featured
+      const nextFeatured = currentList.find((e) => e.isFeatured && e.isActive);
+      if (nextFeatured) {
+        settings.eventTitle = nextFeatured.title;
+        settings.eventSubtitle = nextFeatured.subtitle;
+        settings.eventBadge = nextFeatured.badge;
+        settings.eventDate = nextFeatured.date;
+        settings.eventLocation = nextFeatured.location;
+        settings.eventDescription = nextFeatured.description;
+        settings.eventImage = nextFeatured.image || settings.eventImage;
+        settings.eventCountdownLabel = nextFeatured.countdownLabel;
+        settings.eventCtaText = nextFeatured.ctaText;
+        settings.eventCtaLink = nextFeatured.ctaLink;
+        settings.eventEnabled = true;
+      } else {
+        settings.eventEnabled = false;
+      }
     }
 
     await settings.save();

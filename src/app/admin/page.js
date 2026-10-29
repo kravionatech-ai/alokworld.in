@@ -296,6 +296,8 @@ function AdminDashboardInner() {
     isApproved: true,
     isPublished: true,
     isArchived: false,
+    isFeatured: false,
+    featuredOrder: 0,
     showPhone: true,
     showEmail: true,
     showAddress: false,
@@ -381,7 +383,7 @@ function AdminDashboardInner() {
     seoKeywords: "",
     siteUrl: "https://alokworld.in",
     ogImage: "",
-    organizationName: "Akhil Bhartiya Lodha, Lodhi, Lodh Mahasabha",
+    organizationName: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक संघ)",
     googleVerificationId: "vyB1ieqri6VF9_Bi2VRnpKxS1WHA46qqUYawxbK6qqg",
     twitterHandle: "@alokworldin",
     maintenanceMode: true,
@@ -453,10 +455,12 @@ function AdminDashboardInner() {
     image: "",
     countdownLabel: "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती",
     ctaText: "अधिवेशन विवरण एवं पंजीकरण →",
-    ctaLink: "/mahasabha",
+    ctaLink: "/aloksangh",
     isFeatured: false,
+    isActive: true,
     status: "upcoming",
   });
+  const [eventFilterTab, setEventFilterTab] = useState("all");
   const [uploadingEventImage, setUploadingEventImage] = useState(false);
   const [savingEvent, setSavingEvent] = useState(false);
 
@@ -736,6 +740,7 @@ function AdminDashboardInner() {
       if (statusFilter === "pending" && (m.isApproved || m.isArchived)) return false;
       if (statusFilter === "archived" && !m.isArchived && m.membershipStatus !== "archived") return false;
       if (statusFilter === "unlisted" && m.isPublished) return false;
+      if (statusFilter === "featured" && !m.isFeatured) return false;
 
       if (adminSearch) {
         const tokens = getSearchTokens(adminSearch).map((t) => t.toLowerCase());
@@ -790,7 +795,8 @@ function AdminDashboardInner() {
     const approved = members.filter((m) => m.isApproved && !m.isArchived).length;
     const pending = members.filter((m) => !m.isApproved && !m.isArchived).length;
     const archived = members.filter((m) => m.isArchived || m.membershipStatus === "archived").length;
-    return { total, approved, pending, archived };
+    const featured = members.filter((m) => m.isFeatured).length;
+    return { total, approved, pending, archived, featured };
   }, [members]);
 
   const resetMemberForm = () => {
@@ -814,6 +820,8 @@ function AdminDashboardInner() {
       isApproved: true,
       isPublished: true,
       isArchived: false,
+      isFeatured: false,
+      featuredOrder: 0,
       showPhone: true,
       showEmail: true,
       showAddress: false,
@@ -841,6 +849,8 @@ function AdminDashboardInner() {
       isApproved: Boolean(m.isApproved),
       isPublished: Boolean(m.isPublished),
       isArchived: Boolean(m.isArchived),
+      isFeatured: Boolean(m.isFeatured),
+      featuredOrder: m.featuredOrder || 0,
       showPhone: m.showPhone !== false,
       showEmail: m.showEmail !== false,
       showAddress: Boolean(m.showAddress),
@@ -880,6 +890,30 @@ function AdminDashboardInner() {
       const data = await res.json();
       setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
       showBanner(`Member "${m.name}" set to ${newPub ? "Published" : "Draft"}.`);
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleToggleFeaturedMember = async (m) => {
+    try {
+      const id = m._id || m.id;
+      const nextFeatured = !m.isFeatured;
+      const res = await fetch(`/api/members/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: nextFeatured }),
+      });
+      if (!res.ok) throw new Error("Failed to update featured status.");
+      const data = await res.json();
+      setMembers((prev) =>
+        prev.map((item) => (item._id === id || item.id === id ? { ...item, isFeatured: nextFeatured } : item))
+      );
+      showBanner(
+        nextFeatured
+          ? (isHi ? `"${m.name}" को होमपेज कैरोसेल में 'विशिष्ट समाज बंधु' के रूप में जोड़ा गया!` : `"${m.name}" featured in carousel!`)
+          : (isHi ? `"${m.name}" को होमपेज कैरोसेल से हटाया गया।` : `"${m.name}" unfeatured from carousel.`)
+      );
     } catch (err) {
       showBanner(err.message, true);
     }
@@ -1451,7 +1485,8 @@ function AdminDashboardInner() {
       countdownLabel: "",
       ctaText: "",
       ctaLink: "",
-      isFeatured: true,
+      isFeatured: false,
+      isActive: true,
       status: "upcoming",
     });
   };
@@ -1476,6 +1511,7 @@ function AdminDashboardInner() {
       ctaText: evt.ctaText || "",
       ctaLink: evt.ctaLink || "",
       isFeatured: Boolean(evt.isFeatured),
+      isActive: evt.isActive !== false,
       status: evt.status || "upcoming",
     });
   };
@@ -1552,35 +1588,65 @@ function AdminDashboardInner() {
     }
   };
 
-  const handleSetFeaturedEvent = async (evt) => {
+  const handleToggleEventActive = async (evt) => {
+    const newActive = evt.isActive === false ? true : false;
     try {
       const res = await fetch("/api/events", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: evt.id, isFeatured: true }),
+        body: JSON.stringify({ id: evt.id, isActive: newActive }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to set featured event");
-
+      if (!res.ok) throw new Error(data.error || "Failed to update event active status");
       if (data.events) setEventsList(data.events);
-      setSettings((prev) => ({
-        ...prev,
-        eventTitle: evt.title,
-        eventSubtitle: evt.subtitle,
-        eventBadge: evt.badge,
-        eventDate: evt.date,
-        eventLocation: evt.location,
-        eventDescription: evt.description,
-        eventImage: evt.image || prev.eventImage,
-        eventCountdownLabel: evt.countdownLabel,
-        eventCtaText: evt.ctaText,
-        eventCtaLink: evt.ctaLink,
-        eventEnabled: true,
-      }));
-      showBanner(isHi ? `"${evt.title}" को मुख्य उल्टी गिनती व पॉपअप कार्यक्रम बनाया गया!` : `"${evt.title}" set as featured countdown event!`);
+      showBanner(
+        newActive
+          ? (isHi ? `"${evt.title}" को सक्रिय (Active) किया गया!` : `"${evt.title}" activated!`)
+          : (isHi ? `"${evt.title}" को निष्क्रिय (Inactive) किया गया।` : `"${evt.title}" deactivated.`)
+      );
     } catch (err) {
       showBanner(err.message, true);
     }
+  };
+
+  const handleToggleEventFeatured = async (evt) => {
+    const newFeatured = !evt.isFeatured;
+    try {
+      const res = await fetch("/api/events", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: evt.id, isFeatured: newFeatured }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to update featured event");
+
+      if (data.events) setEventsList(data.events);
+      if (newFeatured) {
+        setSettings((prev) => ({
+          ...prev,
+          eventTitle: evt.title,
+          eventSubtitle: evt.subtitle,
+          eventBadge: evt.badge,
+          eventDate: evt.date,
+          eventLocation: evt.location,
+          eventDescription: evt.description,
+          eventImage: evt.image || prev.eventImage,
+          eventCountdownLabel: evt.countdownLabel,
+          eventCtaText: evt.ctaText,
+          eventCtaLink: evt.ctaLink,
+          eventEnabled: true,
+        }));
+        showBanner(isHi ? `"${evt.title}" को मुख्य लाइव कार्यक्रम बनाया गया!` : `"${evt.title}" set as featured event!`);
+      } else {
+        showBanner(isHi ? `"${evt.title}" को मुख्य कार्यक्रम से हटाया गया।` : `"${evt.title}" unfeatured.`);
+      }
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleSetFeaturedEvent = async (evt) => {
+    handleToggleEventFeatured(evt);
   };
 
   const handleDeleteEvent = (eventId, eventTitle) => {
@@ -2498,6 +2564,7 @@ function AdminDashboardInner() {
                 <div className="flex items-center gap-1 flex-wrap">
                   {[
                     { id: "all", label: isHi ? "सभी सदस्य" : "All", count: memberStats.total },
+                    { id: "featured", label: isHi ? "⭐ विशिष्ट समाज बंधु (कैरोसेल)" : "⭐ Featured Carousel", count: memberStats.featured },
                     { id: "active", label: isHi ? "स्वीकृत" : "Approved", count: memberStats.approved },
                     { id: "pending", label: isHi ? "प्रतीक्षारत" : "Pending", count: memberStats.pending },
                     { id: "unlisted", label: isHi ? "अप्रकाशित" : "Draft / Unlisted" },
@@ -2571,13 +2638,14 @@ function AdminDashboardInner() {
                         <th className="py-2.5 px-3">Location</th>
                         <th className="py-2.5 px-3">Approval</th>
                         <th className="py-2.5 px-3">Visibility</th>
+                        <th className="py-2.5 px-3 text-center">⭐ विशिष्ट (Featured)</th>
                         <th className="py-2.5 px-3 text-right">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#EFECE6]">
                       {paginatedMembers.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="py-10 text-center text-[#55657E]">
+                          <td colSpan={7} className="py-10 text-center text-[#55657E]">
                             No member records found matching criteria.
                           </td>
                         </tr>
@@ -2671,6 +2739,23 @@ function AdminDashboardInner() {
                                   <span className={m.isPublished ? "text-[#102F6B]" : "text-[#55657E]"}>
                                     {m.isPublished ? "Published" : "Draft"}
                                   </span>
+                                </button>
+                              </td>
+
+                              {/* Featured Carousel Star Toggle */}
+                              <td className="py-2.5 px-3 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleFeaturedMember(m)}
+                                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold border transition-colors cursor-pointer ${
+                                    m.isFeatured
+                                      ? "bg-amber-100 text-amber-900 border-amber-300 shadow-2xs hover:bg-amber-200"
+                                      : "bg-slate-50 text-slate-500 border-slate-200 hover:bg-amber-50 hover:text-amber-700"
+                                  }`}
+                                  title={m.isFeatured ? "होमपेज कैरोसेल में सक्रिय है (हटाने हेतु क्लिक करें)" : "होमपेज कैरोसेल में जोड़ने हेतु क्लिक करें"}
+                                >
+                                  <span>{m.isFeatured ? "⭐" : "☆"}</span>
+                                  <span>{m.isFeatured ? (isHi ? "विशिष्ट" : "Featured") : (isHi ? "सामान्य" : "Standard")}</span>
                                 </button>
                               </td>
 
@@ -3025,6 +3110,35 @@ function AdminDashboardInner() {
                         <span>Display full address on public profile</span>
                       </label>
                     </div>
+
+                    {/* Featured Prominent Member Carousel Control */}
+                    <div className="pt-2 border-t border-[#E2DDD5] bg-[#FFF0E2]/40 p-2.5 rounded-xs space-y-1.5">
+                      <label className="flex items-center gap-2 cursor-pointer font-bold text-[#102F6B]">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(memberForm.isFeatured)}
+                          onChange={(e) => setMemberForm({ ...memberForm, isFeatured: e.target.checked })}
+                          className="w-4 h-4 text-[#F26A21] rounded"
+                        />
+                        <span>⭐ {isHi ? "होमपेज कैरोसेल में विशिष्ट समाज बंधु के रूप में प्रदर्शित करें" : "Feature in Homepage Prominent Carousel"}</span>
+                      </label>
+                      <p className="text-[11px] text-[#55657E] pl-6">
+                        {isHi
+                          ? "चयनित होने पर यह सदस्य होमपेज के 'विशिष्ट समाज बंधु एवं पदाधिकारी' कैरोसेल में दिखेगा।"
+                          : "When checked, this member will appear in the prominent carousel on the homepage."}
+                      </p>
+                      {memberForm.isFeatured && (
+                        <div className="pl-6 pt-1 flex items-center gap-2">
+                          <label className="font-semibold text-[#102F6B] text-xs">क्रम (Display Order):</label>
+                          <input
+                            type="number"
+                            value={memberForm.featuredOrder || 0}
+                            onChange={(e) => setMemberForm({ ...memberForm, featuredOrder: Number(e.target.value) })}
+                            className="w-20 px-2 py-1 border border-[#D5CEC4] bg-white rounded text-xs"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -3071,7 +3185,7 @@ function AdminDashboardInner() {
                   <option value="about">About Us (/about)</option>
                   <option value="history">Community History (/history)</option>
                   <option value="organization">Organization & Executive (/organization)</option>
-                  <option value="mahasabha">National Mahasabha (/mahasabha)</option>
+                  <option value="aloksangh">आलोक संघ - राष्ट्रीय संकल्प (/aloksangh)</option>
                   <option value="personalities">Eminent Personalities (/personalities)</option>
                   <option value="contact">Secretariat Contact (/contact)</option>
                   <option value="privacy">Privacy Policy (/privacy)</option>
@@ -3263,6 +3377,22 @@ function AdminDashboardInner() {
                   <span>{isHi ? "राष्ट्रीय पदाधिकारी (दायां साइडबार)" : "Leadership Spotlight"}</span>
                   <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${heroWidgetSubTab === "leadership" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"}`}>
                     {(settings.featuredOfficeBearers || []).length}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroWidgetSubTab("featured_members")}
+                  className={`px-3 py-1.5 rounded-xs transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    heroWidgetSubTab === "featured_members"
+                      ? "bg-[#102F6B] text-white font-bold shadow-xs"
+                      : "bg-white text-[#55657E] hover:bg-[#FAF8F3] border border-[#E2DDD5]"
+                  }`}
+                >
+                  <span>⭐</span>
+                  <span>{isHi ? "विशिष्ट समाज बंधु (कैरोसेल)" : "Featured Carousel"}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${heroWidgetSubTab === "featured_members" ? "bg-white/20 text-white" : "bg-slate-100 text-slate-700"}`}>
+                    {memberStats.featured || 0}
                   </span>
                 </button>
 
@@ -4023,6 +4153,165 @@ function AdminDashboardInner() {
                   </div>
                 </div>
               )}
+
+              {/* ------------------------------------------------------------- */}
+              {/* SUB-VIEW 6: FEATURED PROMINENT MEMBERS CAROUSEL CONTROL       */}
+              {/* ------------------------------------------------------------- */}
+              {heroWidgetSubTab === "featured_members" && (
+                <div className="bg-white p-5 rounded-xs border border-[#E2DDD5] space-y-5 text-xs">
+                  <div className="border-b border-[#E2DDD5] pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                      <h2 className="text-sm font-bold text-[#102F6B] flex items-center gap-2">
+                        <span>⭐ {isHi ? "विशिष्ट समाज बंधु एवं पदाधिकारी (होमपेज कैरोसेल)" : "Featured Prominent Members Carousel"}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${settings.featuredMembersEnabled !== false ? "bg-emerald-100 text-emerald-800" : "bg-slate-200 text-slate-700"}`}>
+                          {settings.featuredMembersEnabled !== false ? (isHi ? "सक्रिय (Live)" : "Active") : (isHi ? "निष्क्रिय" : "Disabled")}
+                        </span>
+                      </h2>
+                      <p className="text-[11.5px] text-[#55657E] mt-0.5">
+                        {isHi
+                          ? "होमपेज पर प्रमुख विभूतियों, वरिष्ठजनों, चिकित्सकों, इंजीनियरों व अधिवक्ताओं के कैरोसेल कार्ड्स को नियंत्रित करें।"
+                          : "Control the prominent members multi-card carousel shown on the homepage."}
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab("members");
+                        setStatusFilter("all");
+                      }}
+                      className="px-3 py-1.5 bg-[#102F6B] hover:bg-[#0D1B2A] text-white rounded-xs font-bold text-xs cursor-pointer inline-flex items-center gap-1.5 self-start sm:self-auto"
+                    >
+                      <span>👥</span>
+                      <span>{isHi ? "सदस्य डायरेक्टरी में विशिष्ट सदस्य जोड़ें →" : "Manage in Directory →"}</span>
+                    </button>
+                  </div>
+
+                  {/* Section Settings: Title, Subtitle, Enabled */}
+                  <div className="bg-[#FAF8F3] p-4 rounded-xs border border-[#E2DDD5] space-y-3">
+                    <label className="flex items-center gap-2 cursor-pointer font-bold text-[#102F6B]">
+                      <input
+                        type="checkbox"
+                        checked={settings.featuredMembersEnabled !== false}
+                        onChange={(e) => setSettings({ ...settings, featuredMembersEnabled: e.target.checked })}
+                        className="w-4 h-4 text-[#F26A21] rounded"
+                      />
+                      <span>{isHi ? "होमपेज पर यह कैरोसेल अनुभाग प्रदर्शित करें" : "Display this Carousel Section on Homepage"}</span>
+                    </label>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <div>
+                        <label className="block font-bold text-[#102F6B] mb-1">
+                          {isHi ? "अनुभाग मुख्य शीर्षक (Section Title):" : "Section Title:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.featuredMembersTitle || "विशिष्ट समाज बंधु एवं पदाधिकारी"}
+                          onChange={(e) => setSettings({ ...settings, featuredMembersTitle: e.target.value })}
+                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded-xs font-semibold focus:border-[#102F6B] outline-hidden text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="block font-bold text-[#102F6B] mb-1">
+                          {isHi ? "उपशीर्षक / विवरण (Subtitle):" : "Subtitle:"}
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.featuredMembersSubtitle || "समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।"}
+                          onChange={(e) => setSettings({ ...settings, featuredMembersSubtitle: e.target.value })}
+                          className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Selected Featured Members Listing */}
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-bold text-xs uppercase tracking-wide text-[#102F6B]">
+                        {isHi ? "वर्तमान में कैरोसेल में चयनित सदस्य:" : "Currently Featured Members in Carousel:"} ({members.filter((m) => m.isFeatured).length})
+                      </h3>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("members");
+                          setStatusFilter("featured");
+                        }}
+                        className="text-xs font-bold text-[#F26A21] hover:underline"
+                      >
+                        {isHi ? "विशिष्ट सदस्य फ़िल्टर देखें →" : "View in Table Filter →"}
+                      </button>
+                    </div>
+
+                    {members.filter((m) => m.isFeatured).length === 0 ? (
+                      <div className="p-6 text-center bg-[#FAF8F3] border border-dashed border-[#D5CEC4] rounded-xs space-y-2">
+                        <span className="text-2xl block">⭐</span>
+                        <div className="font-bold text-sm text-[#102F6B]">
+                          {isHi ? "वर्तमान में कोई सदस्य विशिष्ट (Featured) चिह्नित नहीं है" : "No members currently marked as featured"}
+                        </div>
+                        <p className="text-xs text-[#64748B] max-w-md mx-auto">
+                          {isHi
+                            ? "डिफ़ॉल्ट रूप से शीर्ष सत्यापित सदस्य प्रदर्शित हो रहे हैं। आप सदस्य डायरेक्टरी में किसी भी सदस्य के आगे '⭐ विशिष्ट' बटन दबाकर उसे इस कैरोसेल में जोड़ सकते हैं।"
+                            : "Top verified members are shown as fallback. Click '⭐ विशिष्ट' on any member in the directory to add them here."}
+                        </p>
+                        <div className="pt-1">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab("members");
+                              setStatusFilter("all");
+                            }}
+                            className="px-3 py-1.5 bg-[#102F6B] text-white rounded-xs font-bold text-xs"
+                          >
+                            + सदस्य डायरेक्टरी में जाएं
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                        {members
+                          .filter((m) => m.isFeatured)
+                          .map((m) => (
+                            <div
+                              key={m._id || m.id}
+                              className="p-3 bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs flex items-start justify-between gap-2.5"
+                            >
+                              <div className="flex items-start gap-2.5 min-w-0">
+                                <div className="w-9 h-9 rounded-xs overflow-hidden bg-slate-200 border border-[#D5CEC4] shrink-0 flex items-center justify-center font-bold text-xs text-[#102F6B]">
+                                  {m.avatar ? (
+                                    <img src={m.avatar} alt="" className="w-full h-full object-cover" />
+                                  ) : (
+                                    <span>{m.name ? m.name.charAt(0) : "M"}</span>
+                                  )}
+                                </div>
+                                <div className="min-w-0 space-y-0.5">
+                                  <div className="font-bold text-xs text-[#102F6B] truncate">
+                                    {m.name}
+                                  </div>
+                                  <div className="text-[10.5px] text-[#55657E] truncate">
+                                    {m.role || m.occupation}
+                                  </div>
+                                  <div className="text-[10px] text-[#8896AB]">
+                                    📍 {m.city}, {m.state}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => handleToggleFeaturedMember(m)}
+                                className="text-red-700 hover:text-red-900 text-xs font-bold px-1.5 py-0.5 rounded hover:bg-red-50 shrink-0 cursor-pointer"
+                                title="कैरोसेल से हटाएं"
+                              >
+                                ✕
+                              </button>
+                            </div>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -4335,7 +4624,43 @@ function AdminDashboardInner() {
                   </button>
                 </div>
 
-                {/* Events Cards Listing */}
+                {/* Segmented Filter Toolbar: All, Upcoming, Past */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-[#E2DDD5]">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {[
+                      { id: "all", label: isHi ? "सभी कार्यक्रम" : "All Events", count: eventsList.length },
+                      {
+                        id: "upcoming",
+                        label: isHi ? "📅 आगामी / सक्रिय" : "Upcoming / Active",
+                        count: eventsList.filter((e) => !e.date || isNaN(new Date(e.date).getTime()) || new Date(e.date) >= new Date()).length,
+                      },
+                      {
+                        id: "past",
+                        label: isHi ? "🏛️ पूर्व कार्यक्रम" : "Past Events",
+                        count: eventsList.filter((e) => e.date && !isNaN(new Date(e.date).getTime()) && new Date(e.date) < new Date()).length,
+                      },
+                    ].map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setEventFilterTab(tab.id)}
+                        className={`px-3 py-1.5 rounded-xs text-xs font-semibold cursor-pointer transition-colors ${
+                          eventFilterTab === tab.id
+                            ? "bg-[#102F6B] text-white shadow-xs"
+                            : "bg-[#FAF8F3] text-[#55657E] hover:text-[#102F6B] hover:bg-[#FFF0E2] border border-[#D5CEC4]"
+                        }`}
+                      >
+                        {tab.label} ({tab.count})
+                      </button>
+                    ))}
+                  </div>
+
+                  <span className="text-[11px] text-[#64748B]">
+                    {isHi ? "टेबल में सीधे 'सक्रिय' या 'मुख्य' टॉगल करें" : "Toggle active/featured directly from table"}
+                  </span>
+                </div>
+
+                {/* Events Table Format */}
                 {eventsList.length === 0 ? (
                   <div className="p-8 text-center text-xs text-[#55657E] bg-[#FAF8F3] border border-[#E2DDD5] rounded-xs space-y-3">
                     <div className="text-3xl">📅</div>
@@ -4344,170 +4669,179 @@ function AdminDashboardInner() {
                     </div>
                     <p className="text-xs text-[#64748B]">
                       {isHi
-                        ? "पहला कार्यक्रम जोड़ने के लिए '+ नया कार्यक्रम जोड़ें' बटन पर क्लिक करें।"
+                        ? "पहला कार्यक्रम जोड़ने के लिए ऊपर दिए गए '+ नया कार्यक्रम जोड़ें' बटन पर क्लिक करें।"
                         : "Click '+ Add New Event' to create the first community event."}
                     </p>
                     <button
                       type="button"
                       onClick={handleOpenAddEvent}
-                      className="px-4 py-2 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs"
+                      className="px-4 py-2 bg-[#102F6B] hover:bg-[#0D1B2A] text-white text-xs font-bold rounded-xs cursor-pointer shadow-xs inline-flex items-center gap-1.5"
                     >
-                      {isHi ? "+ नया कार्यक्रम जोड़ें" : "+ Add Event"}
+                      <span>➕</span>
+                      <span>{isHi ? "नया कार्यक्रम जोड़ें" : "Add Event"}</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {eventsList.map((evt) => {
-                      const isFeatured = Boolean(evt.isFeatured);
-                      let formattedDate = evt.date;
-                      try {
-                        const d = new Date(evt.date);
-                        if (!isNaN(d.getTime())) {
-                          formattedDate = d.toLocaleString(isHi ? "hi-IN" : "en-IN", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          });
-                        }
-                      } catch (e) {}
+                  <div className="bg-white border border-[#E2DDD5] rounded-xs overflow-hidden">
+                    <div className="overflow-x-auto w-full">
+                      <table className="w-full text-left text-xs min-w-[760px]">
+                        <thead className="bg-[#FAF8F3] border-b border-[#E2DDD5] text-[11px] uppercase tracking-wider text-[#55657E] font-bold">
+                          <tr>
+                            <th className="py-2.5 px-3 w-14">पोस्टर</th>
+                            <th className="py-2.5 px-3">कार्यक्रम का नाम व विवरण</th>
+                            <th className="py-2.5 px-3">दिनांक व समय</th>
+                            <th className="py-2.5 px-3">स्थान</th>
+                            <th className="py-2.5 px-3 text-center">सक्रियता (Active)</th>
+                            <th className="py-2.5 px-3 text-center">मुख्य (Featured)</th>
+                            <th className="py-2.5 px-3 text-right">कार्य</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#EFECE6]">
+                          {eventsList
+                            .filter((evt) => {
+                              const isPast = evt.date && !isNaN(new Date(evt.date).getTime()) && new Date(evt.date) < new Date();
+                              if (eventFilterTab === "upcoming") return !isPast;
+                              if (eventFilterTab === "past") return isPast;
+                              return true;
+                            })
+                            .map((evt) => {
+                              const isPast = evt.date && !isNaN(new Date(evt.date).getTime()) && new Date(evt.date) < new Date();
+                              let formattedDate = evt.date;
+                              try {
+                                const d = new Date(evt.date);
+                                if (!isNaN(d.getTime())) {
+                                  formattedDate = d.toLocaleString(isHi ? "hi-IN" : "en-IN", {
+                                    day: "numeric",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  });
+                                }
+                              } catch (e) {}
 
-                      return (
-                        <div
-                          key={evt.id}
-                          className={`p-4 rounded-xs border transition-all text-xs flex flex-col justify-between space-y-3 ${
-                            isFeatured
-                              ? "bg-[#FFFDF9] border-l-4 border-l-[#F26A21] border-[#E2DDD5] shadow-xs"
-                              : "bg-white border-[#E2DDD5] hover:border-[#102F6B]/40 shadow-2xs"
-                          }`}
-                        >
-                          <div className="space-y-2.5">
-                            {/* Card Top Strip: Badges + Featured Tag */}
-                            <div className="flex items-center justify-between gap-2 flex-wrap">
-                              <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="bg-[#102F6B] text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                                  {evt.badge || "कार्यक्रम"}
-                                </span>
-                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                                  evt.status === "live"
-                                    ? "bg-red-50 text-red-700 border-red-200"
-                                    : evt.status === "completed"
-                                    ? "bg-slate-100 text-slate-700 border-slate-200"
-                                    : "bg-amber-50 text-amber-800 border-amber-200"
-                                }`}>
-                                  {evt.status === "live" ? "🔴 लाइव / जारी" : evt.status === "completed" ? "✓ संपन्न" : "⏳ आगामी"}
-                                </span>
-                              </div>
+                              return (
+                                <tr key={evt.id} className="hover:bg-[#FAF8F3] transition-colors">
+                                  {/* Poster Thumbnail */}
+                                  <td className="py-2.5 px-3">
+                                    <div className="w-10 h-12 rounded overflow-hidden bg-slate-100 border border-[#D5CEC4] shrink-0 flex items-center justify-center">
+                                      {evt.image ? (
+                                        <img
+                                          src={evt.image}
+                                          alt=""
+                                          className="w-full h-full object-cover"
+                                        />
+                                      ) : (
+                                        <span className="text-base">📅</span>
+                                      )}
+                                    </div>
+                                  </td>
 
-                              {isFeatured && (
-                                <span className="bg-[#FFF0E2] text-[#F26A21] border border-[#F26A21]/40 px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
-                                  <span>🌟</span>
-                                  <span>{isHi ? "मुख्य लाइव कार्यक्रम" : "Featured Live"}</span>
-                                </span>
-                              )}
-                            </div>
+                                  {/* Title & Badge */}
+                                  <td className="py-2.5 px-3">
+                                    <div className="max-w-[260px]">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleOpenEditEvent(evt)}
+                                        className="font-bold text-[#102F6B] hover:text-[#F26A21] hover:underline text-left block truncate cursor-pointer"
+                                      >
+                                        {evt.title}
+                                      </button>
+                                      <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                                        <span className="text-[10px] bg-[#102F6B] text-white px-1.5 py-0.2 rounded font-bold">
+                                          {evt.badge || "कार्यक्रम"}
+                                        </span>
+                                        {evt.subtitle && (
+                                          <span className="text-[10.5px] text-[#64748B] truncate max-w-[160px]">
+                                            {evt.subtitle}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </td>
 
-                            {/* Card Middle: Poster + Details */}
-                            <div className="flex items-start gap-3">
-                              {/* Poster Thumbnail */}
-                              <div className="w-20 h-24 rounded overflow-hidden shrink-0 bg-slate-100 border border-[#D5CEC4] relative group">
-                                {evt.image ? (
-                                  <img
-                                    src={evt.image}
-                                    alt={evt.title}
-                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 p-1 text-center text-[10px]">
-                                    <span>🖼️</span>
-                                    <span>पोस्टर नहीं</span>
-                                  </div>
-                                )}
-                              </div>
+                                  {/* Date & Time with Status Pill */}
+                                  <td className="py-2.5 px-3">
+                                    <div className="text-[11px] font-mono font-medium text-[#1E293B]">
+                                      {formattedDate || "—"}
+                                    </div>
+                                    <span
+                                      className={`inline-block mt-0.5 text-[9.5px] font-bold px-1.5 py-0.2 rounded ${
+                                        isPast
+                                          ? "bg-slate-100 text-slate-700 border border-slate-200"
+                                          : "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                                      }`}
+                                    >
+                                      {isPast ? (isHi ? "✓ सम्पन्न (Past)" : "Past") : (isHi ? "⏳ आगामी (Upcoming)" : "Upcoming")}
+                                    </span>
+                                  </td>
 
-                              {/* Title, Subtitle, Venue, Date */}
-                              <div className="flex-1 min-w-0 space-y-1">
-                                <h3 className="font-bold text-sm text-[#102F6B] leading-snug line-clamp-2">
-                                  {evt.title}
-                                </h3>
-                                {evt.subtitle && (
-                                  <p className="text-[11px] text-[#55657E] line-clamp-1">
-                                    {evt.subtitle}
-                                  </p>
-                                )}
-                                <div className="text-[11px] text-[#1E293B] flex items-center gap-1 font-mono pt-0.5">
-                                  <span className="text-[#F26A21]">📅</span>
-                                  <span>{formattedDate}</span>
-                                </div>
-                                <div className="text-[11px] text-[#64748B] flex items-center gap-1 truncate">
-                                  <span>📍</span>
-                                  <span className="truncate">{evt.location || "नई दिल्ली"}</span>
-                                </div>
-                              </div>
-                            </div>
+                                  {/* Location */}
+                                  <td className="py-2.5 px-3 text-[#55657E]">
+                                    <div className="truncate max-w-[140px] flex items-center gap-1">
+                                      <span>📍</span>
+                                      <span className="truncate">{evt.location || "—"}</span>
+                                    </div>
+                                  </td>
 
-                            {/* Description preview */}
-                            {evt.description && (
-                              <p className="text-[11.5px] text-[#475569] leading-relaxed line-clamp-2 bg-[#FAF8F3] p-2 rounded-xs border border-[#EFECE6]">
-                                {evt.description}
-                              </p>
-                            )}
+                                  {/* Active / Inactive Status Switch */}
+                                  <td className="py-2.5 px-3 text-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleToggleEventActive(evt)}
+                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10.5px] font-bold border transition-colors cursor-pointer ${
+                                        evt.isActive !== false
+                                          ? "bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200"
+                                          : "bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200"
+                                      }`}
+                                      title={evt.isActive !== false ? "सक्रिय है (निष्क्रिय करने हेतु क्लिक करें)" : "निष्क्रिय है (सक्रिय करने हेतु क्लिक करें)"}
+                                    >
+                                      <span>{evt.isActive !== false ? "🟢 सक्रिय (Live)" : "⚪ निष्क्रिय"}</span>
+                                    </button>
+                                  </td>
 
-                            {/* CTA Link Preview */}
-                            {evt.ctaText && (
-                              <div className="text-[11px] text-[#64748B] flex items-center gap-1 truncate">
-                                <span className="font-semibold text-[#102F6B]">बटन:</span>
-                                <span className="text-[#F26A21] truncate font-medium">{evt.ctaText}</span>
-                                <span className="font-mono text-[10px] text-slate-400">({evt.ctaLink || "/"})</span>
-                              </div>
-                            )}
-                          </div>
+                                  {/* Featured Star Toggle */}
+                                  <td className="py-2.5 px-3 text-center">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleToggleEventFeatured(evt)}
+                                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10.5px] font-bold border transition-colors cursor-pointer ${
+                                        evt.isFeatured
+                                          ? "bg-amber-100 text-amber-900 border-amber-400 shadow-2xs hover:bg-amber-200"
+                                          : "bg-slate-50 text-slate-600 border-slate-200 hover:bg-amber-50 hover:text-amber-800"
+                                      }`}
+                                      title={evt.isFeatured ? "हेडर व पॉपअप पर मुख्य लाइव है (हटाने हेतु क्लिक करें)" : "हेडर व पॉपअप पर मुख्य लाइव बनाएं"}
+                                    >
+                                      <span>{evt.isFeatured ? "⭐ मुख्य लाइव" : "☆ सामान्य"}</span>
+                                    </button>
+                                  </td>
 
-                          {/* Card Action Toolbar */}
-                          <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#F0E5D5] flex-wrap">
-                            <div>
-                              {!isFeatured ? (
-                                <button
-                                  type="button"
-                                  onClick={() => handleSetFeaturedEvent(evt)}
-                                  className="px-2.5 py-1 bg-[#FAF8F3] hover:bg-[#FFF0E2] text-[#102F6B] hover:text-[#F26A21] border border-[#D5CEC4] rounded-xs text-[11px] font-bold cursor-pointer flex items-center gap-1 transition-colors"
-                                >
-                                  <span>🌟</span>
-                                  <span>{isHi ? "मुख्य लाइव बनाएं" : "Set as Live"}</span>
-                                </button>
-                              ) : (
-                                <span className="text-[10.5px] font-bold text-emerald-700 flex items-center gap-1">
-                                  <span>✓</span>
-                                  <span>{isHi ? "हेडर व पॉपअप में सक्रिय" : "Active on Header"}</span>
-                                </span>
-                              )}
-                            </div>
-
-                            <div className="flex items-center gap-1.5">
-                              {/* Edit Button */}
-                              <button
-                                type="button"
-                                onClick={() => handleOpenEditEvent(evt)}
-                                className="px-2.5 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white rounded-xs text-[11px] font-bold cursor-pointer shadow-2xs flex items-center gap-1 transition-colors"
-                              >
-                                <span>✏️</span>
-                                <span>{isHi ? "संपादित करें" : "Edit"}</span>
-                              </button>
-
-                              {/* Delete Button */}
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteEvent(evt.id, evt.title)}
-                                className="px-2 py-1 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-xs text-[11px] font-medium cursor-pointer transition-colors"
-                              >
-                                {isHi ? "हटाएं" : "Delete"}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                                  {/* Actions */}
+                                  <td className="py-2.5 px-3 text-right">
+                                    <div className="flex items-center justify-end gap-1.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleOpenEditEvent(evt)}
+                                        className="px-2 py-1 bg-[#102F6B] hover:bg-[#0D1B2A] text-white rounded-xs text-[11px] font-bold cursor-pointer shadow-2xs flex items-center gap-1"
+                                      >
+                                        <span>✏️</span>
+                                        <span>{isHi ? "संपादित करें" : "Edit"}</span>
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteEvent(evt.id, evt.title)}
+                                        className="px-2 py-1 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-xs text-[11px] font-medium cursor-pointer"
+                                      >
+                                        {isHi ? "हटाएं" : "Delete"}
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 )}
               </div>
@@ -4691,7 +5025,7 @@ function AdminDashboardInner() {
                             type="text"
                             value={settings.eventCtaLink || ""}
                             onChange={(e) => setSettings({ ...settings, eventCtaLink: e.target.value })}
-                            placeholder="/mahasabha"
+                            placeholder="/aloksangh"
                             className="px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
                           />
                         </div>
@@ -6370,14 +6704,35 @@ function AdminDashboardInner() {
                     type="text"
                     value={eventModal.ctaLink}
                     onChange={(e) => setEventModal({ ...eventModal, ctaLink: e.target.value })}
-                    placeholder="जैसे: /mahasabha या /"
+                    placeholder="जैसे: /aloksangh या /events"
                     className="w-full px-3 py-1.5 border border-[#D5CEC4] bg-white rounded text-xs font-mono focus:border-[#102F6B] outline-hidden"
                   />
                 </div>
               </div>
 
-              {/* Row 7: Set as Featured Toggle */}
-              <label className="flex items-start gap-3 p-3 rounded bg-[#FFF0E2]/50 border border-[#F26A21]/30 cursor-pointer hover:bg-[#FFF0E2] transition-colors">
+              {/* Active / Inactive Status Toggle */}
+              <label className="flex items-start gap-3 p-3 rounded bg-emerald-50/70 border border-emerald-300 cursor-pointer hover:bg-emerald-100/50 transition-colors">
+                <input
+                  type="checkbox"
+                  checked={eventModal.isActive !== false}
+                  onChange={(e) => setEventModal({ ...eventModal, isActive: e.target.checked })}
+                  className="mt-0.5 w-4 h-4 text-emerald-600 rounded border-emerald-400 cursor-pointer"
+                />
+                <div>
+                  <div className="font-bold text-xs text-emerald-950 flex items-center gap-1.5">
+                    <span>🟢</span>
+                    <span>{isHi ? "कार्यक्रम को सक्रिय रखें (Keep Event Active)" : "Active Event"}</span>
+                  </div>
+                  <p className="text-[11px] text-emerald-800 mt-0.5">
+                    {isHi
+                      ? "सक्रिय कार्यक्रम वेबसाइट के कार्यक्रम पृष्ठ एवं होमपेज पर जनता को दिखाई देंगे।"
+                      : "Active events are publicly visible on the events page and homepage."}
+                  </p>
+                </div>
+              </label>
+
+              {/* Set as Featured Live Event Toggle */}
+              <label className="flex items-start gap-3 p-3 rounded bg-[#FFF0E2]/60 border border-[#F26A21]/40 cursor-pointer hover:bg-[#FFF0E2] transition-colors">
                 <input
                   type="checkbox"
                   checked={Boolean(eventModal.isFeatured)}
@@ -6386,9 +6741,9 @@ function AdminDashboardInner() {
                 />
                 <div>
                   <div className="font-bold text-xs text-[#102F6B]">
-                    🌟 {isHi ? "इसे शीर्ष उल्टी गिनती पट्टी एवं आगंतुक पॉपअप पर मुख्य कार्यक्रम बनाएं" : "Set as Featured Live Event (Display on Top Bar & Popup)"}
+                    🌟 {isHi ? "शीर्ष उल्टी गिनती पट्टी एवं आगंतुक पॉपअप पर मुख्य बनाएं (Featured Live)" : "Set as Featured Live Event (Display on Top Bar & Popup)"}
                   </div>
-                  <p className="text-[11px] text-[#64748B]">
+                  <p className="text-[11px] text-[#64748B] mt-0.5">
                     {isHi
                       ? "इस विकल्प को चुनने पर पूरी वेबसाइट के शीर्ष हेडर और आगंतुक पॉपअप पर यह कार्यक्रम प्रदर्शित होगा।"
                       : "When checked, this event will be synchronized to the sticky top countdown bar and visitor popup."}
@@ -6558,7 +6913,7 @@ function AdminDashboardInner() {
                     type="text"
                     value={slideModal.ctaLink}
                     onChange={(e) => setSlideModal({ ...slideModal, ctaLink: e.target.value })}
-                    placeholder="उदा: /mahasabha"
+                    placeholder="उदा: /aloksangh"
                     className="w-full px-2.5 py-1.5 border border-[#D5CEC4] bg-white rounded-xs focus:border-[#102F6B] outline-hidden font-mono"
                   />
                 </div>

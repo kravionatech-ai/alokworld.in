@@ -80,6 +80,16 @@ const MemberSchema = new mongoose.Schema(
       default: 999,
       index: true,
     },
+    // Featured / Prominent Community Member (विशिष्ट समाज बंधु एवं पदाधिकारी)
+    isFeatured: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    featuredOrder: {
+      type: Number,
+      default: 0,
+    },
     // Membership Status & Administrative Controls
     membershipStatus: {
       type: String,

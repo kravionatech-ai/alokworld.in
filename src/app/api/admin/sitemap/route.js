@@ -31,7 +31,8 @@ export async function POST(req) {
       { loc: `${cleanBase}/about`, priority: "0.8", changefreq: "weekly" },
       { loc: `${cleanBase}/history`, priority: "0.8", changefreq: "monthly" },
       { loc: `${cleanBase}/organization`, priority: "0.8", changefreq: "monthly" },
-      { loc: `${cleanBase}/mahasabha`, priority: "0.8", changefreq: "monthly" },
+      { loc: `${cleanBase}/aloksangh`, priority: "0.8", changefreq: "monthly" },
+      { loc: `${cleanBase}/events`, priority: "0.8", changefreq: "weekly" },
       { loc: `${cleanBase}/gallery`, priority: "0.8", changefreq: "weekly" },
       { loc: `${cleanBase}/personalities`, priority: "0.8", changefreq: "monthly" },
       { loc: `${cleanBase}/contact`, priority: "0.7", changefreq: "monthly" },
@@ -60,7 +61,7 @@ export async function POST(req) {
         changefreq: "weekly",
       }));
 
-      const coreSlugs = ["home", "about", "history", "organization", "mahasabha"];
+      const coreSlugs = ["home", "about", "history", "organization", "mahasabha", "aloksangh", "events"];
       const pages = await PageContent.find(
         {
           status: "published",

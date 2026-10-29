@@ -13,6 +13,7 @@ import HeroCarousel from "@/components/HeroCarousel";
 import AnnouncementSlider from "@/components/AnnouncementSlider";
 import FeaturedMembersCarousel from "@/components/FeaturedMembersCarousel";
 import HomepageVideoSection from "@/components/HomepageVideoSection";
+import HomepageEventsSection from "@/components/HomepageEventsSection";
 import {
   FadeIn,
   StaggerContainer,
@@ -24,6 +25,7 @@ import {
 
 export default function HomePage() {
   const [featuredMembers, setFeaturedMembers] = useState([]);
+  const [carouselMembers, setCarouselMembers] = useState([]);
   const [settings, setSettings] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("All");
@@ -34,6 +36,16 @@ export default function HomePage() {
       .then((res) => res.json())
       .then((data) => {
         if (data?.settings) setSettings(data.settings);
+      })
+      .catch(console.error);
+
+    // Fetch specifically featured prominent members for top carousel
+    fetch("/api/members?featured=true&limit=24")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.members && data.members.length > 0) {
+          setCarouselMembers(data.members);
+        }
       })
       .catch(console.error);
   }, []);
@@ -50,6 +62,8 @@ export default function HomePage() {
       .then((data) => {
         if (data?.members) {
           setFeaturedMembers(data.members);
+          // If no explicitly featured members exist yet, fallback carousel to top verified members
+          setCarouselMembers((prev) => (prev.length > 0 ? prev : data.members));
         }
       })
       .catch(console.error)
@@ -60,7 +74,7 @@ export default function HomePage() {
     { title: "समाज डायरेक्टरी", desc: "सत्यापित सदस्य विवरण, वरिष्ठजन, डॉक्टर, इंजीनियर व अधिवक्ता।", href: "/directory", icon: "👥" },
     { title: "समाज इतिहास", desc: "गौरवशाली विरासत, स्वतंत्रता संग्राम व ऐतिहासिक जड़ें।", href: "/history", icon: "📜" },
     { title: "विभूतियां", desc: "वीर स्वतंत्रता सेनानी, समाज सुधारक एवं महापुरुष।", href: "/personalities", icon: "🎖️" },
-    { title: "महासभा संकल्प", desc: "आलोक राष्ट्रीय महाधिवेशन एवं समाज विकास के प्रस्ताव।", href: "/mahasabha", icon: "⚖️" },
+    { title: "आलोक संघ", desc: "आलोक राष्ट्रीय महाधिवेशन, संगठन नीति एवं समाज विकास के प्रस्ताव।", href: "/aloksangh", icon: "⚖️" },
     { title: "संगठन एवं इकाइयां", desc: "राष्ट्रीय कार्यकारिणी, युवा प्रकोष्ठ व प्रांतीय शाखाएं।", href: "/organization", icon: "🏛️" },
     { title: "छायाचित्र दीर्घा", desc: "राष्ट्रीय अधिवेशन व प्रतिभा सम्मान समारोह के क्षण।", href: "/gallery", icon: "📸" },
   ];
@@ -89,8 +103,8 @@ export default function HomePage() {
           id: "ann-convention",
           tag: "अधिवेशन 2026",
           text: "आगामी 2 नवंबर 2026 राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
-          link: "/mahasabha",
-          linkText: "अधिवेशन विवरण →",
+          link: "/aloksangh",
+          linkText: "आलोक संघ विवरण →",
         },
         {
           id: "ann-history",
@@ -151,13 +165,16 @@ export default function HomePage() {
         </StaggerContainer>
 
         {/* Featured Community Members Carousel (Multi-card Swiper) */}
-        {featuredMembers && featuredMembers.length > 0 && (
+        {settings?.featuredMembersEnabled !== false && carouselMembers && carouselMembers.length > 0 && (
           <FeaturedMembersCarousel
-            members={featuredMembers}
-            title="विशिष्ट समाज बंधु एवं पदाधिकारी"
-            subtitle="समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।"
+            members={carouselMembers}
+            title={settings?.featuredMembersTitle || "विशिष्ट समाज बंधु एवं पदाधिकारी"}
+            subtitle={settings?.featuredMembersSubtitle || "समाज के वरिष्ठजनों, चिकित्सकों, इंजीनियरों, अधिवक्ताओं एवं प्रबुद्धजनों का संक्षिप्त विवरण।"}
           />
         )}
+
+        {/* Community Events & Conventions Section */}
+        <HomepageEventsSection />
 
         {/* Community Videos & Live Broadcast Section */}
         <HomepageVideoSection />

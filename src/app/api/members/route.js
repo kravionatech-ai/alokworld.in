@@ -29,6 +29,7 @@ export async function GET(req) {
     const organization = searchParams.get("organization")?.trim() || searchParams.get("company")?.trim() || "";
     const status = searchParams.get("status")?.trim() || searchParams.get("membershipStatus")?.trim() || "";
     const sortBy = searchParams.get("sortBy")?.trim() || "newest";
+    const isFeaturedOnly = searchParams.get("featured") === "true" || searchParams.get("isFeatured") === "true";
     const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
     const limit = Math.max(1, Math.min(100, parseInt(searchParams.get("limit") || "12", 10)));
     const isAdminView = searchParams.get("admin") === "true";
@@ -46,6 +47,10 @@ export async function GET(req) {
 
     if (conn) {
       const filter = {};
+
+      if (isFeaturedOnly) {
+        filter.isFeatured = true;
+      }
 
       if (!isAuthorizedAdmin) {
         // Public directory: strictly approved, published, and active (non-archived)
@@ -280,6 +285,8 @@ export async function POST(req) {
       isApproved,
       isPublished,
       isArchived,
+      isFeatured,
+      featuredOrder,
       showPhone,
       showEmail,
       showAddress,
@@ -370,6 +377,8 @@ export async function POST(req) {
       isApproved: isApproved !== undefined ? Boolean(isApproved) : true,
       isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
       isArchived: isArchived !== undefined ? Boolean(isArchived) : statusVal === "archived",
+      isFeatured: isFeatured !== undefined ? Boolean(isFeatured) : false,
+      featuredOrder: featuredOrder !== undefined ? Number(featuredOrder) : 0,
       showPhone: showPhone !== undefined ? Boolean(showPhone) : true,
       showEmail: showEmail !== undefined ? Boolean(showEmail) : true,
       showAddress: showAddress !== undefined ? Boolean(showAddress) : false,

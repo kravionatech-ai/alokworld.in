@@ -40,7 +40,8 @@ export default function Footer({ contactEmail, contactPhone }) {
               <li><Link href="/history" className="text-[#263449] hover:text-[#F26A21] transition-colors">समाज इतिहास</Link></li>
               <li><Link href="/personalities" className="text-[#263449] hover:text-[#F26A21] transition-colors">ऐतिहासिक विभूतियां</Link></li>
               <li><Link href="/organization" className="text-[#263449] hover:text-[#F26A21] transition-colors">संगठन एवं कार्यकारिणी</Link></li>
-              <li><Link href="/mahasabha" className="text-[#263449] hover:text-[#F26A21] transition-colors">महासभा विवरण</Link></li>
+              <li><Link href="/aloksangh" className="text-[#263449] hover:text-[#F26A21] transition-colors">आलोक संघ</Link></li>
+              <li><Link href="/events" className="text-[#263449] hover:text-[#F26A21] transition-colors">कार्यक्रम एवं आयोजन</Link></li>
             </ul>
           </StaggerItem>
 

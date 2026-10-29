@@ -4,7 +4,7 @@ import PageContent from "@/models/PageContent";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { recordAudit } from "@/lib/audit";
 
-const PROTECTED_SLUGS = ["home", "about", "history", "organization", "mahasabha"];
+const PROTECTED_SLUGS = ["home", "about", "history", "organization", "mahasabha", "aloksangh", "events"];
 
 export async function GET(req, { params }) {
   try {
@@ -19,7 +19,20 @@ export async function GET(req, { params }) {
     const token = req.cookies.get("admin_token")?.value;
     const admin = token ? verifyAdminToken(token) : null;
 
-    const page = await PageContent.findOne({ slug: cleanSlug }).lean();
+    let page = await PageContent.findOne({ slug: cleanSlug }).lean();
+
+    // Graceful fallback from aloksangh <-> mahasabha
+    if (!page && cleanSlug === "aloksangh") {
+      page = await PageContent.findOne({ slug: "mahasabha" }).lean();
+      if (page) {
+        page = {
+          ...page,
+          slug: "aloksangh",
+          title: "अखिल भारतीय लोधी अधिकारी-कर्मचारी संघ (आलोक)",
+          subtitle: "देशभर के समस्त अधिकारी, कर्मचारी एवं प्रबुद्धजनों का राष्ट्रीय संगठन।",
+        };
+      }
+    }
 
     if (!page) {
       return NextResponse.json({ error: `Page '${cleanSlug}' not found.` }, { status: 404 });

@@ -17,7 +17,7 @@ export default function TopEventCountdownBar({ eventSettings, onOpenModal }) {
   const eventTitle = eventSettings?.eventTitle || "आलोक राष्ट्रीय महासम्मेलन एवं भव्य पोर्टल लोकार्पण — 2026";
   const countdownLabel = eventSettings?.eventCountdownLabel || "वेबसाइट लाइव एवं महासम्मेलन उल्टी गिनती";
   const ctaText = eventSettings?.eventCtaText || "विवरण एवं पंजीकरण →";
-  const ctaLink = eventSettings?.eventCtaLink || "/mahasabha";
+  const ctaLink = eventSettings?.eventCtaLink || "/events";
 
   useEffect(() => {
     function calculateTime() {

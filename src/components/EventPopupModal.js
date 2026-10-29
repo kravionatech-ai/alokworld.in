@@ -28,7 +28,7 @@ export default function EventPopupModal({ isOpen, onClose, eventSettings }) {
     eventSettings?.eventImage ||
     "https://res.cloudinary.com/yk1l1nlz/image/upload/v1792924149/alokworld/posters/poster1.jpg";
   const ctaText = eventSettings?.eventCtaText || "अधिवेशन विवरण एवं पंजीकरण →";
-  const ctaLink = eventSettings?.eventCtaLink || "/mahasabha";
+  const ctaLink = eventSettings?.eventCtaLink || "/events";
 
   useEffect(() => {
     function calculateTime() {
