@@ -1,17 +1,14 @@
 import { connectDB } from "@/lib/db";
-import Member from "@/models/Member";
+import Member, { buildMemberLookupQuery } from "@/models/Member";
 import { membersData as fallbackMembers } from "@/data/members";
 
 async function getMemberData(id) {
   try {
     const conn = await connectDB();
     if (conn) {
-      if (id.match(/^[0-9a-fA-F]{24}$/)) {
-        const found = await Member.findById(id).lean();
-        if (found) return found;
-      }
-      const foundBySlug = await Member.findOne({ slug: id.toLowerCase().trim() }).lean();
-      if (foundBySlug) return foundBySlug;
+      const query = buildMemberLookupQuery(id);
+      const found = await Member.findOne(query).lean();
+      if (found) return found;
     }
   } catch (err) {
     // fallback

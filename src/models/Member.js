@@ -151,4 +151,35 @@ MemberSchema.index({ city: 1, isPublished: 1, isApproved: 1, isArchived: 1 });
 MemberSchema.index({ state: 1, isPublished: 1, isApproved: 1, isArchived: 1 });
 MemberSchema.index({ occupation: 1, isPublished: 1, isApproved: 1, isArchived: 1 });
 
+/**
+ * Robust multi-identifier member lookup query builder.
+ * Resolves members seamlessly whether accessed by:
+ * - String BSON _id (e.g. "65a000000000000000000001")
+ * - Native MongoDB ObjectId BSON (e.g. ObjectId("6ae3..."))
+ * - Numeric sequence id (e.g. 1, 4, 94)
+ * - String numeric id (e.g. "4")
+ * - Unique URL slug (e.g. "amar-kumar", "member-4")
+ */
+export function buildMemberLookupQuery(id) {
+  if (!id) return { _id: null };
+  const cleanId = String(id).trim();
+  const orClauses = [
+    { _id: cleanId },
+    { id: cleanId },
+    { slug: cleanId.toLowerCase() },
+  ];
+
+  if (mongoose.Types.ObjectId.isValid(cleanId)) {
+    try {
+      orClauses.push({ _id: new mongoose.Types.ObjectId(cleanId) });
+    } catch (_) {}
+  }
+
+  if (!isNaN(Number(cleanId))) {
+    orClauses.push({ id: Number(cleanId) });
+  }
+
+  return { $or: orClauses };
+}
+
 export default mongoose.models.Member || mongoose.model("Member", MemberSchema);

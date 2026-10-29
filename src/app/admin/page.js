@@ -862,7 +862,7 @@ function AdminDashboardInner() {
   };
 
   const startEditMember = (m) => {
-    setEditingMemberId(m._id || m.id);
+    setEditingMemberId(m._id || m.id || m.slug);
     setMemberForm({
       name: m.name || "",
       slug: m.slug || "",
@@ -894,7 +894,7 @@ function AdminDashboardInner() {
 
   const toggleMemberApproval = async (m) => {
     try {
-      const id = m._id || m.id;
+      const id = m._id || m.id || m.slug;
       const newStatus = !m.isApproved;
       const res = await fetch(`/api/members/${id}`, {
         method: "PUT",
@@ -912,7 +912,7 @@ function AdminDashboardInner() {
 
   const toggleMemberPublish = async (m) => {
     try {
-      const id = m._id || m.id;
+      const id = m._id || m.id || m.slug;
       const newPub = !m.isPublished;
       const res = await fetch(`/api/members/${id}`, {
         method: "PUT",
@@ -930,7 +930,7 @@ function AdminDashboardInner() {
 
   const handleToggleFeaturedMember = async (m) => {
     try {
-      const id = m._id || m.id;
+      const id = m._id || m.id || m.slug;
       const nextFeatured = !m.isFeatured;
       const res = await fetch(`/api/members/${id}`, {
         method: "PUT",
@@ -964,7 +964,7 @@ function AdminDashboardInner() {
       confirmBtnClass: nextState ? "bg-slate-700 hover:bg-slate-800 text-white" : "bg-emerald-700 hover:bg-emerald-800 text-white",
       onConfirm: async () => {
         try {
-          const id = m._id || m.id;
+          const id = m._id || m.id || m.slug;
           const res = await fetch(`/api/members/${id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
@@ -993,7 +993,7 @@ function AdminDashboardInner() {
       confirmBtnClass: "bg-red-700 hover:bg-red-800 text-white",
       onConfirm: async () => {
         try {
-          const id = m._id || m.id;
+          const id = m._id || m.id || m.slug;
           const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw new Error(data.error || "Failed to delete member.");

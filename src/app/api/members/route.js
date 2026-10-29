@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import Member from "@/models/Member";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
@@ -357,7 +358,11 @@ export async function POST(req) {
     const autoTags = generateMemberSearchTags({ name, role, occupation, company, city, state, tags: manualTags });
     const finalTags = Array.from(new Set([...manualTags, ...autoTags]));
 
+    const newId = new mongoose.Types.ObjectId().toString();
+
     const newMember = await Member.create({
+      _id: newId,
+      id: newId,
       name: name.trim(),
       slug: uniqueSlug,
       role: role ? role.trim() : "Member",

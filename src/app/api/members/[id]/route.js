@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { connectDB } from "@/lib/db";
-import Member from "@/models/Member";
+import Member, { buildMemberLookupQuery } from "@/models/Member";
 import { verifyAdminToken, sanitizeContent } from "@/lib/auth";
 import { generateUniqueMemberSlug } from "@/lib/slug";
 import { recordAudit } from "@/lib/audit";
@@ -26,23 +26,8 @@ export async function GET(req, { params }) {
     const isAuthorizedAdmin = Boolean(verifyAdminToken(req));
 
     if (conn) {
-      let member = null;
-
-      // 1. Check by _id or 24-character hex MongoDB ID
-      member = await Member.findOne({ _id: id }).lean();
-      if (!member && id.match(/^[0-9a-fA-F]{24}$/)) {
-        member = await Member.findById(id).lean();
-      }
-
-      // 2. Check by unique URL slug
-      if (!member) {
-        member = await Member.findOne({ slug: id.toLowerCase().trim() }).lean();
-      }
-
-      // 3. Check by numeric id
-      if (!member && !isNaN(Number(id))) {
-        member = await Member.findOne({ id: Number(id) }).lean();
-      }
+      const query = buildMemberLookupQuery(id);
+      let member = await Member.findOne(query).lean();
 
       if (!member) {
         return NextResponse.json({ error: "Member profile not found." }, { status: 404 });
@@ -108,17 +93,9 @@ export async function PUT(req, { params }) {
       return NextResponse.json({ error: "Database not connected. Please ensure MongoDB is running." }, { status: 503 });
     }
 
-    // Locate the existing member
-    let member = await Member.findOne({ _id: id });
-    if (!member && id.match(/^[0-9a-fA-F]{24}$/)) {
-      member = await Member.findById(id);
-    }
-    if (!member) {
-      member = await Member.findOne({ slug: id.toLowerCase().trim() });
-    }
-    if (!member && !isNaN(Number(id))) {
-      member = await Member.findOne({ id: Number(id) });
-    }
+    // Locate the existing member using robust multi-identifier query
+    const query = buildMemberLookupQuery(id);
+    let member = await Member.findOne(query);
 
     if (!member) {
       return NextResponse.json({ error: "Member not found." }, { status: 404 });
@@ -281,16 +258,8 @@ export async function DELETE(req, { params }) {
       return NextResponse.json({ error: "Database not connected." }, { status: 503 });
     }
 
-    let deleted = await Member.findOneAndDelete({ _id: id });
-    if (!deleted && id.match(/^[0-9a-fA-F]{24}$/)) {
-      deleted = await Member.findByIdAndDelete(id);
-    }
-    if (!deleted) {
-      deleted = await Member.findOneAndDelete({ slug: id.toLowerCase().trim() });
-    }
-    if (!deleted && !isNaN(Number(id))) {
-      deleted = await Member.findOneAndDelete({ id: Number(id) });
-    }
+    const query = buildMemberLookupQuery(id);
+    let deleted = await Member.findOneAndDelete(query);
 
     if (!deleted) {
       return NextResponse.json({ error: "Member not found." }, { status: 404 });
