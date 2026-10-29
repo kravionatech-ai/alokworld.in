@@ -318,7 +318,7 @@ export async function PUT(req) {
     const updatedSettings = await SiteSettings.findOneAndUpdate(
       {},
       { $set: cleanBody },
-      { new: true, upsert: true, runValidators: false }
+      { returnDocument: "after", upsert: true, runValidators: false }
     ).lean();
 
     await recordAudit({
