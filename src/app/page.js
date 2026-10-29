@@ -40,11 +40,14 @@ export default function HomePage() {
       .catch(console.error);
 
     // Fetch specifically featured prominent members for top carousel
-    fetch("/api/members?featured=true&limit=24", { cache: "no-store" })
+    fetch("/api/members?featured=true&sortBy=featured_order&limit=24", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.members && data.members.length > 0) {
-          setCarouselMembers(data.members);
+          const sorted = [...data.members].sort(
+            (a, b) => (Number(a.featuredOrder) || 0) - (Number(b.featuredOrder) || 0)
+          );
+          setCarouselMembers(sorted);
         }
       })
       .catch(console.error);

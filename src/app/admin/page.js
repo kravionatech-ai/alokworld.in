@@ -805,6 +805,11 @@ function AdminDashboardInner() {
     });
 
     list = [...list].sort((a, b) => {
+      if (statusFilter === "featured" || memberSort === "featured_order") {
+        const fa = Number(a.featuredOrder) || 0;
+        const fb = Number(b.featuredOrder) || 0;
+        if (fa !== fb) return fa - fb;
+      }
       if (memberSort === "oldest") return new Date(a.createdAt || 0) - new Date(b.createdAt || 0);
       if (memberSort === "name_asc") return (a.name || "").localeCompare(b.name || "");
       if (memberSort === "name_desc") return (b.name || "").localeCompare(a.name || "");
@@ -1031,6 +1036,26 @@ function AdminDashboardInner() {
           ? (isHi ? `"${m.name}" को होमपेज कैरोसेल में 'विशिष्ट समाज बंधु' के रूप में जोड़ा गया!` : `"${m.name}" featured in carousel!`)
           : (isHi ? `"${m.name}" को होमपेज कैरोसेल से हटाया गया।` : `"${m.name}" unfeatured from carousel.`)
       );
+    } catch (err) {
+      showBanner(err.message, true);
+    }
+  };
+
+  const handleUpdateMemberFeaturedOrder = async (m, newOrder) => {
+    const orderNum = Math.max(1, parseInt(newOrder, 10) || 1);
+    try {
+      const id = m._id || m.id || m.slug;
+      const res = await fetch(`/api/members/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ featuredOrder: orderNum, isFeatured: true }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Failed to update member order.");
+      setMembers((prev) =>
+        prev.map((item) => (item._id === id || item.id === id ? { ...item, featuredOrder: orderNum, isFeatured: true } : item))
+      );
+      showBanner(isHi ? `"${m.name}" का कैरोसेल क्रम #${orderNum} सेट किया गया!` : `"${m.name}" carousel order set to #${orderNum}`);
     } catch (err) {
       showBanner(err.message, true);
     }
@@ -2729,6 +2754,7 @@ function AdminDashboardInner() {
                     onChange={(e) => setMemberSort(e.target.value)}
                     className="h-8 px-2 rounded-xs border border-[#D5CEC4] bg-white text-xs text-[#1E293B] focus:border-[#102F6B] outline-hidden"
                   >
+                    <option value="featured_order">{isHi ? "क्रम: कैरोसेल प्राथमिकता" : "Sort: Carousel Order"}</option>
                     <option value="newest">{isHi ? "क्रम: नवीनतम" : "Sort: Newest"}</option>
                     <option value="oldest">{isHi ? "क्रम: पुरातन" : "Sort: Oldest"}</option>
                     <option value="name_asc">{isHi ? "क्रम: नाम A-Z" : "Sort: Name A-Z"}</option>
@@ -2874,7 +2900,7 @@ function AdminDashboardInner() {
                                 </button>
                               </td>
 
-                              {/* Featured Carousel Star Toggle */}
+                              {/* Featured Carousel Star Toggle & Order */}
                               <td className="py-2.5 px-3 text-center">
                                 <button
                                   type="button"
@@ -2889,6 +2915,38 @@ function AdminDashboardInner() {
                                   <span>{m.isFeatured ? "⭐" : "☆"}</span>
                                   <span>{m.isFeatured ? (isHi ? "विशिष्ट" : "Featured") : (isHi ? "सामान्य" : "Standard")}</span>
                                 </button>
+
+                                {m.isFeatured && (
+                                  <div className="flex items-center justify-center gap-1 mt-1.5" title={isHi ? "कैरोसेल प्रदर्शन क्रम (1 = सबसे पहले)" : "Carousel Display Order"}>
+                                    <span className="text-[10px] text-[#55657E] font-medium">{isHi ? "क्रम:" : "Rank:"}</span>
+                                    <input
+                                      type="number"
+                                      min="1"
+                                      max="99"
+                                      value={m.featuredOrder ?? 1}
+                                      onChange={(e) => handleUpdateMemberFeaturedOrder(m, e.target.value)}
+                                      className="w-10 h-5 px-1 text-center font-bold text-xs bg-white border border-[#D5CEC4] rounded-2xs text-[#102F6B] focus:border-[#F26A21] outline-hidden shadow-2xs"
+                                    />
+                                    <div className="flex flex-col gap-0.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleUpdateMemberFeaturedOrder(m, Math.max(1, (m.featuredOrder || 1) - 1))}
+                                        className="w-3.5 h-2.5 flex items-center justify-center text-[7px] bg-slate-100 hover:bg-slate-200 text-[#102F6B] rounded-2xs cursor-pointer border border-[#D5CEC4] leading-none"
+                                        title={isHi ? "आगे करें (Move Up)" : "Move Up"}
+                                      >
+                                        ▲
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleUpdateMemberFeaturedOrder(m, (m.featuredOrder || 1) + 1)}
+                                        className="w-3.5 h-2.5 flex items-center justify-center text-[7px] bg-slate-100 hover:bg-slate-200 text-[#102F6B] rounded-2xs cursor-pointer border border-[#D5CEC4] leading-none"
+                                        title={isHi ? "पीछे करें (Move Down)" : "Move Down"}
+                                      >
+                                        ▼
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
                               </td>
 
                               {/* Action Text Links */}

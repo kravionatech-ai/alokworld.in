@@ -123,13 +123,21 @@ export async function GET(req) {
         filter.$or = orClauses;
       }
 
-      // Sorting: prioritize order (official hierarchy)
+      // Sorting: prioritize featuredOrder when querying featured members
       let sortObj = { order: 1, createdAt: 1 };
-      if (sortBy === "newest" || !sortBy) sortObj = { order: 1, createdAt: 1 };
-      else if (sortBy === "oldest") sortObj = { order: -1, createdAt: -1 };
-      else if (sortBy === "name_asc") sortObj = { name: 1 };
-      else if (sortBy === "name_desc") sortObj = { name: -1 };
-      else if (sortBy === "city_asc") sortObj = { city: 1, name: 1 };
+      if (isFeaturedOnly || sortBy === "featured_order") {
+        sortObj = { featuredOrder: 1, order: 1, _id: 1 };
+      } else if (sortBy === "newest" || !sortBy) {
+        sortObj = { order: 1, createdAt: 1 };
+      } else if (sortBy === "oldest") {
+        sortObj = { order: -1, createdAt: -1 };
+      } else if (sortBy === "name_asc") {
+        sortObj = { name: 1 };
+      } else if (sortBy === "name_desc") {
+        sortObj = { name: -1 };
+      } else if (sortBy === "city_asc") {
+        sortObj = { city: 1, name: 1 };
+      }
 
       const total = await Member.countDocuments(filter);
       const members = await Member.find(filter)
@@ -214,7 +222,9 @@ export async function GET(req) {
     }
 
     // Sorting fallback
-    if (sortBy === "oldest") {
+    if (isFeaturedOnly || sortBy === "featured_order") {
+      results.sort((a, b) => (Number(a.featuredOrder) || 0) - (Number(b.featuredOrder) || 0));
+    } else if (sortBy === "oldest") {
       results.reverse();
     } else if (sortBy === "name_asc") {
       results.sort((a, b) => a.name.localeCompare(b.name));
