@@ -196,7 +196,11 @@ export default function HeroCarousel({ settings }) {
       className="relative bg-white rounded-lg border border-[#E9E2D8] shadow-xs overflow-hidden"
     >
       <Swiper
+        key={slides.map((s) => s.id || s.title).join("-")}
         modules={[Autoplay, Pagination, Navigation, EffectFade, A11y]}
+        observer={true}
+        observeParents={true}
+        resizeObserver={true}
         effect="fade"
         fadeEffect={{ crossFade: true }}
         speed={700}

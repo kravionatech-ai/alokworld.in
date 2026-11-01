@@ -32,7 +32,8 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/settings", { cache: "no-store" })
+    const t = Date.now();
+    fetch(`/api/settings?_t=${t}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.settings) setSettings(data.settings);
@@ -40,7 +41,7 @@ export default function HomePage() {
       .catch(console.error);
 
     // Fetch specifically featured prominent members for top carousel
-    fetch("/api/members?featured=true&sortBy=featured_order&limit=24", { cache: "no-store" })
+    fetch(`/api/members?featured=true&sortBy=featured_order&limit=24&_t=${t}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.members && data.members.length > 0) {
@@ -48,6 +49,14 @@ export default function HomePage() {
             (a, b) => (Number(a.featuredOrder) || 0) - (Number(b.featuredOrder) || 0)
           );
           setCarouselMembers(sorted);
+        } else {
+          // Fallback if no members have been featured in database yet
+          fetch(`/api/members?limit=6&_t=${t}`, { cache: "no-store" })
+            .then((r) => r.json())
+            .then((d) => {
+              if (d?.members) setCarouselMembers(d.members);
+            })
+            .catch(console.error);
         }
       })
       .catch(console.error);
@@ -59,14 +68,13 @@ export default function HomePage() {
     if (searchQuery) params.set("q", searchQuery);
     if (selectedLocation && selectedLocation !== "All") params.set("city", selectedLocation);
     params.set("limit", "12"); // Spotlight preview on home
+    params.set("_t", String(Date.now()));
 
     fetch(`/api/members?${params.toString()}`, { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         if (data?.members) {
           setFeaturedMembers(data.members);
-          // If no explicitly featured members exist yet, fallback carousel to top verified members
-          setCarouselMembers((prev) => (prev.length > 0 ? prev : data.members));
         }
       })
       .catch(console.error)
@@ -104,8 +112,8 @@ export default function HomePage() {
         },
         {
           id: "ann-convention",
-          tag: "अधिवेशन 2026",
-          text: "आगामी 2 नवंबर 2026 राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
+          tag: "अधिवेशन",
+          text: "राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
           link: "/aloksangh",
           linkText: "आलोक संघ विवरण →",
         },

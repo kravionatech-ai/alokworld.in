@@ -51,6 +51,7 @@ export default function AnnouncementSlider({
   ];
 
   const items = announcements && announcements.length > 0 ? announcements : defaultItems;
+  const swiperKey = items.map((it) => it.id || it._id || it.text).join("-");
 
   return (
     <div
@@ -108,7 +109,11 @@ export default function AnnouncementSlider({
           </div>
         ) : (
           <Swiper
+            key={swiperKey}
             modules={[Autoplay, Navigation, A11y]}
+            observer={true}
+            observeParents={true}
+            resizeObserver={true}
             direction="horizontal"
             speed={500}
             loop={items.length > 1}

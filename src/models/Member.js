@@ -163,10 +163,18 @@ MemberSchema.index({ occupation: 1, isPublished: 1, isApproved: 1, isArchived: 1
 export function buildMemberLookupQuery(id) {
   if (!id) return { _id: null };
   const cleanId = String(id).trim();
+  let decodedId = cleanId;
+  try {
+    decodedId = decodeURIComponent(cleanId).trim();
+  } catch (_) {}
+
   const orClauses = [
     { _id: cleanId },
+    { _id: decodedId },
     { id: cleanId },
+    { id: decodedId },
     { slug: cleanId.toLowerCase() },
+    { slug: decodedId.toLowerCase() },
   ];
 
   if (mongoose.Types.ObjectId.isValid(cleanId)) {
@@ -174,9 +182,17 @@ export function buildMemberLookupQuery(id) {
       orClauses.push({ _id: new mongoose.Types.ObjectId(cleanId) });
     } catch (_) {}
   }
+  if (decodedId !== cleanId && mongoose.Types.ObjectId.isValid(decodedId)) {
+    try {
+      orClauses.push({ _id: new mongoose.Types.ObjectId(decodedId) });
+    } catch (_) {}
+  }
 
   if (!isNaN(Number(cleanId))) {
     orClauses.push({ id: Number(cleanId) });
+  }
+  if (decodedId !== cleanId && !isNaN(Number(decodedId))) {
+    orClauses.push({ id: Number(decodedId) });
   }
 
   return { $or: orClauses };

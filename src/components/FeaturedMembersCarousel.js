@@ -85,6 +85,7 @@ export default function FeaturedMembersCarousel({
         ) : (
           <div className="w-full">
             <Swiper
+              key={members.map((m) => m._id || m.id || m.slug || m.name || m.featuredOrder).join("-")}
               modules={[Autoplay, Pagination, Navigation, A11y]}
               observer={true}
               observeParents={true}

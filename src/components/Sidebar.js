@@ -18,45 +18,70 @@ export default function Sidebar({
   locations = ["Bhopal", "Jaipur", "Bengaluru", "Lucknow", "Indore", "Delhi NCR", "Mumbai", "Jabalpur"],
   selectedLocation = "All",
   onSelectLocation,
+  settings: propSettings,
 }) {
   const [mounted, setMounted] = useState(false);
+  const [liveSettings, setLiveSettings] = useState(propSettings || null);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (!propSettings) {
+      fetch(`/api/settings?_t=${Date.now()}`, { cache: "no-store" })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d?.settings) setLiveSettings(d.settings);
+        })
+        .catch(console.error);
+    } else {
+      setLiveSettings(propSettings);
+    }
+  }, [propSettings]);
 
-  const notices = [
-    {
-      id: "n1",
-      badge: "डायरेक्टरी",
-      text:
-        noticeContent ||
-        "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी डायरेक्टरी में अद्यतन रखें।",
-      actionText: "रिकॉर्ड जांचें →",
-      actionLink: "/directory",
-    },
-    {
-      id: "n2",
-      badge: "अधिवेशन 2026",
-      text: "आगामी 2 नवंबर 2026 राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
-      actionText: "आलोक संघ विवरण →",
-      actionLink: "/aloksangh",
-    },
-    {
-      id: "n3",
-      badge: "आलोक संघ",
-      text: "प्रांतीय कमेटियों एवं युवा प्रकोष्ठ सम्मेलनों के संबंध में जिला प्रभारियों से संपर्क करें।",
-      actionText: "संगठन प्रकोष्ठ →",
-      actionLink: "/organization",
-    },
-    {
-      id: "n4",
-      badge: "सचिवालय",
-      text: "डायरेक्टरी संशोधन, प्रविष्टि सहायता अथवा जानकारी हेतु केंद्रीय हेल्पलाइन से संपर्क करें।",
-      actionText: "संपर्क करें →",
-      actionLink: "/contact",
-    },
-  ];
+  const notices = liveSettings?.announcementsList?.length
+    ? liveSettings.announcementsList
+        .filter((a) => a.enabled !== false)
+        .map((a) => ({
+          id: a.id || a._id,
+          badge: a.tag || "सूचना",
+          text: a.text,
+          actionText: a.linkText || "विवरण देखें →",
+          actionLink: a.link || "/directory",
+        }))
+    : [
+        {
+          id: "n1",
+          badge: "डायरेक्टरी",
+          text:
+            noticeContent ||
+            liveSettings?.sidebarNoticeContent ||
+            "सभी समाज बंधुओं से अनुरोध है कि वे अपने परिवार व कार्यक्षेत्र की जानकारी डायरेक्टरी में अद्यतन रखें।",
+          actionText: "रिकॉर्ड जांचें →",
+          actionLink: "/directory",
+        },
+        {
+          id: "n2",
+          badge: "आलोक संघ",
+          text: "राष्ट्रीय महासम्मेलन एवं प्रतिभा सम्मान समारोह में सादर आमंत्रित हैं।",
+          actionText: "आलोक संघ विवरण →",
+          actionLink: "/aloksangh",
+        },
+        {
+          id: "n3",
+          badge: "विरासत",
+          text: "वीरांगना रानी अवंतीबाई एवं अमर शहीद गुलाब सिंह के शौर्य और बलिदान को सादर नमन।",
+          actionText: "इतिहास पढ़ें →",
+          actionLink: "/history",
+        },
+        {
+          id: "n4",
+          badge: "सचिवालय",
+          text: "डायरेक्टरी संशोधन, प्रविष्टि सहायता अथवा जानकारी हेतु केंद्रीय हेल्पलाइन से संपर्क करें।",
+          actionText: "संपर्क करें →",
+          actionLink: "/contact",
+        },
+      ];
+
+  const swiperKey = notices.map((n) => n.id || n.text).join("-");
 
   return (
     <aside className="space-y-4">
@@ -110,9 +135,13 @@ export default function Sidebar({
               </div>
             ) : (
               <Swiper
+                key={swiperKey}
                 modules={[Autoplay, Navigation, A11y]}
+                observer={true}
+                observeParents={true}
+                resizeObserver={true}
                 speed={500}
-                loop={true}
+                loop={notices.length > 1}
                 autoplay={{
                   delay: 5000,
                   disableOnInteraction: false,

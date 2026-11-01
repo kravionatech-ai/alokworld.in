@@ -613,14 +613,15 @@ function AdminDashboardInner() {
   }, [router]);
 
   const loadAllData = () => {
-    fetch("/api/members?admin=true&limit=150", { cache: "no-store" })
+    const t = Date.now();
+    fetch(`/api/members?admin=true&limit=150&_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.members) setMembers(d.members);
       })
       .catch(console.error);
 
-    fetch("/api/settings", { cache: "no-store" })
+    fetch(`/api/settings?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.settings) {
@@ -636,14 +637,14 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/events", { cache: "no-store" })
+    fetch(`/api/events?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.events) setEventsList(d.events);
       })
       .catch(console.error);
 
-    fetch("/api/pages", { cache: "no-store" })
+    fetch(`/api/pages?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.pages) {
@@ -657,21 +658,21 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/gallery?all=true", { cache: "no-store" })
+    fetch(`/api/gallery?all=true&_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.items) setGalleryItems(d.items);
       })
       .catch(console.error);
 
-    fetch("/api/contact", { cache: "no-store" })
+    fetch(`/api/contact?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.messages) setMessages(d.messages);
       })
       .catch(console.error);
 
-    fetch("/api/admin/emails", { cache: "no-store" })
+    fetch(`/api/admin/emails?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d?.logs) setEmailsList(d.logs);
@@ -679,7 +680,7 @@ function AdminDashboardInner() {
       })
       .catch(console.error);
 
-    fetch("/api/admin/stats", { cache: "no-store" })
+    fetch(`/api/admin/stats?_t=${t}`, { cache: "no-store" })
       .then((r) => r.json())
       .then((d) => {
         if (d) setDashboardStats(d);
@@ -985,14 +986,25 @@ function AdminDashboardInner() {
     try {
       const id = m._id || m.id || m.slug;
       const newStatus = !m.isApproved;
-      const res = await fetch(`/api/members/${id}`, {
+      const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isApproved: newStatus }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to update member approval status.");
-      setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
+      setMembers((prev) =>
+        prev.map((item) => {
+          const match =
+            item._id === id ||
+            item.id === id ||
+            item.slug === id ||
+            String(item._id) === String(id) ||
+            String(item.id) === String(id) ||
+            (data.member && (item._id === data.member._id || item.slug === data.member.slug));
+          return match ? (data.member ? { ...item, ...data.member } : { ...item, isApproved: newStatus }) : item;
+        })
+      );
       showBanner(`Member "${m.name}" set to ${newStatus ? "Approved" : "Pending"}.`);
     } catch (err) {
       showBanner(err.message, true);
@@ -1003,14 +1015,25 @@ function AdminDashboardInner() {
     try {
       const id = m._id || m.id || m.slug;
       const newPub = !m.isPublished;
-      const res = await fetch(`/api/members/${id}`, {
+      const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isPublished: newPub }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to update visibility status.");
-      setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
+      setMembers((prev) =>
+        prev.map((item) => {
+          const match =
+            item._id === id ||
+            item.id === id ||
+            item.slug === id ||
+            String(item._id) === String(id) ||
+            String(item.id) === String(id) ||
+            (data.member && (item._id === data.member._id || item.slug === data.member.slug));
+          return match ? (data.member ? { ...item, ...data.member } : { ...item, isPublished: newPub }) : item;
+        })
+      );
       showBanner(`Member "${m.name}" set to ${newPub ? "Published" : "Draft"}.`);
     } catch (err) {
       showBanner(err.message, true);
@@ -1021,7 +1044,7 @@ function AdminDashboardInner() {
     try {
       const id = m._id || m.id || m.slug;
       const nextFeatured = !m.isFeatured;
-      const res = await fetch(`/api/members/${id}`, {
+      const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ isFeatured: nextFeatured }),
@@ -1029,7 +1052,16 @@ function AdminDashboardInner() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to update featured status.");
       setMembers((prev) =>
-        prev.map((item) => (item._id === id || item.id === id ? { ...item, isFeatured: nextFeatured } : item))
+        prev.map((item) => {
+          const match =
+            item._id === id ||
+            item.id === id ||
+            item.slug === id ||
+            String(item._id) === String(id) ||
+            String(item.id) === String(id) ||
+            (data.member && (item._id === data.member._id || item.slug === data.member.slug));
+          return match ? (data.member ? { ...item, ...data.member } : { ...item, isFeatured: nextFeatured }) : item;
+        })
       );
       showBanner(
         nextFeatured
@@ -1045,7 +1077,7 @@ function AdminDashboardInner() {
     const orderNum = Math.max(1, parseInt(newOrder, 10) || 1);
     try {
       const id = m._id || m.id || m.slug;
-      const res = await fetch(`/api/members/${id}`, {
+      const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ featuredOrder: orderNum, isFeatured: true }),
@@ -1053,7 +1085,16 @@ function AdminDashboardInner() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Failed to update member order.");
       setMembers((prev) =>
-        prev.map((item) => (item._id === id || item.id === id ? { ...item, featuredOrder: orderNum, isFeatured: true } : item))
+        prev.map((item) => {
+          const match =
+            item._id === id ||
+            item.id === id ||
+            item.slug === id ||
+            String(item._id) === String(id) ||
+            String(item.id) === String(id) ||
+            (data.member && (item._id === data.member._id || item.slug === data.member.slug));
+          return match ? (data.member ? { ...item, ...data.member } : { ...item, featuredOrder: orderNum, isFeatured: true }) : item;
+        })
       );
       showBanner(isHi ? `"${m.name}" का कैरोसेल क्रम #${orderNum} सेट किया गया!` : `"${m.name}" carousel order set to #${orderNum}`);
     } catch (err) {
@@ -1074,7 +1115,7 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const id = m._id || m.id || m.slug;
-          const res = await fetch(`/api/members/${id}`, {
+          const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -1084,7 +1125,18 @@ function AdminDashboardInner() {
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw new Error(data.error || "Failed to archive/restore member.");
-          setMembers((prev) => prev.map((item) => (item._id === id || item.id === id ? data.member : item)));
+          setMembers((prev) =>
+            prev.map((item) => {
+              const match =
+                item._id === id ||
+                item.id === id ||
+                item.slug === id ||
+                String(item._id) === String(id) ||
+                String(item.id) === String(id) ||
+                (data.member && (item._id === data.member._id || item.slug === data.member.slug));
+              return match ? (data.member ? { ...item, ...data.member } : item) : item;
+            })
+          );
           showBanner(`Member "${m.name}" set to ${nextState ? "Archived" : "Restored"}.`);
         } catch (err) {
           showBanner(err.message, true);
@@ -1103,10 +1155,19 @@ function AdminDashboardInner() {
       onConfirm: async () => {
         try {
           const id = m._id || m.id || m.slug;
-          const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
+          const res = await fetch(`/api/members/${encodeURIComponent(String(id))}`, { method: "DELETE" });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) throw new Error(data.error || "Failed to delete member.");
-          setMembers((prev) => prev.filter((item) => item._id !== id && item.id !== id));
+          setMembers((prev) =>
+            prev.filter(
+              (item) =>
+                item._id !== id &&
+                item.id !== id &&
+                item.slug !== id &&
+                String(item._id) !== String(id) &&
+                String(item.id) !== String(id)
+            )
+          );
           showBanner(`Member "${m.name}" successfully deleted.`);
         } catch (err) {
           showBanner(err.message, true);

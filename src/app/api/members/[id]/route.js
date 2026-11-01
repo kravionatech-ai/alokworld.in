@@ -21,12 +21,17 @@ function isValidPhone(phone) {
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
+    let cleanId = String(id || "").trim();
+    try {
+      cleanId = decodeURIComponent(cleanId);
+    } catch (_) {}
+
     const conn = await connectDB();
 
     const isAuthorizedAdmin = Boolean(verifyAdminToken(req));
 
     if (conn) {
-      const query = buildMemberLookupQuery(id);
+      const query = buildMemberLookupQuery(cleanId);
       let member = await Member.findOne(query).lean();
 
       if (!member) {
@@ -86,6 +91,11 @@ export async function PUT(req, { params }) {
     }
 
     const { id } = await params;
+    let cleanId = String(id || "").trim();
+    try {
+      cleanId = decodeURIComponent(cleanId);
+    } catch (_) {}
+
     const body = await req.json();
 
     const conn = await connectDB();
@@ -94,7 +104,7 @@ export async function PUT(req, { params }) {
     }
 
     // Locate the existing member using robust multi-identifier query
-    const query = buildMemberLookupQuery(id);
+    const query = buildMemberLookupQuery(cleanId);
     let member = await Member.findOne(query);
 
     if (!member) {
@@ -253,12 +263,17 @@ export async function DELETE(req, { params }) {
     }
 
     const { id } = await params;
+    let cleanId = String(id || "").trim();
+    try {
+      cleanId = decodeURIComponent(cleanId);
+    } catch (_) {}
+
     const conn = await connectDB();
     if (!conn) {
       return NextResponse.json({ error: "Database not connected." }, { status: 503 });
     }
 
-    const query = buildMemberLookupQuery(id);
+    const query = buildMemberLookupQuery(cleanId);
     let deleted = await Member.findOneAndDelete(query);
 
     if (!deleted) {
